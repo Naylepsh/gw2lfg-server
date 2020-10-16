@@ -1,2 +1,8 @@
+# PACKAGES
 node_modules/
+
+# COMPILED TYPESCRIPT
 dist/
+
+# ENVIRONMENT VARIABLES
+.env.*
