@@ -1,13 +1,12 @@
-import { BaseEntity, Column, Entity, PrimaryGeneratedColumn } from "typeorm";
-
-@Entity()
-export class User extends BaseEntity {
-  @PrimaryGeneratedColumn()
+export class User {
   id: number;
+  username!: string;
+  password!: string;
+  apiKey: string;
 
-  @Column()
-  username: String;
-
-  @Column()
-  password: String;
+  constructor(username: string, password: string, apiKey: string) {
+    this.username = username;
+    this.password = password;
+    this.apiKey = apiKey;
+  }
 }
