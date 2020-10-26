@@ -28,6 +28,14 @@ const parseEnvNumber = (name: string) => {
   return env;
 };
 
+const getEntitiesDir = (env: string) => {
+  const dir =
+    env === "test"
+      ? "../db/typeorm/entities/*.ts"
+      : "../db/typeorm/entities/*.js";
+  return [path.join(__dirname, dir)];
+};
+
 const database: ConnectionOptions = {
   type: "postgres",
   host: parseEnvString("DATABASE_HOST"),
@@ -35,8 +43,8 @@ const database: ConnectionOptions = {
   database: parseEnvString("DATABASE_NAME"),
   username: parseEnvString("DATABASE_USERNAME"),
   password: parseEnvString("DATABASE_PASSWORD"),
-  synchronize: is_prod,
-  entities: [path.join(__dirname, "../models/*.js")],
+  synchronize: !is_prod,
+  entities: getEntitiesDir(env),
 };
 
 export const config: ConfigProperties = {
