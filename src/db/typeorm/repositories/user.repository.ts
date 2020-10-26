@@ -1,6 +1,6 @@
 import { getRepository } from "typeorm";
 import { IRepository } from "../../repository";
-import { User } from "../entities/user.entity.typeorm";
+import { User } from "../entities/user.entity";
 
 export class UserRepository implements IRepository<User> {
   save(user: User): Promise<User> {

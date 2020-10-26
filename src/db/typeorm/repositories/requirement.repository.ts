@@ -1,6 +1,6 @@
 import { getRepository } from "typeorm";
 import { IRepository } from "../../repository";
-import { Requirement } from "../entities/requirement.entity.typeorm";
+import { Requirement } from "../entities/requirement.entity";
 
 export class RequirementRepository implements IRepository<Requirement> {
   save(requirement: Requirement): Promise<Requirement> {

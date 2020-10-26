@@ -1,6 +1,6 @@
 import { getConnection } from "typeorm";
-import { User } from "../../../../db/typeorm/entities/user.entity.typeorm";
-import { UserRepository } from "../../../../db/typeorm/repositories/user.repository.typeorm";
+import { User } from "../../../../db/typeorm/entities/user.entity";
+import { UserRepository } from "../../../../db/typeorm/repositories/user.repository";
 import { loadTypeORM } from "../../../../loaders/typeorm";
 
 interface IUser {

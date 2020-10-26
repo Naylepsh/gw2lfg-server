@@ -2,28 +2,25 @@ import {
   Column,
   CreateDateColumn,
   Entity,
-  OneToMany,
+  ManyToMany,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from "typeorm";
-import { Posting } from "./posting.entity.typeorm";
+import { Posting } from "./posting.entity";
 
 @Entity()
-export class User {
+export class Requirement {
   @PrimaryGeneratedColumn()
   id: number;
 
   @Column()
-  username!: string;
+  name!: string;
 
-  @Column()
-  password!: string;
+  @Column({ type: "int" })
+  quantity!: number;
 
-  @Column()
-  apiKey!: string;
-
-  @OneToMany(() => Posting, (posting) => posting.author)
-  postings: Posting[];
+  @ManyToMany(() => Posting, (posting) => posting.requirements)
+  postings: Posting;
 
   @CreateDateColumn()
   createdAt: Date;

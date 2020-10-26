@@ -2,13 +2,13 @@ import {
   Column,
   CreateDateColumn,
   Entity,
+  ManyToMany,
   ManyToOne,
-  OneToMany,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from "typeorm";
-import { Requirement } from "./requirement.entity.typeorm";
-import { User } from "./user.entity.typeorm";
+import { Requirement } from "./requirement.entity";
+import { User } from "./user.entity";
 
 @Entity()
 export class Posting {
@@ -27,7 +27,7 @@ export class Posting {
   @Column()
   description: string;
 
-  @OneToMany(() => Requirement, (requirement) => requirement.posting)
+  @ManyToMany(() => Requirement, (requirement) => requirement.postings)
   requirements: Requirement[];
 
   @Column({ type: "int" })
