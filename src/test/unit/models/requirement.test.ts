@@ -1,5 +1,5 @@
-import { LIRequirement } from "../models/requirement";
-import { IGW2Service, Item } from "../services/gw2service";
+import { LIRequirement } from "../../../models/requirements/requirement.model";
+import { IGW2Service, Item } from "../../../services/gw2service";
 
 const itemNameToId: Record<string, number> = {};
 itemNameToId[LIRequirement.itemName] = 1;

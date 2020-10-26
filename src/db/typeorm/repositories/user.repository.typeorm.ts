@@ -1,4 +1,4 @@
-import { getConnection } from "typeorm";
+import { getRepository } from "typeorm";
 import { IRepository } from "../../repository";
 import { User } from "../entities/user.entity.typeorm";
 
@@ -13,6 +13,6 @@ export class UserRepository implements IRepository<User> {
   }
 
   private getRepo() {
-    return getConnection().getRepository(User);
+    return getRepository(User);
   }
 }

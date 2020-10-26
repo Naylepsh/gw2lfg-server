@@ -8,6 +8,7 @@
     "dev": "nodemon dist/index.js",
     "start": "node dist/index.js",
     "test": "jest",
+    "test:unit": "jest -i src/test/unit",
     "test:integr": "jest -i src/test/integration"
   },
   "keywords": [],

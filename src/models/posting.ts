@@ -1,4 +1,4 @@
-import { IRequirement } from "./requirement";
+import { IRequirement } from "./requirements/requirement.interface";
 import { User } from "./user.model";
 
 export type Server = "EU" | "NA";

@@ -1,13 +1,8 @@
-import { IGW2Service } from "../services/gw2service";
-
-export interface IRequirement {
-  isSatisfied(apiKey: string, gameService: IGW2Service): boolean;
-}
-
-export class InvalidRequirementQuantity extends Error {}
+import { IGW2Service } from "../../services/gw2service";
+import { InvalidRequirementQuantity } from "./requirement.errors";
+import { IRequirement } from "./requirement.interface";
 
 export class LIRequirement implements IRequirement {
-  // cannot name it 'name', due to Function.name being a thing
   public static readonly itemName = "Legendary Insight";
   quantity: number;
 
@@ -18,8 +13,12 @@ export class LIRequirement implements IRequirement {
   }
 
   isSatisfied(apiKey: string, gameService: IGW2Service) {
-    const item = gameService.getItem(LIRequirement.itemName, apiKey);
+    const item = gameService.getItem(this.getName(), apiKey);
     return item.quantity >= this.quantity;
+  }
+
+  getName() {
+    return LIRequirement.itemName;
   }
 }
 
