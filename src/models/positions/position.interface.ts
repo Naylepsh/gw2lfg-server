@@ -1,6 +1,6 @@
 export interface IPosition {
   type: string;
   description: string;
-  class: string;
+  characterClass: string;
   specialization: string;
 }

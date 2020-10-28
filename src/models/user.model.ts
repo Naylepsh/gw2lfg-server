@@ -1,12 +1,8 @@
 export class User {
-  id: number;
-  username!: string;
-  password!: string;
-  apiKey!: string;
-
-  constructor(username: string, password: string, apiKey: string) {
-    this.username = username;
-    this.password = password;
-    this.apiKey = apiKey;
-  }
+  constructor(
+    protected readonly id: number,
+    public username: string,
+    public password: string,
+    public apiKey: string
+  ) {}
 }
