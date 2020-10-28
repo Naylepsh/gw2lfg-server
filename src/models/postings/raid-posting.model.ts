@@ -1,7 +1,7 @@
 import { IPosition } from "../positions/position.interface";
 import { IRequirement } from "../requirements/requirement.interface";
 import { User } from "../user.model";
-import { Posting, Server } from "./posting.model";
+import { Posting } from "./posting.model";
 
 export interface RaidBoss {
   name: string;
@@ -13,13 +13,26 @@ export class RaidPosting extends Posting {
     id: number,
     author: User,
     date: Date,
-    server: Server,
+    server: string,
     description: string,
     requirements: IRequirement[],
     positions: IPosition[],
     public bosses: RaidBoss[]
   ) {
     super(id, author, date, server, description, requirements, positions);
+  }
+
+  public static fromPosting(posting: Posting, bosses: RaidBoss[]) {
+    return new this(
+      posting.id,
+      posting.author,
+      posting.date,
+      posting.server,
+      posting.description,
+      posting.requirements,
+      posting.positions,
+      bosses
+    );
   }
 
   public equals(raidPosting: RaidPosting) {

@@ -1,4 +1,4 @@
-import { LIRequirement } from "../../../models/requirements/requirement.model";
+import { LIRequirement } from "../../../models/requirements/li-requirement.model";
 import { IGW2Service, Item } from "../../../services/gw2service";
 
 const itemNameToId: Record<string, number> = {};

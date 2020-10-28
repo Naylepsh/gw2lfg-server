@@ -30,9 +30,6 @@ export class Posting {
   @ManyToMany(() => Requirement, (requirement) => requirement.postings)
   requirements: Requirement[];
 
-  @Column({ type: "int" })
-  quantity!: number;
-
   @CreateDateColumn()
   createdAt: Date;
 

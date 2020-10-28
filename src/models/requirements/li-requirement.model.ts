@@ -20,6 +20,10 @@ export class LIRequirement implements IRequirement {
   getName() {
     return LIRequirement.itemName;
   }
+
+  getQuantity(): number {
+    return this.quantity;
+  }
 }
 
 // export class TitleRequirement implements IRequirement {
