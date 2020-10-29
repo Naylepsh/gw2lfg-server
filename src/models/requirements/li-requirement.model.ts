@@ -1,4 +1,4 @@
-import { IGW2Service } from "../../services/gw2service";
+import { IGW2APIService } from "../../services/gw2-api/gw2.service.interface";
 import { InvalidRequirementQuantity } from "./requirement.errors";
 import { IRequirement } from "./requirement.interface";
 
@@ -12,9 +12,9 @@ export class LIRequirement implements IRequirement {
     this.quantity = quantity;
   }
 
-  isSatisfied(apiKey: string, gameService: IGW2Service) {
+  isSatisfied(apiKey: string, gameService: IGW2APIService) {
     const item = gameService.getItem(this.getName(), apiKey);
-    return item.quantity >= this.quantity;
+    return item.count >= this.quantity;
   }
 
   getName() {

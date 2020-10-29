@@ -1,10 +1,11 @@
 import { LIRequirement } from "../../../models/requirements/li-requirement.model";
-import { IGW2Service, Item } from "../../../services/gw2service";
+import { IGW2APIService } from "../../../services/gw2-api/gw2.service.interface";
+import { Item } from "../../../services/gw2-items/item.interface";
 
-const itemNameToId: Record<string, number> = {};
-itemNameToId[LIRequirement.itemName] = 1;
+const itemNameToId: Record<string, string> = {};
+itemNameToId[LIRequirement.itemName] = "1";
 
-class FakeGw2Service implements IGW2Service {
+class FakeGw2Service implements IGW2APIService {
   constructor(public items: Item[]) {}
 
   getItem(name: string, _: string) {
@@ -16,9 +17,7 @@ class FakeGw2Service implements IGW2Service {
 }
 
 const makeRequirementAndService = (requiredLi: number, ownedLi: number) => {
-  const items = [
-    { id: itemNameToId[LIRequirement.itemName], quantity: ownedLi },
-  ];
+  const items = [{ id: itemNameToId[LIRequirement.itemName], count: ownedLi }];
   const gw2service = new FakeGw2Service(items);
   const requirement = new LIRequirement(requiredLi);
 
