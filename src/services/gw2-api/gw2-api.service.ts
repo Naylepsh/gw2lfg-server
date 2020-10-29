@@ -1,5 +1,10 @@
 import { Item } from "../gw2-items/item.interface";
-import { fetchItemsFromBank } from "./gw2-api.proxy";
+import {
+  fetchCharacters,
+  fetchItemsFromBank,
+  fetchItemsFromCharacter,
+  fetchItemsFromSharedInventory,
+} from "./gw2-api.proxy";
 
 type ItemFetcher = (id: string, apiKey: string) => Promise<Item>;
 type ItemsFetcher = (apiKey: string) => Promise<Item[]>;
@@ -38,6 +43,28 @@ const countItemStacks = (items: Item[], id: string) => {
 
 export const getItemFromBank = getItem(fetchItemsFromBank);
 
-export const getItemFromEntireAccount = getItemFromMultipleSources([
-  getItemFromBank,
-]);
+export const getItemFromSharedInventory = getItem(
+  fetchItemsFromSharedInventory
+);
+
+export const getItemFromCharacter = (characterName: string) => {
+  return getItem((apiKey: string) =>
+    fetchItemsFromCharacter(characterName, apiKey)
+  );
+};
+
+export const getItemFromEntireAccount: ItemFetcher = async (
+  id: string,
+  apiKey: string
+) => {
+  const characters = await fetchCharacters(apiKey);
+  const characterItemFetchers = await Promise.all(
+    characters.map((character) => getItemFromCharacter(character))
+  );
+
+  return getItemFromMultipleSources([
+    ...characterItemFetchers,
+    getItemFromBank,
+    getItemFromSharedInventory,
+  ])(id, apiKey);
+};
