@@ -24,4 +24,8 @@ export class UserRepository implements IRepository<DomainUser> {
   async findById(id: number): Promise<DomainUser | null> {
     return this.repository.findById(id);
   }
+
+  async findByUsername(username: string): Promise<DomainUser | null> {
+    return this.repository.findByProperty("username", username);
+  }
 }

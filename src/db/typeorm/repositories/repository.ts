@@ -20,4 +20,14 @@ export class MappingRepository<DomainModel, PersistenceModel>
     const model = await this.repository.findOne(id);
     return model ? this.toDomain(model) : null;
   }
+
+  async findByProperty(
+    property: string,
+    value: any
+  ): Promise<DomainModel | null> {
+    let query: any = {};
+    query[property] = value;
+    const model = await this.repository.findOne(query);
+    return model ? this.toDomain(model) : null;
+  }
 }

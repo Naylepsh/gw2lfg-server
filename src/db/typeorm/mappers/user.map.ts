@@ -16,7 +16,7 @@ export const toPersistence: Mapper<DomainUser, PersistenceUser> = (
 export const toDomain: Mapper<PersistenceUser, DomainUser> = (
   user: PersistenceUser
 ) => {
-  return new DomainUser(user.id, user.username, user.password, user.apiKey);
+  return new DomainUser(user.username, user.password, user.apiKey);
 };
 
 export const userMap = { toPersistence, toDomain };

@@ -47,9 +47,9 @@ describe("TypeORM User Repository Tests", () => {
 
   it("should retrieve an user", async () => {
     const user = createUser();
-    const { id } = await repository.save(createUser());
+    await repository.save(user);
 
-    const userInDb = await repository.findById(id);
+    const userInDb = await repository.findByUsername(user.username);
 
     expect(userInDb).not.toBeNull();
     expectUserToHavePropertiesOfOtherUser(userInDb!, user);
@@ -57,12 +57,11 @@ describe("TypeORM User Repository Tests", () => {
 });
 
 const createUser = (
-  id = 1,
   apiKey = "AP1-K3Y",
   username = "username",
   password = "password"
 ) => {
-  const user = new DomainUser(id, username, password, apiKey);
+  const user = new DomainUser(username, password, apiKey);
 
   return user;
 };
