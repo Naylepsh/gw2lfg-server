@@ -1,7 +1,8 @@
 import { getConnection } from "typeorm";
-import { User } from "../../../../db/typeorm/entities/user.entity";
+import { User as PersistenceUser } from "../../../../db/typeorm/entities/user.entity";
 import { UserRepository } from "../../../../db/typeorm/repositories/user.repository";
 import { loadTypeORM } from "../../../../loaders/typeorm";
+import { User as DomainUser } from "../../../../models/user.model";
 
 interface IUser {
   apiKey: string;
@@ -10,10 +11,11 @@ interface IUser {
 }
 
 describe("TypeORM User Repository Tests", () => {
-  const repository = new UserRepository();
+  let repository: UserRepository;
 
   beforeAll(async () => {
     await loadTypeORM();
+    repository = new UserRepository();
   });
 
   afterAll(async () => {
@@ -21,7 +23,7 @@ describe("TypeORM User Repository Tests", () => {
     await connection
       .createQueryBuilder()
       .delete()
-      .from(User, "user")
+      .from(PersistenceUser, "user")
       .where({})
       .execute();
     connection.close();
@@ -35,7 +37,7 @@ describe("TypeORM User Repository Tests", () => {
     const rows = await getConnection()
       .createQueryBuilder()
       .select()
-      .from(User, "user")
+      .from(PersistenceUser, "user")
       .where({ username: user.username })
       .execute();
     const userInDb = rows[0];
@@ -45,7 +47,7 @@ describe("TypeORM User Repository Tests", () => {
 
   it("should retrieve an user", async () => {
     const user = createUser();
-    const { id } = await repository.save(user);
+    const { id } = await repository.save(createUser());
 
     const userInDb = await repository.findById(id);
 
@@ -55,14 +57,12 @@ describe("TypeORM User Repository Tests", () => {
 });
 
 const createUser = (
+  id = 1,
   apiKey = "AP1-K3Y",
   username = "username",
   password = "password"
 ) => {
-  const user = new User();
-  user.apiKey = apiKey;
-  user.username = username;
-  user.password = password;
+  const user = new DomainUser(id, username, password, apiKey);
 
   return user;
 };

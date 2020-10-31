@@ -1,4 +1,4 @@
-export interface IRepository<Entity> {
-  save(entity: Entity): Promise<Entity>;
-  findById(id: number): Promise<Entity | null>;
+export interface IRepository<Model> {
+  save(entity: Model): Promise<Model>;
+  findById(id: number): Promise<Model | null>;
 }

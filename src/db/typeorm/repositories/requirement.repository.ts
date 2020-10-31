@@ -1,18 +1,27 @@
-import { getRepository } from "typeorm";
+import { getConnection } from "typeorm";
+import { IRequirement } from "../../../models/requirements/requirement.interface";
 import { IRepository } from "../../repository";
 import { Requirement } from "../entities/requirement.entity";
+import { toDomain, toPersistence } from "../mappers/requirement.map";
+import { MappingRepository } from "./repository";
 
-export class RequirementRepository implements IRepository<Requirement> {
-  save(requirement: Requirement): Promise<Requirement> {
-    return this.getRepo().save(requirement);
+export class RequirementRepository implements IRepository<IRequirement> {
+  repository: MappingRepository<IRequirement, Requirement>;
+
+  constructor() {
+    const typeOrmRepo = getConnection().getRepository(Requirement);
+    this.repository = new MappingRepository<IRequirement, Requirement>(
+      toPersistence,
+      toDomain,
+      typeOrmRepo
+    );
   }
 
-  async findById(id: number): Promise<Requirement | null> {
-    const requirement = await this.getRepo().findOne(id);
-    return requirement ? requirement : null;
+  save(requirement: IRequirement): Promise<IRequirement> {
+    return this.repository.save(requirement);
   }
 
-  private getRepo() {
-    return getRepository(Requirement);
+  async findById(id: number): Promise<IRequirement | null> {
+    return this.repository.findById(id);
   }
 }
