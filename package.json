@@ -6,18 +6,26 @@
   "scripts": {
     "watch": "tsc -w",
     "dev": "nodemon dist/index.js",
-    "start": "node dist/index.js"
+    "start": "node dist/index.js",
+    "test": "jest",
+    "test:unit": "jest -i src/test/unit",
+    "test:integr": "jest -i src/test/integration",
+    "test:integr:db": "jest -i src/test/integration/db"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "devDependencies": {
+    "@types/jest": "^26.0.15",
     "@types/node": "^14.11.8",
+    "jest": "^26.6.1",
     "typescript": "^4.0.3"
   },
   "dependencies": {
+    "axios": "^0.21.0",
     "dotenv": "^8.2.0",
     "pg": "^8.4.1",
+    "ts-jest": "^26.4.1",
     "typeorm": "^0.2.28"
   }
 }

@@ -28,6 +28,15 @@ const parseEnvNumber = (name: string) => {
   return env;
 };
 
+const getEntities = (pathToDir: string) => {
+  const getEntitiesOfExtension = (extension: string) => {
+    return path.join(__dirname, pathToDir, `*${extension}`);
+  };
+
+  const extensions = ["ts", "js"];
+  return extensions.map(getEntitiesOfExtension);
+};
+
 const database: ConnectionOptions = {
   type: "postgres",
   host: parseEnvString("DATABASE_HOST"),
@@ -35,8 +44,8 @@ const database: ConnectionOptions = {
   database: parseEnvString("DATABASE_NAME"),
   username: parseEnvString("DATABASE_USERNAME"),
   password: parseEnvString("DATABASE_PASSWORD"),
-  synchronize: is_prod,
-  entities: [path.join(__dirname, "../models/*.js")],
+  synchronize: !is_prod,
+  entities: getEntities("../entities"),
 };
 
 export const config: ConfigProperties = {
