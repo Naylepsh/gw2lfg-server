@@ -9,7 +9,8 @@
     "start": "node dist/index.js",
     "test": "jest",
     "test:unit": "jest -i src/test/unit",
-    "test:integr": "jest -i src/test/integration"
+    "test:integr": "jest -i src/test/integration",
+    "test:integr:db": "jest -i src/test/integration/db"
   },
   "keywords": [],
   "author": "",

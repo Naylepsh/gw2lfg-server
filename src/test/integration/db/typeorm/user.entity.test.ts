@@ -1,8 +1,6 @@
-import { getConnection } from "typeorm";
-import { User as PersistenceUser } from "../../../../db/typeorm/entities/user.entity";
-import { UserRepository } from "../../../../db/typeorm/repositories/user.repository";
+import { Connection, getConnection, Repository } from "typeorm";
+import { User } from "../../../../entities/user.entity";
 import { loadTypeORM } from "../../../../loaders/typeorm";
-import { User as DomainUser } from "../../../../models/user.model";
 
 interface IUser {
   apiKey: string;
@@ -10,20 +8,24 @@ interface IUser {
   password: string;
 }
 
-describe("TypeORM User Repository Tests", () => {
-  let repository: UserRepository;
+describe("TypeORM User Entity Tests", () => {
+  let repository: Repository<User>;
+  let connection: Connection;
 
   beforeAll(async () => {
-    await loadTypeORM();
-    repository = new UserRepository();
+    connection = await loadTypeORM();
+    repository = connection.getRepository(User);
+  });
+
+  afterEach(async () => {
+    await repository.delete({});
   });
 
   afterAll(async () => {
-    const connection = getConnection();
     await connection
       .createQueryBuilder()
       .delete()
-      .from(PersistenceUser, "user")
+      .from(User, "user")
       .where({})
       .execute();
     connection.close();
@@ -33,14 +35,14 @@ describe("TypeORM User Repository Tests", () => {
     const user = createUser();
 
     await repository.save(user);
-
     const rows = await getConnection()
       .createQueryBuilder()
       .select()
-      .from(PersistenceUser, "user")
+      .from(User, "user")
       .where({ username: user.username })
       .execute();
     const userInDb = rows[0];
+
     expect(userInDb).not.toBeNull();
     expectUserToHavePropertiesOfOtherUser(userInDb as IUser, user);
   });
@@ -49,7 +51,7 @@ describe("TypeORM User Repository Tests", () => {
     const user = createUser();
     await repository.save(user);
 
-    const userInDb = await repository.findByUsername(user.username);
+    const userInDb = await repository.findOne(user.id);
 
     expect(userInDb).not.toBeNull();
     expectUserToHavePropertiesOfOtherUser(userInDb!, user);
@@ -61,7 +63,7 @@ const createUser = (
   username = "username",
   password = "password"
 ) => {
-  const user = new DomainUser(username, password, apiKey);
+  const user = new User(username, password, apiKey);
 
   return user;
 };

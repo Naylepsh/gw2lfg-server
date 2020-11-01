@@ -28,12 +28,13 @@ const parseEnvNumber = (name: string) => {
   return env;
 };
 
-const getEntitiesDir = (env: string) => {
-  const dir =
-    env === "test"
-      ? "../db/typeorm/entities/*.ts"
-      : "../db/typeorm/entities/*.js";
-  return [path.join(__dirname, dir)];
+const getEntities = (pathToDir: string) => {
+  const getEntitiesOfExtension = (extension: string) => {
+    return path.join(__dirname, pathToDir, `*${extension}`);
+  };
+
+  const extensions = ["ts", "js"];
+  return extensions.map(getEntitiesOfExtension);
 };
 
 const database: ConnectionOptions = {
@@ -44,7 +45,7 @@ const database: ConnectionOptions = {
   username: parseEnvString("DATABASE_USERNAME"),
   password: parseEnvString("DATABASE_PASSWORD"),
   synchronize: !is_prod,
-  entities: getEntitiesDir(env),
+  entities: getEntities("../entities"),
 };
 
 export const config: ConfigProperties = {

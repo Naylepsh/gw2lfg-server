@@ -13,7 +13,7 @@ export class User {
   @PrimaryGeneratedColumn()
   id: number;
 
-  @Column()
+  @Column({ unique: true })
   username!: string;
 
   @Column()
@@ -30,4 +30,10 @@ export class User {
 
   @UpdateDateColumn()
   updatedAt: Date;
+
+  constructor(username: string, password: string, apiKey: string) {
+    this.username = username;
+    this.password = password;
+    this.apiKey = apiKey;
+  }
 }
