@@ -10,7 +10,7 @@ export class PostingRepository
   extends GenericRepository<Posting>
   implements IPostingRepository {
   findById(id: number): Promise<Posting | undefined> {
-    const relations = ["author"];
+    const relations = ["author", "requirements"];
     return super.findById(id, relations);
   }
 }

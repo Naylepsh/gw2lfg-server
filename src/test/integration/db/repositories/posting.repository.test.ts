@@ -1,7 +1,4 @@
 import { Connection } from "typeorm";
-import { Posting } from "../../../../entities/posting.entity";
-import { Requirement } from "../../../../entities/requirement.entity";
-import { User } from "../../../../entities/user.entity";
 import { loadTypeORM } from "../../../../loaders/typeorm";
 import {
   IPostingRepository,
@@ -15,43 +12,18 @@ import {
   IUserRepository,
   UserRepository,
 } from "../../../../repositories/user.repository";
-
-type CreateAndSaveUser = (
-  username: string,
-  password?: string,
-  apiKey?: string
-) => Promise<User>;
-
-const createAndSaveUserWithRepository = (
-  repository: IUserRepository
-): CreateAndSaveUser => (
-  username: string,
-  password: string = "password",
-  apiKey: string = "api-key"
-) => {
-  const author = new User(username, password, apiKey);
-  return repository.save(author);
-};
-
-type CreateAndSavePosting = (
-  author: User,
-  requirements?: Requirement[],
-  date?: Date,
-  server?: string
-) => Promise<Posting>;
-
-const createAndSavePostingWithRepository = (
-  repository: IPostingRepository
-): CreateAndSavePosting => (
-  author: User,
-  requirements: Requirement[] = [],
-  date: Date = new Date(),
-  server: string = "EU"
-) => {
-  const reqs = requirements ? requirements : undefined;
-  const posting = new Posting(author, date, server, { requirements: reqs });
-  return repository.save(posting);
-};
+import {
+  CreateAndSaveLIRequirement,
+  createAndSaveLIRequirementWithRepository,
+} from "./li-requirement.helper";
+import {
+  CreateAndSavePosting,
+  createAndSavePostingWithRepository,
+} from "./posting.helper";
+import {
+  CreateAndSaveUser,
+  createAndSaveUserWithRepository,
+} from "./user.helper";
 
 describe("TypeORM posting repository tests", () => {
   let connection: Connection;
@@ -60,6 +32,7 @@ describe("TypeORM posting repository tests", () => {
   let requirementRepository: IRequirementRepository;
   let createAndSaveUser: CreateAndSaveUser;
   let createAndSavePosting: CreateAndSavePosting;
+  let createAndSaveLiRequirement: CreateAndSaveLIRequirement;
 
   beforeAll(async () => {
     connection = await loadTypeORM();
@@ -73,6 +46,9 @@ describe("TypeORM posting repository tests", () => {
     createAndSaveUser = createAndSaveUserWithRepository(userRepository);
     createAndSavePosting = createAndSavePostingWithRepository(
       postingRepository
+    );
+    createAndSaveLiRequirement = createAndSaveLIRequirementWithRepository(
+      requirementRepository
     );
   });
 
@@ -102,5 +78,15 @@ describe("TypeORM posting repository tests", () => {
     const postingInDb = await postingRepository.findById(posting.id);
 
     expect(postingInDb?.author.id).toBe(author.id);
+  });
+
+  it("should save requirements relationship", async () => {
+    const author = await createAndSaveUser("username");
+    const requirement = await createAndSaveLiRequirement(10);
+    const posting = await createAndSavePosting(author, [requirement]);
+
+    const postingInDb = await postingRepository.findById(posting.id);
+
+    expect(postingInDb?.requirements.length).toBe(1);
   });
 });
