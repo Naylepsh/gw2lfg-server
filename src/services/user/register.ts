@@ -9,8 +9,9 @@ export const register = async (
   userRepository: IUserRepository,
   hash: Hash
 ) => {
-  const isUsernameTaken =
-    (await userRepository.findByUsername(user.username)) !== undefined;
+  const isUsernameTaken = !!(await userRepository.findByUsername(
+    user.username
+  ));
   if (isUsernameTaken) {
     throw new UsernameTakenError();
   }
