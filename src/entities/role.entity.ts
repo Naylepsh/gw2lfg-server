@@ -2,13 +2,16 @@ import {
   Column,
   CreateDateColumn,
   Entity,
+  ManyToOne,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from "typeorm";
+import { Posting } from "./posting.entity";
 
 export interface RoleProps {
   name: string;
-  description: string | undefined;
+  description?: string;
+  posting?: Posting;
 }
 
 @Entity()
@@ -22,6 +25,9 @@ export class Role {
   @Column({ nullable: true })
   description?: string;
 
+  @ManyToOne(() => Posting, (posting) => posting.roles)
+  posting: Posting;
+
   @CreateDateColumn()
   createdAt: Date;
 
@@ -32,6 +38,7 @@ export class Role {
     if (props) {
       this.name = props.name;
       this.description = props.description;
+      if (props.posting) this.posting = this.posting;
     }
   }
 }

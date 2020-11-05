@@ -5,22 +5,21 @@ import {
   JoinTable,
   ManyToMany,
   ManyToOne,
+  OneToMany,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from "typeorm";
 import { Requirement } from "./requirement.entity";
+import { Role } from "./role.entity";
 import { User } from "./user.entity";
 
-export interface OptionalPostingParams {
-  description: string;
-  requirements: Requirement[];
-}
 export interface PostingProps {
   author: User;
   date: Date;
   server: string;
-  description: string | undefined;
-  requirements: Requirement[] | undefined;
+  description?: string;
+  requirements?: Requirement[];
+  roles?: Role[];
 }
 
 @Entity()
@@ -44,6 +43,9 @@ export class Posting {
   @JoinTable()
   requirements: Requirement[];
 
+  @OneToMany(() => Role, (role) => role.posting)
+  roles: Role[];
+
   @CreateDateColumn()
   createdAt: Date;
 
@@ -57,6 +59,7 @@ export class Posting {
       this.server = props.server;
       this.description = props.description;
       this.requirements = props.requirements ?? [];
+      this.roles = props.roles ?? [];
     }
   }
 }
