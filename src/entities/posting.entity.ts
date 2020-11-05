@@ -15,6 +15,13 @@ export interface OptionalPostingParams {
   description: string;
   requirements: Requirement[];
 }
+export interface PostingProps {
+  author: User;
+  date: Date;
+  server: string;
+  description: string | undefined;
+  requirements: Requirement[] | undefined;
+}
 
 @Entity()
 export class Posting {
@@ -31,7 +38,7 @@ export class Posting {
   server: string;
 
   @Column({ nullable: true })
-  description: string;
+  description?: string;
 
   @ManyToMany(() => Requirement)
   @JoinTable()
@@ -43,20 +50,13 @@ export class Posting {
   @UpdateDateColumn()
   updatedAt: Date;
 
-  constructor(
-    author: User,
-    date: Date,
-    server: string,
-    optionalParams?: Partial<OptionalPostingParams>
-  ) {
-    this.author = author;
-    this.date = date;
-    this.server = server;
-
-    if (optionalParams?.description)
-      this.description = optionalParams.description;
-
-    if (optionalParams?.requirements)
-      this.requirements = optionalParams.requirements;
+  constructor(props?: PostingProps) {
+    if (props) {
+      this.author = props.author;
+      this.date = props.date;
+      this.server = props.server;
+      this.description = props.description;
+      this.requirements = props.requirements ?? [];
+    }
   }
 }

@@ -1,5 +1,10 @@
 import { Column, Entity, PrimaryGeneratedColumn } from "typeorm";
 
+export interface RaidBossProps {
+  name: string;
+  isCm: boolean;
+}
+
 @Entity()
 export class RaidBoss {
   @PrimaryGeneratedColumn()
@@ -11,8 +16,10 @@ export class RaidBoss {
   @Column()
   isCm!: boolean;
 
-  constructor(name: string, isCm: boolean) {
-    this.name = name;
-    this.isCm = isCm;
+  constructor(props?: RaidBossProps) {
+    if (props) {
+      this.name = props.name;
+      this.isCm = props.isCm;
+    }
   }
 }

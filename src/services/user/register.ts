@@ -9,14 +9,28 @@ export const register = async (
   userRepository: IUserRepository,
   hash: Hash
 ) => {
-  const isUsernameTaken = !!(await userRepository.findByUsername(
-    user.username
-  ));
-  if (isUsernameTaken) {
+  if (await isUsernameTaken(userRepository, user.username)) {
     throw new UsernameTakenError();
   }
 
-  const hashedPassword = await hash(user.password);
-  const hashedUser = new User(user.username, hashedPassword, user.apiKey);
+  const hashedUser = await hashUserPassword(hash, user);
   await userRepository.save(hashedUser);
+};
+
+const isUsernameTaken = async (
+  userRepository: IUserRepository,
+  username: string
+) => {
+  return !!(await userRepository.findByUsername(username));
+};
+
+const hashUserPassword = async (hash: Hash, user: User) => {
+  const hashedPassword = await hash(user.password);
+  const userProps = {
+    username: user.username,
+    password: hashedPassword,
+    apiKey: user.apiKey,
+  };
+  const hashedUser = new User(userProps);
+  return hashedUser;
 };

@@ -8,6 +8,10 @@ import {
   UpdateDateColumn,
 } from "typeorm";
 
+export interface RequirementProps {
+  name: string;
+}
+
 @Entity()
 @TableInheritance({ column: { type: "varchar", name: "type" } })
 export abstract class Requirement {
@@ -23,25 +27,41 @@ export abstract class Requirement {
   @UpdateDateColumn()
   updatedAt: Date;
 
-  constructor(name: string) {
-    this.name = name;
+  constructor(props?: RequirementProps) {
+    if (props) {
+      this.name = props.name;
+    }
   }
+}
+
+export interface ItemRequirementProps extends RequirementProps {
+  quantity: number;
 }
 
 @ChildEntity()
 export abstract class ItemRequirement extends Requirement {
   @Column({ type: "int" })
-  quantity!: number;
+  quantity: number;
 
-  constructor(name: string, quantity: number) {
-    super(name);
-    this.quantity = quantity;
+  constructor(props?: ItemRequirementProps) {
+    super(props);
+    if (props) {
+      this.quantity = props.quantity;
+    }
   }
+}
+
+export interface LIRequirementProps {
+  quantity: number;
 }
 
 @ChildEntity()
 export class LIRequirement extends ItemRequirement {
-  constructor(quantity: number) {
-    super("Legendary Insight", quantity);
+  constructor(props?: LIRequirementProps) {
+    if (props) {
+      super({ ...props, name: "Legendary Insight" });
+    } else {
+      super();
+    }
   }
 }

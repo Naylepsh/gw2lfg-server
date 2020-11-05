@@ -12,27 +12,15 @@ import {
   IUserRepository,
   UserRepository,
 } from "../../../../repositories/user.repository";
-import {
-  CreateAndSaveLIRequirement,
-  createAndSaveLIRequirementWithRepository,
-} from "./li-requirement.helper";
-import {
-  CreateAndSavePosting,
-  createAndSavePostingWithRepository,
-} from "./posting.helper";
-import {
-  CreateAndSaveUser,
-  createAndSaveUserWithRepository,
-} from "./user.helper";
+import { createAndSaveLIRequirement } from "../../../helpers/li-requirement.helper";
+import { createAndSavePosting } from "../../../helpers/posting.helper";
+import { createAndSaveUser } from "../../../helpers/user.helper";
 
 describe("TypeORM posting repository tests", () => {
   let connection: Connection;
   let postingRepository: IPostingRepository;
   let userRepository: IUserRepository;
   let requirementRepository: IRequirementRepository;
-  let createAndSaveUser: CreateAndSaveUser;
-  let createAndSavePosting: CreateAndSavePosting;
-  let createAndSaveLiRequirement: CreateAndSaveLIRequirement;
 
   beforeAll(async () => {
     connection = await loadTypeORM();
@@ -41,14 +29,6 @@ describe("TypeORM posting repository tests", () => {
     userRepository = connection.getCustomRepository(UserRepository);
     requirementRepository = connection.getCustomRepository(
       RequirementRepository
-    );
-
-    createAndSaveUser = createAndSaveUserWithRepository(userRepository);
-    createAndSavePosting = createAndSavePostingWithRepository(
-      postingRepository
-    );
-    createAndSaveLiRequirement = createAndSaveLIRequirementWithRepository(
-      requirementRepository
     );
   });
 
@@ -63,8 +43,10 @@ describe("TypeORM posting repository tests", () => {
   });
 
   it("should save posting in database", async () => {
-    const author = await createAndSaveUser("username");
-    const posting = await createAndSavePosting(author);
+    const author = await createAndSaveUser(userRepository, {
+      username: "username",
+    });
+    const posting = await createAndSavePosting(postingRepository, { author });
 
     const postingInDb = await postingRepository.findById(posting.id);
 
@@ -72,8 +54,10 @@ describe("TypeORM posting repository tests", () => {
   });
 
   it("should save author relationship", async () => {
-    const author = await createAndSaveUser("username");
-    const posting = await createAndSavePosting(author);
+    const author = await createAndSaveUser(userRepository, {
+      username: "username",
+    });
+    const posting = await createAndSavePosting(postingRepository, { author });
 
     const postingInDb = await postingRepository.findById(posting.id);
 
@@ -81,9 +65,17 @@ describe("TypeORM posting repository tests", () => {
   });
 
   it("should save requirements relationship", async () => {
-    const author = await createAndSaveUser("username");
-    const requirement = await createAndSaveLiRequirement(10);
-    const posting = await createAndSavePosting(author, [requirement]);
+    const author = await createAndSaveUser(userRepository, {
+      username: "username",
+    });
+    const requirement = await createAndSaveLIRequirement(
+      requirementRepository,
+      { quantity: 10 }
+    );
+    const posting = await createAndSavePosting(postingRepository, {
+      author,
+      requirements: [requirement],
+    });
 
     const postingInDb = await postingRepository.findById(posting.id);
 
