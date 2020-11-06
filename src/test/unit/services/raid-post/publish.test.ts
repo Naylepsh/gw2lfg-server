@@ -1,7 +1,11 @@
 import { RaidBoss } from "../../../../entities/raid-boss.entity";
 import { RaidPost } from "../../../../entities/raid-post.entitity";
 import { publish } from "../../../../services/raid-post/publish";
+import { RaidBossMemoryRepository } from "../../../helpers/repositories/raid-boss.memory-repository";
 import { RaidPostMemoryRepository } from "../../../helpers/repositories/raid-post.memory-repository";
+import { RequirementMemoryRepository } from "../../../helpers/repositories/requirement.memory-repository";
+import { RoleMemoryRepository } from "../../../helpers/repositories/role.memory-repository";
+import { UserMemoryRepository } from "../../../helpers/repositories/user.memory-repository";
 import { createUser } from "../../../helpers/user.helper";
 
 const addHours = (date: Date, hours: number) => {
@@ -25,8 +29,19 @@ describe("RaidPost service: publish tests", () => {
       bosses,
     });
     const raidPostRepository = new RaidPostMemoryRepository();
+    const userRepository = new UserMemoryRepository();
+    const requirementRepository = new RequirementMemoryRepository();
+    const roleRepository = new RoleMemoryRepository();
+    const bossRepository = new RaidBossMemoryRepository();
 
-    const { id } = await publish(post, raidPostRepository);
+    const { id } = await publish(
+      post,
+      raidPostRepository,
+      userRepository,
+      requirementRepository,
+      roleRepository,
+      bossRepository
+    );
     const hasBeenSaved = !!(await raidPostRepository.findById(id));
 
     expect(hasBeenSaved).toBe(true);
@@ -42,7 +57,20 @@ describe("RaidPost service: publish tests", () => {
       bosses,
     });
     const raidPostRepository = new RaidPostMemoryRepository();
+    const userRepository = new UserMemoryRepository();
+    const requirementRepository = new RequirementMemoryRepository();
+    const roleRepository = new RoleMemoryRepository();
+    const bossRepository = new RaidBossMemoryRepository();
 
-    expect(publish(post, raidPostRepository)).rejects.toThrow();
+    expect(
+      publish(
+        post,
+        raidPostRepository,
+        userRepository,
+        requirementRepository,
+        roleRepository,
+        bossRepository
+      )
+    ).rejects.toThrow();
   });
 });
