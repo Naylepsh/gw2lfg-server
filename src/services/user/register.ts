@@ -13,8 +13,9 @@ export const register = async (
     throw new UsernameTakenError();
   }
 
-  const hashedUser = await hashUserPassword(hash, user);
-  await userRepository.save(hashedUser);
+  const _user = { ...user };
+  await hashUserPassword(hash, _user);
+  await userRepository.save(_user);
 };
 
 const isUsernameTaken = async (
@@ -26,11 +27,5 @@ const isUsernameTaken = async (
 
 const hashUserPassword = async (hash: Hash, user: User) => {
   const hashedPassword = await hash(user.password);
-  const userProps = {
-    username: user.username,
-    password: hashedPassword,
-    apiKey: user.apiKey,
-  };
-  const hashedUser = new User(userProps);
-  return hashedUser;
+  user.password = hashedPassword;
 };

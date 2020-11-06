@@ -2,7 +2,7 @@ import { login } from "../../../../services/user/login";
 import { register } from "../../../../services/user/register";
 import { createDummyUser } from "../../../helpers/user.helper";
 import { simpleCompare, simpleHash } from "./simple.hashing";
-import { UserMemoryRepository } from "./user.memory-repository";
+import { UserMemoryRepository } from "../../../helpers/repositories/user.memory-repository";
 
 describe("User service: login tests", () => {
   it("should throw an error if user does not exist", async () => {

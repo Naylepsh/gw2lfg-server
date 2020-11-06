@@ -1,7 +1,7 @@
 import { register } from "../../../../services/user/register";
 import { createDummyUser } from "../../../helpers/user.helper";
 import { simpleHash } from "./simple.hashing";
-import { UserMemoryRepository } from "./user.memory-repository";
+import { UserMemoryRepository } from "../../../helpers/repositories/user.memory-repository";
 
 describe("User service: register tests", () => {
   it("should throw an error if username is taken", async () => {
