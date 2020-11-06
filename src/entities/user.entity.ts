@@ -6,7 +6,7 @@ import {
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from "typeorm";
-import { Posting } from "./posting.entity";
+import { Post } from "./post.entity";
 
 export interface UserProps {
   username: string;
@@ -28,8 +28,8 @@ export class User {
   @Column()
   apiKey: string;
 
-  @OneToMany(() => Posting, (posting) => posting.author)
-  postings: Posting[];
+  @OneToMany(() => Post, (post) => post.author)
+  posts: Post[];
 
   @CreateDateColumn()
   createdAt: Date;

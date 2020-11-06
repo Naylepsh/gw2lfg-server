@@ -1,9 +1,9 @@
 import { Connection } from "typeorm";
 import { loadTypeORM } from "../../../../loaders/typeorm";
 import {
-  IPostingRepository,
-  PostingRepository,
-} from "../../../../repositories/posting.repository";
+  IPostRepository,
+  PostRepository,
+} from "../../../../repositories/post.repository";
 import {
   IRequirementRepository,
   RequirementRepository,
@@ -13,19 +13,19 @@ import {
   UserRepository,
 } from "../../../../repositories/user.repository";
 import { createAndSaveLIRequirement } from "../../../helpers/li-requirement.helper";
-import { createAndSavePosting } from "../../../helpers/posting.helper";
+import { createAndSavePosting } from "../../../helpers/post.helper";
 import { createAndSaveUser } from "../../../helpers/user.helper";
 
 describe("TypeORM posting repository tests", () => {
   let connection: Connection;
-  let postingRepository: IPostingRepository;
+  let postRepository: IPostRepository;
   let userRepository: IUserRepository;
   let requirementRepository: IRequirementRepository;
 
   beforeAll(async () => {
     connection = await loadTypeORM();
 
-    postingRepository = connection.getCustomRepository(PostingRepository);
+    postRepository = connection.getCustomRepository(PostRepository);
     userRepository = connection.getCustomRepository(UserRepository);
     requirementRepository = connection.getCustomRepository(
       RequirementRepository
@@ -33,7 +33,7 @@ describe("TypeORM posting repository tests", () => {
   });
 
   afterEach(async () => {
-    await postingRepository.delete();
+    await postRepository.delete();
     await userRepository.delete();
     await requirementRepository.delete();
   });
@@ -46,9 +46,9 @@ describe("TypeORM posting repository tests", () => {
     const author = await createAndSaveUser(userRepository, {
       username: "username",
     });
-    const posting = await createAndSavePosting(postingRepository, { author });
+    const post = await createAndSavePosting(postRepository, { author });
 
-    const postingInDb = await postingRepository.findById(posting.id);
+    const postingInDb = await postRepository.findById(post.id);
 
     expect(postingInDb).not.toBeUndefined();
   });
@@ -57,9 +57,9 @@ describe("TypeORM posting repository tests", () => {
     const author = await createAndSaveUser(userRepository, {
       username: "username",
     });
-    const posting = await createAndSavePosting(postingRepository, { author });
+    const post = await createAndSavePosting(postRepository, { author });
 
-    const postingInDb = await postingRepository.findById(posting.id);
+    const postingInDb = await postRepository.findById(post.id);
 
     expect(postingInDb?.author.id).toBe(author.id);
   });
@@ -72,13 +72,13 @@ describe("TypeORM posting repository tests", () => {
       requirementRepository,
       { quantity: 10 }
     );
-    const posting = await createAndSavePosting(postingRepository, {
+    const post = await createAndSavePosting(postRepository, {
       author,
       requirements: [requirement],
     });
 
-    const postingInDb = await postingRepository.findById(posting.id);
+    const postInDb = await postRepository.findById(post.id);
 
-    expect(postingInDb?.requirements.length).toBe(1);
+    expect(postInDb?.requirements.length).toBe(1);
   });
 });

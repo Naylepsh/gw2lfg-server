@@ -13,7 +13,7 @@ import { Requirement } from "./requirement.entity";
 import { Role } from "./role.entity";
 import { User } from "./user.entity";
 
-export interface PostingProps {
+export interface PostProps {
   author: User;
   date: Date;
   server: string;
@@ -23,11 +23,11 @@ export interface PostingProps {
 }
 
 @Entity()
-export class Posting {
+export class Post {
   @PrimaryGeneratedColumn()
   id: number;
 
-  @ManyToOne(() => User, (user) => user.postings)
+  @ManyToOne(() => User, (user) => user.posts)
   author: User;
 
   @Column()
@@ -43,7 +43,7 @@ export class Posting {
   @JoinTable()
   requirements: Requirement[];
 
-  @OneToMany(() => Role, (role) => role.posting)
+  @OneToMany(() => Role, (role) => role.post)
   roles: Role[];
 
   @CreateDateColumn()
@@ -52,7 +52,7 @@ export class Posting {
   @UpdateDateColumn()
   updatedAt: Date;
 
-  constructor(props?: PostingProps) {
+  constructor(props?: PostProps) {
     if (props) {
       this.author = props.author;
       this.date = props.date;
