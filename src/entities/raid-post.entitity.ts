@@ -3,17 +3,21 @@ import { Post, PostProps } from "./post.entity";
 import { RaidBoss } from "./raid-boss.entity";
 
 export interface RaidPostProps extends PostProps {
-  bosses?: RaidBoss[];
+  bosses: RaidBoss[];
 }
 
 @Entity()
 export class RaidPost extends Post {
   @ManyToMany(() => RaidBoss)
   @JoinTable()
-  bosses?: RaidBoss[];
+  bosses: RaidBoss[];
 
   constructor(props?: RaidPostProps) {
-    super(props);
-    this.bosses = props?.bosses;
+    if (props) {
+      super(props);
+      this.bosses = props?.bosses;
+    } else {
+      super();
+    }
   }
 }
