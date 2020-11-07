@@ -30,7 +30,6 @@ describe("TypeORM Unit of Work tests", () => {
     user.username = "username";
     user.password = "password";
     user.apiKey = "api-key";
-
     await userRepo.save(user);
     await uow.commit();
 
@@ -50,7 +49,6 @@ describe("TypeORM Unit of Work tests", () => {
     user.username = "username";
     user.password = "password";
     user.apiKey = "api-key";
-
     await userRepo.save(user);
     await uow.rollback();
 
