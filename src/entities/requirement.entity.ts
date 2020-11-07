@@ -57,7 +57,7 @@ export interface LIRequirementProps {
 
 @ChildEntity()
 export class LIRequirement extends ItemRequirement {
-  public static itemName: "Legendary Insight";
+  public static itemName = "Legendary Insight";
 
   constructor(props?: LIRequirementProps) {
     if (props) {
