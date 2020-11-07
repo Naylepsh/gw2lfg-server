@@ -13,6 +13,10 @@ export class GenericRepository<Entity>
     return this.repository.findOne(id, { relations });
   }
 
+  findByIds(ids: number[]): Promise<Entity[]> {
+    return this.repository.findByIds(ids);
+  }
+
   async delete(criteria: any = {}): Promise<void> {
     await this.repository.delete(criteria);
   }

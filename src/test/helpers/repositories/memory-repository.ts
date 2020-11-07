@@ -33,6 +33,17 @@ export class MemoryRepository<Entity extends Identifiable> {
     });
   }
 
+  findByIds(ids: number[]): Promise<Entity[]> {
+    return turnIntoPromise<Entity[]>(() => {
+      const entities = ids
+        .map((id) => this.entities.get(id))
+        .filter((e) => !!e);
+      if (entities.length !== ids.length)
+        throw new Error("some entities were missing");
+      return entities as Entity[];
+    });
+  }
+
   delete(_criteria?: any): Promise<void> {
     return turnIntoPromise<void>(() => {
       this.entities.clear();
