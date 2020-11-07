@@ -5,12 +5,13 @@ import { RoleRepository } from "./role.repository";
 
 interface IUnitOfWork {
   start: () => Promise<void>;
-  commit: (f: () => Promise<void>) => Promise<void>;
+  commit: () => Promise<void>;
+  rollback: () => Promise<void>;
 }
 
 export class TypeOrmUnitOfWork implements IUnitOfWork {
   private readonly queryRunner: QueryRunner;
-  public transactionManager: EntityManager;
+  private transactionManager: EntityManager;
 
   constructor(connection: Connection) {
     this.queryRunner = connection.createQueryRunner();
@@ -33,21 +34,19 @@ export class TypeOrmUnitOfWork implements IUnitOfWork {
     return this.transactionManager.getCustomRepository(customRepository);
   }
 
-  async commit(work: () => Promise<void>): Promise<void> {
-    try {
-      await work();
-      await this.queryRunner.commitTransaction();
-    } catch (error) {
-      await this.queryRunner.rollbackTransaction();
-      throw error;
-    } finally {
-      await this.queryRunner.release();
-    }
+  async commit(): Promise<void> {
+    await this.queryRunner.commitTransaction();
+    await this.queryRunner.release();
+  }
+
+  async rollback(): Promise<void> {
+    await this.queryRunner.rollbackTransaction();
+    await this.queryRunner.release();
   }
 }
 
 export class RaidPostUnitOfWork implements IUnitOfWork {
-  public unitOfWork: TypeOrmUnitOfWork;
+  private unitOfWork: TypeOrmUnitOfWork;
 
   constructor(connection: Connection) {
     this.unitOfWork = new TypeOrmUnitOfWork(connection);
@@ -69,7 +68,11 @@ export class RaidPostUnitOfWork implements IUnitOfWork {
     return this.unitOfWork.start();
   }
 
-  async commit(work: () => Promise<void>) {
-    return this.unitOfWork.commit(work);
+  async commit() {
+    return this.unitOfWork.commit();
+  }
+
+  async rollback() {
+    return this.unitOfWork.rollback();
   }
 }

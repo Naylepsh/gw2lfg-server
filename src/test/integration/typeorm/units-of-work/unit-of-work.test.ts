@@ -16,7 +16,7 @@ describe("TypeORM Unit of Work tests", () => {
     connection = getConnection();
   });
 
-  afterEach(async () => {
+  afterAll(async () => {
     await connection.close();
   });
 
@@ -25,20 +25,36 @@ describe("TypeORM Unit of Work tests", () => {
     const uow = new TypeOrmUnitOfWork(connection);
 
     await uow.start();
-    const saveUser = async () => {
-      const userRepo = uow.getRepository(UserRepository);
-      const user = new User();
-      user.username = "username";
-      user.password = "password";
-      user.apiKey = "api-key";
+    const userRepo = uow.getRepository(UserRepository);
+    const user = new User();
+    user.username = "username";
+    user.password = "password";
+    user.apiKey = "api-key";
 
-      await userRepo.save(user);
-    };
-    await uow.commit(saveUser);
+    await userRepo.save(user);
+    await uow.commit();
 
-    const user = await repo.findByUsername("username");
-    expect(user).not.toBeUndefined();
+    const _user = await repo.findByUsername("username");
+    expect(_user).not.toBeUndefined();
 
     await repo.delete({});
+  });
+
+  it("should rollback changes", async () => {
+    const repo = connection.getCustomRepository(UserRepository);
+    const uow = new TypeOrmUnitOfWork(connection);
+
+    await uow.start();
+    const userRepo = uow.getRepository(UserRepository);
+    const user = new User();
+    user.username = "username";
+    user.password = "password";
+    user.apiKey = "api-key";
+
+    await userRepo.save(user);
+    await uow.rollback();
+
+    const _user = await repo.findByUsername("username");
+    expect(_user).toBeUndefined();
   });
 });
