@@ -2,7 +2,6 @@ import { Connection, getConnection } from "typeorm";
 import { User } from "../../../../entities/user.entity";
 import { loadTypeORM } from "../../../../loaders/typeorm";
 import { TypeOrmUnitOfWork } from "../../../../repositories/raid-post.unit-of-work";
-// import { TypeOrmUnitOfWork } from "../../../../repositories/raid-post.unit-of-work";
 import { UserRepository } from "../../../../repositories/user.repository";
 
 describe("TypeORM Unit of Work tests", () => {
