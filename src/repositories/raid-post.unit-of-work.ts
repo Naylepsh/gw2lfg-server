@@ -1,30 +1,27 @@
-import { Connection, EntityManager, ObjectType, QueryRunner } from "typeorm";
-import { RaidPostRepository } from "./raid-post.repository";
-import { RequirementRepository } from "./requirement.repository";
-import { RoleRepository } from "./role.repository";
+import { Connection, EntityManager, ObjectType } from "typeorm";
+import {
+  IRaidBossRepository,
+  RaidBossRepository,
+} from "./raid-boss.repository";
+import {
+  IRaidPostRepository,
+  RaidPostRepository,
+} from "./raid-post.repository";
+import {
+  IRequirementRepository,
+  RequirementRepository,
+} from "./requirement.repository";
+import { IRoleRepository, RoleRepository } from "./role.repository";
+import { IUserRepository, UserRepository } from "./user.repository";
 
-interface IUnitOfWork {
-  start: () => Promise<void>;
-  commit: () => Promise<void>;
-  rollback: () => Promise<void>;
+export interface IUnitOfWork {
+  withTransaction<T>(work: () => T): Promise<T>;
 }
 
 export class TypeOrmUnitOfWork implements IUnitOfWork {
-  private readonly queryRunner: QueryRunner;
-  private transactionManager: EntityManager;
+  private transactionManager: EntityManager | null;
 
-  constructor(connection: Connection) {
-    this.queryRunner = connection.createQueryRunner();
-  }
-
-  setTransactionManager() {
-    this.transactionManager = this.queryRunner.manager;
-  }
-
-  async start(): Promise<void> {
-    await this.queryRunner.startTransaction();
-    this.setTransactionManager();
-  }
+  constructor(private connection: Connection) {}
 
   // currently only to be used with custom repositories
   getRepository<T>(customRepository: ObjectType<T>): T {
@@ -34,45 +31,55 @@ export class TypeOrmUnitOfWork implements IUnitOfWork {
     return this.transactionManager.getCustomRepository(customRepository);
   }
 
-  async commit(): Promise<void> {
-    await this.queryRunner.commitTransaction();
-    await this.queryRunner.release();
-  }
-
-  async rollback(): Promise<void> {
-    await this.queryRunner.rollbackTransaction();
-    await this.queryRunner.release();
+  async withTransaction<T>(work: () => T): Promise<T> {
+    const queryRunner = this.connection.createQueryRunner();
+    await queryRunner.startTransaction();
+    this.transactionManager = queryRunner.manager;
+    try {
+      const result = await work();
+      await queryRunner.commitTransaction();
+      return result;
+    } catch (error) {
+      await queryRunner.rollbackTransaction();
+      throw error;
+    } finally {
+      await queryRunner.release();
+      this.transactionManager = null;
+    }
   }
 }
 
-export class RaidPostUnitOfWork implements IUnitOfWork {
-  private unitOfWork: TypeOrmUnitOfWork;
+export interface IRaidPostUnitOfWork extends IUnitOfWork {
+  requirements: IRequirementRepository;
+  roles: IRoleRepository;
+  raidPosts: IRaidPostRepository;
+  users: IUserRepository;
+  raidBosses: IRaidBossRepository;
+}
 
-  constructor(connection: Connection) {
-    this.unitOfWork = new TypeOrmUnitOfWork(connection);
+export class RaidPostUnitOfWork implements IRaidPostUnitOfWork {
+  private constructor(private unitOfWork: TypeOrmUnitOfWork) {}
+  withTransaction<T>(work: () => T): Promise<T> {
+    return this.unitOfWork.withTransaction(work);
   }
 
-  getRequirementRepository() {
+  get users() {
+    return this.unitOfWork.getRepository(UserRepository);
+  }
+
+  get raidBosses() {
+    return this.unitOfWork.getRepository(RaidBossRepository);
+  }
+
+  get requirements() {
     return this.unitOfWork.getRepository(RequirementRepository);
   }
 
-  getRoleRepository() {
+  get roles() {
     return this.unitOfWork.getRepository(RoleRepository);
   }
 
-  getRaidPostRepository() {
+  get raidPosts() {
     return this.unitOfWork.getRepository(RaidPostRepository);
-  }
-
-  async start() {
-    return this.unitOfWork.start();
-  }
-
-  async commit() {
-    return this.unitOfWork.commit();
-  }
-
-  async rollback() {
-    return this.unitOfWork.rollback();
   }
 }

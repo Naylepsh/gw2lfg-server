@@ -4,11 +4,7 @@ import {
   RequirementArgs,
   requirementFactory,
 } from "../../entities/requirement.factory";
-import { IRaidBossRepository } from "../../repositories/raid-boss.repository";
-import { IRaidPostRepository } from "../../repositories/raid-post.repository";
-import { IRequirementRepository } from "../../repositories/requirement.repository";
-import { IRoleRepository } from "../../repositories/role.repository";
-import { IUserRepository } from "../../repositories/user.repository";
+import { IRaidPostUnitOfWork } from "../../repositories/raid-post.unit-of-work";
 
 export class InvalidPropertyError extends Error {
   constructor(public readonly property: string, message: string) {
@@ -32,39 +28,46 @@ export interface PublishDTO {
 
 export const publish = async (
   publishDto: PublishDTO,
-  raidPostRepository: IRaidPostRepository,
-  userRepository: IUserRepository,
-  requirementRepository: IRequirementRepository,
-  roleRepository: IRoleRepository,
-  raidBossRepository: IRaidBossRepository
+  raidPostUow: IRaidPostUnitOfWork
 ) => {
-  const { raidPostProps } = publishDto;
-  if (isDateInThePast(raidPostProps.date)) throw new PastDateError("date");
+  if (isDateInThePast(publishDto.raidPostProps.date))
+    throw new PastDateError("date");
 
-  const author = await userRepository.findById(publishDto.authorId);
+  return await raidPostUow.withTransaction(() =>
+    createAndSavePost(publishDto, raidPostUow)
+  );
+};
+
+const isDateInThePast = (date: Date) => {
+  return new Date() > date;
+};
+
+const createAndSavePost = async (
+  publishDto: PublishDTO,
+  raidPostUow: IRaidPostUnitOfWork
+) => {
+  const author = await raidPostUow.users.findById(publishDto.authorId);
   if (!author) throw new Error("unregistered user");
 
   const requirements = publishDto.requirementsProps.map((req) =>
     requirementFactory.createRequirement(req)
   );
+  const requirementRepository = raidPostUow.requirements;
   await Promise.all(requirements.map((req) => requirementRepository.save(req)));
 
   const roles = publishDto.rolesProps.map((props) => new Role(props));
+  const roleRepository = raidPostUow.roles;
   await Promise.all(roles.map((role) => roleRepository.save(role)));
 
   const bossesIds = publishDto.bossesIds;
-  const bosses = await raidBossRepository.findByIds(bossesIds);
+  const bosses = await raidPostUow.raidBosses.findByIds(bossesIds);
 
   const post = new RaidPost({
-    ...raidPostProps,
+    ...publishDto.raidPostProps,
     author,
     requirements,
     roles,
     bosses,
   });
-  return raidPostRepository.save(post);
-};
-
-const isDateInThePast = (date: Date) => {
-  return new Date() > date;
+  return await raidPostUow.raidPosts.save(post);
 };

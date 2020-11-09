@@ -23,14 +23,15 @@ describe("TypeORM Unit of Work tests", () => {
     const repo = connection.getCustomRepository(UserRepository);
     const uow = new TypeOrmUnitOfWork(connection);
 
-    await uow.start();
-    const userRepo = uow.getRepository(UserRepository);
-    const user = new User();
-    user.username = "username";
-    user.password = "password";
-    user.apiKey = "api-key";
-    await userRepo.save(user);
-    await uow.commit();
+    const work = async () => {
+      const userRepo = uow.getRepository(UserRepository);
+      const user = new User();
+      user.username = "username";
+      user.password = "password";
+      user.apiKey = "api-key";
+      await userRepo.save(user);
+    };
+    await uow.withTransaction(work);
 
     const _user = await repo.findByUsername("username");
     expect(_user).not.toBeUndefined();
@@ -42,14 +43,18 @@ describe("TypeORM Unit of Work tests", () => {
     const repo = connection.getCustomRepository(UserRepository);
     const uow = new TypeOrmUnitOfWork(connection);
 
-    await uow.start();
-    const userRepo = uow.getRepository(UserRepository);
-    const user = new User();
-    user.username = "username";
-    user.password = "password";
-    user.apiKey = "api-key";
-    await userRepo.save(user);
-    await uow.rollback();
+    const work = async () => {
+      const userRepo = uow.getRepository(UserRepository);
+      const user = new User();
+      user.username = "username";
+      user.password = "password";
+      user.apiKey = "api-key";
+      await userRepo.save(user);
+      throw new Error("an error to force rollback");
+    };
+    try {
+      await uow.withTransaction(work);
+    } catch (error) {}
 
     const _user = await repo.findByUsername("username");
     expect(_user).toBeUndefined();
