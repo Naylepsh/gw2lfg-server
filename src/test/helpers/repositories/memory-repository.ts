@@ -46,15 +46,23 @@ export class MemoryRepository<Entity extends Identifiable> {
       const entities = ids
         .map((id) => this.entities.get(id))
         .filter((e) => !!e);
-      if (entities.length !== ids.length)
-        throw new Error("some entities were missing");
       return entities as Entity[];
     });
   }
 
   delete(_criteria?: any): Promise<void> {
     return turnIntoPromise<void>(() => {
-      this.entities.clear();
+      if (this.isArrayOfIds(_criteria)) {
+        for (const id of _criteria) {
+          this.entities.delete(id);
+        }
+      } else {
+        this.entities.clear();
+      }
     });
+  }
+
+  private isArrayOfIds(value: any) {
+    return Array.isArray(value) && value.every((v) => typeof v === "number");
   }
 }

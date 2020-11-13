@@ -20,4 +20,22 @@ export class RaidPostMemoryUnitOfWork implements IRaidPostUnitOfWork {
     this.committed = true;
     return res;
   }
+
+  async deleteAll() {
+    await this.raidPosts.delete({});
+    await this.users.delete({});
+    await this.requirements.delete({});
+    await this.roles.delete({});
+    await this.raidBosses.delete({});
+  }
+
+  static create() {
+    return new RaidPostMemoryUnitOfWork(
+      new UserMemoryRepository(),
+      new RaidBossMemoryRepository(),
+      new RoleMemoryRepository(),
+      new RequirementMemoryRepository(),
+      new RaidPostMemoryRepository()
+    );
+  }
 }

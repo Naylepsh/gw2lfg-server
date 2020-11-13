@@ -1,30 +1,15 @@
 import { LIRequirement } from "../../../../entities/requirement.entity";
 import { publish } from "../../../../services/raid-post/publish.service";
 import { createAndSaveRaidBoss } from "../../../helpers/raid-boss.helper";
-import { RaidBossMemoryRepository } from "../../../helpers/repositories/raid-boss.memory-repository";
-import { RaidPostMemoryRepository } from "../../../helpers/repositories/raid-post.memory-repository";
-import { RequirementMemoryRepository } from "../../../helpers/repositories/requirement.memory-repository";
-import { RoleMemoryRepository } from "../../../helpers/repositories/role.memory-repository";
-import { UserMemoryRepository } from "../../../helpers/repositories/user.memory-repository";
 import { RaidPostMemoryUnitOfWork } from "../../../helpers/uows/raid-post.memory-unit-of-work";
 import { createAndSaveUser } from "../../../helpers/user.helper";
 import { addHours, subtractHours } from "./hours.util";
 
 describe("RaidPost service: publish tests", () => {
-  const uow = new RaidPostMemoryUnitOfWork(
-    new UserMemoryRepository(),
-    new RaidBossMemoryRepository(),
-    new RoleMemoryRepository(),
-    new RequirementMemoryRepository(),
-    new RaidPostMemoryRepository()
-  );
+  const uow = RaidPostMemoryUnitOfWork.create();
 
   afterEach(async () => {
-    await uow.raidPosts.delete({});
-    await uow.users.delete({});
-    await uow.requirements.delete({});
-    await uow.roles.delete({});
-    await uow.raidBosses.delete({});
+    await uow.deleteAll();
   });
 
   it("should save a post when valid data was passed", async () => {
