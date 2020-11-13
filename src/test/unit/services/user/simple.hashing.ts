@@ -1,5 +1,5 @@
 import { Compare, Hash } from "../../../../utils/hashing/hashing.types";
-import { turnIntoPromise } from "./turn-into-promise";
+import { turnIntoPromise } from "../../../helpers/turn-into-promise";
 
 export const simpleHash: Hash = (text: string) =>
   turnIntoPromise(() => text + "123");

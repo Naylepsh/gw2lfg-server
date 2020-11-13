@@ -10,7 +10,7 @@
     "test": "jest",
     "test:unit": "jest -i src/test/unit",
     "test:integr": "jest -i src/test/integration",
-    "test:integr:db": "jest -i src/test/integration/db"
+    "test:integr:typeorm": "jest -i src/test/integration/typeorm"
   },
   "keywords": [],
   "author": "",
