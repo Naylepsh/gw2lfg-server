@@ -9,7 +9,9 @@ import { isDateInThePast } from "./is-date-in-the-past";
 import { PastDateError } from "./raid-post-errors";
 
 export interface PublishDTO {
-  raidPostProps: Pick<RaidPost, "date" | "server" | "description">;
+  date: Date;
+  server: string;
+  description?: string;
   authorId: number;
   bossesIds: number[];
   rolesProps: Pick<Role, "name" | "description">[];
@@ -20,8 +22,7 @@ export const publish = (
   publishDto: PublishDTO,
   raidPostUow: IRaidPostUnitOfWork
 ) => {
-  if (isDateInThePast(publishDto.raidPostProps.date))
-    throw new PastDateError("date");
+  if (isDateInThePast(publishDto.date)) throw new PastDateError("date");
 
   return raidPostUow.withTransaction(() =>
     createAndSavePost(publishDto, raidPostUow)
@@ -49,7 +50,7 @@ const createAndSavePost = async (
   const bosses = await raidPostUow.raidBosses.findByIds(bossesIds);
 
   const post = new RaidPost({
-    ...publishDto.raidPostProps,
+    ...publishDto,
     author,
     requirements,
     roles,

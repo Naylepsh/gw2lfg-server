@@ -84,10 +84,8 @@ describe("RaidPost service: publish tests", () => {
     bossesIds: number[]
   ) {
     const dto = {
-      raidPostProps: {
-        date,
-        server: "EU",
-      },
+      date,
+      server: "EU",
       authorId,
       bossesIds,
       rolesProps: [],
