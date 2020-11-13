@@ -5,18 +5,8 @@ import {
   requirementFactory,
 } from "../../entities/requirement.factory";
 import { IRaidPostUnitOfWork } from "../../repositories/raid-post.unit-of-work";
-
-export class InvalidPropertyError extends Error {
-  constructor(public readonly property: string, message: string) {
-    super(message);
-  }
-}
-
-export class PastDateError extends InvalidPropertyError {
-  constructor(property: string) {
-    super(property, `property ${property} cannot be a past date`);
-  }
-}
+import { isDateInThePast } from "./is-date-in-the-past";
+import { PastDateError } from "./raid-post-errors";
 
 export interface PublishDTO {
   raidPostProps: Pick<RaidPost, "date" | "server" | "description">;
@@ -26,20 +16,16 @@ export interface PublishDTO {
   requirementsProps: RequirementArgs[];
 }
 
-export const publish = async (
+export const publish = (
   publishDto: PublishDTO,
   raidPostUow: IRaidPostUnitOfWork
 ) => {
   if (isDateInThePast(publishDto.raidPostProps.date))
     throw new PastDateError("date");
 
-  return await raidPostUow.withTransaction(() =>
+  return raidPostUow.withTransaction(() =>
     createAndSavePost(publishDto, raidPostUow)
   );
-};
-
-const isDateInThePast = (date: Date) => {
-  return new Date() > date;
 };
 
 const createAndSavePost = async (

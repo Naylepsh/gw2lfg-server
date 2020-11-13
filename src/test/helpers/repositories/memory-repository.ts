@@ -17,14 +17,22 @@ export class MemoryRepository<Entity extends Identifiable> {
 
   save(entity: Entity): Promise<Entity> {
     return turnIntoPromise<Entity>(() => {
-      const id = this.nextId;
-      this.nextId++;
+      if (this.contains(entity)) {
+        this.entities.set(entity.id, entity);
+      } else {
+        const id = this.nextId;
+        this.nextId++;
 
-      entity.id = id;
-      this.entities.set(id, entity);
+        entity.id = id;
+        this.entities.set(id, entity);
+      }
 
       return entity;
     });
+  }
+
+  private contains(entity: Entity) {
+    return entity.id !== undefined && this.entities.has(entity.id);
   }
 
   findById(id: number): Promise<Entity | undefined> {

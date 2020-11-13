@@ -1,5 +1,5 @@
 import { LIRequirement } from "../../../../entities/requirement.entity";
-import { publish } from "../../../../services/raid-post/publish";
+import { publish } from "../../../../services/raid-post/publish.service";
 import { createAndSaveRaidBoss } from "../../../helpers/raid-boss.helper";
 import { RaidBossMemoryRepository } from "../../../helpers/repositories/raid-boss.memory-repository";
 import { RaidPostMemoryRepository } from "../../../helpers/repositories/raid-post.memory-repository";
@@ -8,16 +8,7 @@ import { RoleMemoryRepository } from "../../../helpers/repositories/role.memory-
 import { UserMemoryRepository } from "../../../helpers/repositories/user.memory-repository";
 import { RaidPostMemoryUnitOfWork } from "../../../helpers/uows/raid-post.memory-unit-of-work";
 import { createAndSaveUser } from "../../../helpers/user.helper";
-
-const addHours = (date: Date, hours: number) => {
-  const copy = new Date(date);
-  copy.setTime(copy.getTime() + hours * 60 * 60 * 1000);
-  return copy;
-};
-
-const subtractHours = (date: Date, hours: number) => {
-  return addHours(date, -hours);
-};
+import { addHours, subtractHours } from "./hours.util";
 
 describe("RaidPost service: publish tests", () => {
   const uow = new RaidPostMemoryUnitOfWork(
@@ -87,7 +78,11 @@ describe("RaidPost service: publish tests", () => {
     return createAndSaveRaidBoss(uow.raidBosses, raidBoss);
   }
 
-  function publishPost(date: Date, authorId: number, bossesIds: number[]) {
+  async function publishPost(
+    date: Date,
+    authorId: number,
+    bossesIds: number[]
+  ) {
     const dto = {
       raidPostProps: {
         date,
@@ -98,6 +93,6 @@ describe("RaidPost service: publish tests", () => {
       rolesProps: [],
       requirementsProps: [{ name: LIRequirement.itemName, quantity: 10 }],
     };
-    return publish(dto, uow);
+    return await publish(dto, uow);
   }
 });
