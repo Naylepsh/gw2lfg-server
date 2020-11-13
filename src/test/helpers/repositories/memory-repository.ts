@@ -17,14 +17,22 @@ export class MemoryRepository<Entity extends Identifiable> {
 
   save(entity: Entity): Promise<Entity> {
     return turnIntoPromise<Entity>(() => {
-      const id = this.nextId;
-      this.nextId++;
+      if (this.contains(entity)) {
+        this.entities.set(entity.id, entity);
+      } else {
+        const id = this.nextId;
+        this.nextId++;
 
-      entity.id = id;
-      this.entities.set(id, entity);
+        entity.id = id;
+        this.entities.set(id, entity);
+      }
 
       return entity;
     });
+  }
+
+  private contains(entity: Entity) {
+    return entity.id !== undefined && this.entities.has(entity.id);
   }
 
   findById(id: number): Promise<Entity | undefined> {
@@ -38,15 +46,23 @@ export class MemoryRepository<Entity extends Identifiable> {
       const entities = ids
         .map((id) => this.entities.get(id))
         .filter((e) => !!e);
-      if (entities.length !== ids.length)
-        throw new Error("some entities were missing");
       return entities as Entity[];
     });
   }
 
   delete(_criteria?: any): Promise<void> {
     return turnIntoPromise<void>(() => {
-      this.entities.clear();
+      if (this.isArrayOfIds(_criteria)) {
+        for (const id of _criteria) {
+          this.entities.delete(id);
+        }
+      } else {
+        this.entities.clear();
+      }
     });
+  }
+
+  private isArrayOfIds(value: any) {
+    return Array.isArray(value) && value.every((v) => typeof v === "number");
   }
 }
