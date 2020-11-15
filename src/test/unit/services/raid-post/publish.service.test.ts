@@ -36,12 +36,8 @@ describe("RaidPost service: publish tests", () => {
     const { id: userId } = await createAndSaveUser(uow.users, {
       username: "username",
     });
-    const { id: bossId } = await createAndSaveRaidBoss(uow.raidBosses, {
-      name: "boss",
-      isCm: false,
-    });
     const date = addHours(new Date(), 1);
-    const dto = createPublishDto(userId, [bossId], {
+    const dto = createPublishDto(userId, [], {
       date,
       requirementsProps: [{ name: LIRequirement.itemName, quantity: 10 }],
     });
@@ -57,12 +53,8 @@ describe("RaidPost service: publish tests", () => {
     const { id: userId } = await createAndSaveUser(uow.users, {
       username: "username",
     });
-    const { id: bossId } = await createAndSaveRaidBoss(uow.raidBosses, {
-      name: "boss",
-      isCm: false,
-    });
     const date = addHours(new Date(), 1);
-    const dto = createPublishDto(userId, [bossId], {
+    const dto = createPublishDto(userId, [], {
       date,
       rolesProps: [{ name: "DPS" }],
     });
@@ -70,7 +62,7 @@ describe("RaidPost service: publish tests", () => {
 
     await publish(dto, uow);
 
-    const rolesInDbAfter = uow.requirements.entities.size;
+    const rolesInDbAfter = uow.roles.entities.size;
     expect(rolesInDbAfter - rolesInDbBefore > 0).toBe(true);
   });
 
@@ -114,12 +106,8 @@ describe("RaidPost service: publish tests", () => {
     const { id: userId } = await createAndSaveUser(uow.users, {
       username: "username",
     });
-    const { id: bossId } = await createAndSaveRaidBoss(uow.raidBosses, {
-      name: "boss",
-      isCm: false,
-    });
     const date = subtractHours(new Date(), 1);
-    const dto = createPublishDto(userId, [bossId], { date });
+    const dto = createPublishDto(userId, [], { date });
 
     expect(publish(dto, uow)).rejects.toThrow();
   });
@@ -134,8 +122,8 @@ describe("RaidPost service: publish tests", () => {
       server: dto.server ?? "EU",
       authorId,
       bossesIds,
-      rolesProps: [{ name: "DPS" }],
-      requirementsProps: [{ name: LIRequirement.itemName, quantity: 10 }],
+      rolesProps: dto.rolesProps ?? [],
+      requirementsProps: dto.requirementsProps ?? [],
     };
   }
 });
