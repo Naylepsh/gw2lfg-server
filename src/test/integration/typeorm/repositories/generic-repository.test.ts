@@ -14,6 +14,10 @@ describe("Generic Repository Tests", () => {
     connection = await loadTypeORM();
   });
 
+  afterEach(async () => {
+    await connection.getRepository(User).delete({});
+  });
+
   afterAll(async () => {
     await connection.close();
   });
@@ -36,6 +40,6 @@ describe("Generic Repository Tests", () => {
           apiKey: "api-key",
         })
     );
-    await connection.getRepository(User).insert(users);
+    await connection.getRepository(User).save(users);
   }
 });

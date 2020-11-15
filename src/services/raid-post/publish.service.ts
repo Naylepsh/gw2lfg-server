@@ -31,23 +31,21 @@ export const publish = async (
 
 const createAndSavePost = async (
   publishDto: PublishDTO,
-  raidPostUow: IRaidPostUnitOfWork
+  uow: IRaidPostUnitOfWork
 ) => {
-  const author = await raidPostUow.users.findById(publishDto.authorId);
+  const author = await uow.users.findById(publishDto.authorId);
   if (!author) throw new Error("unregistered user");
 
   const requirements = publishDto.requirementsProps.map((req) =>
     requirementFactory.createRequirement(req)
   );
-  const requirementRepository = raidPostUow.requirements;
-  await Promise.all(requirements.map((req) => requirementRepository.save(req)));
+  await uow.requirements.saveMany(requirements);
 
   const roles = publishDto.rolesProps.map((props) => new Role(props));
-  const roleRepository = raidPostUow.roles;
-  await Promise.all(roles.map((role) => roleRepository.save(role)));
+  await uow.roles.saveMany(roles);
 
   const bossesIds = publishDto.bossesIds;
-  const bosses = await raidPostUow.raidBosses.findByIds(bossesIds);
+  const bosses = await uow.raidBosses.findByIds(bossesIds);
 
   const post = new RaidPost({
     ...publishDto,
@@ -56,5 +54,5 @@ const createAndSavePost = async (
     roles,
     bosses,
   });
-  return await raidPostUow.raidPosts.save(post);
+  return await uow.raidPosts.save(post);
 };

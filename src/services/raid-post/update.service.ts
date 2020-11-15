@@ -79,8 +79,7 @@ const createRoles = async (
   uow: IRaidPostUnitOfWork
 ) => {
   const roles = rolesProps.map((props) => new Role(props));
-  const roleRepository = uow.roles;
-  return await Promise.all(roles.map((role) => roleRepository.save(role)));
+  return uow.roles.saveMany(roles);
 };
 
 const createRequirements = async (
@@ -90,7 +89,5 @@ const createRequirements = async (
   const requirements = requirementsProps.map((req) =>
     requirementFactory.createRequirement(req)
   );
-  return await Promise.all(
-    requirements.map((req) => uow.requirements.save(req))
-  );
+  return uow.requirements.saveMany(requirements);
 };
