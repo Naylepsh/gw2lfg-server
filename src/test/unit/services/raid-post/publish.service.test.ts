@@ -74,7 +74,22 @@ describe("RaidPost service: publish tests", () => {
     expect(rolesInDbAfter - rolesInDbBefore > 0).toBe(true);
   });
 
-  // it('should NOT create additional users')
+  it("should NOT create additional users", async () => {
+    const { id: userId } = await createAndSaveUser(uow.users, {
+      username: "username",
+    });
+    const date = addHours(new Date(), 1);
+    const dto = createPublishDto(userId, [], {
+      date,
+    });
+    const usersInDbBefore = uow.users.entities.size;
+
+    await publish(dto, uow);
+
+    const usersInDbAfter = uow.users.entities.size;
+    expect(usersInDbAfter).toBe(usersInDbBefore);
+  });
+
   // it('should NOT create additional bosses')
 
   it("should fail when a post date is in the past", async () => {
