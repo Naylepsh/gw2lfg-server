@@ -17,7 +17,6 @@ export interface UpdateRaidPostDTO {
   date: Date;
   server: string;
   description?: string;
-  authorId: number;
   bossesIds: number[];
   rolesProps: RoleProp[];
   requirementsProps: RequirementArgs[];
@@ -38,7 +37,7 @@ export const update = async (
       );
     }
 
-    const author = await getAuthor(uow, updateDto.authorId);
+    const author = raidPost.author;
     const bosses = await getBosses(uow, updateDto.bossesIds);
 
     await uow.roles.delete(raidPost.roles);
@@ -63,12 +62,12 @@ export const update = async (
   });
 };
 
-const getAuthor = async (uow: IRaidPostUnitOfWork, authorId: number) => {
-  const author = await uow.users.findById(authorId);
-  if (!author)
-    throw new EntityNotFoundError(`user with id ${authorId} not found`);
-  return author;
-};
+// const getAuthor = async (uow: IRaidPostUnitOfWork, authorId: number) => {
+//   const author = await uow.users.findById(authorId);
+//   if (!author)
+//     throw new EntityNotFoundError(`user with id ${authorId} not found`);
+//   return author;
+// };
 
 const getBosses = async (uow: IRaidPostUnitOfWork, bossesIds: number[]) => {
   const bosses = await uow.raidBosses.findByIds(bossesIds);
