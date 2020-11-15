@@ -1,5 +1,8 @@
 import { LIRequirement } from "../../../../entities/requirement.entity";
-import { publish } from "../../../../services/raid-post/publish.service";
+import {
+  publish,
+  PublishDTO,
+} from "../../../../services/raid-post/publish.service";
 import { createAndSaveRaidBoss } from "../../../helpers/raid-boss.helper";
 import { RaidPostMemoryUnitOfWork } from "../../../helpers/uows/raid-post.memory-unit-of-work";
 import { createAndSaveUser } from "../../../helpers/user.helper";
@@ -13,69 +16,114 @@ describe("RaidPost service: publish tests", () => {
   });
 
   it("should save a post when valid data was passed", async () => {
-    const { id: userId } = await addUser({ username: "username" });
-    const { id: bossId } = await addRaidBoss({
+    const { id: userId } = await createAndSaveUser(uow.users, {
+      username: "username",
+    });
+    const { id: bossId } = await createAndSaveRaidBoss(uow.raidBosses, {
       name: "boss",
       isCm: false,
     });
     const date = addHours(new Date(), 1);
+    const dto = createPublishDto(userId, [bossId], { date });
+    const { id: postId } = await publish(dto, uow);
 
-    const { id: postId } = await publishPost(date, userId, [bossId]);
     const hasBeenSaved = !!(await uow.raidPosts.findById(postId));
 
     expect(hasBeenSaved).toBe(true);
   });
 
   it("should save requirements when valid data was passed", async () => {
-    const { id: userId } = await addUser({ username: "username" });
-    const { id: bossId } = await addRaidBoss({
-      name: "boss",
-      isCm: false,
+    const { id: userId } = await createAndSaveUser(uow.users, {
+      username: "username",
     });
     const date = addHours(new Date(), 1);
+    const dto = createPublishDto(userId, [], {
+      date,
+      requirementsProps: [{ name: LIRequirement.itemName, quantity: 10 }],
+    });
     const reqsInDbBefore = uow.requirements.entities.size;
 
-    await publishPost(date, userId, [bossId]);
+    await publish(dto, uow);
 
     const reqsInDbAfter = uow.requirements.entities.size;
     expect(reqsInDbAfter - reqsInDbBefore > 0).toBe(true);
   });
 
-  it("should fail when a post date is in the past", async () => {
-    const { id: userId } = await addUser({ username: "username" });
-    const { id: bossId } = await addRaidBoss({
+  it("should save roles when valid data was passed", async () => {
+    const { id: userId } = await createAndSaveUser(uow.users, {
+      username: "username",
+    });
+    const date = addHours(new Date(), 1);
+    const dto = createPublishDto(userId, [], {
+      date,
+      rolesProps: [{ name: "DPS" }],
+    });
+    const rolesInDbBefore = uow.roles.entities.size;
+
+    await publish(dto, uow);
+
+    const rolesInDbAfter = uow.roles.entities.size;
+    expect(rolesInDbAfter - rolesInDbBefore > 0).toBe(true);
+  });
+
+  it("should NOT create additional users", async () => {
+    const { id: userId } = await createAndSaveUser(uow.users, {
+      username: "username",
+    });
+    const date = addHours(new Date(), 1);
+    const dto = createPublishDto(userId, [], {
+      date,
+    });
+    const usersInDbBefore = uow.users.entities.size;
+
+    await publish(dto, uow);
+
+    const usersInDbAfter = uow.users.entities.size;
+    expect(usersInDbAfter).toBe(usersInDbBefore);
+  });
+
+  it("should NOT create additional bosses", async () => {
+    const { id: userId } = await createAndSaveUser(uow.users, {
+      username: "username",
+    });
+    const { id: bossId } = await createAndSaveRaidBoss(uow.raidBosses, {
       name: "boss",
       isCm: false,
     });
-    const date = subtractHours(new Date(), 1);
+    const date = addHours(new Date(), 1);
+    const dto = createPublishDto(userId, [bossId], {
+      date,
+    });
+    const bossesInDbBefore = uow.raidBosses.entities.size;
 
-    expect(publishPost(date, userId, [bossId])).rejects.toThrow();
+    await publish(dto, uow);
+
+    const bossesInDbAfter = uow.raidBosses.entities.size;
+    expect(bossesInDbAfter).toBe(bossesInDbBefore);
   });
 
-  function addUser(user: { username: string }): Promise<{ id: any }> {
-    return createAndSaveUser(uow.users, user);
-  }
+  it("should fail when a post date is in the past", async () => {
+    const { id: userId } = await createAndSaveUser(uow.users, {
+      username: "username",
+    });
+    const date = subtractHours(new Date(), 1);
+    const dto = createPublishDto(userId, [], { date });
 
-  function addRaidBoss(raidBoss: {
-    name: string;
-    isCm: boolean;
-  }): Promise<{ id: any }> {
-    return createAndSaveRaidBoss(uow.raidBosses, raidBoss);
-  }
+    expect(publish(dto, uow)).rejects.toThrow();
+  });
 
-  async function publishPost(
-    date: Date,
+  function createPublishDto(
     authorId: number,
-    bossesIds: number[]
+    bossesIds: number[],
+    dto: Partial<PublishDTO>
   ) {
-    const dto = {
-      date,
-      server: "EU",
+    return {
+      date: dto.date ?? addHours(new Date(), 1),
+      server: dto.server ?? "EU",
       authorId,
       bossesIds,
-      rolesProps: [],
-      requirementsProps: [{ name: LIRequirement.itemName, quantity: 10 }],
+      rolesProps: dto.rolesProps ?? [],
+      requirementsProps: dto.requirementsProps ?? [],
     };
-    return await publish(dto, uow);
   }
 });
