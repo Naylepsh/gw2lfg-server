@@ -1,5 +1,8 @@
 import { LIRequirement } from "../../../../entities/requirement.entity";
-import { publish } from "../../../../services/raid-post/publish.service";
+import {
+  publish,
+  PublishDTO,
+} from "../../../../services/raid-post/publish.service";
 import { createAndSaveRaidBoss } from "../../../helpers/raid-boss.helper";
 import { RaidPostMemoryUnitOfWork } from "../../../helpers/uows/raid-post.memory-unit-of-work";
 import { createAndSaveUser } from "../../../helpers/user.helper";
@@ -21,8 +24,9 @@ describe("RaidPost service: publish tests", () => {
       isCm: false,
     });
     const date = addHours(new Date(), 1);
+    const dto = createPublishDto(userId, [bossId], { date });
+    const { id: postId } = await publish(dto, uow);
 
-    const { id: postId } = await publishPost(date, userId, [bossId]);
     const hasBeenSaved = !!(await uow.raidPosts.findById(postId));
 
     expect(hasBeenSaved).toBe(true);
@@ -37,9 +41,13 @@ describe("RaidPost service: publish tests", () => {
       isCm: false,
     });
     const date = addHours(new Date(), 1);
+    const dto = createPublishDto(userId, [bossId], {
+      date,
+      requirementsProps: [{ name: LIRequirement.itemName, quantity: 10 }],
+    });
     const reqsInDbBefore = uow.requirements.entities.size;
 
-    await publishPost(date, userId, [bossId]);
+    await publish(dto, uow);
 
     const reqsInDbAfter = uow.requirements.entities.size;
     expect(reqsInDbAfter - reqsInDbBefore > 0).toBe(true);
@@ -54,9 +62,13 @@ describe("RaidPost service: publish tests", () => {
       isCm: false,
     });
     const date = addHours(new Date(), 1);
+    const dto = createPublishDto(userId, [bossId], {
+      date,
+      rolesProps: [{ name: "DPS" }],
+    });
     const rolesInDbBefore = uow.roles.entities.size;
 
-    await publishPost(date, userId, [bossId]);
+    await publish(dto, uow);
 
     const rolesInDbAfter = uow.requirements.entities.size;
     expect(rolesInDbAfter - rolesInDbBefore > 0).toBe(true);
@@ -74,23 +86,23 @@ describe("RaidPost service: publish tests", () => {
       isCm: false,
     });
     const date = subtractHours(new Date(), 1);
+    const dto = createPublishDto(userId, [bossId], { date });
 
-    expect(publishPost(date, userId, [bossId])).rejects.toThrow();
+    expect(publish(dto, uow)).rejects.toThrow();
   });
 
-  async function publishPost(
-    date: Date,
+  function createPublishDto(
     authorId: number,
-    bossesIds: number[]
+    bossesIds: number[],
+    dto: Partial<PublishDTO>
   ) {
-    const dto = {
-      date,
-      server: "EU",
+    return {
+      date: dto.date ?? addHours(new Date(), 1),
+      server: dto.server ?? "EU",
       authorId,
       bossesIds,
       rolesProps: [{ name: "DPS" }],
       requirementsProps: [{ name: LIRequirement.itemName, quantity: 10 }],
     };
-    return await publish(dto, uow);
   }
 });

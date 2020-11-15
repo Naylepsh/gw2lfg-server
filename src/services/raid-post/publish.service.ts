@@ -18,7 +18,7 @@ export interface PublishDTO {
   requirementsProps: RequirementArgs[];
 }
 
-export const publish = (
+export const publish = async (
   publishDto: PublishDTO,
   raidPostUow: IRaidPostUnitOfWork
 ) => {
