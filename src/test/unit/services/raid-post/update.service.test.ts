@@ -9,6 +9,7 @@ import { createAndSaveRaidPost } from "../../../helpers/raid-post.helper";
 import { addHours } from "./hours.util";
 import { createAndSaveLIRequirement } from "../../../helpers/li-requirement.helper";
 import { LIRequirement } from "../../../../entities/requirement.entity";
+import { createAndSaveRole } from "../../../helpers/role.helper";
 
 describe("RaidPost Service: update tests", () => {
   const uow = RaidPostMemoryUnitOfWork.create();
@@ -53,7 +54,25 @@ describe("RaidPost Service: update tests", () => {
     expect(post!.requirements[0]).toHaveProperty("quantity", 2);
   });
 
-  // it('should change roles when they differ from in-database ones')
+  it("should change roles when they differ from in-database ones", async () => {
+    const user = await createAndSaveUser(uow.users, { username: "username" });
+    const role = await createAndSaveRole(uow.roles, { name: "DPS" });
+    const raidPost = await createAndSaveRaidPost(uow.raidPosts, user, {
+      date: addHours(new Date(), 1),
+      roles: [role],
+    });
+    const updateDto = createUpdateDto(raidPost.id, {
+      rolesProps: [{ name: "Healer" }],
+    });
+
+    await update(updateDto, uow);
+
+    const post = await uow.raidPosts.findById(raidPost.id);
+    expect(post).toBeDefined();
+    expect(post).toHaveProperty("requirements");
+    expect(post!.roles.length).toBe(1);
+    expect(post!.roles[0]).toHaveProperty("name", "Healer");
+  });
 
   it("should change bosses when boss list differs from in-database one", async () => {
     const user = await createAndSaveUser(uow.users, { username: "username" });
