@@ -45,6 +45,26 @@ describe("RaidPost service: publish tests", () => {
     expect(reqsInDbAfter - reqsInDbBefore > 0).toBe(true);
   });
 
+  it("should save roles when valid data was passed", async () => {
+    const { id: userId } = await createAndSaveUser(uow.users, {
+      username: "username",
+    });
+    const { id: bossId } = await createAndSaveRaidBoss(uow.raidBosses, {
+      name: "boss",
+      isCm: false,
+    });
+    const date = addHours(new Date(), 1);
+    const rolesInDbBefore = uow.roles.entities.size;
+
+    await publishPost(date, userId, [bossId]);
+
+    const rolesInDbAfter = uow.requirements.entities.size;
+    expect(rolesInDbAfter - rolesInDbBefore > 0).toBe(true);
+  });
+
+  // it('should NOT create additional users')
+  // it('should NOT create additional bosses')
+
   it("should fail when a post date is in the past", async () => {
     const { id: userId } = await createAndSaveUser(uow.users, {
       username: "username",
@@ -68,7 +88,7 @@ describe("RaidPost service: publish tests", () => {
       server: "EU",
       authorId,
       bossesIds,
-      rolesProps: [],
+      rolesProps: [{ name: "DPS" }],
       requirementsProps: [{ name: LIRequirement.itemName, quantity: 10 }],
     };
     return await publish(dto, uow);
