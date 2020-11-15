@@ -13,8 +13,10 @@ describe("RaidPost service: publish tests", () => {
   });
 
   it("should save a post when valid data was passed", async () => {
-    const { id: userId } = await addUser({ username: "username" });
-    const { id: bossId } = await addRaidBoss({
+    const { id: userId } = await createAndSaveUser(uow.users, {
+      username: "username",
+    });
+    const { id: bossId } = await createAndSaveRaidBoss(uow.raidBosses, {
       name: "boss",
       isCm: false,
     });
@@ -27,8 +29,10 @@ describe("RaidPost service: publish tests", () => {
   });
 
   it("should save requirements when valid data was passed", async () => {
-    const { id: userId } = await addUser({ username: "username" });
-    const { id: bossId } = await addRaidBoss({
+    const { id: userId } = await createAndSaveUser(uow.users, {
+      username: "username",
+    });
+    const { id: bossId } = await createAndSaveRaidBoss(uow.raidBosses, {
       name: "boss",
       isCm: false,
     });
@@ -42,8 +46,10 @@ describe("RaidPost service: publish tests", () => {
   });
 
   it("should fail when a post date is in the past", async () => {
-    const { id: userId } = await addUser({ username: "username" });
-    const { id: bossId } = await addRaidBoss({
+    const { id: userId } = await createAndSaveUser(uow.users, {
+      username: "username",
+    });
+    const { id: bossId } = await createAndSaveRaidBoss(uow.raidBosses, {
       name: "boss",
       isCm: false,
     });
@@ -51,17 +57,6 @@ describe("RaidPost service: publish tests", () => {
 
     expect(publishPost(date, userId, [bossId])).rejects.toThrow();
   });
-
-  function addUser(user: { username: string }): Promise<{ id: any }> {
-    return createAndSaveUser(uow.users, user);
-  }
-
-  function addRaidBoss(raidBoss: {
-    name: string;
-    isCm: boolean;
-  }): Promise<{ id: any }> {
-    return createAndSaveRaidBoss(uow.raidBosses, raidBoss);
-  }
 
   async function publishPost(
     date: Date,
