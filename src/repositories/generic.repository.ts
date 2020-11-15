@@ -1,5 +1,5 @@
 import { AbstractRepository, EntityRepository } from "typeorm";
-import { IRepository } from "./repository.interface";
+import { FindParams, IRepository } from "./repository.interface";
 
 @EntityRepository()
 export class GenericRepository<Entity>
@@ -7,6 +7,10 @@ export class GenericRepository<Entity>
   implements IRepository<Entity> {
   save(entity: Entity): Promise<Entity> {
     return this.repository.save(entity);
+  }
+
+  findMany(findParams?: FindParams<Entity>): Promise<Entity[]> {
+    return this.repository.find(findParams);
   }
 
   findById(id: number, relations: string[] = []): Promise<Entity | undefined> {

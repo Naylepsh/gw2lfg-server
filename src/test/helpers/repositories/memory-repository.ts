@@ -1,10 +1,15 @@
+import {
+  FindParams,
+  IRepository,
+} from "../../../repositories/repository.interface";
 import { turnIntoPromise } from "../turn-into-promise";
 
 interface Identifiable {
   id: number;
 }
 
-export class MemoryRepository<Entity extends Identifiable> {
+export class MemoryRepository<Entity extends Identifiable>
+  implements IRepository<Entity> {
   nextId = 0;
   readonly entities = new Map<number, Entity>();
 
@@ -33,6 +38,40 @@ export class MemoryRepository<Entity extends Identifiable> {
 
   private contains(entity: Entity) {
     return entity.id !== undefined && this.entities.has(entity.id);
+  }
+
+  findMany(_params?: FindParams<Entity>): Promise<Entity[]> {
+    let entities = Array.from(this.entities.values());
+
+    if (_params?.order) {
+      const orderParams = new Map(Object.entries(_params.order!));
+
+      entities = entities.sort((a, b) => {
+        const _a = new Map(Object.entries(a));
+        const _b = new Map(Object.entries(b));
+
+        for (const property in orderParams) {
+          const order = orderParams.get(property);
+          if (_a.get(property) > _b.get(property)) {
+            return order === "ASC" ? 1 : -1;
+          } else if (_a.get(property) < _b.get(property)) {
+            return order === "ASC" ? -1 : 1;
+          }
+        }
+
+        return 0;
+      });
+    }
+
+    if (_params?.skip) {
+      entities = entities.slice(_params.skip);
+    }
+
+    if (_params?.take) {
+      entities = entities.slice(0, _params.take);
+    }
+
+    return turnIntoPromise(() => entities);
   }
 
   findById(id: number): Promise<Entity | undefined> {
