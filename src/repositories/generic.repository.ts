@@ -1,12 +1,5 @@
 import { AbstractRepository, EntityRepository } from "typeorm";
-import { IRepository } from "./repository.interface";
-
-export interface FindParams {
-  where?: any;
-  take?: number;
-  skip?: number;
-  relations?: string[];
-}
+import { FindParams, IRepository } from "./repository.interface";
 
 @EntityRepository()
 export class GenericRepository<Entity>
@@ -16,7 +9,7 @@ export class GenericRepository<Entity>
     return this.repository.save(entity);
   }
 
-  findMany(findParams?: FindParams): Promise<Entity[]> {
+  findMany(findParams?: FindParams<Entity>): Promise<Entity[]> {
     return this.repository.find(findParams);
   }
 
