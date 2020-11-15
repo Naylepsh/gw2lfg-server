@@ -9,6 +9,10 @@ export class GenericRepository<Entity>
     return this.repository.save(entity);
   }
 
+  saveMany(entities: Entity[]): Promise<Entity[]> {
+    return this.repository.save(entities);
+  }
+
   findMany(findParams?: FindParams<Entity>): Promise<Entity[]> {
     return this.repository.find(findParams);
   }

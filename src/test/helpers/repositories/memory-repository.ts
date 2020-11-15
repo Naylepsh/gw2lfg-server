@@ -36,6 +36,14 @@ export class MemoryRepository<Entity extends Identifiable>
     });
   }
 
+  async saveMany(entities: Entity[]): Promise<Entity[]> {
+    for (const entity of entities) {
+      await this.save(entity);
+    }
+
+    return entities;
+  }
+
   private contains(entity: Entity) {
     return entity.id !== undefined && this.entities.has(entity.id);
   }

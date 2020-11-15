@@ -8,6 +8,7 @@ export interface FindParams<Entity> {
 
 export interface IRepository<Model> {
   save(entity: Model): Promise<Model>;
+  saveMany(entities: Model[]): Promise<Model[]>;
   findMany(params?: FindParams<Model>): Promise<Model[]>;
   findById(id: number): Promise<Model | undefined>;
   findByIds(ids: number[]): Promise<Model[]>;
