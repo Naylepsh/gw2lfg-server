@@ -8,32 +8,31 @@ import { createAndSaveUser } from "../../../helpers/user.helper";
 
 describe("RaidPost Service: unpublish tests", () => {
   const uow = RaidPostMemoryUnitOfWork.create();
+  let id: number;
+
+  beforeEach(async () => {
+    const user = await createAndSaveUser(uow.users, { username: "username" });
+    const boss = await createAndSaveRaidBoss(uow.raidBosses, {
+      name: "boss",
+      isCm: false,
+    });
+    const requirement = await createAndSaveLIRequirement(uow.requirements, {
+      quantity: 1,
+    });
+    const role = await createAndSaveRole(uow.roles, { name: "DPS" });
+    const post = await createAndSaveRaidPost(uow.raidPosts, user, {
+      bosses: [boss],
+      requirements: [requirement],
+      roles: [role],
+    });
+    id = post.id;
+  });
 
   afterEach(async () => {
     await uow.deleteAll();
   });
 
   describe("if a post with given id exists", () => {
-    let id: number;
-
-    beforeEach(async () => {
-      const user = await createAndSaveUser(uow.users, { username: "username" });
-      const boss = await createAndSaveRaidBoss(uow.raidBosses, {
-        name: "boss",
-        isCm: false,
-      });
-      const requirement = await createAndSaveLIRequirement(uow.requirements, {
-        quantity: 1,
-      });
-      const role = await createAndSaveRole(uow.roles, { name: "DPS" });
-      const post = await createAndSaveRaidPost(uow.raidPosts, user, {
-        bosses: [boss],
-        requirements: [requirement],
-        roles: [role],
-      });
-      id = post.id;
-    });
-
     it("should remove a post from database", async () => {
       await unpublish({ id }, uow);
 
@@ -82,5 +81,13 @@ describe("RaidPost Service: unpublish tests", () => {
     });
   });
 
-  // it("should not change the database state if no post with given id exists");
+  it("should not change the database state if no post with given id exists", async () => {
+    const post = await uow.raidPosts.findById(id);
+    const idNotInDb = id + 1;
+
+    await unpublish({ id: idNotInDb }, uow);
+
+    const _post = await uow.raidPosts.findById(post!.id);
+    expect(_post).toBeDefined();
+  });
 });
