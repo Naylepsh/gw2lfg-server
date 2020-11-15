@@ -6,7 +6,7 @@ import { createAndSaveRaidBoss } from "../../../helpers/raid-boss.helper";
 import { RaidPostMemoryUnitOfWork } from "../../../helpers/uows/raid-post.memory-unit-of-work";
 import { createAndSaveUser } from "../../../helpers/user.helper";
 import { createAndSaveRaidPost } from "../../../helpers/raid-post.helper";
-import { addHours } from "./hours.util";
+import { addHours, subtractHours } from "./hours.util";
 import { createAndSaveLIRequirement } from "../../../helpers/li-requirement.helper";
 import { LIRequirement } from "../../../../entities/requirement.entity";
 import { createAndSaveRole } from "../../../helpers/role.helper";
@@ -102,6 +102,18 @@ describe("RaidPost Service: update tests", () => {
     expect(post).toBeDefined();
     expect(post).toHaveProperty("bosses");
     expect(post!.bosses.length).toBe(1);
+  });
+
+  it("should not allow changing date to that in the past", async () => {
+    const user = await createAndSaveUser(uow.users, { username: "username" });
+    const raidPost = await createAndSaveRaidPost(uow.raidPosts, user, {
+      date: addHours(new Date(), 1),
+    });
+    const updateDto = createUpdateDto(raidPost.id, {
+      date: subtractHours(new Date(), 1),
+    });
+
+    expect(update(updateDto, uow)).rejects.toThrow();
   });
 
   function createUpdateDto(
