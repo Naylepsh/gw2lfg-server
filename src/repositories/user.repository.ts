@@ -1,6 +1,6 @@
 import { IRepository } from "./repository.interface";
 import { User } from "../entities/user.entity";
-import { GenericRepository } from "./generic.repository";
+import { IdentifiableEntityRepository } from "./generic.repository";
 import { EntityRepository } from "typeorm";
 
 export interface IUserRepository extends IRepository<User> {
@@ -9,7 +9,7 @@ export interface IUserRepository extends IRepository<User> {
 
 @EntityRepository(User)
 export class UserRepository
-  extends GenericRepository<User>
+  extends IdentifiableEntityRepository<User>
   implements IUserRepository {
   findByUsername(username: string): Promise<User | undefined> {
     return this.repository.findOne({ where: { username } });

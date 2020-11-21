@@ -1,15 +1,15 @@
 import { RaidPost } from "../entities/raid-post.entitity";
-import { GenericRepository } from "./generic.repository";
-import { FindParams, IRepository } from "./repository.interface";
+import { IdentifiableEntityRepository } from "./generic.repository";
+import { FindManyParams, IRepository } from "./repository.interface";
 
 export interface IRaidPostRepository extends IRepository<RaidPost> {}
 
 export class RaidPostRepository
-  extends GenericRepository<RaidPost>
+  extends IdentifiableEntityRepository<RaidPost>
   implements IRaidPostRepository {
   private static relations = ["author", "requirements", "bosses"];
 
-  findMany(params: FindParams<RaidPost>) {
+  findMany(params: FindManyParams<RaidPost>) {
     const _params = { ...params, relations: RaidPostRepository.relations };
     return super.findMany(_params);
   }

@@ -1,5 +1,6 @@
 import {
-  FindParams,
+  FindManyParams,
+  FindOneParams,
   IRepository,
 } from "../../../repositories/repository.interface";
 import { turnIntoPromise } from "../turn-into-promise";
@@ -48,7 +49,12 @@ export class MemoryRepository<Entity extends Identifiable>
     return entity.id !== undefined && this.entities.has(entity.id);
   }
 
-  findMany(_params?: FindParams<Entity>): Promise<Entity[]> {
+  async findOne(params: FindOneParams<Entity>): Promise<Entity | undefined> {
+    const entities = await this.findMany(params);
+    return entities.length > 0 ? entities[0] : undefined;
+  }
+
+  findMany(_params?: FindManyParams<Entity>): Promise<Entity[]> {
     let entities = Array.from(this.entities.values());
 
     if (_params?.order) {
