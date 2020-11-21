@@ -1,9 +1,12 @@
-import { IRepository } from "./repository.interface";
+import {
+  IIdentifiableEntityRepository,
+  IRepository,
+} from "./repository.interface";
 import { User } from "../entities/user.entity";
 import { IdentifiableEntityRepository } from "./generic.repository";
 import { EntityRepository } from "typeorm";
 
-export interface IUserRepository extends IRepository<User> {
+export interface IUserRepository extends IIdentifiableEntityRepository<User> {
   findByUsername(username: string): Promise<User | undefined>;
 }
 
