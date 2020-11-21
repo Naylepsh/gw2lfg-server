@@ -1,7 +1,7 @@
 import { Role } from "../../../entities/role.entity";
 import { IRoleRepository } from "../../../repositories/role.repository";
-import { MemoryRepository } from "./memory-repository";
+import { IdentifiableMemoryRepository } from "./memory-repository";
 
 export class RoleMemoryRepository
-  extends MemoryRepository<Role>
+  extends IdentifiableMemoryRepository<Role>
   implements IRoleRepository {}

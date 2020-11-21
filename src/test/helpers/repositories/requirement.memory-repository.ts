@@ -1,7 +1,7 @@
 import { Requirement } from "../../../entities/requirement.entity";
 import { IRequirementRepository } from "../../../repositories/requirement.repository";
-import { MemoryRepository } from "./memory-repository";
+import { IdentifiableMemoryRepository } from "./memory-repository";
 
 export class RequirementMemoryRepository
-  extends MemoryRepository<Requirement>
+  extends IdentifiableMemoryRepository<Requirement>
   implements IRequirementRepository {}

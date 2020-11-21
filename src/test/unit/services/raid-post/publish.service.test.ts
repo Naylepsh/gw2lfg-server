@@ -41,11 +41,11 @@ describe("RaidPost service: publish tests", () => {
       date,
       requirementsProps: [{ name: LIRequirement.itemName, quantity: 10 }],
     });
-    const reqsInDbBefore = uow.requirements.entities.size;
+    const reqsInDbBefore = uow.requirements.entities.length;
 
     await publish(dto, uow);
 
-    const reqsInDbAfter = uow.requirements.entities.size;
+    const reqsInDbAfter = uow.requirements.entities.length;
     expect(reqsInDbAfter - reqsInDbBefore > 0).toBe(true);
   });
 
@@ -58,11 +58,11 @@ describe("RaidPost service: publish tests", () => {
       date,
       rolesProps: [{ name: "DPS" }],
     });
-    const rolesInDbBefore = uow.roles.entities.size;
+    const rolesInDbBefore = uow.roles.entities.length;
 
     await publish(dto, uow);
 
-    const rolesInDbAfter = uow.roles.entities.size;
+    const rolesInDbAfter = uow.roles.entities.length;
     expect(rolesInDbAfter - rolesInDbBefore > 0).toBe(true);
   });
 
@@ -74,11 +74,11 @@ describe("RaidPost service: publish tests", () => {
     const dto = createPublishDto(userId, [], {
       date,
     });
-    const usersInDbBefore = uow.users.entities.size;
+    const usersInDbBefore = uow.users.entities.length;
 
     await publish(dto, uow);
 
-    const usersInDbAfter = uow.users.entities.size;
+    const usersInDbAfter = uow.users.entities.length;
     expect(usersInDbAfter).toBe(usersInDbBefore);
   });
 
@@ -94,11 +94,11 @@ describe("RaidPost service: publish tests", () => {
     const dto = createPublishDto(userId, [bossId], {
       date,
     });
-    const bossesInDbBefore = uow.raidBosses.entities.size;
+    const bossesInDbBefore = uow.raidBosses.entities.length;
 
     await publish(dto, uow);
 
-    const bossesInDbAfter = uow.raidBosses.entities.size;
+    const bossesInDbAfter = uow.raidBosses.entities.length;
     expect(bossesInDbAfter).toBe(bossesInDbBefore);
   });
 
