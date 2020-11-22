@@ -5,11 +5,7 @@ import {
   IRepository,
 } from "../../../repositories/repository.interface";
 
-interface Identifiable {
-  id: number;
-}
-
-export class MemoRepository<Entity> implements IRepository<Entity> {
+export class MemoryRepository<Entity> implements IRepository<Entity> {
   entities: Entity[] = [];
 
   constructor(entities: Entity[] = []) {
@@ -80,8 +76,12 @@ export class MemoRepository<Entity> implements IRepository<Entity> {
   }
 }
 
+interface Identifiable {
+  id: number;
+}
+
 export class IdentifiableMemoryRepository<Entity extends Identifiable>
-  extends MemoRepository<Entity>
+  extends MemoryRepository<Entity>
   implements IIdentifiableEntityRepository<Entity> {
   nextId = 0;
 
