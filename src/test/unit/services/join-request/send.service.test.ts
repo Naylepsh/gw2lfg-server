@@ -4,10 +4,13 @@ import { User } from "../../../../entities/user.entity";
 import { IJoinRequestRepository } from "../../../../repositories/join-request.repository";
 import { IPostRepository } from "../../../../repositories/post.repository";
 import { IUserRepository } from "../../../../repositories/user.repository";
-import { GetItems } from "../../../../services/gw2-api/gw2-api.service";
+import {
+  ConcreteItemsFetcher,
+  GetItems,
+} from "../../../../services/gw2-api/gw2-api.service";
 import { nameToId } from "../../../../services/gw2-items/gw2-items.service";
 import { Item } from "../../../../services/gw2-items/item.interface";
-import { sendJoinRequest } from "../../../../services/join-request/send.service";
+import { SendJoinRequestService } from "../../../../services/join-request/send.service";
 import { JoinRequestMemoryRepository } from "../../../helpers/repositories/join-request.memory-repository";
 import { RaidPostMemoryRepository } from "../../../helpers/repositories/raid-post.memory-repository";
 import { UserMemoryRepository } from "../../../helpers/repositories/user.memory-repository";
@@ -48,14 +51,12 @@ describe("JoinRequest Service: send tests", () => {
       ])
     );
 
-    await sendJoinRequest(
-      user.id,
-      post.id,
+    await new SendJoinRequestService(
       userRepo,
       postRepo,
       joinRequestRepo,
-      getItems(fetchItems)
-    );
+      new GetItems(fetchItems)
+    ).sendJoinRequest(user.id, post.id);
 
     const request = await joinRequestRepo.findByKey(user.id, post.id);
     expect(request).toBeDefined();
@@ -66,14 +67,12 @@ describe("JoinRequest Service: send tests", () => {
     const postId = 2;
 
     expect(
-      sendJoinRequest(
-        userId,
-        postId,
+      new SendJoinRequestService(
         userRepo,
         postRepo,
         joinRequestRepo,
-        dummyItemFetcher
-      )
+        new DummyItemFetcher()
+      ).sendJoinRequest(userId, postId)
     ).rejects.toThrow();
   });
 
@@ -88,14 +87,12 @@ describe("JoinRequest Service: send tests", () => {
     const postId = 2;
 
     expect(
-      sendJoinRequest(
-        user.id,
-        postId,
+      new SendJoinRequestService(
         userRepo,
         postRepo,
         joinRequestRepo,
-        dummyItemFetcher
-      )
+        new DummyItemFetcher()
+      ).sendJoinRequest(user.id, postId)
     ).rejects.toThrow();
   });
 
@@ -124,18 +121,18 @@ describe("JoinRequest Service: send tests", () => {
     );
 
     expect(
-      sendJoinRequest(
-        user.id,
-        post.id,
+      new SendJoinRequestService(
         userRepo,
         postRepo,
         joinRequestRepo,
-        getItems(fetchItems)
-      )
+        new GetItems(fetchItems)
+      ).sendJoinRequest(user.id, post.id)
     ).rejects.toThrow();
   });
 });
 
-const dummyItemFetcher = (_ids: string[], _apiKey: string): Promise<Item[]> => {
-  return new Promise((resolve) => resolve([]));
-};
+class DummyItemFetcher implements ConcreteItemsFetcher {
+  fetch(_ids: string[], _apiKey: string): Promise<Item[]> {
+    return new Promise((resolve) => resolve([]));
+  }
+}
