@@ -3,27 +3,14 @@ import {
   getItemFromMultipleSources,
 } from "../../../services/gw2-api/gw2-api.service";
 import { Item } from "../../../services/gw2-items/item.interface";
-
-const storage = (itemStorage: Item[]) => {
-  return (_: string): Promise<Item[]> =>
-    new Promise((resolve) => resolve(itemStorage));
-};
-
-const createItemFetcher = (items: Item[]) => {
-  const itemsFetcher = storage(items);
-  return getItems(itemsFetcher);
-};
-
-const createFetchersForItemGroups = (itemGroups: Item[][]) => {
-  return itemGroups.map(createItemFetcher);
-};
+import { storage, createFetchersForItemGroups } from "./item-storage";
 
 describe("test gw2 api service", () => {
   describe("get item from single source", () => {
     it("should return item with zero quantity if it was not found", async () => {
       const id = "1";
       const apiKey = "AP1-K3Y";
-      const fetchItems = storage([]);
+      const fetchItems = storage();
 
       const item = await getItems(fetchItems)([id], apiKey);
 
@@ -39,7 +26,9 @@ describe("test gw2 api service", () => {
         { id, count: 3 },
         { id: "2", count: 10 },
       ];
-      const fetchItems = storage(items);
+      const fetchItems = storage(
+        new Map<string, Item[]>([[apiKey, items]])
+      );
 
       const item = await getItems(fetchItems)([id], apiKey);
 
@@ -53,12 +42,17 @@ describe("test gw2 api service", () => {
       const id = "1";
       const apiKey = "AP1-K3Y";
       const fetchers = createFetchersForItemGroups([
-        [],
-        [{ id, count: 5 }],
-        [
-          { id, count: 3 },
-          { id, count: 2 },
-        ],
+        new Map<string, Item[]>(),
+        new Map<string, Item[]>([[apiKey, [{ id, count: 5 }]]]),
+        new Map<string, Item[]>([
+          [
+            apiKey,
+            [
+              { id, count: 3 },
+              { id, count: 2 },
+            ],
+          ],
+        ]),
       ]);
 
       const item = await getItemFromMultipleSources(fetchers)([id], apiKey);
@@ -80,7 +74,9 @@ describe("test gw2 api service", () => {
         { id: id1, count: 3 },
         { id: otherId, count: 10 },
       ];
-      const fetchItems = storage(items);
+      const fetchItems = storage(
+        new Map<string, Item[]>([[apiKey, items]])
+      );
 
       const foundItems = await getItems(fetchItems)([id1, id2], apiKey);
       const item1count = foundItems.filter((item) => item.id == id1)[0];

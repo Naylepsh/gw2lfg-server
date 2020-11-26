@@ -1,7 +1,7 @@
 import { RaidBoss } from "../../../entities/raid-boss.entity";
 import { IRaidBossRepository } from "../../../repositories/raid-boss.repository";
-import { MemoryRepository } from "./memory-repository";
+import { IdentifiableMemoryRepository } from "./memory-repository";
 
 export class RaidBossMemoryRepository
-  extends MemoryRepository<RaidBoss>
+  extends IdentifiableMemoryRepository<RaidBoss>
   implements IRaidBossRepository {}

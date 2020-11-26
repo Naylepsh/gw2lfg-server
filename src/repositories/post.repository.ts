@@ -1,13 +1,13 @@
 import { EntityRepository } from "typeorm";
 import { Post } from "../entities/post.entity";
-import { GenericRepository } from "./generic.repository";
-import { IRepository } from "./repository.interface";
+import { IdentifiableEntityRepository } from "./generic.repository";
+import { IIdentifiableEntityRepository } from "./repository.interface";
 
-export interface IPostRepository extends IRepository<Post> {}
+export interface IPostRepository extends IIdentifiableEntityRepository<Post> {}
 
 @EntityRepository(Post)
 export class PostRepository
-  extends GenericRepository<Post>
+  extends IdentifiableEntityRepository<Post>
   implements IPostRepository {
   findById(id: number): Promise<Post | undefined> {
     const relations = ["author", "requirements"];

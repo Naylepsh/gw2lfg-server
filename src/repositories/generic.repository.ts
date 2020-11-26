@@ -1,5 +1,10 @@
 import { AbstractRepository, EntityRepository } from "typeorm";
-import { FindParams, IRepository } from "./repository.interface";
+import {
+  FindManyParams,
+  FindOneParams,
+  IIdentifiableEntityRepository,
+  IRepository,
+} from "./repository.interface";
 
 @EntityRepository()
 export class GenericRepository<Entity>
@@ -13,19 +18,28 @@ export class GenericRepository<Entity>
     return this.repository.save(entities);
   }
 
-  findMany(findParams?: FindParams<Entity>): Promise<Entity[]> {
+  findOne(params: FindOneParams<Entity>): Promise<Entity | undefined> {
+    return this.repository.findOne(params);
+  }
+
+  findMany(findParams?: FindManyParams<Entity>): Promise<Entity[]> {
     return this.repository.find(findParams);
   }
 
+  async delete(criteria: any = {}): Promise<void> {
+    await this.repository.delete(criteria);
+  }
+}
+
+@EntityRepository()
+export class IdentifiableEntityRepository<Entity>
+  extends GenericRepository<Entity>
+  implements IIdentifiableEntityRepository<Entity> {
   findById(id: number, relations: string[] = []): Promise<Entity | undefined> {
     return this.repository.findOne(id, { relations });
   }
 
   findByIds(ids: number[]): Promise<Entity[]> {
     return this.repository.findByIds(ids);
-  }
-
-  async delete(criteria: any = {}): Promise<void> {
-    await this.repository.delete(criteria);
   }
 }

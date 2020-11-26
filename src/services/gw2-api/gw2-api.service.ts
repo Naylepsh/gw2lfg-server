@@ -6,7 +6,10 @@ import {
   fetchItemsFromSharedInventory,
 } from "./gw2-api.proxy";
 
-type ConcreteItemsFetcher = (ids: string[], apiKey: string) => Promise<Item[]>;
+export type ConcreteItemsFetcher = (
+  ids: string[],
+  apiKey: string
+) => Promise<Item[]>;
 type AllItemsFetcher = (apiKey: string) => Promise<Item[]>;
 
 export const getItemFromMultipleSources = (

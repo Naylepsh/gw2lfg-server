@@ -1,58 +1,47 @@
 import {
-  FindParams,
+  FindManyParams,
+  FindOneParams,
+  IIdentifiableEntityRepository,
   IRepository,
 } from "../../../repositories/repository.interface";
-import { turnIntoPromise } from "../turn-into-promise";
 
-interface Identifiable {
-  id: number;
-}
-
-export class MemoryRepository<Entity extends Identifiable>
-  implements IRepository<Entity> {
-  nextId = 0;
-  readonly entities = new Map<number, Entity>();
+export class MemoryRepository<Entity> implements IRepository<Entity> {
+  entities: Entity[] = [];
 
   constructor(entities: Entity[] = []) {
-    for (const user of entities) {
-      user.id = this.nextId;
-      this.entities.set(this.nextId++, user);
-    }
+    this.entities.push(...entities);
   }
 
-  save(entity: Entity): Promise<Entity> {
-    return turnIntoPromise<Entity>(() => {
-      if (this.contains(entity)) {
-        this.entities.set(entity.id, entity);
-      } else {
-        const id = this.nextId;
-        this.nextId++;
+  async save(entity: Entity): Promise<Entity> {
+    return new Promise((resolve) => {
+      const entities = this.entities.filter(
+        (e) => !this.areEntitiesEqual(e, entity)
+      );
+      entities.push(entity);
+      this.entities = entities;
 
-        entity.id = id;
-        this.entities.set(id, entity);
-      }
-
-      return entity;
+      return resolve(entity);
     });
   }
 
-  async saveMany(entities: Entity[]): Promise<Entity[]> {
-    for (const entity of entities) {
-      await this.save(entity);
-    }
-
-    return entities;
+  protected areEntitiesEqual(_entity: Entity, _otherEntity: Entity): boolean {
+    throw new Error("not implemented");
   }
 
-  private contains(entity: Entity) {
-    return entity.id !== undefined && this.entities.has(entity.id);
+  saveMany(entities: Entity[]): Promise<Entity[]> {
+    return Promise.all(entities.map((entity) => this.save(entity)));
   }
 
-  findMany(_params?: FindParams<Entity>): Promise<Entity[]> {
+  async findOne(params: FindOneParams<Entity>): Promise<Entity | undefined> {
+    const all = await this.findMany(params);
+    return all.length > 0 ? all[0] : undefined;
+  }
+
+  findMany(params?: FindManyParams<Entity>): Promise<Entity[]> {
     let entities = Array.from(this.entities.values());
 
-    if (_params?.order) {
-      const orderParams = new Map(Object.entries(_params.order!));
+    if (params?.order) {
+      const orderParams = new Map(Object.entries(params.order!));
 
       entities = entities.sort((a, b) => {
         const _a = new Map(Object.entries(a));
@@ -71,42 +60,91 @@ export class MemoryRepository<Entity extends Identifiable>
       });
     }
 
-    if (_params?.skip) {
-      entities = entities.slice(_params.skip);
+    if (params?.skip) {
+      entities = entities.slice(params.skip);
     }
 
-    if (_params?.take) {
-      entities = entities.slice(0, _params.take);
+    if (params?.take) {
+      entities = entities.slice(0, params.take);
     }
 
-    return turnIntoPromise(() => entities);
+    return new Promise((resolve) => resolve(entities));
+  }
+
+  delete(_criteria?: any): Promise<void> {
+    throw new Error("Method not implemented.");
+  }
+}
+
+interface Identifiable {
+  id: number;
+}
+
+export class IdentifiableMemoryRepository<Entity extends Identifiable>
+  extends MemoryRepository<Entity>
+  implements IIdentifiableEntityRepository<Entity> {
+  nextId = 0;
+
+  constructor(entities: Entity[] = []) {
+    super(entities);
+    for (const entity of entities) {
+      entity.id = this.nextId;
+      this.nextId++;
+    }
   }
 
   findById(id: number): Promise<Entity | undefined> {
-    return turnIntoPromise<Entity | undefined>(() => {
-      return this.entities.get(id);
+    return new Promise((resolve) => {
+      const entities = this.entities.filter((e) => e.id === id);
+      resolve(entities.length === 1 ? entities[0] : undefined);
     });
   }
 
   findByIds(ids: number[]): Promise<Entity[]> {
-    return turnIntoPromise<Entity[]>(() => {
-      const entities = ids
-        .map((id) => this.entities.get(id))
-        .filter((e) => !!e);
-      return entities as Entity[];
+    return new Promise((resolve) => {
+      resolve(this.entities.filter((e) => ids.includes(e.id)));
     });
   }
 
-  delete(_criteria?: any): Promise<void> {
-    return turnIntoPromise<void>(() => {
-      if (this.isArrayOfIds(_criteria)) {
-        for (const id of _criteria) {
-          this.entities.delete(id);
-        }
-      } else {
-        this.entities.clear();
+  async save(entity: Entity): Promise<Entity> {
+    if (!this.entities.map((e) => e.id).includes(entity.id)) {
+      entity.id = this.nextId;
+      this.nextId++;
+    }
+
+    await super.save(entity);
+
+    return entity;
+  }
+
+  async saveMany(entities: Entity[]): Promise<Entity[]> {
+    const usedIds = this.entities.map((e) => e.id);
+    for (const entity of entities) {
+      if (!usedIds.includes(entity.id)) {
+        entity.id = this.nextId;
+        this.nextId++;
       }
+    }
+
+    await super.saveMany(entities);
+
+    return entities;
+  }
+
+  delete(_criteria?: any): Promise<void> {
+    return new Promise((resolve) => {
+      if (this.isArrayOfIds(_criteria)) {
+        const ids = _criteria as number[];
+        this.entities = this.entities.filter((e) => !ids.includes(e.id));
+      } else {
+        this.entities = [];
+      }
+      resolve();
     });
+  }
+
+  protected areEntitiesEqual(entity: Entity, otherEntity: Entity): boolean {
+    return entity.id === otherEntity.id;
   }
 
   private isArrayOfIds(value: any) {

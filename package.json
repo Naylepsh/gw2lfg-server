@@ -9,6 +9,7 @@
     "start": "node dist/index.js",
     "test": "jest",
     "test:unit": "jest -i src/test/unit",
+    "test:hmm": "jest -i src/test/unit/services/repo.test.ts",
     "test:integr": "jest -i src/test/integration",
     "test:integr:typeorm": "jest -i src/test/integration/typeorm"
   },
