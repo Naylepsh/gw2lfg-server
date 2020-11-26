@@ -1,6 +1,6 @@
 import { LIRequirement } from "../../../../entities/requirement.entity";
 import {
-  publish,
+  PublishRaidPostService,
   PublishDTO,
 } from "../../../../services/raid-post/publish.service";
 import { createAndSaveRaidBoss } from "../../../helpers/raid-boss.helper";
@@ -10,6 +10,7 @@ import { addHours, subtractHours } from "./hours.util";
 
 describe("RaidPost service: publish tests", () => {
   const uow = RaidPostMemoryUnitOfWork.create();
+  const publishService = new PublishRaidPostService(uow);
 
   afterEach(async () => {
     await uow.deleteAll();
@@ -25,7 +26,7 @@ describe("RaidPost service: publish tests", () => {
     });
     const date = addHours(new Date(), 1);
     const dto = createPublishDto(userId, [bossId], { date });
-    const { id: postId } = await publish(dto, uow);
+    const { id: postId } = await publishService.publish(dto);
 
     const hasBeenSaved = !!(await uow.raidPosts.findById(postId));
 
@@ -43,7 +44,7 @@ describe("RaidPost service: publish tests", () => {
     });
     const reqsInDbBefore = uow.requirements.entities.length;
 
-    await publish(dto, uow);
+    await publishService.publish(dto);
 
     const reqsInDbAfter = uow.requirements.entities.length;
     expect(reqsInDbAfter - reqsInDbBefore > 0).toBe(true);
@@ -60,7 +61,7 @@ describe("RaidPost service: publish tests", () => {
     });
     const rolesInDbBefore = uow.roles.entities.length;
 
-    await publish(dto, uow);
+    await publishService.publish(dto);
 
     const rolesInDbAfter = uow.roles.entities.length;
     expect(rolesInDbAfter - rolesInDbBefore > 0).toBe(true);
@@ -76,7 +77,7 @@ describe("RaidPost service: publish tests", () => {
     });
     const usersInDbBefore = uow.users.entities.length;
 
-    await publish(dto, uow);
+    await publishService.publish(dto);
 
     const usersInDbAfter = uow.users.entities.length;
     expect(usersInDbAfter).toBe(usersInDbBefore);
@@ -96,7 +97,7 @@ describe("RaidPost service: publish tests", () => {
     });
     const bossesInDbBefore = uow.raidBosses.entities.length;
 
-    await publish(dto, uow);
+    await publishService.publish(dto);
 
     const bossesInDbAfter = uow.raidBosses.entities.length;
     expect(bossesInDbAfter).toBe(bossesInDbBefore);
@@ -109,7 +110,7 @@ describe("RaidPost service: publish tests", () => {
     const date = subtractHours(new Date(), 1);
     const dto = createPublishDto(userId, [], { date });
 
-    expect(publish(dto, uow)).rejects.toThrow();
+    expect(publishService.publish(dto)).rejects.toThrow();
   });
 
   function createPublishDto(
