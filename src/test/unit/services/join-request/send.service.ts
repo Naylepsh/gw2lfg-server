@@ -4,7 +4,7 @@ import { User } from "../../../../entities/user.entity";
 import { IJoinRequestRepository } from "../../../../repositories/join-request.repository";
 import { IPostRepository } from "../../../../repositories/post.repository";
 import { IUserRepository } from "../../../../repositories/user.repository";
-import { getItems } from "../../../../services/gw2-api/gw2-api.service";
+import { GetItems } from "../../../../services/gw2-api/gw2-api.service";
 import { nameToId } from "../../../../services/gw2-items/gw2-items.service";
 import { Item } from "../../../../services/gw2-items/item.interface";
 import { sendJoinRequest } from "../../../../services/join-request/send.service";
