@@ -1,4 +1,4 @@
-import { getItems } from "../../../services/gw2-api/gw2-api.service";
+import { GetItems } from "../../../services/gw2-api/gw2-api.service";
 import { Item } from "../../../services/gw2-items/item.interface";
 
 type ItemStorage = Map<string, Item[]>;
@@ -10,7 +10,7 @@ export const storage = (items: ItemStorage = new Map<string, Item[]>()) => {
 
 const createItemFetcher = (items: ItemStorage = new Map<string, Item[]>()) => {
   const itemsFetcher = storage(items);
-  return getItems(itemsFetcher);
+  return new GetItems(itemsFetcher);
 };
 
 export const createFetchersForItemGroups = (itemGroups: ItemStorage[]) => {

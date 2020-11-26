@@ -1,5 +1,5 @@
 import {
-  update,
+  UpdateRaidPostService,
   UpdateRaidPostDTO,
 } from "../../../../services/raid-post/update.service";
 import { createAndSaveRaidBoss } from "../../../helpers/raid-boss.helper";
@@ -13,6 +13,7 @@ import { createAndSaveRole } from "../../../helpers/role.helper";
 
 describe("RaidPost Service: update tests", () => {
   const uow = RaidPostMemoryUnitOfWork.create();
+  const service = new UpdateRaidPostService(uow);
 
   afterEach(async () => {
     await uow.deleteAll();
@@ -25,7 +26,7 @@ describe("RaidPost Service: update tests", () => {
     });
     const updateDto = createUpdateDto(raidPost.id, { server: "NA" });
 
-    await update(updateDto, uow);
+    await service.update(updateDto);
 
     const post = await uow.raidPosts.findById(raidPost.id);
     expect(post).toBeDefined();
@@ -45,7 +46,7 @@ describe("RaidPost Service: update tests", () => {
       requirementsProps: [{ name: LIRequirement.itemName, quantity: 2 }],
     });
 
-    await update(updateDto, uow);
+    await service.update(updateDto);
 
     const post = await uow.raidPosts.findById(raidPost.id);
     expect(post).toBeDefined();
@@ -65,7 +66,7 @@ describe("RaidPost Service: update tests", () => {
       rolesProps: [{ name: "Healer" }],
     });
 
-    await update(updateDto, uow);
+    await service.update(updateDto);
 
     const post = await uow.raidPosts.findById(raidPost.id);
     expect(post).toBeDefined();
@@ -96,7 +97,7 @@ describe("RaidPost Service: update tests", () => {
       bossesIds: [boss3.id],
     });
 
-    await update(updateDto, uow);
+    await service.update(updateDto);
 
     const post = await uow.raidPosts.findById(raidPost.id);
     expect(post).toBeDefined();
@@ -113,7 +114,7 @@ describe("RaidPost Service: update tests", () => {
       date: subtractHours(new Date(), 1),
     });
 
-    expect(update(updateDto, uow)).rejects.toThrow();
+    expect(service.update(updateDto)).rejects.toThrow();
   });
 
   function createUpdateDto(

@@ -22,45 +22,44 @@ export interface UpdateRaidPostDTO {
   requirementsProps: RequirementArgs[];
 }
 
-export const update = async (
-  updateDto: UpdateRaidPostDTO,
-  uow: IRaidPostUnitOfWork
-) => {
-  if (isDateInThePast(updateDto.date)) throw new PastDateError("date");
+export class UpdateRaidPostService {
+  constructor(private readonly uow: IRaidPostUnitOfWork) {}
 
-  return uow.withTransaction(async () => {
-    const raidPost = await uow.raidPosts.findById(updateDto.id);
+  async update(dto: UpdateRaidPostDTO) {
+    if (isDateInThePast(dto.date)) throw new PastDateError("date");
 
-    if (!raidPost) {
-      throw new EntityNotFoundError(
-        `raid post with id ${updateDto.id} not found`
+    return this.uow.withTransaction(async () => {
+      const raidPost = await this.uow.raidPosts.findById(dto.id);
+
+      if (!raidPost) {
+        throw new EntityNotFoundError(`raid post with id ${dto.id} not found`);
+      }
+
+      const author = raidPost.author;
+      const bosses = await getBosses(this.uow, dto.bossesIds);
+
+      await this.uow.roles.delete(raidPost.roles);
+      const roles = await createRoles(dto.rolesProps, this.uow);
+
+      await this.uow.requirements.delete(raidPost.requirements);
+      const requirements = await createRequirements(
+        dto.requirementsProps,
+        this.uow
       );
-    }
 
-    const author = raidPost.author;
-    const bosses = await getBosses(uow, updateDto.bossesIds);
+      const post = new RaidPost({
+        ...dto,
+        author,
+        requirements,
+        roles,
+        bosses,
+      });
+      post.id = raidPost.id;
 
-    await uow.roles.delete(raidPost.roles);
-    const roles = await createRoles(updateDto.rolesProps, uow);
-
-    await uow.requirements.delete(raidPost.requirements);
-    const requirements = await createRequirements(
-      updateDto.requirementsProps,
-      uow
-    );
-
-    const post = new RaidPost({
-      ...updateDto,
-      author,
-      requirements,
-      roles,
-      bosses,
+      return await this.uow.raidPosts.save(post);
     });
-    post.id = raidPost.id;
-
-    return await uow.raidPosts.save(post);
-  });
-};
+  }
+}
 
 // const getAuthor = async (uow: IRaidPostUnitOfWork, authorId: number) => {
 //   const author = await uow.users.findById(authorId);

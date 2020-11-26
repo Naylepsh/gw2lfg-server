@@ -1,6 +1,6 @@
 import {
-  getItems,
-  getItemFromMultipleSources,
+  GetItems,
+  GetItemsFromMultipleSources,
 } from "../../../services/gw2-api/gw2-api.service";
 import { Item } from "../../../services/gw2-items/item.interface";
 import { storage, createFetchersForItemGroups } from "./item-storage";
@@ -12,7 +12,7 @@ describe("test gw2 api service", () => {
       const apiKey = "AP1-K3Y";
       const fetchItems = storage();
 
-      const item = await getItems(fetchItems)([id], apiKey);
+      const item = await new GetItems(fetchItems).fetch([id], apiKey);
 
       expect(item.length).toBe(1);
       expect(item[0].count).toBe(0);
@@ -30,7 +30,7 @@ describe("test gw2 api service", () => {
         new Map<string, Item[]>([[apiKey, items]])
       );
 
-      const item = await getItems(fetchItems)([id], apiKey);
+      const item = await new GetItems(fetchItems).fetch([id], apiKey);
 
       expect(item.length).toBe(1);
       expect(item[0].count).toBe(4);
@@ -55,7 +55,10 @@ describe("test gw2 api service", () => {
         ]),
       ]);
 
-      const item = await getItemFromMultipleSources(fetchers)([id], apiKey);
+      const item = await new GetItemsFromMultipleSources(fetchers).fetch(
+        [id],
+        apiKey
+      );
 
       expect(item.length).toBe(1);
       expect(item[0].count).toBe(10);
@@ -78,7 +81,10 @@ describe("test gw2 api service", () => {
         new Map<string, Item[]>([[apiKey, items]])
       );
 
-      const foundItems = await getItems(fetchItems)([id1, id2], apiKey);
+      const foundItems = await new GetItems(fetchItems).fetch(
+        [id1, id2],
+        apiKey
+      );
       const item1count = foundItems.filter((item) => item.id == id1)[0];
       const item2count = foundItems.filter((item) => item.id == id2)[0];
 

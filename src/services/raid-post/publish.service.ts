@@ -18,41 +18,40 @@ export interface PublishDTO {
   requirementsProps: RequirementArgs[];
 }
 
-export const publish = async (
-  publishDto: PublishDTO,
-  raidPostUow: IRaidPostUnitOfWork
-) => {
-  if (isDateInThePast(publishDto.date)) throw new PastDateError("date");
+export class PublishRaidPostService {
+  constructor(private readonly uow: IRaidPostUnitOfWork) {}
 
-  return raidPostUow.withTransaction(() =>
-    createAndSavePost(publishDto, raidPostUow)
-  );
-};
+  async publish(publishDto: PublishDTO) {
+    if (isDateInThePast(publishDto.date)) throw new PastDateError("date");
 
-const createAndSavePost = async (
-  publishDto: PublishDTO,
-  uow: IRaidPostUnitOfWork
-) => {
-  const author = await uow.users.findById(publishDto.authorId);
-  if (!author) throw new Error("unregistered user");
+    return await this.uow.withTransaction(() =>
+      this.createAndSavePost(publishDto)
+    );
+  }
 
-  const requirements = publishDto.requirementsProps.map((req) =>
-    requirementFactory.createRequirement(req)
-  );
-  await uow.requirements.saveMany(requirements);
+  private async createAndSavePost(publishDto: PublishDTO) {
+    const author = await this.uow.users.findById(publishDto.authorId);
+    if (!author) throw new Error("unregistered user");
 
-  const roles = publishDto.rolesProps.map((props) => new Role(props));
-  await uow.roles.saveMany(roles);
+    const requirements = publishDto.requirementsProps.map((req) =>
+      requirementFactory.createRequirement(req)
+    );
+    await this.uow.requirements.saveMany(requirements);
 
-  const bossesIds = publishDto.bossesIds;
-  const bosses = await uow.raidBosses.findByIds(bossesIds);
+    const roles = publishDto.rolesProps.map((props) => new Role(props));
+    await this.uow.roles.saveMany(roles);
 
-  const post = new RaidPost({
-    ...publishDto,
-    author,
-    requirements,
-    roles,
-    bosses,
-  });
-  return await uow.raidPosts.save(post);
-};
+    const bossesIds = publishDto.bossesIds;
+    const bosses = await this.uow.raidBosses.findByIds(bossesIds);
+
+    const post = new RaidPost({
+      ...publishDto,
+      author,
+      requirements,
+      roles,
+      bosses,
+    });
+
+    return this.uow.raidPosts.save(post);
+  }
+}

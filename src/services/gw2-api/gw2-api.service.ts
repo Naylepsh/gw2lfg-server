@@ -6,18 +6,18 @@ import {
   fetchItemsFromSharedInventory,
 } from "./gw2-api.proxy";
 
-export type ConcreteItemsFetcher = (
-  ids: string[],
-  apiKey: string
-) => Promise<Item[]>;
 type AllItemsFetcher = (apiKey: string) => Promise<Item[]>;
 
-export const getItemFromMultipleSources = (
-  itemFetchers: ConcreteItemsFetcher[]
-): ConcreteItemsFetcher => {
-  return async (ids: string[], apiKey: string): Promise<Item[]> => {
+export interface ConcreteItemsFetcher {
+  fetch(ids: string[], apiKey: string): Promise<Item[]>;
+}
+
+export class GetItemsFromMultipleSources implements ConcreteItemsFetcher {
+  constructor(private readonly fetchers: ConcreteItemsFetcher[]) {}
+
+  async fetch(ids: string[], apiKey: string): Promise<Item[]> {
     const itemStacks = await Promise.all(
-      itemFetchers.map((fetch) => fetch(ids, apiKey))
+      this.fetchers.map((fetcher) => fetcher.fetch(ids, apiKey))
     );
 
     const counts = new Map<string, number>();
@@ -36,20 +36,22 @@ export const getItemFromMultipleSources = (
       id,
       count: counts.get(id)!,
     }));
-  };
-};
+  }
+}
 
-export const getItems = (fetchItems: AllItemsFetcher): ConcreteItemsFetcher => {
-  return async (ids: string[], apiKey: string) => {
+export class GetItems implements ConcreteItemsFetcher {
+  constructor(private readonly fetchAllItems: AllItemsFetcher) {}
+
+  async fetch(ids: string[], apiKey: string): Promise<Item[]> {
     try {
-      const items = await fetchItems(apiKey);
+      const items = await this.fetchAllItems(apiKey);
 
       return ids.map((id) => ({ id, count: countItemStacks(items, id) }));
     } catch (error) {
       throw error;
     }
-  };
-};
+  }
+}
 
 const countItemStacks = (items: Item[], id: string) => {
   return items
@@ -57,30 +59,31 @@ const countItemStacks = (items: Item[], id: string) => {
     .reduce((count, item) => count + item.count, 0);
 };
 
-export const getItemFromBank = getItems(fetchItemsFromBank);
+export const getItemFromBank = new GetItems(fetchItemsFromBank);
 
-export const getItemFromSharedInventory = getItems(
+export const getItemFromSharedInventory = new GetItems(
   fetchItemsFromSharedInventory
 );
 
 export const getItemFromCharacter = (characterName: string) => {
-  return getItems((apiKey: string) =>
+  return new GetItems((apiKey: string) =>
     fetchItemsFromCharacter(characterName, apiKey)
   );
 };
 
-export const getItemFromEntireAccount: ConcreteItemsFetcher = async (
-  ids: string[],
-  apiKey: string
-) => {
-  const characters = await fetchCharacters(apiKey);
-  const characterItemFetchers = await Promise.all(
-    characters.map((character) => getItemFromCharacter(character))
-  );
+export class GetItemsFromEntireAccount implements ConcreteItemsFetcher {
+  constructor() {}
 
-  return getItemFromMultipleSources([
-    ...characterItemFetchers,
-    getItemFromBank,
-    getItemFromSharedInventory,
-  ])(ids, apiKey);
-};
+  async fetch(ids: string[], apiKey: string): Promise<Item[]> {
+    const characters = await fetchCharacters(apiKey);
+    const characterItemFetchers = await Promise.all(
+      characters.map((character) => getItemFromCharacter(character))
+    );
+
+    return new GetItemsFromMultipleSources([
+      ...characterItemFetchers,
+      getItemFromBank,
+      getItemFromSharedInventory,
+    ]).fetch(ids, apiKey);
+  }
+}
