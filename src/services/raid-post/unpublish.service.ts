@@ -4,17 +4,18 @@ export interface UnpublishRaidPostDTO {
   id: number;
 }
 
-export const unpublish = async (
-  unpublishDto: UnpublishRaidPostDTO,
-  uow: IRaidPostUnitOfWork
-) => {
-  return uow.withTransaction(async () => {
-    const post = await uow.raidPosts.findById(unpublishDto.id);
-    if (!post) return;
+export class UnpublishRaidPostService {
+  constructor(private readonly uow: IRaidPostUnitOfWork) {}
 
-    await uow.requirements.delete(post.requirements.map((r) => r.id));
-    await uow.roles.delete(post.roles.map((r) => r.id));
+  async unpublish(dto: UnpublishRaidPostDTO) {
+    return this.uow.withTransaction(async () => {
+      const post = await this.uow.raidPosts.findById(dto.id);
+      if (!post) return;
 
-    await uow.raidPosts.delete(post.id);
-  });
-};
+      await this.uow.requirements.delete(post.requirements.map((r) => r.id));
+      await this.uow.roles.delete(post.roles.map((r) => r.id));
+
+      await this.uow.raidPosts.delete(post.id);
+    });
+  }
+}

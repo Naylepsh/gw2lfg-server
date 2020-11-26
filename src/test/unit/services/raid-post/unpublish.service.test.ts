@@ -1,4 +1,4 @@
-import { unpublish } from "../../../../services/raid-post/unpublish.service";
+import { UnpublishRaidPostService } from "../../../../services/raid-post/unpublish.service";
 import { createAndSaveLIRequirement } from "../../../helpers/li-requirement.helper";
 import { createAndSaveRaidBoss } from "../../../helpers/raid-boss.helper";
 import { createAndSaveRaidPost } from "../../../helpers/raid-post.helper";
@@ -8,6 +8,7 @@ import { createAndSaveUser } from "../../../helpers/user.helper";
 
 describe("RaidPost Service: unpublish tests", () => {
   const uow = RaidPostMemoryUnitOfWork.create();
+  const unpublishService = new UnpublishRaidPostService(uow);
   let id: number;
 
   beforeEach(async () => {
@@ -34,7 +35,7 @@ describe("RaidPost Service: unpublish tests", () => {
 
   describe("if a post with given id exists", () => {
     it("should remove a post from database", async () => {
-      await unpublish({ id }, uow);
+      await unpublishService.unpublish({ id });
 
       const postInDb = await uow.raidPosts.findById(id);
       expect(postInDb).toBeUndefined();
@@ -44,7 +45,7 @@ describe("RaidPost Service: unpublish tests", () => {
       const post = await uow.raidPosts.findById(id);
       const reqsIds = post!.requirements.map((r) => r.id);
 
-      await unpublish({ id }, uow);
+      await unpublishService.unpublish({ id });
 
       const reqs = await uow.requirements.findByIds(reqsIds);
       expect(reqs.length).toBe(0);
@@ -54,7 +55,7 @@ describe("RaidPost Service: unpublish tests", () => {
       const post = await uow.raidPosts.findById(id);
       const rolesIds = post!.roles.map((r) => r.id);
 
-      await unpublish({ id }, uow);
+      await unpublishService.unpublish({ id });
 
       const roles = await uow.requirements.findByIds(rolesIds);
       expect(roles.length).toBe(0);
@@ -64,7 +65,7 @@ describe("RaidPost Service: unpublish tests", () => {
       const post = await uow.raidPosts.findById(id);
       const authorId = post!.author.id;
 
-      await unpublish({ id }, uow);
+      await unpublishService.unpublish({ id });
 
       const author = await uow.users.findById(authorId);
       expect(author).toBeDefined();
@@ -74,7 +75,7 @@ describe("RaidPost Service: unpublish tests", () => {
       const post = await uow.raidPosts.findById(id);
       const bossesIds = post!.bosses.map((b) => b.id);
 
-      await unpublish({ id }, uow);
+      await unpublishService.unpublish({ id });
 
       const bosses = await uow.raidBosses.findByIds(bossesIds);
       expect(bosses.length).toBeGreaterThan(0);
@@ -85,7 +86,7 @@ describe("RaidPost Service: unpublish tests", () => {
     const post = await uow.raidPosts.findById(id);
     const idNotInDb = id + 1;
 
-    await unpublish({ id: idNotInDb }, uow);
+    await unpublishService.unpublish({ id: idNotInDb });
 
     const _post = await uow.raidPosts.findById(post!.id);
     expect(_post).toBeDefined();
