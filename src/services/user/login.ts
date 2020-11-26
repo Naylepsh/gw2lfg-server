@@ -1,5 +1,5 @@
 import { IUserRepository } from "../../repositories/user.repository";
-import { Compare } from "../../utils/hashing/hashing.types";
+import { compare } from "bcrypt";
 
 export class InvalidLoginDetailsError extends Error {}
 
@@ -8,19 +8,16 @@ export interface loginDTO {
   password: string;
 }
 
-export const login = async (
-  loginDto: loginDTO,
-  userRepository: IUserRepository,
-  comparePassword: Compare
-) => {
-  const user = await userRepository.findByUsername(loginDto.username);
-  if (!user) throw new InvalidLoginDetailsError();
+export class LoginService {
+  constructor(private readonly userRepository: IUserRepository) {}
 
-  const isPasswordValid = await comparePassword(
-    loginDto.password,
-    user.password
-  );
-  if (!isPasswordValid) throw new InvalidLoginDetailsError();
+  async login(loginDto: loginDTO) {
+    const user = await this.userRepository.findByUsername(loginDto.username);
+    if (!user) throw new InvalidLoginDetailsError();
 
-  return user;
-};
+    const isPasswordValid = await compare(loginDto.password, user.password);
+    if (!isPasswordValid) throw new InvalidLoginDetailsError();
+
+    return user;
+  }
+}

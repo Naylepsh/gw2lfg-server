@@ -1,31 +1,29 @@
 import { User } from "../../entities/user.entity";
 import { IUserRepository } from "../../repositories/user.repository";
-import { Hash } from "../../utils/hashing/hashing.types";
+import { hash } from "bcrypt";
 
 export class UsernameTakenError extends Error {}
 
-export const register = async (
-  user: User,
-  userRepository: IUserRepository,
-  hash: Hash
-) => {
-  if (await isUsernameTaken(userRepository, user.username)) {
-    throw new UsernameTakenError();
+export class RegisterService {
+  constructor(private readonly userRepository: IUserRepository) {}
+
+  async register(user: User) {
+    if (await this.isUsernameTaken(user.username)) {
+      throw new UsernameTakenError();
+    }
+
+    const _user = { ...user };
+    await this.hashUserPassword(_user);
+    await this.userRepository.save(_user);
   }
 
-  const _user = { ...user };
-  await hashUserPassword(hash, _user);
-  await userRepository.save(_user);
-};
+  private async isUsernameTaken(username: string) {
+    return !!(await this.userRepository.findByUsername(username));
+  }
 
-const isUsernameTaken = async (
-  userRepository: IUserRepository,
-  username: string
-) => {
-  return !!(await userRepository.findByUsername(username));
-};
-
-const hashUserPassword = async (hash: Hash, user: User) => {
-  const hashedPassword = await hash(user.password);
-  user.password = hashedPassword;
-};
+  private async hashUserPassword(user: User) {
+    const salt = 6;
+    const hashedPassword = await hash(user.password, salt);
+    user.password = hashedPassword;
+  }
+}
