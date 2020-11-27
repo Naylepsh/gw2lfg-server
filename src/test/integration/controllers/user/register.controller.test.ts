@@ -26,7 +26,7 @@ describe("RegisterUserController integration tests", () => {
     Container.set(RegisterUserController, controller);
     useContainer(Container);
 
-    app = await createExpressServer({
+    app = createExpressServer({
       controllers: [RegisterUserController],
     });
   });

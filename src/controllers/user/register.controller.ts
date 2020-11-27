@@ -2,7 +2,6 @@ import { MinLength } from "class-validator";
 import {
   Body,
   HttpCode,
-  HttpError,
   InternalServerError,
   JsonController,
   OnUndefined,
@@ -13,6 +12,7 @@ import {
   RegisterService,
   UsernameTakenError,
 } from "../../services/user/register";
+import { UnprocessableEntityError } from "./unprocessable-entity.error";
 
 class RegisterDTO {
   @MinLength(6)
@@ -23,20 +23,6 @@ class RegisterDTO {
 
   @MinLength(1)
   apiKey: string;
-}
-
-class UnprocessableEntityError extends HttpError {
-  constructor(public readonly message: string) {
-    super(422);
-    Object.setPrototypeOf(this, UnprocessableEntityError.prototype);
-  }
-
-  toJSON() {
-    return {
-      status: this.httpCode,
-      message: this.message,
-    };
-  }
 }
 
 @JsonController()
