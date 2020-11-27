@@ -29,6 +29,7 @@
     "dotenv": "^8.2.0",
     "pg": "^8.4.1",
     "reflect-metadata": "^0.1.13",
+    "routing-controllers": "^0.9.0-alpha.6",
     "ts-jest": "^26.4.1",
     "typedi": "^0.8.0",
     "typeorm": "^0.2.28"
