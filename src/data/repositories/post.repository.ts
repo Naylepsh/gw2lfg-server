@@ -1,9 +1,7 @@
 import { EntityRepository } from "typeorm";
-import { Post } from "../entities/post.entity";
+import { Post } from "../../core/entities/post.entity";
 import { IdentifiableEntityRepository } from "./generic.repository";
-import { IIdentifiableEntityRepository } from "./repository.interface";
-
-export interface IPostRepository extends IIdentifiableEntityRepository<Post> {}
+import { IPostRepository } from "../../core/repositories/post.repository.interface";
 
 @EntityRepository(Post)
 export class PostRepository

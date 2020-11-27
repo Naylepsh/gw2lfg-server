@@ -9,7 +9,7 @@ import {
 import {
   InvalidLoginDetailsError,
   LoginService,
-} from "../../services/user/login";
+} from "../../../services/user/login";
 
 class LoginDTO {
   @MinLength(6)

@@ -1,10 +1,7 @@
 import { EntityRepository } from "typeorm";
-import { Requirement } from "../entities/requirement.entity";
+import { Requirement } from "../../core/entities/requirement.entity";
 import { IdentifiableEntityRepository } from "./generic.repository";
-import { IIdentifiableEntityRepository } from "./repository.interface";
-
-export interface IRequirementRepository
-  extends IIdentifiableEntityRepository<Requirement> {}
+import { IRequirementRepository } from "../../core/repositories/requirement.repository.interface";
 
 @EntityRepository(Requirement)
 export class RequirementRepository

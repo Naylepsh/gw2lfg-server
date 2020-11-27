@@ -1,17 +1,11 @@
 import { Connection } from "typeorm";
-import { loadTypeORM } from "../../../../loaders/typeorm";
-import {
-  IPostRepository,
-  PostRepository,
-} from "../../../../repositories/post.repository";
-import {
-  IRequirementRepository,
-  RequirementRepository,
-} from "../../../../repositories/requirement.repository";
-import {
-  IUserRepository,
-  UserRepository,
-} from "../../../../repositories/user.repository";
+import { loadTypeORM } from "../../../../api/loaders/typeorm";
+import { PostRepository } from "../../../../data/repositories/post.repository";
+import { IPostRepository } from "../../../../core/repositories/post.repository.interface";
+import { RequirementRepository } from "../../../../data/repositories/requirement.repository";
+import { IRequirementRepository } from "../../../../core/repositories/requirement.repository.interface";
+import { UserRepository } from "../../../../data/repositories/user.repository";
+import { IUserRepository } from "../../../../core/repositories/user.repository.interface";
 import { createAndSaveLIRequirement } from "../../../helpers/li-requirement.helper";
 import { createAndSavePosting } from "../../../helpers/post.helper";
 import { createAndSaveUser } from "../../../helpers/user.helper";

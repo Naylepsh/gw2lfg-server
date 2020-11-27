@@ -1,4 +1,4 @@
-import { IUserRepository } from "../../repositories/user.repository";
+import { IUserRepository } from "../../core/repositories/user.repository.interface";
 import { compare } from "bcrypt";
 
 export class InvalidLoginDetailsError extends Error {}

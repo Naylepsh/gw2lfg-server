@@ -1,7 +1,7 @@
 import { Connection } from "typeorm";
-import { User } from "../../../../entities/user.entity";
-import { loadTypeORM } from "../../../../loaders/typeorm";
-import { UserRepository } from "../../../../repositories/user.repository";
+import { User } from "../../../../core/entities/user.entity";
+import { loadTypeORM } from "../../../../api/loaders/typeorm";
+import { UserRepository } from "../../../../data/repositories/user.repository";
 
 /*
   It's not possible to call GenericRepository by itself, 

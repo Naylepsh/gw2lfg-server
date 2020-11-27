@@ -1,5 +1,5 @@
-import { JoinRequest } from "../../../entities/join-request";
-import { IJoinRequestRepository } from "../../../repositories/join-request.repository";
+import { JoinRequest } from "../../../core/entities/join-request";
+import { IJoinRequestRepository } from "../../../core/repositories/join-request.repository.interface";
 import { MemoryRepository } from "./memory-repository";
 
 export class JoinRequestMemoryRepository

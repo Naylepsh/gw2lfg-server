@@ -45,7 +45,7 @@ const database: ConnectionOptions = {
   username: parseEnvString("DATABASE_USERNAME"),
   password: parseEnvString("DATABASE_PASSWORD"),
   synchronize: !is_prod,
-  entities: getEntities("../entities"),
+  entities: getEntities("../../entities"),
 };
 
 export const config: ConfigProperties = {

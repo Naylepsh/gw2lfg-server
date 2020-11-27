@@ -1,11 +1,7 @@
-import { IIdentifiableEntityRepository } from "./repository.interface";
-import { User } from "../entities/user.entity";
+import { User } from "../../core/entities/user.entity";
 import { IdentifiableEntityRepository } from "./generic.repository";
 import { EntityRepository } from "typeorm";
-
-export interface IUserRepository extends IIdentifiableEntityRepository<User> {
-  findByUsername(username: string): Promise<User | undefined>;
-}
+import { IUserRepository } from "../../core/repositories/user.repository.interface";
 
 @EntityRepository(User)
 export class UserRepository

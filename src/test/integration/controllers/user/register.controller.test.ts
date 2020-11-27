@@ -1,9 +1,9 @@
 import "reflect-metadata";
 import request from "supertest";
 import { Container } from "typedi";
-import { RegisterUserController } from "../../../../controllers/user/register.controller";
-import { User } from "../../../../entities/user.entity";
-import { IUserRepository } from "../../../../repositories/user.repository";
+import { RegisterUserController } from "../../../../api/controllers/user/register.controller";
+import { User } from "../../../../core/entities/user.entity";
+import { IUserRepository } from "../../../../core/repositories/user.repository.interface";
 import { RegisterService } from "../../../../services/user/register";
 import { UserMemoryRepository } from "../../../helpers/repositories/user.memory-repository";
 import { createExpressServer, useContainer } from "routing-controllers";

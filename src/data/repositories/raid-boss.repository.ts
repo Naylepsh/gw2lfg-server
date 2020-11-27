@@ -1,10 +1,7 @@
 import { EntityRepository } from "typeorm";
-import { RaidBoss } from "../entities/raid-boss.entity";
+import { RaidBoss } from "../../core/entities/raid-boss.entity";
 import { IdentifiableEntityRepository } from "./generic.repository";
-import { IIdentifiableEntityRepository } from "./repository.interface";
-
-export interface IRaidBossRepository
-  extends IIdentifiableEntityRepository<RaidBoss> {}
+import { IRaidBossRepository } from "../../core/repositories/raid-boss.repository.interface";
 
 @EntityRepository()
 export class RaidBossRepository

@@ -2,7 +2,7 @@ import { LoginService } from "../../../../services/user/login";
 import { RegisterService } from "../../../../services/user/register";
 import { createDummyUser } from "../../../helpers/user.helper";
 import { UserMemoryRepository } from "../../../helpers/repositories/user.memory-repository";
-import { IUserRepository } from "../../../../repositories/user.repository";
+import { IUserRepository } from "../../../../core/repositories/user.repository.interface";
 
 describe("User service: login tests", () => {
   let userRepository: IUserRepository;

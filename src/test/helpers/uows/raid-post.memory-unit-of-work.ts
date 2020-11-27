@@ -1,4 +1,4 @@
-import { IRaidPostUnitOfWork } from "../../../repositories/raid-post.unit-of-work";
+import { IRaidPostUnitOfWork } from "../../../core/units-of-work/raid-post.unit-of-work.interface";
 import { RaidBossMemoryRepository } from "../repositories/raid-boss.memory-repository";
 import { RaidPostMemoryRepository } from "../repositories/raid-post.memory-repository";
 import { RequirementMemoryRepository } from "../repositories/requirement.memory-repository";

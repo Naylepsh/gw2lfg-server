@@ -1,10 +1,10 @@
-import { RaidPost } from "../../entities/raid-post.entitity";
+import { RaidPost } from "../../core/entities/raid-post.entitity";
 import {
   RequirementArgs,
   requirementFactory,
-} from "../../entities/requirement.factory";
-import { Role } from "../../entities/role.entity";
-import { IRaidPostUnitOfWork } from "../../repositories/raid-post.unit-of-work";
+} from "../../core/entities/requirement.factory";
+import { Role } from "../../core/entities/role.entity";
+import { IRaidPostUnitOfWork } from "../../core/units-of-work/raid-post.unit-of-work.interface";
 import { isDateInThePast } from "./is-date-in-the-past";
 import { PastDateError } from "./raid-post-errors";
 
