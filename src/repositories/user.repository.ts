@@ -1,7 +1,4 @@
-import {
-  IIdentifiableEntityRepository,
-  IRepository,
-} from "./repository.interface";
+import { IIdentifiableEntityRepository } from "./repository.interface";
 import { User } from "../entities/user.entity";
 import { IdentifiableEntityRepository } from "./generic.repository";
 import { EntityRepository } from "typeorm";

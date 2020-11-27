@@ -6,7 +6,7 @@ export interface FindManyParams<Entity> {
   relations?: string[];
 }
 
-export interface FindOneParams<Entity> {
+export interface FindOneParams<_Entity> {
   where?: any;
   relations?: string[];
 }
