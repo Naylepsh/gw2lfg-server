@@ -1,5 +1,5 @@
-import { User } from "../../core/entities/user.entity";
-import { IUserRepository } from "../../core/repositories/user.repository.interface";
+import { User } from "../../data/entities/user.entity";
+import { IUserRepository } from "../../data/repositories/user/user.repository.interface";
 import { hash } from "bcrypt";
 import { Service } from "typedi";
 

@@ -1,10 +1,10 @@
-import { JoinRequest } from "../../core/entities/join-request";
-import { Post } from "../../core/entities/post.entity";
-import { ItemRequirement } from "../../core/entities/requirement.entity";
-import { User } from "../../core/entities/user.entity";
-import { IJoinRequestRepository } from "../../core/repositories/join-request.repository.interface";
-import { IPostRepository } from "../../core/repositories/post.repository.interface";
-import { IUserRepository } from "../../core/repositories/user.repository.interface";
+import { JoinRequest } from "../../data/entities/join-request";
+import { Post } from "../../data/entities/post.entity";
+import { ItemRequirement } from "../../data/entities/requirement.entity";
+import { User } from "../../data/entities/user.entity";
+import { IJoinRequestRepository } from "../../data/repositories/join-request/join-request.repository.interface";
+import { IPostRepository } from "../../data/repositories/post/post.repository.interface";
+import { IUserRepository } from "../../data/repositories/user/user.repository.interface";
 import { ConcreteItemsFetcher } from "../gw2-api/gw2-api.service";
 import { nameToId } from "../gw2-items/gw2-items.service";
 

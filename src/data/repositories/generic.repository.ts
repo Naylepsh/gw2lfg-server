@@ -4,7 +4,7 @@ import {
   FindOneParams,
   IIdentifiableEntityRepository,
   IRepository,
-} from "../../core/repositories/repository.interface";
+} from "./repository.interface";
 
 @EntityRepository()
 export class GenericRepository<Entity>

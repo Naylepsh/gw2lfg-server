@@ -1,5 +1,5 @@
 import { Connection, EntityManager, ObjectType } from "typeorm";
-import { IUnitOfWork } from "../../core/units-of-work/unit-of-work.interface";
+import { IUnitOfWork } from "./unit-of-work.interface";
 
 export class TypeOrmUnitOfWork implements IUnitOfWork {
   private transactionManager: EntityManager | null;

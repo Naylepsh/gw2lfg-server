@@ -8,7 +8,7 @@ import { createAndSaveUser } from "../../../helpers/user.helper";
 import { createAndSaveRaidPost } from "../../../helpers/raid-post.helper";
 import { addHours, subtractHours } from "./hours.util";
 import { createAndSaveLIRequirement } from "../../../helpers/li-requirement.helper";
-import { LIRequirement } from "../../../../core/entities/requirement.entity";
+import { LIRequirement } from "../../../../data/entities/requirement.entity";
 import { createAndSaveRole } from "../../../helpers/role.helper";
 
 describe("RaidPost Service: update tests", () => {

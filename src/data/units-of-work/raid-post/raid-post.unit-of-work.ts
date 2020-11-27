@@ -1,10 +1,10 @@
-import { RaidBossRepository } from "../repositories/raid-boss.repository";
-import { RaidPostRepository } from "../repositories/raid-post.repository";
-import { RequirementRepository } from "../repositories/requirement.repository";
-import { RoleRepository } from "../repositories/role.repository";
-import { UserRepository } from "../repositories/user.repository";
-import { IRaidPostUnitOfWork } from "../../core/units-of-work/raid-post.unit-of-work.interface";
-import { TypeOrmUnitOfWork } from "./generic.unit-of-work";
+import { RaidBossRepository } from "../../repositories/raid-boss/raid-boss.repository";
+import { RaidPostRepository } from "../../repositories/raid-post/raid-post.repository";
+import { RequirementRepository } from "../../repositories/requirement/requirement.repository";
+import { RoleRepository } from "../../repositories/role/role.repository";
+import { UserRepository } from "../../repositories/user/user.repository";
+import { IRaidPostUnitOfWork } from "./raid-post.unit-of-work.interface";
+import { TypeOrmUnitOfWork } from "../generic.unit-of-work";
 
 export class RaidPostUnitOfWork implements IRaidPostUnitOfWork {
   private constructor(private unitOfWork: TypeOrmUnitOfWork) {}

@@ -1,7 +1,7 @@
 import { EntityRepository } from "typeorm";
-import { JoinRequest } from "../../core/entities/join-request";
-import { GenericRepository } from "./generic.repository";
-import { IJoinRequestRepository } from "../../core/repositories/join-request.repository.interface";
+import { JoinRequest } from "../../entities/join-request";
+import { GenericRepository } from "../generic.repository";
+import { IJoinRequestRepository } from "./join-request.repository.interface";
 
 @EntityRepository(JoinRequest)
 export class JoinRequestRepository

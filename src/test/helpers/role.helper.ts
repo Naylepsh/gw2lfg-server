@@ -1,5 +1,5 @@
-import { Role } from "../../core/entities/role.entity";
-import { IRoleRepository } from "../../core/repositories/role.repository.interface";
+import { Role } from "../../data/entities/role.entity";
+import { IRoleRepository } from "../../data/repositories/role/role.repository.interface";
 
 interface RoleProps {
   name: string;

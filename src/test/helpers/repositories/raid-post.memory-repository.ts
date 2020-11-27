@@ -1,5 +1,5 @@
-import { RaidPost } from "../../../core/entities/raid-post.entitity";
-import { IRaidPostRepository } from "../../../core/repositories/raid-post.repository.interface";
+import { RaidPost } from "../../../data/entities/raid-post.entitity";
+import { IRaidPostRepository } from "../../../data/repositories/raid-post/raid-post.repository.interface";
 import { IdentifiableMemoryRepository } from "./memory-repository";
 
 export class RaidPostMemoryRepository

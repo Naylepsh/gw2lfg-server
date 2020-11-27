@@ -1,8 +1,8 @@
 import { Connection, getConnection } from "typeorm";
-import { User } from "../../../../core/entities/user.entity";
-import { loadTypeORM } from "../../../../api/loaders/typeorm";
+import { User } from "../../../../data/entities/user.entity";
+import { loadTypeORM } from "../../../../loaders/typeorm";
 import { TypeOrmUnitOfWork } from "../../../../data/units-of-work/generic.unit-of-work";
-import { UserRepository } from "../../../../data/repositories/user.repository";
+import { UserRepository } from "../../../../data/repositories/user/user.repository";
 
 describe("TypeORM Unit of Work tests", () => {
   let connection: Connection;
