@@ -1,9 +1,11 @@
 import { User } from "../../entities/user.entity";
 import { IUserRepository } from "../../repositories/user.repository";
 import { hash } from "bcrypt";
+import { Service } from "typedi";
 
 export class UsernameTakenError extends Error {}
 
+@Service()
 export class RegisterService {
   constructor(private readonly userRepository: IUserRepository) {}
 
