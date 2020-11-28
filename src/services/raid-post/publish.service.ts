@@ -18,6 +18,8 @@ export interface PublishDTO {
   requirementsProps: RequirementArgs[];
 }
 
+export class UserNotFoundError extends Error {}
+
 export class PublishRaidPostService {
   constructor(private readonly uow: IRaidPostUnitOfWork) {}
 
@@ -31,7 +33,7 @@ export class PublishRaidPostService {
 
   private async createAndSavePost(publishDto: PublishDTO) {
     const author = await this.uow.users.findById(publishDto.authorId);
-    if (!author) throw new Error("unregistered user");
+    if (!author) throw new UserNotFoundError();
 
     const requirements = publishDto.requirementsProps.map((req) =>
       requirementFactory.createRequirement(req)
