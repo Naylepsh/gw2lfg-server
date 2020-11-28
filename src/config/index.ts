@@ -29,12 +29,10 @@ const parseEnvNumber = (name: string) => {
 };
 
 const getEntities = (pathToDir: string) => {
-  const getEntitiesOfExtension = (extension: string) => {
-    return path.join(__dirname, pathToDir, `*${extension}`);
-  };
-
   const extensions = ["ts", "js"];
-  return extensions.map(getEntitiesOfExtension);
+  return extensions.map((extension: string) => {
+    return path.join(__dirname, pathToDir, `*${extension}`);
+  });
 };
 
 const database: ConnectionOptions = {
@@ -45,7 +43,7 @@ const database: ConnectionOptions = {
   username: parseEnvString("DATABASE_USERNAME"),
   password: parseEnvString("DATABASE_PASSWORD"),
   synchronize: !is_prod,
-  entities: getEntities("../../entities"),
+  entities: getEntities("../data/entities"),
 };
 
 export const config: ConfigProperties = {
