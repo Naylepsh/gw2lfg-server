@@ -1,5 +1,5 @@
-import { RaidBoss } from "../../entities/raid-boss.entity";
-import { IRaidBossRepository } from "../../repositories/raid-boss.repository";
+import { RaidBoss } from "../../data/entities/raid-boss.entity";
+import { IRaidBossRepository } from "../../data/repositories/raid-boss/raid-boss.repository.interface";
 
 interface RaidBossProps {
   name: string;

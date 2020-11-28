@@ -1,5 +1,5 @@
-import { User } from "../../entities/user.entity";
-import { IUserRepository } from "../../repositories/user.repository";
+import { User } from "../../data/entities/user.entity";
+import { IUserRepository } from "../../data/repositories/user/user.repository.interface";
 
 interface UserProps {
   username: string;

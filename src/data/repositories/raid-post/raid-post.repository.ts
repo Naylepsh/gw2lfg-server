@@ -1,12 +1,7 @@
-import { RaidPost } from "../entities/raid-post.entitity";
-import { IdentifiableEntityRepository } from "./generic.repository";
-import {
-  FindManyParams,
-  IIdentifiableEntityRepository,
-} from "./repository.interface";
-
-export interface IRaidPostRepository
-  extends IIdentifiableEntityRepository<RaidPost> {}
+import { RaidPost } from "../../entities/raid-post.entitity";
+import { IdentifiableEntityRepository } from "../generic.repository";
+import { FindManyParams } from "../repository.interface";
+import { IRaidPostRepository } from "./raid-post.repository.interface";
 
 export class RaidPostRepository
   extends IdentifiableEntityRepository<RaidPost>

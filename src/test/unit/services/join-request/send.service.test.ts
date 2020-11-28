@@ -1,9 +1,9 @@
-import { RaidPost } from "../../../../entities/raid-post.entitity";
-import { LIRequirement } from "../../../../entities/requirement.entity";
-import { User } from "../../../../entities/user.entity";
-import { IJoinRequestRepository } from "../../../../repositories/join-request.repository";
-import { IPostRepository } from "../../../../repositories/post.repository";
-import { IUserRepository } from "../../../../repositories/user.repository";
+import { RaidPost } from "../../../../data/entities/raid-post.entitity";
+import { LIRequirement } from "../../../../data/entities/requirement.entity";
+import { User } from "../../../../data/entities/user.entity";
+import { IJoinRequestRepository } from "../../../../data/repositories/join-request/join-request.repository.interface";
+import { IPostRepository } from "../../../../data/repositories/post/post.repository.interface";
+import { IUserRepository } from "../../../../data/repositories/user/user.repository.interface";
 import {
   ConcreteItemsFetcher,
   GetItems,

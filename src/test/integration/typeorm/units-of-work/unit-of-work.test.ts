@@ -1,8 +1,8 @@
 import { Connection, getConnection } from "typeorm";
-import { User } from "../../../../entities/user.entity";
+import { User } from "../../../../data/entities/user.entity";
 import { loadTypeORM } from "../../../../loaders/typeorm";
-import { TypeOrmUnitOfWork } from "../../../../repositories/raid-post.unit-of-work";
-import { UserRepository } from "../../../../repositories/user.repository";
+import { TypeOrmUnitOfWork } from "../../../../data/units-of-work/generic.unit-of-work";
+import { UserRepository } from "../../../../data/repositories/user/user.repository";
 
 describe("TypeORM Unit of Work tests", () => {
   let connection: Connection;
@@ -24,7 +24,7 @@ describe("TypeORM Unit of Work tests", () => {
     const uow = new TypeOrmUnitOfWork(connection);
 
     const work = async () => {
-      const userRepo = uow.getRepository(UserRepository);
+      const userRepo = uow.getCustomRepository(UserRepository);
       const user = new User();
       user.username = "username";
       user.password = "password";
@@ -44,7 +44,7 @@ describe("TypeORM Unit of Work tests", () => {
     const uow = new TypeOrmUnitOfWork(connection);
 
     const work = async () => {
-      const userRepo = uow.getRepository(UserRepository);
+      const userRepo = uow.getCustomRepository(UserRepository);
       const user = new User();
       user.username = "username";
       user.password = "password";
@@ -56,7 +56,7 @@ describe("TypeORM Unit of Work tests", () => {
       await uow.withTransaction(work);
     } catch (error) {}
 
-    const _user = await repo.findByUsername("username");
-    expect(_user).toBeUndefined();
+    const user = await repo.findByUsername("username");
+    expect(user).toBeUndefined();
   });
 });

@@ -1,4 +1,4 @@
-import { IRaidPostUnitOfWork } from "../../repositories/raid-post.unit-of-work";
+import { IRaidPostUnitOfWork } from "../../data/units-of-work/raid-post/raid-post.unit-of-work.interface";
 
 export interface UnpublishRaidPostDTO {
   id: number;

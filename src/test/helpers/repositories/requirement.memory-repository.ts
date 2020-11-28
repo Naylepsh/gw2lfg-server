@@ -1,5 +1,5 @@
-import { Requirement } from "../../../entities/requirement.entity";
-import { IRequirementRepository } from "../../../repositories/requirement.repository";
+import { Requirement } from "../../../data/entities/requirement.entity";
+import { IRequirementRepository } from "../../../data/repositories/requirement/requirement.repository.interface";
 import { IdentifiableMemoryRepository } from "./memory-repository";
 
 export class RequirementMemoryRepository

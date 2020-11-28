@@ -1,11 +1,7 @@
 import { EntityRepository } from "typeorm";
-import { JoinRequest } from "../entities/join-request";
-import { GenericRepository } from "./generic.repository";
-import { IRepository } from "./repository.interface";
-
-export interface IJoinRequestRepository extends IRepository<JoinRequest> {
-  findByKey(userId: number, postId: number): Promise<JoinRequest | undefined>;
-}
+import { JoinRequest } from "../../entities/join-request";
+import { GenericRepository } from "../generic.repository";
+import { IJoinRequestRepository } from "./join-request.repository.interface";
 
 @EntityRepository(JoinRequest)
 export class JoinRequestRepository

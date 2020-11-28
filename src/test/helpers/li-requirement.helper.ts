@@ -1,5 +1,5 @@
-import { LIRequirement } from "../../entities/requirement.entity";
-import { IRequirementRepository } from "../../repositories/requirement.repository";
+import { LIRequirement } from "../../data/entities/requirement.entity";
+import { IRequirementRepository } from "../../data/repositories/requirement/requirement.repository.interface";
 
 interface LIRequirementProps {
   quantity: number;

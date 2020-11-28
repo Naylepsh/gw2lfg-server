@@ -1,4 +1,4 @@
-import { LIRequirement } from "../../../../entities/requirement.entity";
+import { LIRequirement } from "../../../../data/entities/requirement.entity";
 import {
   PublishRaidPostService,
   PublishDTO,

@@ -1,7 +1,7 @@
-import { Post } from "../../entities/post.entity";
-import { Requirement } from "../../entities/requirement.entity";
-import { User } from "../../entities/user.entity";
-import { IPostRepository } from "../../repositories/post.repository";
+import { Post } from "../../data/entities/post.entity";
+import { Requirement } from "../../data/entities/requirement.entity";
+import { User } from "../../data/entities/user.entity";
+import { IPostRepository } from "../../data/repositories/post/post.repository.interface";
 
 interface PostProps {
   author: User;

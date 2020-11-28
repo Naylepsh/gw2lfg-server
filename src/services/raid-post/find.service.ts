@@ -1,4 +1,4 @@
-import { IRaidPostRepository } from "../../repositories/raid-post.repository";
+import { IRaidPostRepository } from "../../data/repositories/raid-post/raid-post.repository.interface";
 
 export interface FindRaidPostParams {
   skip?: number;

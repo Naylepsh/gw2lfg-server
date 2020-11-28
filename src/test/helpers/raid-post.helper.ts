@@ -1,6 +1,6 @@
-import { RaidPost } from "../../entities/raid-post.entitity";
-import { User } from "../../entities/user.entity";
-import { IRaidPostRepository } from "../../repositories/raid-post.repository";
+import { RaidPost } from "../../data/entities/raid-post.entitity";
+import { User } from "../../data/entities/user.entity";
+import { IRaidPostRepository } from "../../data/repositories/raid-post/raid-post.repository.interface";
 
 export const createAndSaveRaidPost = (
   repo: IRaidPostRepository,
