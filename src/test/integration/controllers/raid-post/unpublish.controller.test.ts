@@ -4,19 +4,12 @@ import { createExpressServer, Action, useContainer } from "routing-controllers";
 import Container from "typedi";
 import { UnpublishRaidPostController } from "../../../../api/controllers/raid-post/unpublish.controller";
 import { CurrentUserMiddleware } from "../../../../api/middleware/current-user.middleware";
-import { RaidBoss } from "../../../../data/entities/raid-boss.entity";
 import { User } from "../../../../data/entities/user.entity";
 import { PostAuthorshipService } from "../../../../services/raid-post/authorship.service";
-import { PublishRaidPostService } from "../../../../services/raid-post/publish.service";
 import { UnpublishRaidPostService } from "../../../../services/raid-post/unpublish.service";
 import { RegisterService } from "../../../../services/user/register";
-import { RaidBossMemoryRepository } from "../../../helpers/repositories/raid-boss.memory-repository";
-import { RaidPostMemoryRepository } from "../../../helpers/repositories/raid-post.memory-repository";
-import { RequirementMemoryRepository } from "../../../helpers/repositories/requirement.memory-repository";
-import { RoleMemoryRepository } from "../../../helpers/repositories/role.memory-repository";
-import { UserMemoryRepository } from "../../../helpers/repositories/user.memory-repository";
 import { RaidPostMemoryUnitOfWork } from "../../../helpers/uows/raid-post.memory-unit-of-work";
-import { addHours } from "../../../unit/services/raid-post/hours.util";
+import { seedDbWithOnePost } from "./seed-db";
 
 describe("UnpublishRaidPostController integration tests", () => {
   let url = "/raid-posts";
@@ -27,38 +20,11 @@ describe("UnpublishRaidPostController integration tests", () => {
   let app: any;
 
   beforeEach(async () => {
-    uow = new RaidPostMemoryUnitOfWork(
-      new UserMemoryRepository(),
-      new RaidBossMemoryRepository(),
-      new RoleMemoryRepository(),
-      new RequirementMemoryRepository(),
-      new RaidPostMemoryRepository()
-    );
+    uow = RaidPostMemoryUnitOfWork.create();
+
+    ({ token, postId } = await seedDbWithOnePost(uow));
 
     registerService = new RegisterService(uow.users);
-    const author = new User({
-      username: "existingUser",
-      password: "password",
-      apiKey: "api-key",
-    });
-    const { id: userid } = await registerService.register(author);
-    token = userid.toString();
-
-    const boss = new RaidBoss({ name: "boss", isCm: false });
-    const savedBoss = await uow.raidBosses.save(boss);
-    const bossesIds = [savedBoss.id];
-
-    const publishService = new PublishRaidPostService(uow);
-    const dto = {
-      server: "EU",
-      date: addHours(new Date(), 12),
-      bossesIds,
-      rolesProps: [],
-      requirementsProps: [],
-      authorId: userid,
-    };
-    const post = await publishService.publish(dto);
-    postId = post.id;
 
     const unpublishService = new UnpublishRaidPostService(uow);
     const authorshipService = new PostAuthorshipService(uow.raidPosts);
