@@ -17,7 +17,7 @@ import { RaidBoss } from "../../../../data/entities/raid-boss.entity";
 import { addHours } from "../../../unit/services/raid-post/hours.util";
 
 describe("PublishRaidPostController integration tests", () => {
-  const url = "/raid-post";
+  const url = "/raid-posts";
   let uow: RaidPostMemoryUnitOfWork;
   let app: any;
   let token: string;

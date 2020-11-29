@@ -16,7 +16,7 @@ export class RegisterService {
 
     const _user = { ...user };
     await this.hashUserPassword(_user);
-    await this.userRepository.save(_user);
+    return await this.userRepository.save(_user);
   }
 
   private async isUsernameTaken(username: string) {
