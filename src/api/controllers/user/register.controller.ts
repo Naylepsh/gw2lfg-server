@@ -12,7 +12,7 @@ import {
   RegisterService,
   UsernameTakenError,
 } from "../../../services/user/register";
-import { UnprocessableEntityError } from "./unprocessable-entity.error";
+import { UnprocessableEntityError } from "../../http-errors/unprocessable-entity.error";
 
 class RegisterDTO {
   @MinLength(6)

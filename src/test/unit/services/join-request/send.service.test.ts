@@ -56,7 +56,7 @@ describe("JoinRequest Service: send tests", () => {
       postRepo,
       joinRequestRepo,
       new GetItems(fetchItems)
-    ).sendJoinRequest(user.id, post.id);
+    ).sendJoinRequest({ userId: user.id, postId: post.id });
 
     const request = await joinRequestRepo.findByKey(user.id, post.id);
     expect(request).toBeDefined();
@@ -72,7 +72,7 @@ describe("JoinRequest Service: send tests", () => {
         postRepo,
         joinRequestRepo,
         new DummyItemFetcher()
-      ).sendJoinRequest(userId, postId)
+      ).sendJoinRequest({ userId, postId })
     ).rejects.toThrow();
   });
 
@@ -92,7 +92,7 @@ describe("JoinRequest Service: send tests", () => {
         postRepo,
         joinRequestRepo,
         new DummyItemFetcher()
-      ).sendJoinRequest(user.id, postId)
+      ).sendJoinRequest({ userId: user.id, postId })
     ).rejects.toThrow();
   });
 
@@ -126,7 +126,7 @@ describe("JoinRequest Service: send tests", () => {
         postRepo,
         joinRequestRepo,
         new GetItems(fetchItems)
-      ).sendJoinRequest(user.id, post.id)
+      ).sendJoinRequest({ userId: user.id, postId: post.id })
     ).rejects.toThrow();
   });
 });

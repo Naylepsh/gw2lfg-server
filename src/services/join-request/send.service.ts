@@ -5,8 +5,20 @@ import { User } from "../../data/entities/user.entity";
 import { IJoinRequestRepository } from "../../data/repositories/join-request/join-request.repository.interface";
 import { IPostRepository } from "../../data/repositories/post/post.repository.interface";
 import { IUserRepository } from "../../data/repositories/user/user.repository.interface";
+import { EntityAlreadyExistsError } from "../errors/entity-already-exists.error";
+import {
+  PostNotFoundError,
+  UserNotFoundError,
+} from "../errors/entity-not-found.error";
 import { ConcreteItemsFetcher } from "../gw2-api/gw2-api.service";
 import { nameToId } from "../gw2-items/gw2-items.service";
+
+interface SendJoinRequestDTO {
+  userId: number;
+  postId: number;
+}
+
+export class RequirementsNotSatisfiedError extends Error {}
 
 export class SendJoinRequestService {
   constructor(
@@ -16,25 +28,25 @@ export class SendJoinRequestService {
     private readonly getItems: ConcreteItemsFetcher
   ) {}
 
-  async sendJoinRequest(userId: number, postId: number) {
+  async sendJoinRequest({ userId, postId }: SendJoinRequestDTO) {
     const user = await this.userRepo.findById(userId);
     if (!user) {
-      throw new Error();
+      throw new UserNotFoundError();
     }
 
     const post = await this.postRepo.findById(postId);
     if (!post) {
-      throw new Error();
+      throw new PostNotFoundError();
     }
 
     const _request = await this.joinRequestRepo.findByKey(userId, postId);
     if (_request) {
-      throw new Error();
+      throw new EntityAlreadyExistsError();
     }
 
     const areSatisfied = await this.areItemRequirementsSatisfied(post, user);
     if (!areSatisfied) {
-      throw new Error();
+      throw new RequirementsNotSatisfiedError();
     }
 
     const joinRequest = new JoinRequest({ userId, postId });

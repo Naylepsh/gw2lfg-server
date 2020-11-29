@@ -2,8 +2,9 @@ import { User } from "../../data/entities/user.entity";
 import { IUserRepository } from "../../data/repositories/user/user.repository.interface";
 import { hash } from "bcrypt";
 import { Service } from "typedi";
+import { EntityAlreadyExistsError } from "../errors/entity-already-exists.error";
 
-export class UsernameTakenError extends Error {}
+export class UsernameTakenError extends EntityAlreadyExistsError {}
 
 @Service()
 export class RegisterService {
@@ -16,7 +17,7 @@ export class RegisterService {
 
     const _user = { ...user };
     await this.hashUserPassword(_user);
-    await this.userRepository.save(_user);
+    return await this.userRepository.save(_user);
   }
 
   private async isUsernameTaken(username: string) {

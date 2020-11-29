@@ -7,6 +7,7 @@ import {
 import { IRaidPostUnitOfWork } from "../../data/units-of-work/raid-post/raid-post.unit-of-work.interface";
 import { isDateInThePast } from "./is-date-in-the-past";
 import { PastDateError } from "./raid-post-errors";
+import { UserNotFoundError } from "../errors/entity-not-found.error";
 
 export interface PublishDTO {
   date: Date;
@@ -31,7 +32,7 @@ export class PublishRaidPostService {
 
   private async createAndSavePost(publishDto: PublishDTO) {
     const author = await this.uow.users.findById(publishDto.authorId);
-    if (!author) throw new Error("unregistered user");
+    if (!author) throw new UserNotFoundError();
 
     const requirements = publishDto.requirementsProps.map((req) =>
       requirementFactory.createRequirement(req)
