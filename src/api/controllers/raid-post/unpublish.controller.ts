@@ -10,7 +10,7 @@ import {
 } from "routing-controllers";
 import { User } from "../../../data/entities/user.entity";
 import { PostAuthorshipService } from "../../../services/raid-post/authorship.service";
-import { EntityNotFoundError } from "../../../services/raid-post/entity-not-found.error";
+import { EntityNotFoundError } from "../../../services/errors/entity-not-found.error";
 import { UnpublishRaidPostService } from "../../../services/raid-post/unpublish.service";
 
 @JsonController()

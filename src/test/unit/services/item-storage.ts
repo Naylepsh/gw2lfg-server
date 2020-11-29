@@ -16,3 +16,11 @@ const createItemFetcher = (items: ItemStorage = new Map<string, Item[]>()) => {
 export const createFetchersForItemGroups = (itemGroups: ItemStorage[]) => {
   return itemGroups.map(createItemFetcher);
 };
+
+export class MyStorage {
+  constructor(public readonly items: ItemStorage = new Map<string, Item[]>()) {}
+
+  fetch(apiKey: string): Promise<Item[]> {
+    return new Promise((resolve) => resolve(this.items.get(apiKey) ?? []));
+  }
+}

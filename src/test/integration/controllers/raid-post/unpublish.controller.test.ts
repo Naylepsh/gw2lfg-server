@@ -10,10 +10,11 @@ import { UnpublishRaidPostService } from "../../../../services/raid-post/unpubli
 import { RegisterService } from "../../../../services/user/register";
 import { RaidPostMemoryUnitOfWork } from "../../../helpers/uows/raid-post.memory-unit-of-work";
 import { seedDbWithOnePost } from "./seed-db";
+import { RaidPost } from "../../../../data/entities/raid-post.entitity";
 
 describe("UnpublishRaidPostController integration tests", () => {
   let url = "/raid-posts";
-  let postId: number;
+  let post: RaidPost;
   let uow: RaidPostMemoryUnitOfWork;
   let registerService: RegisterService;
   let token: string;
@@ -22,7 +23,7 @@ describe("UnpublishRaidPostController integration tests", () => {
   beforeEach(async () => {
     uow = RaidPostMemoryUnitOfWork.create();
 
-    ({ token, postId } = await seedDbWithOnePost(uow));
+    ({ token, post } = await seedDbWithOnePost(uow));
 
     registerService = new RegisterService(uow.users);
 
@@ -46,7 +47,7 @@ describe("UnpublishRaidPostController integration tests", () => {
   });
 
   it("should return 401 if user was not logged in", async () => {
-    const res = await request(app).delete(toUrl(postId));
+    const res = await request(app).delete(toUrl(post.id));
 
     expect(res.status).toBe(401);
   });
@@ -61,7 +62,7 @@ describe("UnpublishRaidPostController integration tests", () => {
     const otherUserToken = otherUserId.toString();
 
     const res = await request(app)
-      .delete(toUrl(postId))
+      .delete(toUrl(post.id))
       .set(CurrentUserMiddleware.AUTH_HEADER, otherUserToken);
 
     expect(res.status).toBe(403);
@@ -69,7 +70,7 @@ describe("UnpublishRaidPostController integration tests", () => {
 
   it("should return 204 if valid data was passed", async () => {
     const res = await request(app)
-      .delete(toUrl(postId))
+      .delete(toUrl(post.id))
       .set(CurrentUserMiddleware.AUTH_HEADER, token);
 
     expect(res.status).toBe(204);
@@ -77,10 +78,10 @@ describe("UnpublishRaidPostController integration tests", () => {
 
   it("should return 204 if post does not exists", async () => {
     await request(app)
-      .delete(toUrl(postId))
+      .delete(toUrl(post.id))
       .set(CurrentUserMiddleware.AUTH_HEADER, token);
     const res = await request(app)
-      .delete(toUrl(postId))
+      .delete(toUrl(post.id))
       .set(CurrentUserMiddleware.AUTH_HEADER, token);
 
     expect(res.status).toBe(204);
@@ -88,7 +89,7 @@ describe("UnpublishRaidPostController integration tests", () => {
 
   it("should remove a post if it existed", async () => {
     await request(app)
-      .delete(toUrl(postId))
+      .delete(toUrl(post.id))
       .set(CurrentUserMiddleware.AUTH_HEADER, token);
 
     expect(uow.committed).toBeTruthy();

@@ -7,6 +7,7 @@ import {
 import { IRaidPostUnitOfWork } from "../../data/units-of-work/raid-post/raid-post.unit-of-work.interface";
 import { isDateInThePast } from "./is-date-in-the-past";
 import { PastDateError } from "./raid-post-errors";
+import { UserNotFoundError } from "../errors/entity-not-found.error";
 
 export interface PublishDTO {
   date: Date;
@@ -17,8 +18,6 @@ export interface PublishDTO {
   rolesProps: Pick<Role, "name" | "description">[];
   requirementsProps: RequirementArgs[];
 }
-
-export class UserNotFoundError extends Error {}
 
 export class PublishRaidPostService {
   constructor(private readonly uow: IRaidPostUnitOfWork) {}

@@ -4,15 +4,16 @@ import { RegisterService } from "../../../../services/user/register";
 import { RaidPostMemoryUnitOfWork } from "../../../helpers/uows/raid-post.memory-unit-of-work";
 import { PublishRaidPostService } from "../../../../services/raid-post/publish.service";
 import { addHours } from "../../../unit/services/raid-post/hours.util";
+import { LIRequirement } from "../../../../data/entities/requirement.entity";
 
 export async function seedDbWithOnePost(uow: RaidPostMemoryUnitOfWork) {
   const registerService = new RegisterService(uow.users);
-  const author = new User({
+  const user = new User({
     username: "existingUser",
     password: "password",
     apiKey: "api-key",
   });
-  const { id: userid } = await registerService.register(author);
+  const { id: userid } = await registerService.register(user);
   const token = userid.toString();
 
   const boss = new RaidBoss({ name: "boss", isCm: false });
@@ -25,10 +26,9 @@ export async function seedDbWithOnePost(uow: RaidPostMemoryUnitOfWork) {
     date: addHours(new Date(), 12),
     bossesIds,
     rolesProps: [],
-    requirementsProps: [],
+    requirementsProps: [{ name: LIRequirement.itemName, quantity: 10 }],
     authorId: userid,
   };
   const post = await publishService.publish(dto);
-  const postId = post.id;
-  return { token, bossesIds, postId };
+  return { token, bossesIds, post, user };
 }

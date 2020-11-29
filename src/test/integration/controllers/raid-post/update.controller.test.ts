@@ -11,10 +11,11 @@ import { RegisterService } from "../../../../services/user/register";
 import { RaidPostMemoryUnitOfWork } from "../../../helpers/uows/raid-post.memory-unit-of-work";
 import { addHours } from "../../../unit/services/raid-post/hours.util";
 import { seedDbWithOnePost } from "./seed-db";
+import { RaidPost } from "../../../../data/entities/raid-post.entitity";
 
 describe("UpdateRaidPostController integration tests", () => {
   let url = "/raid-posts";
-  let postId: number;
+  let post: RaidPost;
   let uow: RaidPostMemoryUnitOfWork;
   let registerService: RegisterService;
   let token: string;
@@ -24,7 +25,7 @@ describe("UpdateRaidPostController integration tests", () => {
   beforeEach(async () => {
     uow = RaidPostMemoryUnitOfWork.create();
 
-    ({ token, bossesIds, postId } = await seedDbWithOnePost(uow));
+    ({ token, bossesIds, post } = await seedDbWithOnePost(uow));
 
     registerService = new RegisterService(uow.users);
 
@@ -48,7 +49,7 @@ describe("UpdateRaidPostController integration tests", () => {
   });
 
   it("should return 401 if user was not logged in", async () => {
-    const res = await request(app).put(toUrl(postId)).send({});
+    const res = await request(app).put(toUrl(post.id)).send({});
 
     expect(res.status).toBe(401);
   });
@@ -87,7 +88,7 @@ describe("UpdateRaidPostController integration tests", () => {
     };
 
     const res = await request(app)
-      .put(toUrl(postId))
+      .put(toUrl(post.id))
       .send(dto)
       .set(CurrentUserMiddleware.AUTH_HEADER, otherUserToken);
 
@@ -104,7 +105,7 @@ describe("UpdateRaidPostController integration tests", () => {
     };
 
     const res = await request(app)
-      .put(toUrl(postId))
+      .put(toUrl(post.id))
       .send(dto)
       .set(CurrentUserMiddleware.AUTH_HEADER, token);
 
@@ -121,7 +122,7 @@ describe("UpdateRaidPostController integration tests", () => {
     };
 
     await request(app)
-      .put(toUrl(postId))
+      .put(toUrl(post.id))
       .send(dto)
       .set(CurrentUserMiddleware.AUTH_HEADER, token);
 

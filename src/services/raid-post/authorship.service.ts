@@ -1,5 +1,5 @@
 import { IRaidPostRepository } from "../../data/repositories/raid-post/raid-post.repository.interface";
-import { EntityNotFoundError } from "./entity-not-found.error";
+import { EntityNotFoundError } from "../errors/entity-not-found.error";
 
 export interface CheckAuthorshipDTO {
   userId: number;

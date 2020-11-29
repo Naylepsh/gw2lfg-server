@@ -5,7 +5,7 @@ import {
 } from "../../data/entities/requirement.factory";
 import { Role } from "../../data/entities/role.entity";
 import { IRaidPostUnitOfWork } from "../../data/units-of-work/raid-post/raid-post.unit-of-work.interface";
-import { EntityNotFoundError } from "./entity-not-found.error";
+import { EntityNotFoundError } from "../errors/entity-not-found.error";
 import { isDateInThePast } from "./is-date-in-the-past";
 import { PastDateError } from "./raid-post-errors";
 
