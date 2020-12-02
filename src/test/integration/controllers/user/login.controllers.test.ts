@@ -1,13 +1,14 @@
 import "reflect-metadata";
+import * as jwt from "jsonwebtoken";
+import { createExpressServer, useContainer } from "routing-controllers";
 import request from "supertest";
 import Container from "typedi";
-import { createExpressServer, useContainer } from "routing-controllers";
 import { LoginUserController } from "../../../../api/controllers/user/login.controller";
 import { User } from "../../../../data/entities/user.entity";
 import { IUserRepository } from "../../../../data/repositories/user/user.repository.interface";
 import { LoginService } from "../../../../services/user/login";
-import { UserMemoryRepository } from "../../../helpers/repositories/user.memory-repository";
 import { RegisterService } from "../../../../services/user/register";
+import { UserMemoryRepository } from "../../../helpers/repositories/user.memory-repository";
 
 describe("LoginUserController integration tests", () => {
   const url = "/login";
@@ -85,5 +86,19 @@ describe("LoginUserController integration tests", () => {
     const result = await request(app).post(url).send(validUserData);
 
     expect(result.status).toBe(200);
+  });
+
+  it("should return a token if valid user data was passed", async () => {
+    const validUserData = {
+      username: "existingUser",
+      password: "password",
+    };
+
+    const result = await request(app).post(url).send(validUserData);
+
+    const token = result.body;
+    const decoded = jwt.decode(token);
+
+    expect(decoded).toHaveProperty("id");
   });
 });

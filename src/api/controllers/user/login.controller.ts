@@ -10,6 +10,7 @@ import {
   InvalidLoginDetailsError,
   LoginService,
 } from "../../../services/user/login";
+import { CreateJwtService } from "../../services/token/create";
 
 class LoginDTO {
   @MinLength(6)
@@ -21,12 +22,16 @@ class LoginDTO {
 
 @JsonController()
 export class LoginUserController {
+  authService = new CreateJwtService();
+
   constructor(private readonly loginService: LoginService) {}
 
   @Post("/login")
   async login(@Body({ validate: true }) dto: LoginDTO) {
     try {
-      return await this.loginService.login(dto);
+      const user = await this.loginService.login(dto);
+      const token = this.authService.createToken(user.id);
+      return token;
     } catch (e) {
       if (e instanceof InvalidLoginDetailsError) {
         throw new UnauthorizedError(e.message);

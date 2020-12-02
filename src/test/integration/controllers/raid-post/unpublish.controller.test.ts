@@ -3,7 +3,7 @@ import request from "supertest";
 import { createExpressServer, Action, useContainer } from "routing-controllers";
 import Container from "typedi";
 import { UnpublishRaidPostController } from "../../../../api/controllers/raid-post/unpublish.controller";
-import { CurrentUserMiddleware } from "../../../../api/middleware/current-user.middleware";
+import { CurrentUserJWTMiddleware } from "../../../../api/middleware/current-user.middleware";
 import { User } from "../../../../data/entities/user.entity";
 import { PostAuthorshipService } from "../../../../services/raid-post/authorship.service";
 import { UnpublishRaidPostService } from "../../../../services/raid-post/unpublish.service";
@@ -11,6 +11,7 @@ import { RegisterService } from "../../../../services/user/register";
 import { RaidPostMemoryUnitOfWork } from "../../../helpers/uows/raid-post.memory-unit-of-work";
 import { seedDbWithOnePost } from "./seed-db";
 import { RaidPost } from "../../../../data/entities/raid-post.entitity";
+import { CreateJwtService } from "../../../../api/services/token/create";
 
 describe("UnpublishRaidPostController integration tests", () => {
   let url = "/raid-posts";
@@ -37,7 +38,7 @@ describe("UnpublishRaidPostController integration tests", () => {
     Container.set(UnpublishRaidPostController, controller);
     useContainer(Container);
 
-    const currentUserMiddleware = new CurrentUserMiddleware(uow.users);
+    const currentUserMiddleware = new CurrentUserJWTMiddleware(uow.users);
 
     app = createExpressServer({
       controllers: [UnpublishRaidPostController],
@@ -59,11 +60,11 @@ describe("UnpublishRaidPostController integration tests", () => {
       apiKey: "api-key",
     });
     const { id: otherUserId } = await registerService.register(otherUser);
-    const otherUserToken = otherUserId.toString();
+    const otherUserToken = new CreateJwtService().createToken(otherUserId);
 
     const res = await request(app)
       .delete(toUrl(post.id))
-      .set(CurrentUserMiddleware.AUTH_HEADER, otherUserToken);
+      .set(CurrentUserJWTMiddleware.AUTH_HEADER, otherUserToken);
 
     expect(res.status).toBe(403);
   });
@@ -71,7 +72,7 @@ describe("UnpublishRaidPostController integration tests", () => {
   it("should return 204 if valid data was passed", async () => {
     const res = await request(app)
       .delete(toUrl(post.id))
-      .set(CurrentUserMiddleware.AUTH_HEADER, token);
+      .set(CurrentUserJWTMiddleware.AUTH_HEADER, token);
 
     expect(res.status).toBe(204);
   });
@@ -79,10 +80,10 @@ describe("UnpublishRaidPostController integration tests", () => {
   it("should return 204 if post does not exists", async () => {
     await request(app)
       .delete(toUrl(post.id))
-      .set(CurrentUserMiddleware.AUTH_HEADER, token);
+      .set(CurrentUserJWTMiddleware.AUTH_HEADER, token);
     const res = await request(app)
       .delete(toUrl(post.id))
-      .set(CurrentUserMiddleware.AUTH_HEADER, token);
+      .set(CurrentUserJWTMiddleware.AUTH_HEADER, token);
 
     expect(res.status).toBe(204);
   });
@@ -90,7 +91,7 @@ describe("UnpublishRaidPostController integration tests", () => {
   it("should remove a post if it existed", async () => {
     await request(app)
       .delete(toUrl(post.id))
-      .set(CurrentUserMiddleware.AUTH_HEADER, token);
+      .set(CurrentUserJWTMiddleware.AUTH_HEADER, token);
 
     expect(uow.committed).toBeTruthy();
   });

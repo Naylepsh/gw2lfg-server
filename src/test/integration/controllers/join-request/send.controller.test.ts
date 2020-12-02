@@ -3,7 +3,7 @@ import request from "supertest";
 import { Action, createExpressServer, useContainer } from "routing-controllers";
 import Container from "typedi";
 import { SendRaidJoinRequestController } from "../../../../api/controllers/join-request/send.controller";
-import { CurrentUserMiddleware } from "../../../../api/middleware/current-user.middleware";
+import { CurrentUserJWTMiddleware } from "../../../../api/middleware/current-user.middleware";
 import { GetItems } from "../../../../services/gw2-api/gw2-api.service";
 import { SendJoinRequestService } from "../../../../services/join-request/send.service";
 import { JoinRequestMemoryRepository } from "../../../helpers/repositories/join-request.memory-repository";
@@ -50,7 +50,7 @@ describe("SendRaidJoinRequestController integration tests", () => {
     Container.set(SendRaidJoinRequestController, controller);
     useContainer(Container);
 
-    const currentUserMiddleware = new CurrentUserMiddleware(uow.users);
+    const currentUserMiddleware = new CurrentUserJWTMiddleware(uow.users);
 
     app = createExpressServer({
       controllers: [SendRaidJoinRequestController],
@@ -70,7 +70,7 @@ describe("SendRaidJoinRequestController integration tests", () => {
 
     const res = await request(app)
       .post(toUrl(idOfNonExistingPost))
-      .set(CurrentUserMiddleware.AUTH_HEADER, token);
+      .set(CurrentUserJWTMiddleware.AUTH_HEADER, token);
 
     expect(res.status).toBe(404);
   });
@@ -82,7 +82,7 @@ describe("SendRaidJoinRequestController integration tests", () => {
 
     const res = await request(app)
       .post(toUrl(postId))
-      .set(CurrentUserMiddleware.AUTH_HEADER, token);
+      .set(CurrentUserJWTMiddleware.AUTH_HEADER, token);
 
     expect(res.status).toBe(403);
   });
@@ -94,10 +94,10 @@ describe("SendRaidJoinRequestController integration tests", () => {
 
     await request(app)
       .post(toUrl(postId))
-      .set(CurrentUserMiddleware.AUTH_HEADER, token);
+      .set(CurrentUserJWTMiddleware.AUTH_HEADER, token);
     const res = await request(app)
       .post(toUrl(postId))
-      .set(CurrentUserMiddleware.AUTH_HEADER, token);
+      .set(CurrentUserJWTMiddleware.AUTH_HEADER, token);
 
     expect(res.status).toBe(422);
   });
@@ -109,7 +109,7 @@ describe("SendRaidJoinRequestController integration tests", () => {
 
     const res = await request(app)
       .post(toUrl(postId))
-      .set(CurrentUserMiddleware.AUTH_HEADER, token);
+      .set(CurrentUserJWTMiddleware.AUTH_HEADER, token);
 
     expect(res.status).toBe(201);
   });
@@ -121,7 +121,7 @@ describe("SendRaidJoinRequestController integration tests", () => {
 
     await request(app)
       .post(toUrl(postId))
-      .set(CurrentUserMiddleware.AUTH_HEADER, token);
+      .set(CurrentUserJWTMiddleware.AUTH_HEADER, token);
 
     expect(joinRequestRepo.entities.length).toBe(1);
   });

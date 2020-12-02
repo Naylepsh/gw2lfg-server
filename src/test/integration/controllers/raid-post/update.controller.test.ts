@@ -3,7 +3,7 @@ import request from "supertest";
 import { createExpressServer, Action, useContainer } from "routing-controllers";
 import Container from "typedi";
 import { UpdateRaidPostController } from "../../../../api/controllers/raid-post/update.controller";
-import { CurrentUserMiddleware } from "../../../../api/middleware/current-user.middleware";
+import { CurrentUserJWTMiddleware } from "../../../../api/middleware/current-user.middleware";
 import { User } from "../../../../data/entities/user.entity";
 import { PostAuthorshipService } from "../../../../services/raid-post/authorship.service";
 import { UpdateRaidPostService } from "../../../../services/raid-post/update.service";
@@ -12,6 +12,7 @@ import { RaidPostMemoryUnitOfWork } from "../../../helpers/uows/raid-post.memory
 import { addHours } from "../../../unit/services/raid-post/hours.util";
 import { seedDbWithOnePost } from "./seed-db";
 import { RaidPost } from "../../../../data/entities/raid-post.entitity";
+import { CreateJwtService } from "../../../../api/services/token/create";
 
 describe("UpdateRaidPostController integration tests", () => {
   let url = "/raid-posts";
@@ -39,7 +40,7 @@ describe("UpdateRaidPostController integration tests", () => {
     Container.set(UpdateRaidPostController, controller);
     useContainer(Container);
 
-    const currentUserMiddleware = new CurrentUserMiddleware(uow.users);
+    const currentUserMiddleware = new CurrentUserJWTMiddleware(uow.users);
 
     app = createExpressServer({
       controllers: [UpdateRaidPostController],
@@ -66,7 +67,7 @@ describe("UpdateRaidPostController integration tests", () => {
     const res = await request(app)
       .put(toUrl(idOfNonExistingPost))
       .send(dto)
-      .set(CurrentUserMiddleware.AUTH_HEADER, token);
+      .set(CurrentUserJWTMiddleware.AUTH_HEADER, token);
 
     expect(res.status).toBe(404);
   });
@@ -78,7 +79,7 @@ describe("UpdateRaidPostController integration tests", () => {
       apiKey: "api-key",
     });
     const { id: otherUserId } = await registerService.register(otherUser);
-    const otherUserToken = otherUserId.toString();
+    const otherUserToken = new CreateJwtService().createToken(otherUserId);
     const dto = {
       server: "EU",
       date: addHours(new Date(), 13),
@@ -90,7 +91,7 @@ describe("UpdateRaidPostController integration tests", () => {
     const res = await request(app)
       .put(toUrl(post.id))
       .send(dto)
-      .set(CurrentUserMiddleware.AUTH_HEADER, otherUserToken);
+      .set(CurrentUserJWTMiddleware.AUTH_HEADER, otherUserToken);
 
     expect(res.status).toBe(403);
   });
@@ -107,7 +108,7 @@ describe("UpdateRaidPostController integration tests", () => {
     const res = await request(app)
       .put(toUrl(post.id))
       .send(dto)
-      .set(CurrentUserMiddleware.AUTH_HEADER, token);
+      .set(CurrentUserJWTMiddleware.AUTH_HEADER, token);
 
     expect(res.status).toBe(200);
   });
@@ -124,7 +125,7 @@ describe("UpdateRaidPostController integration tests", () => {
     await request(app)
       .put(toUrl(post.id))
       .send(dto)
-      .set(CurrentUserMiddleware.AUTH_HEADER, token);
+      .set(CurrentUserJWTMiddleware.AUTH_HEADER, token);
 
     expect(uow.committed).toBeTruthy();
   });
