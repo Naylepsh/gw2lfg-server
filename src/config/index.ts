@@ -8,6 +8,7 @@ dotenv.config({ path: `src/../.env.${env}` });
 
 interface ConfigProperties {
   database: ConnectionOptions;
+  jwt: JwtProperties;
 }
 
 const parseEnvString = (name: string) => {
@@ -46,6 +47,21 @@ const database: ConnectionOptions = {
   entities: getEntities("../data/entities"),
 };
 
+interface JwtProperties {
+  secret: string;
+  options: {
+    expiresIn: string;
+  };
+}
+
+const jwt: JwtProperties = {
+  secret: parseEnvString("JWT_SECRET"),
+  options: {
+    expiresIn: "1d",
+  },
+};
+
 export const config: ConfigProperties = {
   database,
+  jwt,
 };

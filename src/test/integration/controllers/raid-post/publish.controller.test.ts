@@ -2,7 +2,7 @@ import "reflect-metadata";
 import request from "supertest";
 import { Action, createExpressServer, useContainer } from "routing-controllers";
 import Container from "typedi";
-import { CurrentUserMiddleware } from "../../../../api/middleware/current-user.middleware";
+import { CurrentUserJWTMiddleware } from "../../../../api/middleware/current-user.middleware";
 import { PublishRaidPostController } from "../../../../api/controllers/raid-post/publish.controller";
 import { PublishRaidPostService } from "../../../../services/raid-post/publish.service";
 import { RaidPostMemoryUnitOfWork } from "../../../helpers/uows/raid-post.memory-unit-of-work";
@@ -27,7 +27,7 @@ describe("PublishRaidPostController integration tests", () => {
     Container.set(PublishRaidPostController, controller);
     useContainer(Container);
 
-    const currentUserMiddleware = new CurrentUserMiddleware(uow.users);
+    const currentUserMiddleware = new CurrentUserJWTMiddleware(uow.users);
 
     app = createExpressServer({
       controllers: [PublishRaidPostController],
@@ -46,7 +46,7 @@ describe("PublishRaidPostController integration tests", () => {
     const res = await request(app)
       .post(url)
       .send({})
-      .set(CurrentUserMiddleware.AUTH_HEADER, token);
+      .set(CurrentUserJWTMiddleware.AUTH_HEADER, token);
 
     expect(res.status).toBe(400);
   });
@@ -61,7 +61,7 @@ describe("PublishRaidPostController integration tests", () => {
     const res = await request(app)
       .post(url)
       .send(dto)
-      .set(CurrentUserMiddleware.AUTH_HEADER, token);
+      .set(CurrentUserJWTMiddleware.AUTH_HEADER, token);
 
     expect(res.status).toBe(201);
   });
@@ -76,7 +76,7 @@ describe("PublishRaidPostController integration tests", () => {
     await request(app)
       .post(url)
       .send(dto)
-      .set(CurrentUserMiddleware.AUTH_HEADER, token);
+      .set(CurrentUserJWTMiddleware.AUTH_HEADER, token);
 
     expect(uow.committed).toBeTruthy();
   });

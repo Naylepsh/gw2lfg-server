@@ -5,6 +5,7 @@ import { RaidPostMemoryUnitOfWork } from "../../../helpers/uows/raid-post.memory
 import { PublishRaidPostService } from "../../../../services/raid-post/publish.service";
 import { addHours } from "../../../unit/services/raid-post/hours.util";
 import { LIRequirement } from "../../../../data/entities/requirement.entity";
+import { CreateJwtService } from "../../../../api/services/token/create";
 
 export async function seedDbWithOnePost(uow: RaidPostMemoryUnitOfWork) {
   const registerService = new RegisterService(uow.users);
@@ -13,8 +14,8 @@ export async function seedDbWithOnePost(uow: RaidPostMemoryUnitOfWork) {
     password: "password",
     apiKey: "api-key",
   });
-  const { id: userid } = await registerService.register(user);
-  const token = userid.toString();
+  const { id: userId } = await registerService.register(user);
+  const token = new CreateJwtService().createToken(userId);
 
   const boss = new RaidBoss({ name: "boss", isCm: false });
   const savedBoss = await uow.raidBosses.save(boss);
@@ -27,7 +28,7 @@ export async function seedDbWithOnePost(uow: RaidPostMemoryUnitOfWork) {
     bossesIds,
     rolesProps: [],
     requirementsProps: [{ name: LIRequirement.itemName, quantity: 10 }],
-    authorId: userid,
+    authorId: userId,
   };
   const post = await publishService.publish(dto);
   return { token, bossesIds, post, user };
