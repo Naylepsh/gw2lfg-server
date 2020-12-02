@@ -7,6 +7,7 @@ import { IUserRepository } from "../../../../data/repositories/user/user.reposit
 import { RegisterService } from "../../../../services/user/register";
 import { UserMemoryRepository } from "../../../helpers/repositories/user.memory-repository";
 import { createExpressServer, useContainer } from "routing-controllers";
+import * as jwt from "jsonwebtoken";
 
 describe("RegisterUserController integration tests", () => {
   const url = "/register";
@@ -63,6 +64,20 @@ describe("RegisterUserController integration tests", () => {
     const result = await request(app).post(url).send(validUserData);
 
     expect(result.status).toBe(201);
+  });
+
+  it("should return a token if valid data was passed", async () => {
+    const validUserData = {
+      username: "newUser",
+      password: "password",
+      apiKey: "api-key",
+    };
+
+    const result = await request(app).post(url).send(validUserData);
+    const token = result.body;
+    const decoded = jwt.decode(token);
+
+    expect(decoded).toHaveProperty("id");
   });
 
   it("should create a user if valid data was passed", async () => {

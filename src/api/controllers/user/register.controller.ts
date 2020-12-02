@@ -1,4 +1,5 @@
 import { MinLength } from "class-validator";
+import * as jwt from "jsonwebtoken";
 import {
   Body,
   HttpCode,
@@ -7,6 +8,7 @@ import {
   OnUndefined,
   Post,
 } from "routing-controllers";
+import { config } from "../../../config";
 import { User } from "../../../data/entities/user.entity";
 import {
   RegisterService,
@@ -33,9 +35,15 @@ export class RegisterUserController {
   @OnUndefined(201)
   @Post("/register")
   async register(@Body({ validate: true }) dto: RegisterDTO) {
-    const user = new User({ ...dto });
     try {
-      return await this.registerService.register(user);
+      const user = new User({ ...dto });
+      const registeredUser = await this.registerService.register(user);
+      const token = jwt.sign(
+        { id: registeredUser.id },
+        config.jwt.secret,
+        config.jwt.options
+      );
+      return token;
     } catch (e) {
       if (e instanceof UsernameTakenError) {
         throw new UnprocessableEntityError(e.message);
