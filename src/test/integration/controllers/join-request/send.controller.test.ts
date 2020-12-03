@@ -15,6 +15,7 @@ import { LIRequirement } from "../../../../data/entities/requirement.entity";
 import { nameToId } from "../../../../services/gw2-items/gw2-items.service";
 import { Item } from "../../../../services/gw2-items/item.interface";
 import { seedDbWithOnePost } from "../raid-post/seed-db";
+import { CheckItemRequirementsService } from "../../../../services/requirement/check-item-requirements.service";
 
 describe("SendRaidJoinRequestController integration tests", () => {
   let joinRequestRepo: JoinRequestMemoryRepository;
@@ -36,12 +37,15 @@ describe("SendRaidJoinRequestController integration tests", () => {
         [user.apiKey, [{ id: nameToId(LIRequirement.itemName), count: 1 }]],
       ])
     );
+    const requirementChecker = new CheckItemRequirementsService(
+      new GetItems(myStorage.fetch.bind(myStorage))
+    );
     joinRequestRepo = new JoinRequestMemoryRepository();
     const sendJoinRequestService = new SendJoinRequestService(
       uow.users,
       uow.raidPosts,
       joinRequestRepo,
-      new GetItems(myStorage.fetch.bind(myStorage))
+      requirementChecker
     );
     const controller = new SendRaidJoinRequestController(
       sendJoinRequestService

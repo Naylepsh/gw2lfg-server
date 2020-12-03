@@ -11,6 +11,7 @@ import {
 import { nameToId } from "../../../../services/gw2-items/gw2-items.service";
 import { Item } from "../../../../services/gw2-items/item.interface";
 import { SendJoinRequestService } from "../../../../services/join-request/send.service";
+import { CheckItemRequirementsService } from "../../../../services/requirement/check-item-requirements.service";
 import { JoinRequestMemoryRepository } from "../../../helpers/repositories/join-request.memory-repository";
 import { RaidPostMemoryRepository } from "../../../helpers/repositories/raid-post.memory-repository";
 import { UserMemoryRepository } from "../../../helpers/repositories/user.memory-repository";
@@ -55,7 +56,7 @@ describe("JoinRequest Service: send tests", () => {
       userRepo,
       postRepo,
       joinRequestRepo,
-      new GetItems(fetchItems)
+      new CheckItemRequirementsService(new GetItems(fetchItems))
     ).sendJoinRequest({ userId: user.id, postId: post.id });
 
     const request = await joinRequestRepo.findByKey(user.id, post.id);
@@ -71,7 +72,7 @@ describe("JoinRequest Service: send tests", () => {
         userRepo,
         postRepo,
         joinRequestRepo,
-        new DummyItemFetcher()
+        new CheckItemRequirementsService(new DummyItemFetcher())
       ).sendJoinRequest({ userId, postId })
     ).rejects.toThrow();
   });
@@ -91,7 +92,7 @@ describe("JoinRequest Service: send tests", () => {
         userRepo,
         postRepo,
         joinRequestRepo,
-        new DummyItemFetcher()
+        new CheckItemRequirementsService(new DummyItemFetcher())
       ).sendJoinRequest({ userId: user.id, postId })
     ).rejects.toThrow();
   });
@@ -125,7 +126,7 @@ describe("JoinRequest Service: send tests", () => {
         userRepo,
         postRepo,
         joinRequestRepo,
-        new GetItems(fetchItems)
+        new CheckItemRequirementsService(new GetItems(fetchItems))
       ).sendJoinRequest({ userId: user.id, postId: post.id })
     ).rejects.toThrow();
   });
