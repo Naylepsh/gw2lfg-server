@@ -1,7 +1,14 @@
+import { Inject } from "typedi";
 import { JoinRequest } from "../../data/entities/join-request";
 import { IJoinRequestRepository } from "../../data/repositories/join-request/join-request.repository.interface";
 import { IPostRepository } from "../../data/repositories/post/post.repository.interface";
 import { IUserRepository } from "../../data/repositories/user/user.repository.interface";
+import {
+  joinRequestRepositoryType,
+  postRepositoryType,
+  requirementsCheckServiceType,
+  userRepositoryType,
+} from "../../loaders/typedi.constants";
 import { EntityAlreadyExistsError } from "../errors/entity-already-exists.error";
 import {
   PostNotFoundError,
@@ -18,9 +25,11 @@ export class RequirementsNotSatisfiedError extends Error {}
 
 export class SendJoinRequestService {
   constructor(
-    private readonly userRepo: IUserRepository,
-    private readonly postRepo: IPostRepository,
+    @Inject(userRepositoryType) private readonly userRepo: IUserRepository,
+    @Inject(postRepositoryType) private readonly postRepo: IPostRepository,
+    @Inject(joinRequestRepositoryType)
     private readonly joinRequestRepo: IJoinRequestRepository,
+    @Inject(requirementsCheckServiceType)
     private readonly checkRequirementsService: ICheckRequirementsService
   ) {}
 

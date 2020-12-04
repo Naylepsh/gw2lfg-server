@@ -1,7 +1,9 @@
+import { Service } from "typedi";
 import { Requirement } from "../../data/entities/requirement.entity";
 import { User } from "../../data/entities/user.entity";
 import { ICheckRequirementsService } from "./check-requirements.service.interface";
 
+@Service()
 export class CheckRequirementsService implements ICheckRequirementsService {
   constructor(
     private readonly requirementCheckers: ICheckRequirementsService[]

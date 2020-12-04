@@ -1,14 +1,17 @@
 import { User } from "../../data/entities/user.entity";
 import { IUserRepository } from "../../data/repositories/user/user.repository.interface";
 import { hash } from "bcrypt";
-import { Service } from "typedi";
+import { Inject, Service } from "typedi";
 import { EntityAlreadyExistsError } from "../errors/entity-already-exists.error";
+import { userRepositoryType } from "../../loaders/typedi.constants";
 
 export class UsernameTakenError extends EntityAlreadyExistsError {}
 
 @Service()
 export class RegisterService {
-  constructor(private readonly userRepository: IUserRepository) {}
+  constructor(
+    @Inject(userRepositoryType) private readonly userRepository: IUserRepository
+  ) {}
 
   async register(user: User) {
     if (await this.isUsernameTaken(user.username)) {

@@ -5,9 +5,15 @@ import { RoleRepository } from "../../repositories/role/role.repository";
 import { UserRepository } from "../../repositories/user/user.repository";
 import { IRaidPostUnitOfWork } from "./raid-post.unit-of-work.interface";
 import { TypeOrmUnitOfWork } from "../generic.unit-of-work";
+import { Inject, Service } from "typedi";
+import { raidPostUnitOfWorkType } from "../../../loaders/typedi.constants";
 
+@Service(raidPostUnitOfWorkType)
 export class RaidPostUnitOfWork implements IRaidPostUnitOfWork {
-  private constructor(private unitOfWork: TypeOrmUnitOfWork) {}
+  public constructor(
+    @Inject() private readonly unitOfWork: TypeOrmUnitOfWork
+  ) {}
+
   withTransaction<T>(work: () => T): Promise<T> {
     return this.unitOfWork.withTransaction(work);
   }

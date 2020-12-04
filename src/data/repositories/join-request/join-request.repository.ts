@@ -1,8 +1,10 @@
+import { Service } from "typedi";
 import { EntityRepository } from "typeorm";
 import { JoinRequest } from "../../entities/join-request";
 import { GenericRepository } from "../generic.repository";
 import { IJoinRequestRepository } from "./join-request.repository.interface";
 
+@Service()
 @EntityRepository(JoinRequest)
 export class JoinRequestRepository
   extends GenericRepository<JoinRequest>

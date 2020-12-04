@@ -5,8 +5,13 @@ import {
   JsonController,
   QueryParams,
 } from "routing-controllers";
+import { Inject } from "typedi";
 import { RaidPost } from "../../../data/entities/raid-post.entitity";
 import { User } from "../../../data/entities/user.entity";
+import {
+  findRaidPostsServiceType,
+  requirementsCheckServiceType,
+} from "../../../loaders/typedi.constants";
 import { FindRaidPostService } from "../../../services/raid-post/find.service";
 import { ICheckRequirementsService } from "../../../services/requirement/check-requirements.service.interface";
 
@@ -26,7 +31,9 @@ class FindRaidPostsQueryParams {
 @JsonController()
 export class FindRaidPostsController {
   constructor(
+    @Inject(findRaidPostsServiceType)
     private readonly findService: FindRaidPostService,
+    @Inject(requirementsCheckServiceType)
     private readonly requirementsCheckService: ICheckRequirementsService
   ) {}
 
@@ -35,7 +42,12 @@ export class FindRaidPostsController {
     @QueryParams() query: FindRaidPostsQueryParams,
     @CurrentUser() user?: User
   ): Promise<FindRaidPostsDTO> {
+    if (user) {
+      return [];
+    }
+    console.log("in controller");
     const posts = await this.findService.find(query);
+    console.log("got posts", posts);
     const _posts = user
       ? await this.checkIfUserMeetsPostsRequirements(posts, user)
       : this.unsatisfyEachRequirement(posts);

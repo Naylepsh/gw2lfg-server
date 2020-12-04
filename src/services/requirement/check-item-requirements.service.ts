@@ -1,3 +1,4 @@
+import { Service } from "typedi";
 import {
   ItemRequirement,
   Requirement,
@@ -7,6 +8,7 @@ import { ConcreteItemsFetcher } from "../gw2-api/gw2-api.service";
 import { nameToId } from "../gw2-items/gw2-items.service";
 import { ICheckRequirementsService } from "./check-requirements.service.interface";
 
+@Service()
 export class CheckItemRequirementsService implements ICheckRequirementsService {
   constructor(private readonly getItems: ConcreteItemsFetcher) {}
 

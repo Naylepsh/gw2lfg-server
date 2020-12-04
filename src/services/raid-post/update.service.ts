@@ -1,3 +1,4 @@
+import { Inject, Service } from "typedi";
 import { RaidPost } from "../../data/entities/raid-post.entitity";
 import {
   RequirementArgs,
@@ -5,6 +6,7 @@ import {
 } from "../../data/entities/requirement.factory";
 import { Role } from "../../data/entities/role.entity";
 import { IRaidPostUnitOfWork } from "../../data/units-of-work/raid-post/raid-post.unit-of-work.interface";
+import { raidPostUnitOfWorkType } from "../../loaders/typedi.constants";
 import { EntityNotFoundError } from "../errors/entity-not-found.error";
 import { isDateInThePast } from "./is-date-in-the-past";
 import { PastDateError } from "./raid-post-errors";
@@ -21,8 +23,11 @@ export interface UpdateRaidPostDTO {
   requirementsProps: RequirementArgs[];
 }
 
+@Service()
 export class UpdateRaidPostService {
-  constructor(private readonly uow: IRaidPostUnitOfWork) {}
+  constructor(
+    @Inject(raidPostUnitOfWorkType) private readonly uow: IRaidPostUnitOfWork
+  ) {}
 
   async update(dto: UpdateRaidPostDTO) {
     if (isDateInThePast(dto.date)) throw new PastDateError("date");

@@ -1,8 +1,10 @@
+import { Service } from "typedi";
 import { EntityRepository } from "typeorm";
 import { Post } from "../../entities/post.entity";
 import { IdentifiableEntityRepository } from "../generic.repository";
 import { IPostRepository } from "./post.repository.interface";
 
+@Service()
 @EntityRepository(Post)
 export class PostRepository
   extends IdentifiableEntityRepository<Post>

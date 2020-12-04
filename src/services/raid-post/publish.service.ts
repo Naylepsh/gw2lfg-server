@@ -8,6 +8,8 @@ import { IRaidPostUnitOfWork } from "../../data/units-of-work/raid-post/raid-pos
 import { isDateInThePast } from "./is-date-in-the-past";
 import { PastDateError } from "./raid-post-errors";
 import { UserNotFoundError } from "../errors/entity-not-found.error";
+import { Inject, Service } from "typedi";
+import { raidPostUnitOfWorkType } from "../../loaders/typedi.constants";
 
 export interface PublishDTO {
   date: Date;
@@ -19,8 +21,11 @@ export interface PublishDTO {
   requirementsProps: RequirementArgs[];
 }
 
+@Service()
 export class PublishRaidPostService {
-  constructor(private readonly uow: IRaidPostUnitOfWork) {}
+  constructor(
+    @Inject(raidPostUnitOfWorkType) private readonly uow: IRaidPostUnitOfWork
+  ) {}
 
   async publish(publishDto: PublishDTO) {
     if (isDateInThePast(publishDto.date)) throw new PastDateError("date");
