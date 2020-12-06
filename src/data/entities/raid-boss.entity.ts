@@ -22,4 +22,8 @@ export class RaidBoss {
       this.isCm = props.isCm;
     }
   }
+
+  equals(raidBoss: RaidBoss) {
+    return this.name === raidBoss.name && this.isCm === raidBoss.isCm;
+  }
 }
