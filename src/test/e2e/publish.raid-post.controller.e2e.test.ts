@@ -1,19 +1,16 @@
 import "reflect-metadata";
 import request from "supertest";
 import Container from "typedi";
-import { raids } from "../../data/entities/gw2-raids.json";
 import { loadDependencies } from "../../loaders";
 import {
-  raidBossRepositoryType,
   raidPostRepositoryType,
   raidPostUnitOfWorkType,
 } from "../../loaders/typedi.constants";
-import { RaidBoss } from "../../data/entities/raid-boss.entity";
 import { addHours } from "../unit/services/raid-post/hours.util";
 import { IRaidPostUnitOfWork } from "../../data/units-of-work/raid-post/raid-post.unit-of-work.interface";
 import { CurrentUserJWTMiddleware } from "../../api/middleware/current-user.middleware";
-import { IRaidBossRepository } from "../../data/repositories/raid-boss/raid-boss.repository.interface";
 import { IRaidPostRepository } from "../../data/repositories/raid-post/raid-post.repository.interface";
+import { seedUserAndGetToken, seedRaidBoss } from "./seeders";
 
 describe("RegisterUserController e2e tests", () => {
   const publishUrl = "/raid-posts";
@@ -28,8 +25,8 @@ describe("RegisterUserController e2e tests", () => {
 
     uow = container.get(raidPostUnitOfWorkType);
 
-    token = await seedUser();
-    bossesIds = [await seedRaidBoss()];
+    token = await seedUserAndGetToken(app);
+    bossesIds = [await seedRaidBoss(container)];
   });
 
   afterEach(async () => {
@@ -62,33 +59,4 @@ describe("RegisterUserController e2e tests", () => {
     expect(postInDbAfer).toBeDefined();
     expect(postInDbAfer).toHaveProperty("server", post.server);
   });
-
-  const seedUser = async () => {
-    const registerUrl = "/register";
-    const loginUrl = "/login";
-
-    const user = {
-      username: "username",
-      password: "password",
-      apiKey: "ap1-k3y",
-    };
-
-    await request(app).post(registerUrl).send(user);
-    const { body: token } = await request(app)
-      .post(loginUrl)
-      .send({ username: user.username, password: user.password });
-
-    return token;
-  };
-
-  const seedRaidBoss = async () => {
-    const encounter = raids[0].encounters[0];
-    const boss = new RaidBoss({ name: encounter.name, isCm: false });
-    const raidBossRepo: IRaidBossRepository = container.get(
-      raidBossRepositoryType
-    );
-    const { id } = await raidBossRepo.save(boss);
-
-    return id;
-  };
 });

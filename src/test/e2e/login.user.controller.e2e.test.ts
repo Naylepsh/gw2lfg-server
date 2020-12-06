@@ -5,9 +5,9 @@ import Container from "typedi";
 import { IUserRepository } from "../../data/repositories/user/user.repository.interface";
 import { loadDependencies } from "../../loaders";
 import { userRepositoryType } from "../../loaders/typedi.constants";
+import { seedUser } from "./seeders";
 
 describe("RegisterUserController e2e tests", () => {
-  const registerUrl = "/register";
   const loginUrl = "/login";
   let app: any;
   let userRepo: IUserRepository;
@@ -24,17 +24,11 @@ describe("RegisterUserController e2e tests", () => {
   });
 
   it("should return a jwt", async () => {
-    const user = {
-      username: "username",
-      password: "password",
-      apiKey: "ap1-k3y",
-    };
+    const user = await seedUser(app);
 
-    await request(app).post(registerUrl).send(user);
     const { body: token } = await request(app)
       .post(loginUrl)
       .send({ username: user.username, password: user.password });
-
     const decoded = jwt.decode(token);
 
     expect(decoded).toHaveProperty("id");
