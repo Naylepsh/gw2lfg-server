@@ -1,6 +1,6 @@
 import { Connection, getConnection } from "typeorm";
 import { User } from "../../../../data/entities/user.entity";
-import { loadTypeORM } from "../../../../loaders/typeorm";
+import { loadTypeORM } from "../../../../loaders/typeorm.loader";
 import { TypeOrmUnitOfWork } from "../../../../data/units-of-work/generic.unit-of-work";
 import { UserRepository } from "../../../../data/repositories/user/user.repository";
 
