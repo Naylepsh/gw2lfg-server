@@ -4,14 +4,14 @@ import { RequirementRepository } from "../../repositories/requirement/requiremen
 import { RoleRepository } from "../../repositories/role/role.repository";
 import { UserRepository } from "../../repositories/user/user.repository";
 import { IRaidPostUnitOfWork } from "./raid-post.unit-of-work.interface";
-import { TypeOrmUnitOfWork } from "../generic.unit-of-work";
+import { GenericUnitOfWork } from "../generic.unit-of-work";
 import { Inject, Service } from "typedi";
 import { raidPostUnitOfWorkType } from "../../../loaders/typedi.constants";
 
 @Service(raidPostUnitOfWorkType)
 export class RaidPostUnitOfWork implements IRaidPostUnitOfWork {
   public constructor(
-    @Inject() private readonly unitOfWork: TypeOrmUnitOfWork
+    @Inject() private readonly unitOfWork: GenericUnitOfWork
   ) {}
 
   withTransaction<T>(work: () => T): Promise<T> {
