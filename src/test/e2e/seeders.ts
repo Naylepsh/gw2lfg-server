@@ -16,7 +16,7 @@ interface IUser {
 const user: IUser = {
   username: "username",
   password: "password",
-  apiKey: "ap1-k3y",
+  apiKey: process.env.GW2API_TOKEN as string,
 };
 
 export const seedRaidPost = async (

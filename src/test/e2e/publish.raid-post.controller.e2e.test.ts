@@ -12,7 +12,7 @@ import { CurrentUserJWTMiddleware } from "../../api/middleware/current-user.midd
 import { IRaidPostRepository } from "../../data/repositories/raid-post/raid-post.repository.interface";
 import { seedUserAndGetToken, seedRaidBoss } from "./seeders";
 
-describe("RegisterUserController e2e tests", () => {
+describe("PublishRaidPostController e2e tests", () => {
   const publishUrl = "/raid-posts";
   let container: typeof Container;
   let app: any;

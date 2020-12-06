@@ -42,12 +42,7 @@ export class FindRaidPostsController {
     @QueryParams() query: FindRaidPostsQueryParams,
     @CurrentUser() user?: User
   ): Promise<FindRaidPostsDTO> {
-    if (user) {
-      return [];
-    }
-    console.log("in controller");
     const posts = await this.findService.find(query);
-    console.log("got posts", posts);
     const _posts = user
       ? await this.checkIfUserMeetsPostsRequirements(posts, user)
       : this.unsatisfyEachRequirement(posts);

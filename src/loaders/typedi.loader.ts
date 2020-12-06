@@ -49,7 +49,7 @@ export const loadTypeDI = () => {
   const checkRequirementService = new CheckRequirementsService([
     itemRequirementCheckService,
   ]);
-  // Container.set(CheckRequirementsService, checkRequirementService);
+  Container.set(CheckRequirementsService, checkRequirementService);
   Container.set(requirementsCheckServiceType, checkRequirementService);
 
   return Container;
