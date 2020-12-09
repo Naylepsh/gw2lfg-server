@@ -41,7 +41,7 @@ export class SendRaidJoinRequestController {
       });
     } catch (e) {
       if (e instanceof PostNotFoundError) {
-        throw new NotFoundError();
+        throw new NotFoundError(e.message);
       } else if (e instanceof EntityAlreadyExistsError) {
         throw new UnprocessableEntityError(e.message);
       } else if (e instanceof RequirementsNotSatisfiedError) {

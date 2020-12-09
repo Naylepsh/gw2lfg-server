@@ -10,7 +10,7 @@ export class PostRepository
   extends IdentifiableEntityRepository<Post>
   implements IPostRepository {
   findById(id: number): Promise<Post | undefined> {
-    const relations = ["author", "requirements"];
+    const relations = ["author", "requirements", "roles"];
     return super.findById(id, relations);
   }
 }

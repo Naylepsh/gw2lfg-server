@@ -19,6 +19,7 @@ import { IJoinRequestRepository } from "../../data/repositories/join-request/joi
 
 describe("Send raid post join request e2e tests", () => {
   const postsUrl = "/raid-posts";
+  const timelimit = 30000;
   let container: typeof Container;
   let app: any;
   let uow: IRaidPostUnitOfWork;
@@ -41,14 +42,18 @@ describe("Send raid post join request e2e tests", () => {
     await clean(uow);
   });
 
-  it("should create a join request", async () => {
-    const roleId = post.roles[0].id;
-    await request(app)
-      .post(`${postsUrl}/${post.id}`)
-      .set(CurrentUserJWTMiddleware.AUTH_HEADER, token)
-      .send({ roleId });
+  it(
+    "should create a join request",
+    async () => {
+      const roleId = post.roles[0].id;
+      await request(app)
+        .post(`${postsUrl}/${post.id}/join-request`)
+        .set(CurrentUserJWTMiddleware.AUTH_HEADER, token)
+        .send({ roleId });
 
-    const joinRequests = await joinRequestRepo.findMany({});
-    expect(joinRequests.length).toBe(1);
-  });
+      const joinRequests = await joinRequestRepo.findMany({});
+      expect(joinRequests.length).toBe(1);
+    },
+    timelimit
+  );
 });
