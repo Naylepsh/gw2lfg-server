@@ -1,9 +1,13 @@
-import { RaidPostDTO } from "../dtos/raid-post.dto";
+import { RaidPost } from "../../data/entities/raid-post.entitity";
+import { DTO } from "./dto";
 import { mapUserToUserReponse, UserResponse } from "./user.response";
+
+type RaidPostDTO = DTO<RaidPost>;
 
 export type RaidPostResponse = Omit<RaidPostDTO, "author"> & {
   author: UserResponse;
 };
+
 export const mapRaidPostToRaidPostResponse = <R extends RaidPostDTO>(
   raidPost: R
 ) => {
