@@ -7,7 +7,7 @@ import { IRaidPostUnitOfWork } from "../../data/units-of-work/raid-post/raid-pos
 import { CurrentUserJWTMiddleware } from "../../api/middleware/current-user.middleware";
 import { seedUserAndGetToken, seedRaidBoss, seedRaidPost } from "./seeders";
 
-describe("FindRaidPostsController e2e tests", () => {
+describe("Find raid posts e2e tests", () => {
   const findUrl = "/raid-posts";
   let container: typeof Container;
   let app: any;

@@ -5,7 +5,7 @@ import { IUserRepository } from "../../data/repositories/user/user.repository.in
 import { loadDependencies } from "../../loaders";
 import { userRepositoryType } from "../../loaders/typedi.constants";
 
-describe("RegisterUserController e2e tests", () => {
+describe("Register e2e tests", () => {
   const url = "/register";
   let app: any;
   let userRepo: IUserRepository;

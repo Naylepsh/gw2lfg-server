@@ -7,7 +7,7 @@ import { loadDependencies } from "../../loaders";
 import { userRepositoryType } from "../../loaders/typedi.constants";
 import { seedUser } from "./seeders";
 
-describe("RegisterUserController e2e tests", () => {
+describe("Login e2e tests", () => {
   const loginUrl = "/login";
   let app: any;
   let userRepo: IUserRepository;
