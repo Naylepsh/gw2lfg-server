@@ -12,7 +12,7 @@ import { User } from "../../../data/entities/user.entity";
 import { PostAuthorshipService } from "../../../services/raid-post/authorship.service";
 import { EntityNotFoundError } from "../../../services/errors/entity-not-found.error";
 import { UpdateRaidPostService } from "../../../services/raid-post/update.service";
-import { RaidPostDTO } from "./raid-post.dto";
+import { SaveRaidPostDTO } from "./save-raid-post.dto";
 
 @JsonController()
 export class UpdateRaidPostController {
@@ -25,7 +25,7 @@ export class UpdateRaidPostController {
   async update(
     @CurrentUser({ required: true }) user: User,
     @Param("id") postId: number,
-    @Body() dto: RaidPostDTO
+    @Body() dto: SaveRaidPostDTO
   ) {
     try {
       const isAuthor = await this.authorshipService.isPostAuthor({

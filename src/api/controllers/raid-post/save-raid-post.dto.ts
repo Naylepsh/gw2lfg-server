@@ -2,7 +2,7 @@ import { IsDateString, IsInt } from "class-validator";
 import { RequirementArgs } from "../../../data/entities/requirement.factory";
 import { Role } from "../../../data/entities/role.entity";
 
-export class RaidPostDTO {
+export class SaveRaidPostDTO {
   @IsDateString()
   date: Date;
 

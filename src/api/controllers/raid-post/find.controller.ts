@@ -6,7 +6,6 @@ import {
   QueryParams,
 } from "routing-controllers";
 import { Inject } from "typedi";
-import { RaidPost } from "../../../data/entities/raid-post.entitity";
 import { User } from "../../../data/entities/user.entity";
 import {
   findRaidPostsServiceType,
@@ -14,12 +13,11 @@ import {
 } from "../../../loaders/typedi.constants";
 import { FindRaidPostService } from "../../../services/raid-post/find.service";
 import { ICheckRequirementsService } from "../../../services/requirement/check-requirements.service.interface";
-
-type UserResponse = Omit<User, "password" | "apiKey">;
-type RaidPostResponse = Omit<
-  RaidPost,
-  "author" | "hasRequirements" | "hasRoles"
-> & { author: UserResponse };
+import {
+  mapRaidPostToRaidPostResponse,
+  RaidPostResponse,
+} from "../../responses/raid-post.response";
+import { RaidPost } from "../../../data/entities/raid-post.entitity";
 
 type FindSingleRaidPostDTO = RaidPostResponse & {
   userMeetsRequirements: boolean;
@@ -51,15 +49,15 @@ export class FindRaidPostsController {
     @CurrentUser() user?: User
   ): Promise<FindRaidPostsDTO> {
     const posts = await this.findService.find(query);
-    const postsResponses = posts.map(mapRaidPostToRaidPostResponse);
     const _posts = user
-      ? await this.checkIfUserMeetsPostsRequirements(postsResponses, user)
-      : this.unsatisfyEachRequirement(postsResponses);
-    return _posts;
+      ? await this.checkIfUserMeetsPostsRequirements(posts, user)
+      : this.unsatisfyEachRequirement(posts);
+    const response = _posts.map(mapRaidPostToRaidPostResponse);
+    return response;
   }
 
   private async checkIfUserMeetsPostsRequirements(
-    posts: RaidPostResponse[],
+    posts: RaidPost[],
     user: User
   ) {
     const satisfiesRequirements = await Promise.all(
@@ -70,31 +68,18 @@ export class FindRaidPostsController {
         )
       )
     );
-    const _posts: FindRaidPostsDTO = posts.map((post, index) => ({
+    const _posts = posts.map((post, index) => ({
       ...post,
       userMeetsRequirements: satisfiesRequirements[index],
     }));
     return _posts;
   }
 
-  private unsatisfyEachRequirement(posts: RaidPostResponse[]) {
-    const _posts: FindRaidPostsDTO = posts.map((post) => ({
+  private unsatisfyEachRequirement(posts: RaidPost[]) {
+    const _posts = posts.map((post) => ({
       ...post,
       userMeetsRequirements: false,
     }));
     return _posts;
   }
 }
-
-const mapRaidPostToRaidPostResponse = (
-  raidPost: RaidPost
-): RaidPostResponse => {
-  const { author, ...rest } = raidPost;
-  const userResponse = mapUserToUserReponse(author);
-  return { ...rest, author: userResponse };
-};
-
-const mapUserToUserReponse = (user: User): UserResponse => {
-  const { apiKey, password, ...rest } = user;
-  return rest;
-};

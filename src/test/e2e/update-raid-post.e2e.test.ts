@@ -7,7 +7,7 @@ import { IRaidPostUnitOfWork } from "../../data/units-of-work/raid-post/raid-pos
 import { CurrentUserJWTMiddleware } from "../../api/middleware/current-user.middleware";
 import { seedUserAndGetToken, seedRaidBoss, seedRaidPost } from "./seeders";
 import { RaidPost } from "../../data/entities/raid-post.entitity";
-import { RaidPostDTO } from "../../api/controllers/raid-post/raid-post.dto";
+import { SaveRaidPostDTO } from "../../api/controllers/raid-post/save-raid-post.dto";
 
 describe("Update raid post e2e tests", () => {
   const raidPostsUrl = "/raid-posts";
@@ -38,7 +38,7 @@ describe("Update raid post e2e tests", () => {
   });
 
   it("should update a raid post", async () => {
-    const postDto: RaidPostDTO = {
+    const postDto: SaveRaidPostDTO = {
       date: post.date,
       server: post.server,
       description: "a very different description",
