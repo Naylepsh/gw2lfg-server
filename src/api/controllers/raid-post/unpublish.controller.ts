@@ -12,13 +12,12 @@ import { User } from "../../../data/entities/user.entity";
 import { PostAuthorshipService } from "../../../services/raid-post/authorship.service";
 import { EntityNotFoundError } from "../../../services/errors/entity-not-found.error";
 import { UnpublishRaidPostService } from "../../../services/raid-post/unpublish.service";
-import { Inject } from "typedi";
 
 @JsonController()
 export class UnpublishRaidPostController {
   constructor(
-    @Inject() private readonly unpublishService: UnpublishRaidPostService,
-    @Inject() private readonly authorshipService: PostAuthorshipService
+    private readonly unpublishService: UnpublishRaidPostService,
+    private readonly authorshipService: PostAuthorshipService
   ) {}
 
   @HttpCode(204)

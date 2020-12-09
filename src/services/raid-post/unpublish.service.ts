@@ -17,8 +17,13 @@ export class UnpublishRaidPostService {
       const post = await this.uow.raidPosts.findById(dto.id);
       if (!post) return;
 
-      await this.uow.requirements.delete(post.requirements.map((r) => r.id));
-      await this.uow.roles.delete(post.roles.map((r) => r.id));
+      if (post.hasRequirements()) {
+        await this.uow.requirements.delete(post.requirements.map((r) => r.id));
+      }
+
+      if (post.hasRoles()) {
+        await this.uow.roles.delete(post.roles.map((r) => r.id));
+      }
 
       await this.uow.raidPosts.delete(post.id);
     });

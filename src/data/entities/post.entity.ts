@@ -62,4 +62,16 @@ export class Post {
       this.roles = props.roles ?? [];
     }
   }
+
+  hasRequirements() {
+    return !this.isManyRelationEmpty(this.requirements);
+  }
+
+  hasRoles() {
+    return !this.isManyRelationEmpty(this.roles);
+  }
+
+  private isManyRelationEmpty(relation?: any[]) {
+    return relation === undefined || relation.length == 0;
+  }
 }
