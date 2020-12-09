@@ -13,13 +13,12 @@ import { PostAuthorshipService } from "../../../services/raid-post/authorship.se
 import { EntityNotFoundError } from "../../../services/errors/entity-not-found.error";
 import { UpdateRaidPostService } from "../../../services/raid-post/update.service";
 import { RaidPostDTO } from "./raid-post.dto";
-import { Inject } from "typedi";
 
 @JsonController()
 export class UpdateRaidPostController {
   constructor(
-    @Inject() private readonly updateService: UpdateRaidPostService,
-    @Inject() private readonly authorshipService: PostAuthorshipService
+    private readonly updateService: UpdateRaidPostService,
+    private readonly authorshipService: PostAuthorshipService
   ) {}
 
   @Put("/raid-posts/:id")

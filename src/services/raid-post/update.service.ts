@@ -42,10 +42,14 @@ export class UpdateRaidPostService {
       const author = raidPost.author;
       const bosses = await getBosses(this.uow, dto.bossesIds);
 
-      await this.uow.roles.delete(raidPost.roles);
+      if (raidPost.hasRoles()) {
+        await this.uow.roles.delete(raidPost.roles);
+      }
       const roles = await createRoles(dto.rolesProps, this.uow);
 
-      await this.uow.requirements.delete(raidPost.requirements);
+      if (raidPost.hasRequirements()) {
+        await this.uow.requirements.delete(raidPost.requirements);
+      }
       const requirements = await createRequirements(
         dto.requirementsProps,
         this.uow
