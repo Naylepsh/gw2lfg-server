@@ -67,6 +67,13 @@ export class Post {
     return !this.isManyRelationEmpty(this.requirements);
   }
 
+  hasRole(roleId: number) {
+    return (
+      this.hasRoles() &&
+      this.roles.filter((role) => role.id === roleId).length === 1
+    );
+  }
+
   hasRoles() {
     return !this.isManyRelationEmpty(this.roles);
   }

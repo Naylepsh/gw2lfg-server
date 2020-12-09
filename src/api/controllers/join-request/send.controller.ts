@@ -1,4 +1,5 @@
 import {
+  Body,
   CurrentUser,
   ForbiddenError,
   HttpCode,
@@ -17,6 +18,10 @@ import {
 } from "../../../services/join-request/send.service";
 import { UnprocessableEntityError } from "../../http-errors/unprocessable-entity.error";
 
+class SendJoinRequestDTO {
+  roleId: number;
+}
+
 @JsonController()
 export class SendRaidJoinRequestController {
   constructor(private readonly joinRequestService: SendJoinRequestService) {}
@@ -25,12 +30,14 @@ export class SendRaidJoinRequestController {
   @Post("/raid-posts/:id/join-request")
   async sendJoinRequest(
     @CurrentUser({ required: true }) user: User,
-    @Param("id") postId: number
+    @Param("id") postId: number,
+    @Body({ validate: false }) dto: SendJoinRequestDTO
   ) {
     try {
       return await this.joinRequestService.sendJoinRequest({
         userId: user.id,
         postId,
+        roleId: dto.roleId,
       });
     } catch (e) {
       if (e instanceof PostNotFoundError) {

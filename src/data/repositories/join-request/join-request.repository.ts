@@ -9,7 +9,11 @@ import { IJoinRequestRepository } from "./join-request.repository.interface";
 export class JoinRequestRepository
   extends GenericRepository<JoinRequest>
   implements IJoinRequestRepository {
-  findByKey(userId: number, postId: number): Promise<JoinRequest | undefined> {
-    return this.findOne({ where: { userId, postId } });
+  findByKey(
+    userId: number,
+    postId: number,
+    roleId: number
+  ): Promise<JoinRequest | undefined> {
+    return this.findOne({ where: { userId, postId, roleId } });
   }
 }

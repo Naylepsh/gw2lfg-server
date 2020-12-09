@@ -21,16 +21,14 @@ describe("SendRaidJoinRequestController integration tests", () => {
   let joinRequestRepo: JoinRequestMemoryRepository;
   let app: any;
   let token: string;
-  let postId = 0;
+  let post: RaidPost;
   let user: User;
   let myStorage: MyStorage;
 
   beforeEach(async () => {
     const uow = RaidPostMemoryUnitOfWork.create();
 
-    let post: RaidPost;
     ({ token, post, user } = await seedDbWithOnePost(uow));
-    postId = post.id;
 
     myStorage = new MyStorage(
       new Map<string, Item[]>([
@@ -64,7 +62,9 @@ describe("SendRaidJoinRequestController integration tests", () => {
   });
 
   it("should return 401 if user was not logged in", async () => {
-    const res = await request(app).post(toUrl(postId));
+    const res = await request(app)
+      .post(toUrl(post.id))
+      .send({ roleId: post.roles[0].id });
 
     expect(res.status).toBe(401);
   });
@@ -74,7 +74,20 @@ describe("SendRaidJoinRequestController integration tests", () => {
 
     const res = await request(app)
       .post(toUrl(idOfNonExistingPost))
-      .set(CurrentUserJWTMiddleware.AUTH_HEADER, token);
+      .set(CurrentUserJWTMiddleware.AUTH_HEADER, token)
+      .send({ roleId: post.roles[0].id });
+
+    expect(res.status).toBe(404);
+  });
+
+  it("should return 404 if post does not contain the role", async () => {
+    const idOfNonExistingPost = 123;
+    const idOfNonExistsingRole = 456;
+
+    const res = await request(app)
+      .post(toUrl(idOfNonExistingPost))
+      .set(CurrentUserJWTMiddleware.AUTH_HEADER, token)
+      .send({ roleId: idOfNonExistsingRole });
 
     expect(res.status).toBe(404);
   });
@@ -85,8 +98,9 @@ describe("SendRaidJoinRequestController integration tests", () => {
     ]);
 
     const res = await request(app)
-      .post(toUrl(postId))
-      .set(CurrentUserJWTMiddleware.AUTH_HEADER, token);
+      .post(toUrl(post.id))
+      .set(CurrentUserJWTMiddleware.AUTH_HEADER, token)
+      .send({ roleId: post.roles[0].id });
 
     expect(res.status).toBe(403);
   });
@@ -97,11 +111,13 @@ describe("SendRaidJoinRequestController integration tests", () => {
     ]);
 
     await request(app)
-      .post(toUrl(postId))
-      .set(CurrentUserJWTMiddleware.AUTH_HEADER, token);
+      .post(toUrl(post.id))
+      .set(CurrentUserJWTMiddleware.AUTH_HEADER, token)
+      .send({ roleId: post.roles[0].id });
     const res = await request(app)
-      .post(toUrl(postId))
-      .set(CurrentUserJWTMiddleware.AUTH_HEADER, token);
+      .post(toUrl(post.id))
+      .set(CurrentUserJWTMiddleware.AUTH_HEADER, token)
+      .send({ roleId: post.roles[0].id });
 
     expect(res.status).toBe(422);
   });
@@ -112,8 +128,9 @@ describe("SendRaidJoinRequestController integration tests", () => {
     ]);
 
     const res = await request(app)
-      .post(toUrl(postId))
-      .set(CurrentUserJWTMiddleware.AUTH_HEADER, token);
+      .post(toUrl(post.id))
+      .set(CurrentUserJWTMiddleware.AUTH_HEADER, token)
+      .send({ roleId: post.roles[0].id });
 
     expect(res.status).toBe(201);
   });
@@ -124,8 +141,9 @@ describe("SendRaidJoinRequestController integration tests", () => {
     ]);
 
     await request(app)
-      .post(toUrl(postId))
-      .set(CurrentUserJWTMiddleware.AUTH_HEADER, token);
+      .post(toUrl(post.id))
+      .set(CurrentUserJWTMiddleware.AUTH_HEADER, token)
+      .send({ roleId: post.roles[0].id });
 
     expect(joinRequestRepo.entities.length).toBe(1);
   });

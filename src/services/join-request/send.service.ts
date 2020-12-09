@@ -12,6 +12,7 @@ import {
 import { EntityAlreadyExistsError } from "../errors/entity-already-exists.error";
 import {
   PostNotFoundError,
+  RoleNotFoundError,
   UserNotFoundError,
 } from "../errors/entity-not-found.error";
 import { ICheckRequirementsService } from "../requirement/check-requirements.service.interface";
@@ -19,6 +20,7 @@ import { ICheckRequirementsService } from "../requirement/check-requirements.ser
 interface SendJoinRequestDTO {
   userId: number;
   postId: number;
+  roleId: number;
 }
 
 export class RequirementsNotSatisfiedError extends Error {}
@@ -33,7 +35,7 @@ export class SendJoinRequestService {
     private readonly checkRequirementsService: ICheckRequirementsService
   ) {}
 
-  async sendJoinRequest({ userId, postId }: SendJoinRequestDTO) {
+  async sendJoinRequest({ userId, postId, roleId }: SendJoinRequestDTO) {
     const user = await this.userRepo.findById(userId);
     if (!user) {
       throw new UserNotFoundError();
@@ -43,8 +45,15 @@ export class SendJoinRequestService {
     if (!post) {
       throw new PostNotFoundError();
     }
+    if (!post.hasRole(roleId)) {
+      throw new RoleNotFoundError();
+    }
 
-    const _request = await this.joinRequestRepo.findByKey(userId, postId);
+    const _request = await this.joinRequestRepo.findByKey(
+      userId,
+      postId,
+      roleId
+    );
     if (_request) {
       throw new EntityAlreadyExistsError();
     }
@@ -57,7 +66,7 @@ export class SendJoinRequestService {
       throw new RequirementsNotSatisfiedError();
     }
 
-    const joinRequest = new JoinRequest({ userId, postId });
+    const joinRequest = new JoinRequest({ userId, postId, roleId });
     return this.joinRequestRepo.save(joinRequest);
   }
 }
