@@ -15,7 +15,15 @@ import {
 import { FindRaidPostService } from "../../../services/raid-post/find.service";
 import { ICheckRequirementsService } from "../../../services/requirement/check-requirements.service.interface";
 
-type FindSingleRaidPostDTO = RaidPost & { userMeetsRequirements: boolean };
+type UserResponse = Omit<User, "password" | "apiKey">;
+type RaidPostResponse = Omit<
+  RaidPost,
+  "author" | "hasRequirements" | "hasRoles"
+> & { author: UserResponse };
+
+type FindSingleRaidPostDTO = RaidPostResponse & {
+  userMeetsRequirements: boolean;
+};
 type FindRaidPostsDTO = FindSingleRaidPostDTO[];
 
 class FindRaidPostsQueryParams {
@@ -43,14 +51,15 @@ export class FindRaidPostsController {
     @CurrentUser() user?: User
   ): Promise<FindRaidPostsDTO> {
     const posts = await this.findService.find(query);
+    const postsResponses = posts.map(mapRaidPostToRaidPostResponse);
     const _posts = user
-      ? await this.checkIfUserMeetsPostsRequirements(posts, user)
-      : this.unsatisfyEachRequirement(posts);
+      ? await this.checkIfUserMeetsPostsRequirements(postsResponses, user)
+      : this.unsatisfyEachRequirement(postsResponses);
     return _posts;
   }
 
   private async checkIfUserMeetsPostsRequirements(
-    posts: RaidPost[],
+    posts: RaidPostResponse[],
     user: User
   ) {
     const satisfiesRequirements = await Promise.all(
@@ -68,7 +77,7 @@ export class FindRaidPostsController {
     return _posts;
   }
 
-  private unsatisfyEachRequirement(posts: RaidPost[]) {
+  private unsatisfyEachRequirement(posts: RaidPostResponse[]) {
     const _posts: FindRaidPostsDTO = posts.map((post) => ({
       ...post,
       userMeetsRequirements: false,
@@ -76,3 +85,16 @@ export class FindRaidPostsController {
     return _posts;
   }
 }
+
+const mapRaidPostToRaidPostResponse = (
+  raidPost: RaidPost
+): RaidPostResponse => {
+  const { author, ...rest } = raidPost;
+  const userResponse = mapUserToUserReponse(author);
+  return { ...rest, author: userResponse };
+};
+
+const mapUserToUserReponse = (user: User): UserResponse => {
+  const { apiKey, password, ...rest } = user;
+  return rest;
+};
