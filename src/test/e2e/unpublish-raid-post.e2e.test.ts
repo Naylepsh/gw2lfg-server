@@ -36,10 +36,9 @@ describe("Unpublish raid post e2e tests", () => {
   });
 
   it("should remove a raid post", async () => {
-    const { status, body } = await request(app)
+    await request(app)
       .delete(toUrl(postId))
       .set(CurrentUserJWTMiddleware.AUTH_HEADER, token);
-    console.log({ status, body });
     const { body: posts } = await request(app).get(raidPostsUrl);
 
     expect(posts.length).toBe(0);
