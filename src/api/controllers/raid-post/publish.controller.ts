@@ -7,6 +7,10 @@ import {
 } from "routing-controllers";
 import { User } from "../../../data/entities/user.entity";
 import { PublishRaidPostService } from "../../../services/raid-post/publish.service";
+import {
+  mapRaidPostToRaidPostResponse,
+  RaidPostResponse,
+} from "../../responses/raid-post.response";
 import { SaveRaidPostDTO } from "./save-raid-post.dto";
 
 @JsonController()
@@ -18,7 +22,11 @@ export class PublishRaidPostController {
   async publish(
     @CurrentUser({ required: true }) user: User,
     @Body() dto: SaveRaidPostDTO
-  ) {
-    return await this.publishService.publish({ ...dto, authorId: user.id });
+  ): Promise<RaidPostResponse> {
+    const post = await this.publishService.publish({
+      ...dto,
+      authorId: user.id,
+    });
+    return mapRaidPostToRaidPostResponse(post);
   }
 }
