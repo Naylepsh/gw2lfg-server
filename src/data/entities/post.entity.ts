@@ -7,6 +7,7 @@ import {
   ManyToOne,
   OneToMany,
   PrimaryGeneratedColumn,
+  TableInheritance,
   UpdateDateColumn,
 } from "typeorm";
 import { Requirement } from "./requirement.entity";
@@ -23,6 +24,7 @@ export interface PostProps {
 }
 
 @Entity()
+@TableInheritance({ column: { type: "varchar", name: "type" } })
 export class Post {
   @PrimaryGeneratedColumn()
   id: number;
@@ -39,6 +41,7 @@ export class Post {
   @Column({ nullable: true })
   description?: string;
 
+  // TODO: change to OneToMany?
   @ManyToMany(() => Requirement)
   @JoinTable()
   requirements: Requirement[];

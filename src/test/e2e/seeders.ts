@@ -6,6 +6,8 @@ import { RaidBoss } from "../../data/entities/raid-boss.entity";
 import { addHours } from "../unit/services/raid-post/hours.util";
 import { CurrentUserJWTMiddleware } from "../../api/middleware/current-user.middleware";
 import { IRaidBossRepository } from "../../data/repositories/raid-boss/raid-boss.repository.interface";
+import { RaidPost } from "../../data/entities/raid-post.entitity";
+import { IRaidPostUnitOfWork } from "../../data/units-of-work/raid-post/raid-post.unit-of-work.interface";
 
 interface IUser {
   username: string;
@@ -25,11 +27,13 @@ export const seedRaidPost = async (
   token: string
 ) => {
   const publishUrl = "/raid-posts";
+  const roleProps = { name: "DPS" };
   const post = {
     server: "EU",
     date: addHours(new Date(), 10),
     description: "bring potions and food",
     bossesIds,
+    rolesProps: [roleProps],
   };
 
   const { body } = await request(app)
@@ -37,7 +41,9 @@ export const seedRaidPost = async (
     .send(post)
     .set(CurrentUserJWTMiddleware.AUTH_HEADER, token);
 
-  return body;
+  const raidPost = new RaidPost(body);
+  raidPost.id = body.id;
+  return raidPost;
 };
 
 export const seedRaidBoss = async (container: typeof Container) => {
@@ -69,4 +75,14 @@ export const seedUser = async (app: any): Promise<IUser> => {
   await request(app).post(registerUrl).send(user);
 
   return { ...user };
+};
+
+export const clean = async (uow: IRaidPostUnitOfWork) => {
+  return await uow.withTransaction(async () => {
+    await uow.roles.delete({});
+    await uow.raidPosts.delete({});
+    await uow.raidBosses.delete({});
+    await uow.users.delete({});
+    await uow.requirements.delete({});
+  });
 };

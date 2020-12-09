@@ -10,6 +10,7 @@ import { PastDateError } from "./raid-post-errors";
 import { UserNotFoundError } from "../errors/entity-not-found.error";
 import { Inject, Service } from "typedi";
 import { raidPostUnitOfWorkType } from "../../loaders/typedi.constants";
+import { RolePropsDTO } from "./role-props.dto";
 
 export interface PublishDTO {
   date: Date;
@@ -17,7 +18,7 @@ export interface PublishDTO {
   description?: string;
   authorId: number;
   bossesIds: number[];
-  rolesProps: Pick<Role, "name" | "description">[];
+  rolesProps: RolePropsDTO[];
   requirementsProps: RequirementArgs[];
 }
 

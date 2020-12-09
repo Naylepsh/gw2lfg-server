@@ -10,7 +10,7 @@ import { IRaidPostRepository } from "./raid-post.repository.interface";
 export class RaidPostRepository
   extends IdentifiableEntityRepository<RaidPost>
   implements IRaidPostRepository {
-  private static relations = ["author", "requirements", "bosses"];
+  private static relations = ["author", "requirements", "bosses", "roles"];
 
   findMany(params: FindManyParams<RaidPost>) {
     const _params = { ...params, relations: RaidPostRepository.relations };

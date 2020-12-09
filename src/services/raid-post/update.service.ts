@@ -10,8 +10,7 @@ import { raidPostUnitOfWorkType } from "../../loaders/typedi.constants";
 import { EntityNotFoundError } from "../errors/entity-not-found.error";
 import { isDateInThePast } from "./is-date-in-the-past";
 import { PastDateError } from "./raid-post-errors";
-
-type RoleProp = Pick<Role, "name" | "description">;
+import { RolePropsDTO } from "./role-props.dto";
 
 export interface UpdateRaidPostDTO {
   id: number;
@@ -19,7 +18,7 @@ export interface UpdateRaidPostDTO {
   server: string;
   description?: string;
   bossesIds: number[];
-  rolesProps: RoleProp[];
+  rolesProps: RolePropsDTO[];
   requirementsProps: RequirementArgs[];
 }
 
@@ -82,7 +81,7 @@ const getBosses = async (uow: IRaidPostUnitOfWork, bossesIds: number[]) => {
 };
 
 const createRoles = async (
-  rolesProps: RoleProp[],
+  rolesProps: RolePropsDTO[],
   uow: IRaidPostUnitOfWork
 ) => {
   const roles = rolesProps.map((props) => new Role(props));

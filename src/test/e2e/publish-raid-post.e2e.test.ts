@@ -10,7 +10,7 @@ import { addHours } from "../unit/services/raid-post/hours.util";
 import { IRaidPostUnitOfWork } from "../../data/units-of-work/raid-post/raid-post.unit-of-work.interface";
 import { CurrentUserJWTMiddleware } from "../../api/middleware/current-user.middleware";
 import { IRaidPostRepository } from "../../data/repositories/raid-post/raid-post.repository.interface";
-import { seedUserAndGetToken, seedRaidBoss } from "./seeders";
+import { seedUserAndGetToken, seedRaidBoss, clean } from "./seeders";
 
 describe("Publish raid post e2e tests", () => {
   const publishUrl = "/raid-posts";
@@ -30,13 +30,7 @@ describe("Publish raid post e2e tests", () => {
   });
 
   afterEach(async () => {
-    await uow.withTransaction(async () => {
-      await uow.raidPosts.delete({});
-      await uow.users.delete({});
-      await uow.raidBosses.delete({});
-      await uow.requirements.delete({});
-      await uow.roles.delete({});
-    });
+    await clean(uow);
   });
 
   it("should create a raid post", async () => {

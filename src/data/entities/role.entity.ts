@@ -38,7 +38,7 @@ export class Role {
     if (props) {
       this.name = props.name;
       this.description = props.description;
-      if (props.post) this.post = this.post;
+      if (props.post) this.post = props.post;
     }
   }
 }

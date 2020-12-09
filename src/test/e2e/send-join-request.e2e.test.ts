@@ -2,7 +2,10 @@ import "reflect-metadata";
 import request from "supertest";
 import Container from "typedi";
 import { loadDependencies } from "../../loaders";
-import { raidPostUnitOfWorkType } from "../../loaders/typedi.constants";
+import {
+  joinRequestRepositoryType,
+  raidPostUnitOfWorkType,
+} from "../../loaders/typedi.constants";
 import { IRaidPostUnitOfWork } from "../../data/units-of-work/raid-post/raid-post.unit-of-work.interface";
 import { CurrentUserJWTMiddleware } from "../../api/middleware/current-user.middleware";
 import {
@@ -12,20 +15,22 @@ import {
   clean,
 } from "./seeders";
 import { RaidPost } from "../../data/entities/raid-post.entitity";
-import { SaveRaidPostDTO } from "../../api/controllers/raid-post/save-raid-post.dto";
+import { IJoinRequestRepository } from "../../data/repositories/join-request/join-request.repository.interface";
 
-describe("Update raid post e2e tests", () => {
-  const raidPostsUrl = "/raid-posts";
+describe("Send raid post join request e2e tests", () => {
+  const postsUrl = "/raid-posts";
+  let container: typeof Container;
   let app: any;
   let uow: IRaidPostUnitOfWork;
+  let joinRequestRepo: IJoinRequestRepository;
   let token: string;
   let post: RaidPost;
 
   beforeEach(async () => {
-    let container: typeof Container;
     ({ app, container } = await loadDependencies());
 
     uow = container.get(raidPostUnitOfWorkType);
+    joinRequestRepo = container.get(joinRequestRepositoryType);
 
     token = await seedUserAndGetToken(app);
     const bossesIds = [await seedRaidBoss(container)];
@@ -36,24 +41,14 @@ describe("Update raid post e2e tests", () => {
     await clean(uow);
   });
 
-  it("should update a raid post", async () => {
-    const postDto: SaveRaidPostDTO = {
-      date: post.date,
-      server: post.server,
-      description: "a very different description",
-      bossesIds: post.bosses.map((boss) => boss.id),
-      rolesProps: [],
-      requirementsProps: [],
-    };
+  it("should create a join request", async () => {
+    const roleId = post.roles[0].id;
     await request(app)
-      .put(toUrl(post.id))
-      .send(postDto)
-      .set(CurrentUserJWTMiddleware.AUTH_HEADER, token);
-    const { body: posts } = await request(app).get(raidPostsUrl);
+      .post(`${postsUrl}/${post.id}`)
+      .set(CurrentUserJWTMiddleware.AUTH_HEADER, token)
+      .send({ roleId });
 
-    expect(posts.length).toBe(1);
-    expect(posts[0]).toHaveProperty("description", postDto.description);
+    const joinRequests = await joinRequestRepo.findMany({});
+    expect(joinRequests.length).toBe(1);
   });
-
-  const toUrl = (id: number) => `${raidPostsUrl}/${id}`;
 });

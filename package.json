@@ -13,8 +13,8 @@
     "test:hmm": "jest -i src/test/unit/services/repo.test.ts",
     "test:integr": "jest -i src/test/integration",
     "test:integr:controllers": "jest -i src/test/integration/controllers",
-    "test:integr:typeorm": "jest -i src/test/integration/typeorm",
-    "test:e2e": "jest --detectOpenHandles -i src/test/e2e"
+    "test:integr:typeorm": "jest --detectOpenHandles -i src/test/integration/typeorm/enity.test.ts",
+    "test:e2e": "jest --detectOpenHandles -i src/test/e2e/update-raid-post.e2e.test.ts"
   },
   "keywords": [],
   "author": "",

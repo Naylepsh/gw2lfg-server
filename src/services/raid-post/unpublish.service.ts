@@ -16,6 +16,7 @@ export class UnpublishRaidPostService {
     return this.uow.withTransaction(async () => {
       const post = await this.uow.raidPosts.findById(dto.id);
       if (!post) return;
+      console.log({ post });
 
       if (post.hasRequirements()) {
         await this.uow.requirements.delete(post.requirements.map((r) => r.id));

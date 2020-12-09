@@ -5,7 +5,12 @@ import { loadDependencies } from "../../loaders";
 import { raidPostUnitOfWorkType } from "../../loaders/typedi.constants";
 import { IRaidPostUnitOfWork } from "../../data/units-of-work/raid-post/raid-post.unit-of-work.interface";
 import { CurrentUserJWTMiddleware } from "../../api/middleware/current-user.middleware";
-import { seedUserAndGetToken, seedRaidBoss, seedRaidPost } from "./seeders";
+import {
+  seedUserAndGetToken,
+  seedRaidBoss,
+  seedRaidPost,
+  clean,
+} from "./seeders";
 
 describe("Find raid posts e2e tests", () => {
   const timelimit = 30000;
@@ -27,13 +32,7 @@ describe("Find raid posts e2e tests", () => {
   });
 
   afterEach(async () => {
-    await uow.withTransaction(async () => {
-      await uow.raidPosts.delete({});
-      await uow.users.delete({});
-      await uow.raidBosses.delete({});
-      await uow.requirements.delete({});
-      await uow.roles.delete({});
-    });
+    await clean(uow);
   });
 
   it(
