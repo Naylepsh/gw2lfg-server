@@ -8,6 +8,7 @@ import {
 export interface JoinRequestProps {
   userId: number;
   postId: number;
+  roleId: number;
 }
 
 @Entity()
@@ -17,6 +18,9 @@ export class JoinRequest {
 
   @PrimaryColumn()
   postId: number;
+
+  @PrimaryColumn()
+  roleId: number;
 
   @CreateDateColumn()
   createdAt: Date;
@@ -28,6 +32,7 @@ export class JoinRequest {
     if (props) {
       this.userId = props.userId;
       this.postId = props.postId;
+      this.roleId = props.roleId;
     }
   }
 }

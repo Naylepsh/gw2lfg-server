@@ -1,5 +1,6 @@
 import { RaidPost } from "../../../../data/entities/raid-post.entitity";
 import { LIRequirement } from "../../../../data/entities/requirement.entity";
+import { Role } from "../../../../data/entities/role.entity";
 import { User } from "../../../../data/entities/user.entity";
 import { IJoinRequestRepository } from "../../../../data/repositories/join-request/join-request.repository.interface";
 import { IPostRepository } from "../../../../data/repositories/post/post.repository.interface";
@@ -38,12 +39,14 @@ describe("JoinRequest Service: send tests", () => {
       })
     );
     const liRequirement = new LIRequirement({ quantity: 1 });
+    const role = new Role({ name: "DPS" });
     const post = new RaidPost({
       date: new Date(),
       server: "EU",
       author: user,
       bosses: [],
       requirements: [liRequirement],
+      roles: [role],
     });
     await postRepo.save(post);
     const fetchItems = storage(
@@ -57,15 +60,16 @@ describe("JoinRequest Service: send tests", () => {
       postRepo,
       joinRequestRepo,
       new CheckItemRequirementsService(new GetItems(fetchItems))
-    ).sendJoinRequest({ userId: user.id, postId: post.id });
+    ).sendJoinRequest({ userId: user.id, postId: post.id, roleId: role.id });
 
-    const request = await joinRequestRepo.findByKey(user.id, post.id);
+    const request = await joinRequestRepo.findByKey(user.id, post.id, role.id);
     expect(request).toBeDefined();
   });
 
   it("should throw an error if user does not exists", async () => {
     const userId = 1;
     const postId = 2;
+    const roleId = 1;
 
     expect(
       new SendJoinRequestService(
@@ -73,7 +77,7 @@ describe("JoinRequest Service: send tests", () => {
         postRepo,
         joinRequestRepo,
         new CheckItemRequirementsService(new DummyItemFetcher())
-      ).sendJoinRequest({ userId, postId })
+      ).sendJoinRequest({ userId, postId, roleId })
     ).rejects.toThrow();
   });
 
@@ -86,6 +90,7 @@ describe("JoinRequest Service: send tests", () => {
       })
     );
     const postId = 2;
+    const roleId = 3;
 
     expect(
       new SendJoinRequestService(
@@ -93,7 +98,35 @@ describe("JoinRequest Service: send tests", () => {
         postRepo,
         joinRequestRepo,
         new CheckItemRequirementsService(new DummyItemFetcher())
-      ).sendJoinRequest({ userId: user.id, postId })
+      ).sendJoinRequest({ userId: user.id, postId, roleId })
+    ).rejects.toThrow();
+  });
+
+  it("should throw an error if post does not contain the role", async () => {
+    const user = await userRepo.save(
+      new User({
+        username: "username",
+        password: "password",
+        apiKey: "api-key",
+      })
+    );
+    const liRequirement = new LIRequirement({ quantity: 2 });
+    const post = new RaidPost({
+      date: new Date(),
+      server: "EU",
+      author: user,
+      bosses: [],
+      requirements: [liRequirement],
+    });
+    const roleId = 3;
+
+    expect(
+      new SendJoinRequestService(
+        userRepo,
+        postRepo,
+        joinRequestRepo,
+        new CheckItemRequirementsService(new DummyItemFetcher())
+      ).sendJoinRequest({ userId: user.id, postId: post.id, roleId })
     ).rejects.toThrow();
   });
 
@@ -107,12 +140,15 @@ describe("JoinRequest Service: send tests", () => {
       })
     );
     const liRequirement = new LIRequirement({ quantity: 2 });
+    const role = new Role({ name: "DPS" });
+    role.id = 1;
     const post = new RaidPost({
       date: new Date(),
       server: "EU",
       author: user,
       bosses: [],
       requirements: [liRequirement],
+      roles: [role],
     });
     await postRepo.save(post);
     const fetchItems = storage(
@@ -127,7 +163,7 @@ describe("JoinRequest Service: send tests", () => {
         postRepo,
         joinRequestRepo,
         new CheckItemRequirementsService(new GetItems(fetchItems))
-      ).sendJoinRequest({ userId: user.id, postId: post.id })
+      ).sendJoinRequest({ userId: user.id, postId: post.id, roleId: role.id })
     ).rejects.toThrow();
   });
 });

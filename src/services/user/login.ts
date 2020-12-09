@@ -1,5 +1,7 @@
 import { IUserRepository } from "../../data/repositories/user/user.repository.interface";
 import { compare } from "bcrypt";
+import { Inject, Service } from "typedi";
+import { userRepositoryType } from "../../loaders/typedi.constants";
 
 export class InvalidLoginDetailsError extends Error {}
 
@@ -8,8 +10,11 @@ export interface loginDTO {
   password: string;
 }
 
+@Service()
 export class LoginService {
-  constructor(private readonly userRepository: IUserRepository) {}
+  constructor(
+    @Inject(userRepositoryType) private readonly userRepository: IUserRepository
+  ) {}
 
   async login(loginDto: loginDTO) {
     const user = await this.userRepository.findByUsername(loginDto.username);

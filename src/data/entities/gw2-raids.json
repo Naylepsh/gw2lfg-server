@@ -1,0 +1,64 @@
+{
+  "raids": [
+    {
+      "wing": 1,
+      "encounters": [
+        { "name": "Vale Guardian", "hasCm": false },
+        { "name": "Spirit Woods", "hasCm": false },
+        { "name": "Gorseval the Multifarious", "hasCm": false },
+        { "name": "Sabetha the Saboteur", "hasCm": false }
+      ]
+    },
+    {
+      "wing": 2,
+      "encounters": [
+        { "name": "Slothasor", "hasCm": false },
+        { "name": "Prison Camp", "hasCm": false },
+        { "name": "Matthias Gabrel", "hasCm": false }
+      ]
+    },
+    {
+      "wing": 3,
+      "encounters": [
+        { "name": "Siege the Stronghold", "hasCm": false },
+        { "name": "Keep Construct", "hasCm": true },
+        { "name": "Twisted Castle", "hasCm": false },
+        { "name": "Xera", "hasCm": false }
+      ]
+    },
+    {
+      "wing": 4,
+      "encounters": [
+        { "name": "Cairn the Indomitable", "hasCm": true },
+        { "name": "Mursaat Overseer", "hasCm": true },
+        { "name": "Samarog", "hasCm": true },
+        { "name": "Deimos", "hasCm": true }
+      ]
+    },
+    {
+      "wing": 5,
+      "encounters": [
+        { "name": "Soulless Horror", "hasCm": true },
+        { "name": "River of Souls", "hasCm": false },
+        { "name": "Statues of Grenth", "hasCm": false },
+        { "name": "Voice in the Void", "hasCm": true }
+      ]
+    },
+    {
+      "wing": 6,
+      "encounters": [
+        { "name": "Conjured Amalgamate", "hasCm": true },
+        { "name": "Twin Largos", "hasCm": true },
+        { "name": "Qadim", "hasCm": true }
+      ]
+    },
+    {
+      "wing": 7,
+      "encounters": [
+        { "name": "Cardinal Sabir", "hasCm": true },
+        { "name": "Cardinal Adina", "hasCm": true },
+        { "name": "Qadim the Peerless", "hasCm": true }
+      ]
+    }
+  ]
+}

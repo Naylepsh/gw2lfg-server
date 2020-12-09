@@ -1,14 +1,18 @@
+import { Inject, Service } from "typedi";
 import { Connection, EntityManager, ObjectType } from "typeorm";
 import { IUnitOfWork } from "./unit-of-work.interface";
 
-export class TypeOrmUnitOfWork implements IUnitOfWork {
+@Service()
+export class GenericUnitOfWork implements IUnitOfWork {
   private transactionManager: EntityManager | null;
 
-  constructor(private connection: Connection) {}
+  constructor(@Inject() private readonly connection: Connection) {}
 
   getCustomRepository<T>(customRepository: ObjectType<T>): T {
     if (!this.transactionManager) {
-      throw new Error("Unit of work is not started. Call the start() method");
+      throw new Error(
+        "Unit of work is not started. Wrap it around withTransaction"
+      );
     }
     return this.transactionManager.getCustomRepository(customRepository);
   }

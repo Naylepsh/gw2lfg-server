@@ -7,6 +7,7 @@ import {
   ManyToOne,
   OneToMany,
   PrimaryGeneratedColumn,
+  TableInheritance,
   UpdateDateColumn,
 } from "typeorm";
 import { Requirement } from "./requirement.entity";
@@ -23,6 +24,7 @@ export interface PostProps {
 }
 
 @Entity()
+@TableInheritance({ column: { type: "varchar", name: "type" } })
 export class Post {
   @PrimaryGeneratedColumn()
   id: number;
@@ -39,6 +41,7 @@ export class Post {
   @Column({ nullable: true })
   description?: string;
 
+  // TODO: change to OneToMany?
   @ManyToMany(() => Requirement)
   @JoinTable()
   requirements: Requirement[];
@@ -61,5 +64,24 @@ export class Post {
       this.requirements = props.requirements ?? [];
       this.roles = props.roles ?? [];
     }
+  }
+
+  hasRequirements() {
+    return !this.isManyRelationEmpty(this.requirements);
+  }
+
+  hasRole(roleId: number) {
+    return (
+      this.hasRoles() &&
+      this.roles.filter((role) => role.id === roleId).length === 1
+    );
+  }
+
+  hasRoles() {
+    return !this.isManyRelationEmpty(this.roles);
+  }
+
+  private isManyRelationEmpty(relation?: any[]) {
+    return relation === undefined || relation.length == 0;
   }
 }

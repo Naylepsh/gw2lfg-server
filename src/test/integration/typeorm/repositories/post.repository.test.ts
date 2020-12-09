@@ -1,5 +1,5 @@
 import { Connection } from "typeorm";
-import { loadTypeORM } from "../../../../loaders/typeorm";
+import { loadTypeORM } from "../../../../loaders/typeorm.loader";
 import { PostRepository } from "../../../../data/repositories/post/post.repository";
 import { IPostRepository } from "../../../../data/repositories/post/post.repository.interface";
 import { RequirementRepository } from "../../../../data/repositories/requirement/requirement.repository";

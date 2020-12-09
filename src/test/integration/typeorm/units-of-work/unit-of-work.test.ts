@@ -1,7 +1,7 @@
 import { Connection, getConnection } from "typeorm";
 import { User } from "../../../../data/entities/user.entity";
-import { loadTypeORM } from "../../../../loaders/typeorm";
-import { TypeOrmUnitOfWork } from "../../../../data/units-of-work/generic.unit-of-work";
+import { loadTypeORM } from "../../../../loaders/typeorm.loader";
+import { GenericUnitOfWork } from "../../../../data/units-of-work/generic.unit-of-work";
 import { UserRepository } from "../../../../data/repositories/user/user.repository";
 
 describe("TypeORM Unit of Work tests", () => {
@@ -21,7 +21,7 @@ describe("TypeORM Unit of Work tests", () => {
 
   it("should commit changes", async () => {
     const repo = connection.getCustomRepository(UserRepository);
-    const uow = new TypeOrmUnitOfWork(connection);
+    const uow = new GenericUnitOfWork(connection);
 
     const work = async () => {
       const userRepo = uow.getCustomRepository(UserRepository);
@@ -41,7 +41,7 @@ describe("TypeORM Unit of Work tests", () => {
 
   it("should rollback changes", async () => {
     const repo = connection.getCustomRepository(UserRepository);
-    const uow = new TypeOrmUnitOfWork(connection);
+    const uow = new GenericUnitOfWork(connection);
 
     const work = async () => {
       const userRepo = uow.getCustomRepository(UserRepository);

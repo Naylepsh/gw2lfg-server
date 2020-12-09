@@ -52,7 +52,7 @@ export const fetchItemsFromCharacter = async (
 
     const charInventory = data as CharacterInventory;
     const inventories = removeEmptySlots(
-      charInventory.bags.map((bag) => bag.inventory)
+      charInventory.bags.filter((bag) => !!bag).map((bag) => bag.inventory)
     ) as Item[][];
 
     return removeEmptySlots(inventories.flat()) as Item[];

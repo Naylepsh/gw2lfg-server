@@ -1,6 +1,6 @@
 import { Connection } from "typeorm";
 import { User } from "../../../../data/entities/user.entity";
-import { loadTypeORM } from "../../../../loaders/typeorm";
+import { loadTypeORM } from "../../../../loaders/typeorm.loader";
 import { UserRepository } from "../../../../data/repositories/user/user.repository";
 
 /*

@@ -1,3 +1,4 @@
+import { Inject, Service } from "typedi";
 import { RaidPost } from "../../data/entities/raid-post.entitity";
 import {
   RequirementArgs,
@@ -5,11 +6,11 @@ import {
 } from "../../data/entities/requirement.factory";
 import { Role } from "../../data/entities/role.entity";
 import { IRaidPostUnitOfWork } from "../../data/units-of-work/raid-post/raid-post.unit-of-work.interface";
+import { raidPostUnitOfWorkType } from "../../loaders/typedi.constants";
 import { EntityNotFoundError } from "../errors/entity-not-found.error";
 import { isDateInThePast } from "./is-date-in-the-past";
 import { PastDateError } from "./raid-post-errors";
-
-type RoleProp = Pick<Role, "name" | "description">;
+import { RolePropsDTO } from "./role-props.dto";
 
 export interface UpdateRaidPostDTO {
   id: number;
@@ -17,12 +18,15 @@ export interface UpdateRaidPostDTO {
   server: string;
   description?: string;
   bossesIds: number[];
-  rolesProps: RoleProp[];
+  rolesProps: RolePropsDTO[];
   requirementsProps: RequirementArgs[];
 }
 
+@Service()
 export class UpdateRaidPostService {
-  constructor(private readonly uow: IRaidPostUnitOfWork) {}
+  constructor(
+    @Inject(raidPostUnitOfWorkType) private readonly uow: IRaidPostUnitOfWork
+  ) {}
 
   async update(dto: UpdateRaidPostDTO) {
     if (isDateInThePast(dto.date)) throw new PastDateError("date");
@@ -37,10 +41,14 @@ export class UpdateRaidPostService {
       const author = raidPost.author;
       const bosses = await getBosses(this.uow, dto.bossesIds);
 
-      await this.uow.roles.delete(raidPost.roles);
+      if (raidPost.hasRoles()) {
+        await this.uow.roles.delete(raidPost.roles);
+      }
       const roles = await createRoles(dto.rolesProps, this.uow);
 
-      await this.uow.requirements.delete(raidPost.requirements);
+      if (raidPost.hasRequirements()) {
+        await this.uow.requirements.delete(raidPost.requirements);
+      }
       const requirements = await createRequirements(
         dto.requirementsProps,
         this.uow
@@ -73,7 +81,7 @@ const getBosses = async (uow: IRaidPostUnitOfWork, bossesIds: number[]) => {
 };
 
 const createRoles = async (
-  rolesProps: RoleProp[],
+  rolesProps: RolePropsDTO[],
   uow: IRaidPostUnitOfWork
 ) => {
   const roles = rolesProps.map((props) => new Role(props));

@@ -5,12 +5,23 @@ import {
   JsonController,
   QueryParams,
 } from "routing-controllers";
-import { RaidPost } from "../../../data/entities/raid-post.entitity";
+import { Inject } from "typedi";
 import { User } from "../../../data/entities/user.entity";
+import {
+  findRaidPostsServiceType,
+  requirementsCheckServiceType,
+} from "../../../loaders/typedi.constants";
 import { FindRaidPostService } from "../../../services/raid-post/find.service";
 import { ICheckRequirementsService } from "../../../services/requirement/check-requirements.service.interface";
+import {
+  mapRaidPostToRaidPostResponse,
+  RaidPostResponse,
+} from "../../responses/raid-post.response";
+import { RaidPost } from "../../../data/entities/raid-post.entitity";
 
-type FindSingleRaidPostDTO = RaidPost & { userMeetsRequirements: boolean };
+type FindSingleRaidPostDTO = RaidPostResponse & {
+  userMeetsRequirements: boolean;
+};
 type FindRaidPostsDTO = FindSingleRaidPostDTO[];
 
 class FindRaidPostsQueryParams {
@@ -26,7 +37,9 @@ class FindRaidPostsQueryParams {
 @JsonController()
 export class FindRaidPostsController {
   constructor(
+    @Inject(findRaidPostsServiceType)
     private readonly findService: FindRaidPostService,
+    @Inject(requirementsCheckServiceType)
     private readonly requirementsCheckService: ICheckRequirementsService
   ) {}
 
@@ -39,7 +52,8 @@ export class FindRaidPostsController {
     const _posts = user
       ? await this.checkIfUserMeetsPostsRequirements(posts, user)
       : this.unsatisfyEachRequirement(posts);
-    return _posts;
+    const response = _posts.map(mapRaidPostToRaidPostResponse);
+    return response;
   }
 
   private async checkIfUserMeetsPostsRequirements(
@@ -54,7 +68,7 @@ export class FindRaidPostsController {
         )
       )
     );
-    const _posts: FindRaidPostsDTO = posts.map((post, index) => ({
+    const _posts = posts.map((post, index) => ({
       ...post,
       userMeetsRequirements: satisfiesRequirements[index],
     }));
@@ -62,7 +76,7 @@ export class FindRaidPostsController {
   }
 
   private unsatisfyEachRequirement(posts: RaidPost[]) {
-    const _posts: FindRaidPostsDTO = posts.map((post) => ({
+    const _posts = posts.map((post) => ({
       ...post,
       userMeetsRequirements: false,
     }));

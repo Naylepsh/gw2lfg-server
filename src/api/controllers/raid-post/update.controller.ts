@@ -12,7 +12,11 @@ import { User } from "../../../data/entities/user.entity";
 import { PostAuthorshipService } from "../../../services/raid-post/authorship.service";
 import { EntityNotFoundError } from "../../../services/errors/entity-not-found.error";
 import { UpdateRaidPostService } from "../../../services/raid-post/update.service";
-import { RaidPostDTO } from "./raid-post.dto";
+import { SaveRaidPostDTO } from "./save-raid-post.dto";
+import {
+  mapRaidPostToRaidPostResponse,
+  RaidPostResponse,
+} from "../../responses/raid-post.response";
 
 @JsonController()
 export class UpdateRaidPostController {
@@ -25,8 +29,8 @@ export class UpdateRaidPostController {
   async update(
     @CurrentUser({ required: true }) user: User,
     @Param("id") postId: number,
-    @Body() dto: RaidPostDTO
-  ) {
+    @Body() dto: SaveRaidPostDTO
+  ): Promise<RaidPostResponse> {
     try {
       const isAuthor = await this.authorshipService.isPostAuthor({
         userId: user.id,
@@ -34,7 +38,8 @@ export class UpdateRaidPostController {
       });
       if (!isAuthor) throw new ForbiddenError();
 
-      return await this.updateService.update({ ...dto, id: postId });
+      const post = await this.updateService.update({ ...dto, id: postId });
+      return mapRaidPostToRaidPostResponse(post);
     } catch (e) {
       if (e instanceof EntityNotFoundError) {
         throw new NotFoundError();
