@@ -7,7 +7,6 @@ import { IRaidPostUnitOfWork } from "./raid-post.unit-of-work.interface";
 import { GenericUnitOfWork } from "../generic.unit-of-work";
 import { Inject, Service } from "typedi";
 import { raidPostUnitOfWorkType } from "../../../loaders/typedi.constants";
-import { JoinRequestRepository } from "../../repositories/join-request/join-request.repository";
 
 @Service(raidPostUnitOfWorkType)
 export class RaidPostUnitOfWork implements IRaidPostUnitOfWork {
@@ -37,9 +36,5 @@ export class RaidPostUnitOfWork implements IRaidPostUnitOfWork {
 
   get raidPosts() {
     return this.unitOfWork.getCustomRepository(RaidPostRepository);
-  }
-
-  get joinRequests() {
-    return this.unitOfWork.getCustomRepository(JoinRequestRepository);
   }
 }
