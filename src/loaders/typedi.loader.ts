@@ -19,29 +19,45 @@ import "../services/raid-post/publish.service";
 import { data } from "../data";
 
 export const loadTypeDI = () => {
+  loadDataLayerDependencies();
+  loadServiceLayerDependencies();
+
+  return Container;
+};
+
+const loadDataLayerDependencies = () => {
   const { repositories: repos, unitsOfWork: uows } = data;
 
   const conn = getConnection();
+  Container.set(Connection, conn);
+
   const userRepo = conn.getCustomRepository(repos.UserRepository);
+  Container.set(userRepositoryType, userRepo);
+
   const roleRepo = conn.getCustomRepository(repos.RoleRepository);
+  Container.set(roleRepositoryType, roleRepo);
+
   const requirementRepo = conn.getCustomRepository(repos.RequirementRepository);
+  Container.set(requirementRepositoryType, requirementRepo);
+
   const postRepo = conn.getCustomRepository(repos.PostRepository);
+  Container.set(postRepositoryType, postRepo);
+
   const raidPostRepo = conn.getCustomRepository(repos.RaidPostRepository);
+  Container.set(raidPostRepositoryType, raidPostRepo);
+
   const raidBossRepo = conn.getCustomRepository(repos.RaidBossRepository);
+  Container.set(raidBossRepositoryType, raidBossRepo);
+
   const joinRequestRepo = conn.getCustomRepository(repos.JoinRequestRepository);
+  Container.set(joinRequestRepositoryType, joinRequestRepo);
+
   const genericUow = new uows.GenericUnitOfWork(conn);
   const raidPostUow = new uows.RaidPostUnitOfWork(genericUow);
-
-  Container.set(Connection, conn);
-  Container.set(userRepositoryType, userRepo);
-  Container.set(roleRepositoryType, roleRepo);
-  Container.set(requirementRepositoryType, requirementRepo);
-  Container.set(postRepositoryType, postRepo);
-  Container.set(raidPostRepositoryType, raidPostRepo);
-  Container.set(raidBossRepositoryType, raidBossRepo);
-  Container.set(joinRequestRepositoryType, joinRequestRepo);
   Container.set(raidPostUnitOfWorkType, raidPostUow);
+};
 
+const loadServiceLayerDependencies = () => {
   const itemFetcher = new GetItemsFromEntireAccount();
   const itemRequirementCheckService = new CheckItemRequirementsService(
     itemFetcher
@@ -51,6 +67,4 @@ export const loadTypeDI = () => {
   ]);
   Container.set(CheckRequirementsService, checkRequirementService);
   Container.set(requirementsCheckServiceType, checkRequirementService);
-
-  return Container;
 };
