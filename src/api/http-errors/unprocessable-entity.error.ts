@@ -1,8 +1,10 @@
 import { HttpError } from "routing-controllers";
 
 export class UnprocessableEntityError extends HttpError {
+  private static statusCode = 422;
+
   constructor(public readonly message: string) {
-    super(422);
+    super(UnprocessableEntityError.statusCode);
     Object.setPrototypeOf(this, UnprocessableEntityError.prototype);
   }
 
