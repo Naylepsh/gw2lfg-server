@@ -39,6 +39,7 @@ describe("Send raid post join request e2e tests", () => {
   });
 
   afterEach(async () => {
+    await joinRequestRepo.delete({});
     await clean(uow);
   });
 

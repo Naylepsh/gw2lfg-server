@@ -2,8 +2,6 @@ import {
   Column,
   CreateDateColumn,
   Entity,
-  JoinTable,
-  ManyToMany,
   ManyToOne,
   OneToMany,
   PrimaryGeneratedColumn,
@@ -41,9 +39,7 @@ export class Post {
   @Column({ nullable: true })
   description?: string;
 
-  // TODO: change to OneToMany?
-  @ManyToMany(() => Requirement)
-  @JoinTable()
+  @OneToMany(() => Requirement, (requirement) => requirement.post)
   requirements: Requirement[];
 
   @OneToMany(() => Role, (role) => role.post)

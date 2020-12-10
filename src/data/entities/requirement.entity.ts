@@ -3,10 +3,12 @@ import {
   Column,
   CreateDateColumn,
   Entity,
+  ManyToOne,
   PrimaryGeneratedColumn,
   TableInheritance,
   UpdateDateColumn,
 } from "typeorm";
+import { Post } from "./post.entity";
 
 export interface RequirementProps {
   name: string;
@@ -20,6 +22,9 @@ export abstract class Requirement {
 
   @Column()
   name!: string;
+
+  @ManyToOne(() => Post, (post) => post.requirements)
+  post: Post;
 
   @CreateDateColumn()
   createdAt: Date;
