@@ -1,3 +1,4 @@
+import { IJoinRequestRepository } from "../../repositories/join-request/join-request.repository.interface";
 import { IRaidBossRepository } from "../../repositories/raid-boss/raid-boss.repository.interface";
 import { IRaidPostRepository } from "../../repositories/raid-post/raid-post.repository.interface";
 import { IRequirementRepository } from "../../repositories/requirement/requirement.repository.interface";
@@ -11,4 +12,5 @@ export interface IRaidPostUnitOfWork extends IUnitOfWork {
   raidPosts: IRaidPostRepository;
   users: IUserRepository;
   raidBosses: IRaidBossRepository;
+  joinRequests: IJoinRequestRepository;
 }
