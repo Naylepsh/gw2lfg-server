@@ -36,7 +36,7 @@ export class RegisterUserController {
   @Post("/register")
   async register(@Body({ validate: true }) dto: RegisterDTO) {
     try {
-      const user = new User({ ...dto });
+      const user = new User(dto);
       const registeredUser = await this.registerService.register(user);
       const token = this.authService.createToken(registeredUser.id);
       return token;
