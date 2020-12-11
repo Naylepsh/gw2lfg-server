@@ -9,6 +9,7 @@ dotenv.config({ path: `src/../.env.${env}` });
 interface ConfigProperties {
   database: ConnectionOptions;
   jwt: JwtProperties;
+  port: number;
 }
 
 const parseEnvString = (name: string) => {
@@ -61,7 +62,10 @@ const jwt: JwtProperties = {
   },
 };
 
+const port = parseEnvNumber("PORT");
+
 export const config: ConfigProperties = {
   database,
   jwt,
+  port,
 };
