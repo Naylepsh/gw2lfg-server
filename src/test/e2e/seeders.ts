@@ -27,7 +27,7 @@ export const seedRaidPost = async (
   token: string
 ) => {
   const publishUrl = "/raid-posts";
-  const roleProps = { name: "DPS" };
+  const roleProps = { name: "DPS", class: "Any" };
   const post = {
     server: "EU",
     date: addHours(new Date(), 10),

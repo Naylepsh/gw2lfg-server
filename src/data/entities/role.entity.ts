@@ -10,6 +10,7 @@ import { Post } from "./post.entity";
 
 export interface RoleProps {
   name: string;
+  class: string;
   description?: string;
   post?: Post;
 }
@@ -21,6 +22,9 @@ export class Role {
 
   @Column()
   name: string;
+
+  @Column()
+  class: string;
 
   @Column({ nullable: true })
   description?: string;
@@ -38,6 +42,7 @@ export class Role {
     if (props) {
       this.name = props.name;
       this.description = props.description;
+      this.class = props.class;
       if (props.post) this.post = props.post;
     }
   }

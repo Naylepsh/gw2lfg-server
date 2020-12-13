@@ -39,7 +39,7 @@ describe("JoinRequest Service: send tests", () => {
       })
     );
     const liRequirement = new LIRequirement({ quantity: 1 });
-    const role = new Role({ name: "DPS" });
+    const role = new Role({ name: "DPS", class: "Any" });
     const post = new RaidPost({
       date: new Date(),
       server: "EU",
@@ -140,7 +140,7 @@ describe("JoinRequest Service: send tests", () => {
       })
     );
     const liRequirement = new LIRequirement({ quantity: 2 });
-    const role = new Role({ name: "DPS" });
+    const role = new Role({ name: "DPS", class: "Any" });
     role.id = 1;
     const post = new RaidPost({
       date: new Date(),

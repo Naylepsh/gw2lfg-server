@@ -3,6 +3,7 @@ import { RequirementArgs } from "../../../data/entities/requirement.factory";
 
 interface RolePropsDTO {
   name: string;
+  class: string;
   description?: string;
 }
 
