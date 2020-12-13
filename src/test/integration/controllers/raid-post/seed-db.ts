@@ -26,7 +26,9 @@ export async function seedDbWithOnePost(uow: RaidPostMemoryUnitOfWork) {
     server: "EU",
     date: addHours(new Date(), 12),
     bossesIds,
-    rolesProps: [{ name: "DPS", description: "condi, not scourge" }],
+    rolesProps: [
+      { name: "DPS", class: "Any", description: "condi, not scourge" },
+    ],
     requirementsProps: [{ name: LIRequirement.itemName, quantity: 10 }],
     authorId: userId,
   };

@@ -63,7 +63,7 @@ describe("RaidPost Service: update tests", () => {
       roles: [role],
     });
     const updateDto = createUpdateDto(raidPost.id, {
-      rolesProps: [{ name: "Healer" }],
+      rolesProps: [{ name: "Healer", class: "Druid" }],
     });
 
     await service.update(updateDto);

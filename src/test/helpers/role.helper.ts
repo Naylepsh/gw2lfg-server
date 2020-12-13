@@ -3,6 +3,7 @@ import { IRoleRepository } from "../../data/repositories/role/role.repository.in
 
 interface RoleProps {
   name: string;
+  class?: string;
 }
 
 export const createAndSaveRole = (
@@ -14,6 +15,6 @@ export const createAndSaveRole = (
 };
 
 export const createRole = (props: RoleProps) => {
-  const role = new Role(props);
+  const role = new Role({ class: "Any", ...props });
   return role;
 };

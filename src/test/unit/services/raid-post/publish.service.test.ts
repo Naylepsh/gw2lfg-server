@@ -57,7 +57,7 @@ describe("RaidPost service: publish tests", () => {
     const date = addHours(new Date(), 1);
     const dto = createPublishDto(userId, [], {
       date,
-      rolesProps: [{ name: "DPS" }],
+      rolesProps: [{ name: "DPS", class: "Any" }],
     });
     const rolesInDbBefore = uow.roles.entities.length;
 
