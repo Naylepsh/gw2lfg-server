@@ -23,7 +23,7 @@ export class CurrentUserJWTMiddleware {
       const decoded = this.decodeTokenService.decodeToken(token as string);
       const id = parseInt(decoded.id);
       const user = await this.userRepo.findById(id);
-      return user;
+      return user ?? null;
     } catch (e) {
       return null;
     }
