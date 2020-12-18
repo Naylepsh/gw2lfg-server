@@ -3,7 +3,7 @@ import {
   FindOneParams,
   IIdentifiableEntityRepository,
   IRepository,
-} from "../../../data/repositories/repository.interface";
+} from "@data/repositories/repository.interface";
 
 export class MemoryRepository<Entity> implements IRepository<Entity> {
   entities: Entity[] = [];
