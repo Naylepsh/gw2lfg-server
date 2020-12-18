@@ -27,9 +27,9 @@ describe("TypeORM posting repository tests", () => {
   });
 
   afterEach(async () => {
+    await requirementRepository.delete();
     await postRepository.delete();
     await userRepository.delete();
-    await requirementRepository.delete();
   });
 
   afterAll(async () => {

@@ -42,12 +42,10 @@ describe("whatever", () => {
     const user = await userRepo.save(
       new User({ username: "u", password: "p", apiKey: "a" })
     );
-    console.log("user saved");
 
     const roleRepo = conn.getRepository(Role);
     const role = new Role({ name: "dps", class: "Any" });
     await roleRepo.save(role);
-    console.log("role saved");
 
     const postRepo = conn.getRepository(RaidPost);
     const post = new RaidPost({
@@ -58,7 +56,6 @@ describe("whatever", () => {
       bosses: [boss],
     });
     await postRepo.save(post);
-    console.log("post saved");
 
     const roles = await roleRepo.find({});
 

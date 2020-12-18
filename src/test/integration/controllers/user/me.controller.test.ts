@@ -44,7 +44,6 @@ describe("MeController integration tests", () => {
 
   it("should return 401 if user is not logged in", async () => {
     const result = await request(app).get(url);
-    console.log(result.body);
 
     expect(result.status).toBe(401);
   });
