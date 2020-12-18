@@ -5,8 +5,8 @@ import {
   JsonController,
   Post,
 } from "routing-controllers";
-import { User } from "../../../data/entities/user.entity";
-import { PublishRaidPostService } from "../../../services/raid-post/publish.service";
+import { User } from "@data/entities/user.entity";
+import { PublishRaidPostService } from "@services/raid-post/publish.service";
 import {
   mapRaidPostToRaidPostResponse,
   RaidPostResponse,

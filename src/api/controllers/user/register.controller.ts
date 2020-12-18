@@ -7,11 +7,11 @@ import {
   OnUndefined,
   Post,
 } from "routing-controllers";
-import { User } from "../../../data/entities/user.entity";
+import { User } from "@data/entities/user.entity";
 import {
   RegisterService,
   UsernameTakenError,
-} from "../../../services/user/register";
+} from "@services/user/register";
 import { UnprocessableEntityError } from "../../http-errors/unprocessable-entity.error";
 import { CreateJwtService } from "../../services/token/create";
 

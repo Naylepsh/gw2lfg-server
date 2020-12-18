@@ -9,13 +9,13 @@ import {
   Param,
   Post,
 } from "routing-controllers";
-import { User } from "../../../data/entities/user.entity";
-import { EntityAlreadyExistsError } from "../../../services/errors/entity-already-exists.error";
-import { PostNotFoundError } from "../../../services/errors/entity-not-found.error";
+import { User } from "@data/entities/user.entity";
+import { EntityAlreadyExistsError } from "@services/errors/entity-already-exists.error";
+import { PostNotFoundError } from "@services/errors/entity-not-found.error";
 import {
   RequirementsNotSatisfiedError,
   SendJoinRequestService,
-} from "../../../services/join-request/send.service";
+} from "@services/join-request/send.service";
 import { UnprocessableEntityError } from "../../http-errors/unprocessable-entity.error";
 
 class SendJoinRequestDTO {

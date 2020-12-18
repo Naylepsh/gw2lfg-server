@@ -1,5 +1,5 @@
 import { CurrentUser, Get, JsonController } from "routing-controllers";
-import { User } from "../../../data/entities/user.entity";
+import { User } from "@data/entities/user.entity";
 import { mapUserToUserReponse } from "../../responses/user.response";
 
 @JsonController()

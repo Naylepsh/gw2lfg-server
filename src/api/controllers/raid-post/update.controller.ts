@@ -8,10 +8,10 @@ import {
   Param,
   Put,
 } from "routing-controllers";
-import { User } from "../../../data/entities/user.entity";
-import { PostAuthorshipService } from "../../../services/raid-post/authorship.service";
-import { EntityNotFoundError } from "../../../services/errors/entity-not-found.error";
-import { UpdateRaidPostService } from "../../../services/raid-post/update.service";
+import { User } from "@data/entities/user.entity";
+import { PostAuthorshipService } from "@services/raid-post/authorship.service";
+import { EntityNotFoundError } from "@services/errors/entity-not-found.error";
+import { UpdateRaidPostService } from "@services/raid-post/update.service";
 import { SaveRaidPostDTO } from "./save-raid-post.dto";
 import {
   mapRaidPostToRaidPostResponse,

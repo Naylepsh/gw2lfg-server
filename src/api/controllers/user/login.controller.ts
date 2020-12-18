@@ -9,7 +9,7 @@ import {
 import {
   InvalidLoginDetailsError,
   LoginService,
-} from "../../../services/user/login";
+} from "@services/user/login";
 import { CreateJwtService } from "../../services/token/create";
 
 class LoginDTO {

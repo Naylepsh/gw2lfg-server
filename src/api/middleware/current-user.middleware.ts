@@ -1,7 +1,7 @@
 import { Action } from "routing-controllers";
 import { Inject } from "typedi";
-import { IUserRepository } from "../../data/repositories/user/user.repository.interface";
-import { userRepositoryType } from "../../loaders/typedi.constants";
+import { IUserRepository } from "@data/repositories/user/user.repository.interface";
+import { userRepositoryType } from "@loaders/typedi.constants";
 import { DecodeJWTService } from "../services/token/decode";
 
 export class CurrentUserJWTMiddleware {

@@ -6,18 +6,18 @@ import {
   QueryParams,
 } from "routing-controllers";
 import { Inject } from "typedi";
-import { User } from "../../../data/entities/user.entity";
+import { User } from "@data/entities/user.entity";
 import {
   findRaidPostsServiceType,
   requirementsCheckServiceType,
-} from "../../../loaders/typedi.constants";
-import { FindRaidPostService } from "../../../services/raid-post/find.service";
-import { ICheckRequirementsService } from "../../../services/requirement/check-requirements.service.interface";
+} from "@loaders/typedi.constants";
+import { FindRaidPostService } from "@services/raid-post/find.service";
+import { ICheckRequirementsService } from "@services/requirement/check-requirements.service.interface";
 import {
   mapRaidPostToRaidPostResponse,
   RaidPostResponse,
 } from "../../responses/raid-post.response";
-import { RaidPost } from "../../../data/entities/raid-post.entitity";
+import { RaidPost } from "@data/entities/raid-post.entitity";
 
 type FindSingleRaidPostDTO = RaidPostResponse & {
   userMeetsRequirements: boolean;

@@ -1,5 +1,5 @@
 import { IsDateString, IsInt } from "class-validator";
-import { RequirementArgs } from "../../../data/entities/requirement.factory";
+import { RequirementArgs } from "@data/entities/requirement.factory";
 
 interface RolePropsDTO {
   name: string;

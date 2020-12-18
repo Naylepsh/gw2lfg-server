@@ -1,4 +1,4 @@
-import { User } from "../../data/entities/user.entity";
+import { User } from "@data/entities/user.entity";
 import { DTO } from "./dto";
 
 type UserDTO = DTO<User>;
