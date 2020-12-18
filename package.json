@@ -9,12 +9,12 @@
     "start": "node dist/index.js",
     "seed:bosses": "node dist/scripts/seed-bosses.js",
     "test": "jest",
-    "test:unit": "jest -i src/test/unit",
-    "test:integr": "jest -i src/test/integration",
-    "test:integr:controllers": "jest -i src/test/integration/controllers",
-    "test:integr:typeorm": "jest --detectOpenHandles -i src/test/integration/typeorm/",
-    "test:integr:services": "jest --detectOpenHandles -i src/test/integration/services/",
-    "test:e2e": "jest --detectOpenHandles -i src/test/e2e/"
+    "test:unit": "jest -i test/unit",
+    "test:integr": "jest -i test/integration",
+    "test:integr:controllers": "jest -i test/integration/controllers",
+    "test:integr:typeorm": "jest --detectOpenHandles -i test/integration/typeorm/",
+    "test:integr:services": "jest --detectOpenHandles -i test/integration/services/",
+    "test:e2e": "jest --detectOpenHandles -i test/e2e/"
   },
   "keywords": [],
   "author": "",
