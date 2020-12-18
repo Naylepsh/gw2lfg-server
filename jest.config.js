@@ -16,6 +16,5 @@ module.exports = {
     "^@data/(.*)$": "<rootDir>/src/data/$1",
     "^@loaders/(.*)$": "<rootDir>/src/loaders/$1",
     "^@services/(.*)$": "<rootDir>/src/services/$1",
-    "^@test/(.*)$": "<rootDir>/src/test/$1",
   },
 };

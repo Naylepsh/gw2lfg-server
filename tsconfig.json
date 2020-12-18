@@ -13,7 +13,6 @@
       "@data/*": ["src/data/*"],
       "@loaders/*": ["src/loaders/*"],
       "@services/*": ["src/services/*"],
-      "@test/*": ["src/test/*"],
     },
     "target": "ES2019",
     "module": "commonjs",

@@ -54,7 +54,6 @@
     "@config": "dist/config",
     "@data": "dist/data",
     "@loaders": "dist/loaders",
-    "@services": "dist/services",
-    "@test": "dist/services"
+    "@services": "dist/services"
   }
 }
