@@ -1,9 +1,9 @@
 import { Inject, Service } from "typedi";
-import { IRaidPostRepository } from "../../data/repositories/raid-post/raid-post.repository.interface";
+import { IRaidPostRepository } from "@data/repositories/raid-post/raid-post.repository.interface";
 import {
   findRaidPostsServiceType,
   raidPostRepositoryType,
-} from "../../loaders/typedi.constants";
+} from "@loaders/typedi.constants";
 
 export interface FindRaidPostParams {
   skip?: number;

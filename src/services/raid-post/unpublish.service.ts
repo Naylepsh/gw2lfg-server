@@ -1,6 +1,6 @@
 import { Inject, Service } from "typedi";
-import { IRaidPostUnitOfWork } from "../../data/units-of-work/raid-post/raid-post.unit-of-work.interface";
-import { raidPostUnitOfWorkType } from "../../loaders/typedi.constants";
+import { IRaidPostUnitOfWork } from "@data/units-of-work/raid-post/raid-post.unit-of-work.interface";
+import { raidPostUnitOfWorkType } from "@loaders/typedi.constants";
 
 export interface UnpublishRaidPostDTO {
   id: number;

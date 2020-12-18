@@ -1,7 +1,7 @@
 import { Service } from "typedi";
-import { Requirement } from "../../data/entities/requirement.entity";
-import { User } from "../../data/entities/user.entity";
-import { requirementsCheckServiceType } from "../../loaders/typedi.constants";
+import { Requirement } from "@data/entities/requirement.entity";
+import { User } from "@data/entities/user.entity";
+import { requirementsCheckServiceType } from "@loaders/typedi.constants";
 import { ICheckRequirementsService } from "./check-requirements.service.interface";
 
 @Service(requirementsCheckServiceType)

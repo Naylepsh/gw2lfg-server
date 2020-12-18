@@ -1,7 +1,7 @@
-import { IUserRepository } from "../../data/repositories/user/user.repository.interface";
+import { IUserRepository } from "@data/repositories/user/user.repository.interface";
 import { compare } from "bcrypt";
 import { Inject, Service } from "typedi";
-import { userRepositoryType } from "../../loaders/typedi.constants";
+import { userRepositoryType } from "@loaders/typedi.constants";
 
 export class InvalidLoginDetailsError extends Error {}
 
