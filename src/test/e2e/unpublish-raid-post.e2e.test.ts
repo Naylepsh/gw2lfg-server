@@ -1,10 +1,10 @@
 import "reflect-metadata";
 import request from "supertest";
 import Container from "typedi";
-import { loadDependencies } from "../../loaders";
-import { raidPostUnitOfWorkType } from "../../loaders/typedi.constants";
-import { IRaidPostUnitOfWork } from "../../data/units-of-work/raid-post/raid-post.unit-of-work.interface";
-import { CurrentUserJWTMiddleware } from "../../api/middleware/current-user.middleware";
+import { loadDependencies } from "@loaders/index";
+import { raidPostUnitOfWorkType } from "@loaders/typedi.constants";
+import { IRaidPostUnitOfWork } from "@data/units-of-work/raid-post/raid-post.unit-of-work.interface";
+import { CurrentUserJWTMiddleware } from "@api/middleware/current-user.middleware";
 import {
   seedUserAndGetToken,
   seedRaidBoss,

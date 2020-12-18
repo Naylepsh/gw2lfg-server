@@ -1,13 +1,13 @@
+import { CurrentUserJWTMiddleware } from "@api/middleware/current-user.middleware";
+import { raids } from "@data/entities/gw2-raids.json";
+import { RaidBoss } from "@data/entities/raid-boss.entity";
+import { RaidPost } from "@data/entities/raid-post.entitity";
+import { IRaidBossRepository } from "@data/repositories/raid-boss/raid-boss.repository.interface";
+import { IRaidPostUnitOfWork } from "@data/units-of-work/raid-post/raid-post.unit-of-work.interface";
+import { raidBossRepositoryType } from "@loaders/typedi.constants";
 import request from "supertest";
 import Container from "typedi";
-import { raids } from "../../data/entities/gw2-raids.json";
-import { raidBossRepositoryType } from "../../loaders/typedi.constants";
-import { RaidBoss } from "../../data/entities/raid-boss.entity";
 import { addHours } from "../unit/services/raid-post/hours.util";
-import { CurrentUserJWTMiddleware } from "../../api/middleware/current-user.middleware";
-import { IRaidBossRepository } from "../../data/repositories/raid-boss/raid-boss.repository.interface";
-import { RaidPost } from "../../data/entities/raid-post.entitity";
-import { IRaidPostUnitOfWork } from "../../data/units-of-work/raid-post/raid-post.unit-of-work.interface";
 
 interface IUser {
   username: string;

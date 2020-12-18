@@ -1,21 +1,19 @@
 import "reflect-metadata";
 import request from "supertest";
 import Container from "typedi";
-import { loadDependencies } from "../../loaders";
+import { CurrentUserJWTMiddleware } from "@api/middleware/current-user.middleware";
+import { RaidPost } from "@data/entities/raid-post.entitity";
+import { IJoinRequestRepository } from "@data/repositories/join-request/join-request.repository.interface";
+import { IRaidPostUnitOfWork } from "@data/units-of-work/raid-post/raid-post.unit-of-work.interface";
+import { loadDependencies } from "@loaders/index";
 import {
   joinRequestRepositoryType,
-  raidPostUnitOfWorkType,
-} from "../../loaders/typedi.constants";
-import { IRaidPostUnitOfWork } from "../../data/units-of-work/raid-post/raid-post.unit-of-work.interface";
-import { CurrentUserJWTMiddleware } from "../../api/middleware/current-user.middleware";
+  raidPostUnitOfWorkType
+} from "@loaders/typedi.constants";
 import {
-  seedUserAndGetToken,
-  seedRaidBoss,
-  seedRaidPost,
-  clean,
+  clean, seedRaidBoss,
+  seedRaidPost, seedUserAndGetToken
 } from "./seeders";
-import { RaidPost } from "../../data/entities/raid-post.entitity";
-import { IJoinRequestRepository } from "../../data/repositories/join-request/join-request.repository.interface";
 
 describe("Send raid post join request e2e tests", () => {
   const postsUrl = "/raid-posts";

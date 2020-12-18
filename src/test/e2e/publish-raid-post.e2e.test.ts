@@ -1,15 +1,15 @@
 import "reflect-metadata";
 import request from "supertest";
 import Container from "typedi";
-import { loadDependencies } from "../../loaders";
+import { loadDependencies } from "@loaders/index";
 import {
   raidPostRepositoryType,
   raidPostUnitOfWorkType,
-} from "../../loaders/typedi.constants";
+} from "@loaders/typedi.constants";
 import { addHours } from "../unit/services/raid-post/hours.util";
-import { IRaidPostUnitOfWork } from "../../data/units-of-work/raid-post/raid-post.unit-of-work.interface";
-import { CurrentUserJWTMiddleware } from "../../api/middleware/current-user.middleware";
-import { IRaidPostRepository } from "../../data/repositories/raid-post/raid-post.repository.interface";
+import { IRaidPostUnitOfWork } from "@data/units-of-work/raid-post/raid-post.unit-of-work.interface";
+import { CurrentUserJWTMiddleware } from "@api/middleware/current-user.middleware";
+import { IRaidPostRepository } from "@data/repositories/raid-post/raid-post.repository.interface";
 import { seedUserAndGetToken, seedRaidBoss, clean } from "./seeders";
 
 describe("Publish raid post e2e tests", () => {

@@ -1,9 +1,9 @@
 import "reflect-metadata";
 import request from "supertest";
 import Container from "typedi";
-import { IUserRepository } from "../../data/repositories/user/user.repository.interface";
-import { loadDependencies } from "../../loaders";
-import { userRepositoryType } from "../../loaders/typedi.constants";
+import { IUserRepository } from "@data/repositories/user/user.repository.interface";
+import { loadDependencies } from "@loaders/index";
+import { userRepositoryType } from "@loaders/typedi.constants";
 
 describe("Register e2e tests", () => {
   const url = "/register";

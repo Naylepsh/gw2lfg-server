@@ -2,9 +2,9 @@ import "reflect-metadata";
 import request from "supertest";
 import * as jwt from "jsonwebtoken";
 import Container from "typedi";
-import { IUserRepository } from "../../data/repositories/user/user.repository.interface";
-import { loadDependencies } from "../../loaders";
-import { userRepositoryType } from "../../loaders/typedi.constants";
+import { IUserRepository } from "@data/repositories/user/user.repository.interface";
+import { loadDependencies } from "@loaders/index";
+import { userRepositoryType } from "@loaders/typedi.constants";
 import { seedUser } from "./seeders";
 
 describe("Login e2e tests", () => {
