@@ -13,9 +13,9 @@ import { nameToId } from "@services/gw2-items/gw2-items.service";
 import { Item } from "@services/gw2-items/item.interface";
 import { SendJoinRequestService } from "@services/join-request/send.service";
 import { CheckItemRequirementsService } from "@services/requirement/check-item-requirements.service";
-import { JoinRequestMemoryRepository } from "@test/helpers/repositories/join-request.memory-repository";
-import { RaidPostMemoryRepository } from "@test/helpers/repositories/raid-post.memory-repository";
-import { UserMemoryRepository } from "@test/helpers/repositories/user.memory-repository";
+import { JoinRequestMemoryRepository } from "../../../helpers/repositories/join-request.memory-repository";
+import { RaidPostMemoryRepository } from "../../../helpers/repositories/raid-post.memory-repository";
+import { UserMemoryRepository } from "../../../helpers/repositories/user.memory-repository";
 import { storage } from "../item-storage";
 
 describe("JoinRequest Service: send tests", () => {

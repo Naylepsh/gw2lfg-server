@@ -1,21 +1,21 @@
 import "reflect-metadata";
 import request from "supertest";
-import { Action, createExpressServer, useContainer } from "routing-controllers";
 import Container from "typedi";
-import { SendRaidJoinRequestController } from "../../../../api/controllers/join-request/send.controller";
-import { CurrentUserJWTMiddleware } from "../../../../api/middleware/current-user.middleware";
-import { GetItems } from "../../../../services/gw2-api/gw2-api.service";
-import { SendJoinRequestService } from "../../../../services/join-request/send.service";
+import { SendRaidJoinRequestController } from "@api/controllers/join-request/send.controller";
+import { CurrentUserJWTMiddleware } from "@api/middleware/current-user.middleware";
+import { RaidPost } from "@data/entities/raid-post.entitity";
+import { LIRequirement } from "@data/entities/requirement.entity";
+import { User } from "@data/entities/user.entity";
+import { GetItems } from "@services/gw2-api/gw2-api.service";
+import { nameToId } from "@services/gw2-items/gw2-items.service";
+import { Item } from "@services/gw2-items/item.interface";
+import { SendJoinRequestService } from "@services/join-request/send.service";
+import { CheckItemRequirementsService } from "@services/requirement/check-item-requirements.service";
+import { Action, createExpressServer, useContainer } from "routing-controllers";
 import { JoinRequestMemoryRepository } from "../../../helpers/repositories/join-request.memory-repository";
 import { RaidPostMemoryUnitOfWork } from "../../../helpers/uows/raid-post.memory-unit-of-work";
 import { MyStorage } from "../../../unit/services/item-storage";
-import { RaidPost } from "../../../../data/entities/raid-post.entitity";
-import { User } from "../../../../data/entities/user.entity";
-import { LIRequirement } from "../../../../data/entities/requirement.entity";
-import { nameToId } from "../../../../services/gw2-items/gw2-items.service";
-import { Item } from "../../../../services/gw2-items/item.interface";
 import { seedDbWithOnePost } from "../raid-post/seed-db";
-import { CheckItemRequirementsService } from "../../../../services/requirement/check-item-requirements.service";
 
 describe("SendRaidJoinRequestController integration tests", () => {
   let joinRequestRepo: JoinRequestMemoryRepository;

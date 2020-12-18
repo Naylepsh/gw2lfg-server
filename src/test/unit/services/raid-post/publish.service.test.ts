@@ -1,11 +1,11 @@
 import { LIRequirement } from "@data/entities/requirement.entity";
 import {
   PublishDTO,
-  PublishRaidPostService,
+  PublishRaidPostService
 } from "@services/raid-post/publish.service";
-import { createAndSaveRaidBoss } from "@test/helpers/raid-boss.helper";
-import { RaidPostMemoryUnitOfWork } from "@test/helpers/uows/raid-post.memory-unit-of-work";
-import { createAndSaveUser } from "@test/helpers/user.helper";
+import { createAndSaveRaidBoss } from "../../../helpers/raid-boss.helper";
+import { RaidPostMemoryUnitOfWork } from "../../../helpers/uows/raid-post.memory-unit-of-work";
+import { createAndSaveUser } from "../../../helpers/user.helper";
 import { addHours, subtractHours } from "./hours.util";
 
 describe("RaidPost service: publish tests", () => {

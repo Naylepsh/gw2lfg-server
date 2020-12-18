@@ -1,19 +1,18 @@
 import "reflect-metadata";
-// import * as jwt from "jsonwebtoken";
-import request from "supertest";
 import { Action, createExpressServer, useContainer } from "routing-controllers";
+import request from "supertest";
 import Container from "typedi";
-import { FindRaidPostsController } from "../../../../api/controllers/raid-post/find.controller";
-import { CurrentUserJWTMiddleware } from "../../../../api/middleware/current-user.middleware";
-import { FindRaidPostService } from "../../../../services/raid-post/find.service";
+import { FindRaidPostsController } from "@api/controllers/raid-post/find.controller";
+import { CurrentUserJWTMiddleware } from "@api/middleware/current-user.middleware";
+import { LIRequirement } from "@data/entities/requirement.entity";
+import { GetItems } from "@services/gw2-api/gw2-api.service";
+import { nameToId } from "@services/gw2-items/gw2-items.service";
+import { Item } from "@services/gw2-items/item.interface";
+import { FindRaidPostService } from "@services/raid-post/find.service";
+import { CheckItemRequirementsService } from "@services/requirement/check-item-requirements.service";
 import { RaidPostMemoryUnitOfWork } from "../../../helpers/uows/raid-post.memory-unit-of-work";
-import { seedDbWithOnePost } from "./seed-db";
-import { LIRequirement } from "../../../../data/entities/requirement.entity";
-import { GetItems } from "../../../../services/gw2-api/gw2-api.service";
-import { nameToId } from "../../../../services/gw2-items/gw2-items.service";
-import { Item } from "../../../../services/gw2-items/item.interface";
-import { CheckItemRequirementsService } from "../../../../services/requirement/check-item-requirements.service";
 import { MyStorage } from "../../../unit/services/item-storage";
+import { seedDbWithOnePost } from "./seed-db";
 
 describe("FindRaidPostsController integration tests", () => {
   const url = "/raid-posts";

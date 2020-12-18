@@ -1,9 +1,9 @@
 import { Connection } from "typeorm";
-import { RaidBoss } from "../../../data/entities/raid-boss.entity";
-import { RaidPost } from "../../../data/entities/raid-post.entitity";
-import { Role } from "../../../data/entities/role.entity";
-import { User } from "../../../data/entities/user.entity";
-import { loadTypeORM } from "../../../loaders/typeorm.loader";
+import { RaidBoss } from "@data/entities/raid-boss.entity";
+import { RaidPost } from "@data/entities/raid-post.entitity";
+import { Role } from "@data/entities/role.entity";
+import { User } from "@data/entities/user.entity";
+import { loadTypeORM } from "@loaders/typeorm.loader";
 
 describe("whatever", () => {
   let conn: Connection;

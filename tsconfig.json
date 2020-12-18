@@ -8,8 +8,10 @@
     "baseUrl": "./",
     "paths": {
       "@root/*": ["src/*"],
+      "@api/*": ["src/api/*"],
       "@config/*": ["src/config/*"],
       "@data/*": ["src/data/*"],
+      "@loaders/*": ["src/loaders/*"],
       "@services/*": ["src/services/*"],
       "@test/*": ["src/test/*"],
     },

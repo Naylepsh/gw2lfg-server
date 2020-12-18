@@ -1,13 +1,13 @@
 import "reflect-metadata";
 import request from "supertest";
 import { Container } from "typedi";
-import { RegisterUserController } from "../../../../api/controllers/user/register.controller";
-import { User } from "../../../../data/entities/user.entity";
-import { IUserRepository } from "../../../../data/repositories/user/user.repository.interface";
-import { RegisterService } from "../../../../services/user/register";
+import * as jwt from "jsonwebtoken";
+import { RegisterUserController } from "@api/controllers/user/register.controller";
+import { User } from "@data/entities/user.entity";
+import { IUserRepository } from "@data/repositories/user/user.repository.interface";
+import { RegisterService } from "@services/user/register";
 import { UserMemoryRepository } from "../../../helpers/repositories/user.memory-repository";
 import { createExpressServer, useContainer } from "routing-controllers";
-import * as jwt from "jsonwebtoken";
 
 describe("RegisterUserController integration tests", () => {
   const url = "/register";

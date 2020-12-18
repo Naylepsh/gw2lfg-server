@@ -1,18 +1,18 @@
 import "reflect-metadata";
+import { Action, createExpressServer, useContainer } from "routing-controllers";
 import request from "supertest";
-import { createExpressServer, Action, useContainer } from "routing-controllers";
 import Container from "typedi";
-import { UpdateRaidPostController } from "../../../../api/controllers/raid-post/update.controller";
-import { CurrentUserJWTMiddleware } from "../../../../api/middleware/current-user.middleware";
-import { User } from "../../../../data/entities/user.entity";
-import { PostAuthorshipService } from "../../../../services/raid-post/authorship.service";
-import { UpdateRaidPostService } from "../../../../services/raid-post/update.service";
-import { RegisterService } from "../../../../services/user/register";
+import { UpdateRaidPostController } from "@api/controllers/raid-post/update.controller";
+import { CurrentUserJWTMiddleware } from "@api/middleware/current-user.middleware";
+import { CreateJwtService } from "@api/services/token/create";
+import { RaidPost } from "@data/entities/raid-post.entitity";
+import { User } from "@data/entities/user.entity";
+import { PostAuthorshipService } from "@services/raid-post/authorship.service";
+import { UpdateRaidPostService } from "@services/raid-post/update.service";
+import { RegisterService } from "@services/user/register";
 import { RaidPostMemoryUnitOfWork } from "../../../helpers/uows/raid-post.memory-unit-of-work";
 import { addHours } from "../../../unit/services/raid-post/hours.util";
 import { seedDbWithOnePost } from "./seed-db";
-import { RaidPost } from "../../../../data/entities/raid-post.entitity";
-import { CreateJwtService } from "../../../../api/services/token/create";
 
 describe("UpdateRaidPostController integration tests", () => {
   let url = "/raid-posts";

@@ -3,12 +3,12 @@ import {
   UpdateRaidPostDTO,
   UpdateRaidPostService,
 } from "@services/raid-post/update.service";
-import { createAndSaveLIRequirement } from "@test/helpers/li-requirement.helper";
-import { createAndSaveRaidBoss } from "@test/helpers/raid-boss.helper";
-import { createAndSaveRaidPost } from "@test/helpers/raid-post.helper";
-import { createAndSaveRole } from "@test/helpers/role.helper";
-import { RaidPostMemoryUnitOfWork } from "@test/helpers/uows/raid-post.memory-unit-of-work";
-import { createAndSaveUser } from "@test/helpers/user.helper";
+import { createAndSaveLIRequirement } from "../../../helpers/li-requirement.helper";
+import { createAndSaveRaidBoss } from "../../../helpers/raid-boss.helper";
+import { createAndSaveRaidPost } from "../../../helpers/raid-post.helper";
+import { createAndSaveRole } from "../../../helpers/role.helper";
+import { RaidPostMemoryUnitOfWork } from "../../../helpers/uows/raid-post.memory-unit-of-work";
+import { createAndSaveUser } from "../../../helpers/user.helper";
 import { addHours, subtractHours } from "./hours.util";
 
 describe("RaidPost Service: update tests", () => {

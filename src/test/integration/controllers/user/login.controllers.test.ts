@@ -3,11 +3,11 @@ import * as jwt from "jsonwebtoken";
 import { createExpressServer, useContainer } from "routing-controllers";
 import request from "supertest";
 import Container from "typedi";
-import { LoginUserController } from "../../../../api/controllers/user/login.controller";
-import { User } from "../../../../data/entities/user.entity";
-import { IUserRepository } from "../../../../data/repositories/user/user.repository.interface";
-import { LoginService } from "../../../../services/user/login";
-import { RegisterService } from "../../../../services/user/register";
+import { LoginUserController } from "@api/controllers/user/login.controller";
+import { User } from "@data/entities/user.entity";
+import { IUserRepository } from "@data/repositories/user/user.repository.interface";
+import { LoginService } from "@services/user/login";
+import { RegisterService } from "@services/user/register";
 import { UserMemoryRepository } from "../../../helpers/repositories/user.memory-repository";
 
 describe("LoginUserController integration tests", () => {

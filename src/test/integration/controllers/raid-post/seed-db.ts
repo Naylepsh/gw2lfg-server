@@ -1,11 +1,11 @@
-import { RaidBoss } from "../../../../data/entities/raid-boss.entity";
-import { User } from "../../../../data/entities/user.entity";
-import { RegisterService } from "../../../../services/user/register";
+import { CreateJwtService } from "@api/services/token/create";
+import { RaidBoss } from "@data/entities/raid-boss.entity";
+import { LIRequirement } from "@data/entities/requirement.entity";
+import { User } from "@data/entities/user.entity";
+import { PublishRaidPostService } from "@services/raid-post/publish.service";
+import { RegisterService } from "@services/user/register";
 import { RaidPostMemoryUnitOfWork } from "../../../helpers/uows/raid-post.memory-unit-of-work";
-import { PublishRaidPostService } from "../../../../services/raid-post/publish.service";
 import { addHours } from "../../../unit/services/raid-post/hours.util";
-import { LIRequirement } from "../../../../data/entities/requirement.entity";
-import { CreateJwtService } from "../../../../api/services/token/create";
 
 export async function seedDbWithOnePost(uow: RaidPostMemoryUnitOfWork) {
   const registerService = new RegisterService(uow.users);

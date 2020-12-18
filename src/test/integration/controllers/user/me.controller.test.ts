@@ -1,14 +1,14 @@
 import "reflect-metadata";
-import request from "supertest";
 import { Action, createExpressServer, useContainer } from "routing-controllers";
+import request from "supertest";
 import Container from "typedi";
-import { User } from "../../../../data/entities/user.entity";
-import { IUserRepository } from "../../../../data/repositories/user/user.repository.interface";
-import { RegisterService } from "../../../../services/user/register";
+import { MeController } from "@api/controllers/user/me.controller";
+import { CurrentUserJWTMiddleware } from "@api/middleware/current-user.middleware";
+import { CreateJwtService } from "@api/services/token/create";
+import { User } from "@data/entities/user.entity";
+import { IUserRepository } from "@data/repositories/user/user.repository.interface";
+import { RegisterService } from "@services/user/register";
 import { UserMemoryRepository } from "../../../helpers/repositories/user.memory-repository";
-import { CurrentUserJWTMiddleware } from "../../../../api/middleware/current-user.middleware";
-import { CreateJwtService } from "../../../../api/services/token/create";
-import { MeController } from "../../../../api/controllers/user/me.controller";
 
 describe("MeController integration tests", () => {
   const url = "/me";

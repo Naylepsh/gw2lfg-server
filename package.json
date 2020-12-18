@@ -50,8 +50,10 @@
   },
   "_moduleAliases": {
     "@root": "dist",
+    "@api": "dist/api",
     "@config": "dist/config",
     "@data": "dist/data",
+    "@loaders": "dist/loaders",
     "@services": "dist/services",
     "@test": "dist/services"
   }
