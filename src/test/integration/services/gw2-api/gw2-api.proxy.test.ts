@@ -15,6 +15,7 @@ const getSomeCharacterName = async (apiKey: string) => {
 
 describe("GW2 API proxy test", () => {
   let apiKey: string;
+  const timeLimit = 10000;
 
   beforeAll(() => {
     assert(typeof process.env.GW2API_TOKEN !== "undefined");
@@ -22,39 +23,59 @@ describe("GW2 API proxy test", () => {
   });
 
   describe("fetch items from bank", () => {
-    it("should return items when valid api key was passed", async () => {
-      const items = await fetchItemsFromBank(apiKey);
+    it(
+      "should return items when valid api key was passed",
+      async () => {
+        const items = await fetchItemsFromBank(apiKey);
 
-      expect(items.length).toBeGreaterThanOrEqual(0);
-    });
+        expect(items.length).toBeGreaterThanOrEqual(0);
+      },
+      timeLimit
+    );
 
-    it("should throw an error when invalid api key was passed", async () => {
-      const invalidApiKey = "invalid-key";
+    it(
+      "should throw an error when invalid api key was passed",
+      async () => {
+        const invalidApiKey = "invalid-key";
 
-      expect(fetchItemsFromBank(invalidApiKey)).rejects.toThrow();
-    });
+        expect(fetchItemsFromBank(invalidApiKey)).rejects.toThrow();
+      },
+      timeLimit
+    );
   });
 
   describe("fetch item from character", () => {
-    it("should return items from a character when a valid api key was passed", async () => {
-      const name = await getSomeCharacterName(apiKey);
-      const items = await fetchItemsFromCharacter(name, apiKey);
+    it(
+      "should return items from a character when a valid api key was passed",
+      async () => {
+        const name = await getSomeCharacterName(apiKey);
+        const items = await fetchItemsFromCharacter(name, apiKey);
 
-      expect(items.length).toBeGreaterThanOrEqual(0);
-    });
+        expect(items.length).toBeGreaterThanOrEqual(0);
+      },
+      timeLimit
+    );
 
-    it("should throw an error when a character does not exist", async () => {
-      // characters names cannot include numbers
-      const charName = "-1";
+    it(
+      "should throw an error when a character does not exist",
+      async () => {
+        // characters names cannot include numbers
+        const charName = "-1";
 
-      expect(fetchItemsFromCharacter(charName, apiKey)).rejects.toThrow();
-    });
+        expect(fetchItemsFromCharacter(charName, apiKey)).rejects.toThrow();
+      },
+      timeLimit
+    );
 
-    it("should throw an error when invalid api key was passed", async () => {
-      const name = await getSomeCharacterName(apiKey);
-      const invalidApiKey = "invalid-key";
+    it(
+      "should throw an error when invalid api key was passed",
+      async () => {
+        const name = await getSomeCharacterName(apiKey);
+        const invalidApiKey = "invalid-key";
 
-      expect(fetchItemsFromCharacter(name, invalidApiKey)).rejects.toThrow();
-    });
+        expect(fetchItemsFromCharacter(name, invalidApiKey)).rejects.toThrow();
+      },
+      timeLimit
+    );
   });
 });
