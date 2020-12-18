@@ -50,22 +50,9 @@
   },
   "_moduleAliases": {
     "@root": "dist",
-    "@services": "dist/services"
-  },
-  "jest": {
-    "roots": [
-      "<rootDir>/src"
-    ],
-    "testMatch": [
-      "**/__tests__/**/*.+(ts|tsx|js)",
-      "**/?(*.)+(spec|test).+(ts|tsx|js)"
-    ],
-    "transform": {
-      "^.+\\.(ts|tsx)$": "ts-jest"
-    },
-    "moduleNameMapper": {
-      "^@root/(.*)$": "<rootDir>/src/$1",
-      "^@services/(.*)$": "<rootDir>/src/services/$1"
-    }
+    "@config": "dist/config",
+    "@data": "dist/data",
+    "@services": "dist/services",
+    "@test": "dist/services"
   }
 }

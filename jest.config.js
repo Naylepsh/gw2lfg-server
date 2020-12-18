@@ -9,4 +9,11 @@ module.exports = {
   transform: {
     "^.+\\.(ts|tsx)$": "ts-jest",
   },
+  moduleNameMapper: {
+    "^@root/(.*)$": "<rootDir>/src/$1",
+    "^@config/(.*)$": "<rootDir>/src/config/$1",
+    "^@data/(.*)$": "<rootDir>/src/data/$1",
+    "^@services/(.*)$": "<rootDir>/src/services/$1",
+    "^@test/(.*)$": "<rootDir>/src/test/$1",
+  },
 };

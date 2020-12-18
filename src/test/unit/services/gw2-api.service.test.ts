@@ -1,8 +1,8 @@
 import {
   GetItems,
   GetItemsFromMultipleSources,
-} from "../../../services/gw2-api/gw2-api.service";
-import { Item } from "../../../services/gw2-items/item.interface";
+} from "@services/gw2-api/gw2-api.service";
+import { Item } from "@services/gw2-items/item.interface";
 import { storage, createFetchersForItemGroups } from "./item-storage";
 
 describe("test gw2 api service", () => {

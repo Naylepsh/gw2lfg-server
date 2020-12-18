@@ -1,8 +1,8 @@
-import { LoginService } from "../../../../services/user/login";
-import { RegisterService } from "../../../../services/user/register";
-import { createDummyUser } from "../../../helpers/user.helper";
-import { UserMemoryRepository } from "../../../helpers/repositories/user.memory-repository";
-import { IUserRepository } from "../../../../data/repositories/user/user.repository.interface";
+import { IUserRepository } from "@data/repositories/user/user.repository.interface";
+import { LoginService } from "@services/user/login";
+import { RegisterService } from "@services/user/register";
+import { UserMemoryRepository } from "@test/helpers/repositories/user.memory-repository";
+import { createDummyUser } from "@test/helpers/user.helper";
 
 describe("User service: login tests", () => {
   let userRepository: IUserRepository;

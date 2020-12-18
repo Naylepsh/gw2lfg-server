@@ -8,8 +8,10 @@
     "baseUrl": "./",
     "paths": {
       "@root/*": ["src/*"],
+      "@config/*": ["src/config/*"],
+      "@data/*": ["src/data/*"],
       "@services/*": ["src/services/*"],
-      "@test/*": ["test/*"],
+      "@test/*": ["src/test/*"],
     },
     "target": "ES2019",
     "module": "commonjs",
