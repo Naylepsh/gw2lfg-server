@@ -48,7 +48,7 @@ export class GetItems implements ConcreteItemsFetcher {
 
       return ids.map((id) => ({ id, count: countItemStacks(items, id) }));
     } catch (error) {
-      throw error;
+      return [];
     }
   }
 }
@@ -75,15 +75,19 @@ export class GetItemsFromEntireAccount implements ConcreteItemsFetcher {
   constructor() {}
 
   async fetch(ids: string[], apiKey: string): Promise<Item[]> {
-    const characters = await fetchCharacters(apiKey);
-    const characterItemFetchers = await Promise.all(
-      characters.map((character) => getItemFromCharacter(character))
-    );
+    try {
+      const characters = await fetchCharacters(apiKey);
+      const characterItemFetchers = await Promise.all(
+        characters.map((character) => getItemFromCharacter(character))
+      );
 
-    return new GetItemsFromMultipleSources([
-      ...characterItemFetchers,
-      getItemFromBank,
-      getItemFromSharedInventory,
-    ]).fetch(ids, apiKey);
+      return new GetItemsFromMultipleSources([
+        ...characterItemFetchers,
+        getItemFromBank,
+        getItemFromSharedInventory,
+      ]).fetch(ids, apiKey);
+    } catch (error) {
+      return [];
+    }
   }
 }

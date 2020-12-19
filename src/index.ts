@@ -1,4 +1,5 @@
 import "reflect-metadata";
+import "module-alias/register";
 import "./data/repositories/user/user.repository";
 import { loadDependencies } from "./loaders";
 import { config } from "./config";
