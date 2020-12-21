@@ -29,6 +29,6 @@ export class FindRaidPostService {
     if (posts.length === 0) {
       return { posts, hasMore: false };
     }
-    return { posts: posts.slice(0, take), hasMore: posts.length === take };
+    return { posts: posts.slice(0, take), hasMore: posts.length === take + 1 };
   }
 }
