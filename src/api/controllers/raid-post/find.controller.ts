@@ -28,14 +28,31 @@ type FindRaidPostsDTO = FindSingleRaidPostDTO[];
 class FindRaidPostsQueryParams {
   @IsOptional()
   @IsPositive()
-  take?: number;
+  take: number = 10;
 
   @IsOptional()
   @Min(0)
-  skip?: number;
+  skip: number = 0;
 }
 
-interface FindRaidPostsResponse extends IRouteResponse<FindRaidPostsDTO> {}
+/* TODO (maybe):
+use something like
+{
+  pagination: {
+    skip: ??
+    take: ??
+    total: ??
+  },
+  data: [...],
+  links: {
+    prev: ??,
+    next: ??
+  }
+}
+*/
+interface FindRaidPostsResponse extends IRouteResponse<FindRaidPostsDTO> {
+  hasMore: boolean;
+}
 
 @JsonController()
 export class FindRaidPostsController {
@@ -51,11 +68,11 @@ export class FindRaidPostsController {
     @QueryParams() query: FindRaidPostsQueryParams,
     @CurrentUser() user?: User
   ): Promise<FindRaidPostsResponse> {
-    const posts = await this.findService.find(query);
+    const { posts, hasMore } = await this.findService.find(query);
     const _posts = user
       ? await this.checkIfUserMeetsPostsRequirements(posts, user)
       : this.unsatisfyEachRequirement(posts);
-    return { data: _posts.map(mapRaidPostToRaidPostResponse) };
+    return { data: _posts.map(mapRaidPostToRaidPostResponse), hasMore };
   }
 
   private async checkIfUserMeetsPostsRequirements(

@@ -6,8 +6,8 @@ import {
 } from "@loaders/typedi.constants";
 
 export interface FindRaidPostParams {
-  skip?: number;
-  take?: number;
+  skip: number;
+  take: number;
 }
 
 @Service(findRaidPostsServiceType)
@@ -17,8 +17,18 @@ export class FindRaidPostService {
     private readonly repository: IRaidPostRepository
   ) {}
 
-  find(params: FindRaidPostParams) {
+  async find(params: FindRaidPostParams) {
     const { skip, take } = params;
-    return this.repository.findMany({ order: { date: "DESC" }, skip, take });
+
+    const posts = await this.repository.findMany({
+      order: { date: "DESC" },
+      skip,
+      take: take + 1,
+    });
+
+    if (posts.length === 0) {
+      return { posts, hasMore: false };
+    }
+    return { posts: posts.slice(0, take), hasMore: posts.length === take };
   }
 }
