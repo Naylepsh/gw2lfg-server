@@ -17,10 +17,14 @@ import {
   SendJoinRequestService,
 } from "@services/join-request/send.service";
 import { UnprocessableEntityError } from "../../http-errors/unprocessable-entity.error";
+import { IRouteResponse } from "../../responses/routes/route.response.interface";
+import { JoinRequest } from "../../../data/entities/join-request.entity";
 
 class SendJoinRequestDTO {
   roleId: number;
 }
+
+interface SendJoinRequestResponse extends IRouteResponse<JoinRequest> {}
 
 @JsonController()
 export class SendRaidJoinRequestController {
@@ -32,13 +36,14 @@ export class SendRaidJoinRequestController {
     @CurrentUser({ required: true }) user: User,
     @Param("id") postId: number,
     @Body({ validate: false }) dto: SendJoinRequestDTO
-  ) {
+  ): Promise<SendJoinRequestResponse> {
     try {
-      return await this.joinRequestService.sendJoinRequest({
+      const joinRequest = await this.joinRequestService.sendJoinRequest({
         userId: user.id,
         postId,
         roleId: dto.roleId,
       });
+      return { data: joinRequest };
     } catch (e) {
       if (e instanceof PostNotFoundError) {
         throw new NotFoundError(e.message);
