@@ -42,8 +42,9 @@ describe("Find raid posts e2e tests", () => {
         .get(findUrl)
         .set(CurrentUserJWTMiddleware.AUTH_HEADER, token);
 
-      expect(body.length).toBe(1);
-      expect(body[0]).toHaveProperty("id", postId);
+        const posts = body.data
+      expect(posts.length).toBe(1);
+      expect(posts[0]).toHaveProperty("id", postId);
     },
     timelimit
   );

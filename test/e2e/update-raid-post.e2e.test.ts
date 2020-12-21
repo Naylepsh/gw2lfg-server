@@ -49,8 +49,9 @@ describe("Update raid post e2e tests", () => {
       .put(toUrl(post.id))
       .send(postDto)
       .set(CurrentUserJWTMiddleware.AUTH_HEADER, token);
-    const { body: posts } = await request(app).get(raidPostsUrl);
+    const { body} = await request(app).get(raidPostsUrl);
 
+    const posts = body.data
     expect(posts.length).toBe(1);
     expect(posts[0]).toHaveProperty("description", postDto.description);
   });

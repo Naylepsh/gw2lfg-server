@@ -1,6 +1,6 @@
 import { RaidPost } from "@data/entities/raid-post.entitity";
 import { DTO } from "./dto";
-import { mapUserToUserReponse, UserResponse } from "./user.response";
+import { mapUserToUserReponse, UserResponse } from "./user.entity.response";
 
 type RaidPostDTO = DTO<RaidPost>;
 

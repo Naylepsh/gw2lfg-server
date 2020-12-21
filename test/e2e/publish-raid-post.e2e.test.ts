@@ -49,7 +49,7 @@ describe("Publish raid post e2e tests", () => {
     const raidPostRepo: IRaidPostRepository = container.get(
       raidPostRepositoryType
     );
-    const postInDbAfer = await raidPostRepo.findById(body.id);
+    const postInDbAfer = await raidPostRepo.findById(body.data.id);
     expect(postInDbAfer).toBeDefined();
     expect(postInDbAfer).toHaveProperty("server", post.server);
   });

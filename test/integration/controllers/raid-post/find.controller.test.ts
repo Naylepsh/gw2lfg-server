@@ -78,8 +78,9 @@ describe("FindRaidPostsController integration tests", () => {
       `${url}?take=${queryParams.take}&skip=${queryParams.skip}`
     );
 
-    expect(res.body.length).toBeGreaterThan(0);
-    for (const post of res.body as any[]) {
+    const posts = res.body.data;
+    expect(posts.length).toBeGreaterThan(0);
+    for (const post of posts as any[]) {
       expect(post).toHaveProperty("userMeetsRequirements", false);
     }
   });
@@ -90,10 +91,10 @@ describe("FindRaidPostsController integration tests", () => {
       `${url}?take=${queryParams.take}&skip=${queryParams.skip}`
     );
 
-    const requirementChecks = res.body.map(
+    const requirementChecks = res.body.data.map(
       (post: { userMeetsRequirements: boolean }) => post.userMeetsRequirements
     );
-    expect(res.body.length).toBeGreaterThan(0);
+    expect(res.body.data.length).toBeGreaterThan(0);
     expect(requirementChecks.some((check: boolean) => check));
   });
 });

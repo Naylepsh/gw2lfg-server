@@ -16,7 +16,10 @@ import { SaveRaidPostDTO } from "./save-raid-post.dto";
 import {
   mapRaidPostToRaidPostResponse,
   RaidPostResponse,
-} from "../../responses/raid-post.response";
+} from "../../responses/entities/raid-post.entity.response";
+import { IRouteResponse } from "../../responses/routes/route.response.interface";
+
+interface UpdateRaidPostResponse extends IRouteResponse<RaidPostResponse> {}
 
 @JsonController()
 export class UpdateRaidPostController {
@@ -30,7 +33,7 @@ export class UpdateRaidPostController {
     @CurrentUser({ required: true }) user: User,
     @Param("id") postId: number,
     @Body() dto: SaveRaidPostDTO
-  ): Promise<RaidPostResponse> {
+  ): Promise<UpdateRaidPostResponse> {
     try {
       const isAuthor = await this.authorshipService.isPostAuthor({
         userId: user.id,
@@ -39,7 +42,7 @@ export class UpdateRaidPostController {
       if (!isAuthor) throw new ForbiddenError();
 
       const post = await this.updateService.update({ ...dto, id: postId });
-      return mapRaidPostToRaidPostResponse(post);
+      return { data: mapRaidPostToRaidPostResponse(post)}
     } catch (e) {
       if (e instanceof EntityNotFoundError) {
         throw new NotFoundError();

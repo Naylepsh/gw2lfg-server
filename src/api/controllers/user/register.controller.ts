@@ -8,12 +8,10 @@ import {
   Post,
 } from "routing-controllers";
 import { User } from "@data/entities/user.entity";
-import {
-  RegisterService,
-  UsernameTakenError,
-} from "@services/user/register";
+import { RegisterService, UsernameTakenError } from "@services/user/register";
 import { UnprocessableEntityError } from "../../http-errors/unprocessable-entity.error";
 import { CreateJwtService } from "../../services/token/create";
+import { IRouteResponse } from "../../responses/routes/route.response.interface";
 
 class RegisterDTO {
   @MinLength(6)
@@ -26,6 +24,8 @@ class RegisterDTO {
   apiKey: string;
 }
 
+interface RegisterResponse extends IRouteResponse<{ token: string }> {}
+
 @JsonController()
 export class RegisterUserController {
   authService = new CreateJwtService();
@@ -34,12 +34,14 @@ export class RegisterUserController {
   @HttpCode(201)
   @OnUndefined(201)
   @Post("/register")
-  async register(@Body({ validate: true }) dto: RegisterDTO) {
+  async register(
+    @Body({ validate: true }) dto: RegisterDTO
+  ): Promise<RegisterResponse> {
     try {
       const user = new User(dto);
       const registeredUser = await this.registerService.register(user);
       const token = this.authService.createToken(registeredUser.id);
-      return token;
+      return { data: { token } };
     } catch (e) {
       if (e instanceof UsernameTakenError) {
         throw new UnprocessableEntityError(e.message);

@@ -26,9 +26,10 @@ describe("Login e2e tests", () => {
   it("should return a jwt", async () => {
     const user = await seedUser(app);
 
-    const { body: token } = await request(app)
+    const response = await request(app)
       .post(loginUrl)
       .send({ username: user.username, password: user.password });
+    const token = response.body.data.token;
     const decoded = jwt.decode(token);
 
     expect(decoded).toHaveProperty("id");

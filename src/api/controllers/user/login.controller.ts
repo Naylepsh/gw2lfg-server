@@ -6,11 +6,9 @@ import {
   Post,
   UnauthorizedError,
 } from "routing-controllers";
-import {
-  InvalidLoginDetailsError,
-  LoginService,
-} from "@services/user/login";
+import { InvalidLoginDetailsError, LoginService } from "@services/user/login";
 import { CreateJwtService } from "../../services/token/create";
+import { IRouteResponse } from "../../responses/routes/route.response.interface";
 
 class LoginDTO {
   @MinLength(6)
@@ -20,6 +18,8 @@ class LoginDTO {
   password: string;
 }
 
+interface LoginResponse extends IRouteResponse<{ token: string }> {}
+
 @JsonController()
 export class LoginUserController {
   authService = new CreateJwtService();
@@ -27,11 +27,11 @@ export class LoginUserController {
   constructor(private readonly loginService: LoginService) {}
 
   @Post("/login")
-  async login(@Body({ validate: true }) dto: LoginDTO) {
+  async login(@Body({ validate: true }) dto: LoginDTO): Promise<LoginResponse> {
     try {
       const user = await this.loginService.login(dto);
       const token = this.authService.createToken(user.id);
-      return token;
+      return { data: { token } };
     } catch (e) {
       if (e instanceof InvalidLoginDetailsError) {
         throw new UnauthorizedError(e.message);

@@ -60,9 +60,10 @@ describe("MeController integration tests", () => {
     const { body } = await request(app)
       .get(url)
       .set(CurrentUserJWTMiddleware.AUTH_HEADER, token);
+    const data = body.data;
 
-    expect(body).toHaveProperty("id", user.id);
-    expect(body).toHaveProperty("username", user.username);
-    expect(body).not.toHaveProperty("password");
+    expect(data).toHaveProperty("id", user.id);
+    expect(data).toHaveProperty("username", user.username);
+    expect(data).not.toHaveProperty("password");
   });
 });

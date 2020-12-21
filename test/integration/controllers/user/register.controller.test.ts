@@ -74,7 +74,7 @@ describe("RegisterUserController integration tests", () => {
     };
 
     const result = await request(app).post(url).send(validUserData);
-    const token = result.body;
+    const token = result.body.data.token;
     const decoded = jwt.decode(token);
 
     expect(decoded).toHaveProperty("id");

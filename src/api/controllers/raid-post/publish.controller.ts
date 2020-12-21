@@ -10,8 +10,11 @@ import { PublishRaidPostService } from "@services/raid-post/publish.service";
 import {
   mapRaidPostToRaidPostResponse,
   RaidPostResponse,
-} from "../../responses/raid-post.response";
+} from "../../responses/entities/raid-post.entity.response";
 import { SaveRaidPostDTO } from "./save-raid-post.dto";
+import { IRouteResponse } from "../../responses/routes/route.response.interface";
+
+interface PublishRaidPostResponse extends IRouteResponse<RaidPostResponse> {}
 
 @JsonController()
 export class PublishRaidPostController {
@@ -22,11 +25,11 @@ export class PublishRaidPostController {
   async publish(
     @CurrentUser({ required: true }) user: User,
     @Body() dto: SaveRaidPostDTO
-  ): Promise<RaidPostResponse> {
+  ): Promise<PublishRaidPostResponse> {
     const post = await this.publishService.publish({
       ...dto,
       authorId: user.id,
     });
-    return mapRaidPostToRaidPostResponse(post);
+    return { data: mapRaidPostToRaidPostResponse(post) }
   }
 }

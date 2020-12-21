@@ -41,8 +41,8 @@ export const seedRaidPost = async (
     .send(post)
     .set(CurrentUserJWTMiddleware.AUTH_HEADER, token);
 
-  const raidPost = new RaidPost(body);
-  raidPost.id = body.id;
+  const raidPost = new RaidPost(body.data);
+  raidPost.id = body.data.id;
   return raidPost;
 };
 
@@ -62,11 +62,11 @@ export const seedUserAndGetToken = async (app: any) => {
 
   await seedUser(app);
 
-  const { body: token } = await request(app)
+  const { body } = await request(app)
     .post(loginUrl)
     .send({ username: user.username, password: user.password });
 
-  return token;
+  return body.data.token;
 };
 
 export const seedUser = async (app: any): Promise<IUser> => {

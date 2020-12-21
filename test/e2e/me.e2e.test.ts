@@ -27,15 +27,17 @@ describe("Me e2e tests", () => {
   it("should return logged in user data", async () => {
     const user = await seedUser(app);
 
-    const { body: token } = await request(app)
+    const loginResponse = await request(app)
       .post(loginUrl)
       .send({ username: user.username, password: user.password });
+    const token = loginResponse.body.data.token
 
     const { body } = await request(app)
       .get(meUrl)
       .set(CurrentUserJWTMiddleware.AUTH_HEADER, token);
+      const data = body.data
 
-    expect(body).toHaveProperty("id");
-    expect(body).toHaveProperty("username", user.username);
+    expect(data).toHaveProperty("id");
+    expect(data).toHaveProperty("username", user.username);
   });
 });

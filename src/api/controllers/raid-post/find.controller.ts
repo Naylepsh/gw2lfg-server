@@ -16,8 +16,9 @@ import { ICheckRequirementsService } from "@services/requirement/check-requireme
 import {
   mapRaidPostToRaidPostResponse,
   RaidPostResponse,
-} from "../../responses/raid-post.response";
+} from "../../responses/entities/raid-post.entity.response";
 import { RaidPost } from "@data/entities/raid-post.entitity";
+import { IRouteResponse } from "../../responses/routes/route.response.interface";
 
 type FindSingleRaidPostDTO = RaidPostResponse & {
   userMeetsRequirements: boolean;
@@ -34,6 +35,8 @@ class FindRaidPostsQueryParams {
   skip?: number;
 }
 
+interface FindRaidPostsResponse extends IRouteResponse<FindRaidPostsDTO> {}
+
 @JsonController()
 export class FindRaidPostsController {
   constructor(
@@ -47,13 +50,12 @@ export class FindRaidPostsController {
   async findAll(
     @QueryParams() query: FindRaidPostsQueryParams,
     @CurrentUser() user?: User
-  ): Promise<FindRaidPostsDTO> {
+  ): Promise<FindRaidPostsResponse> {
     const posts = await this.findService.find(query);
     const _posts = user
       ? await this.checkIfUserMeetsPostsRequirements(posts, user)
       : this.unsatisfyEachRequirement(posts);
-    const response = _posts.map(mapRaidPostToRaidPostResponse);
-    return response;
+    return { data: _posts.map(mapRaidPostToRaidPostResponse) };
   }
 
   private async checkIfUserMeetsPostsRequirements(
