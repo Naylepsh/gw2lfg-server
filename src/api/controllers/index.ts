@@ -1,9 +1,11 @@
-import { joinRequestControllers } from "./join-requests";
-import { raidPostControllers } from "./raid-posts";
-import { userControllers } from "./users";
+import { joinRequestsControllers } from "./join-requests";
+import { raidBossesControllers } from "./raid-bosses";
+import { raidPostsControllers } from "./raid-posts";
+import { usersControllers } from "./users";
 
 export const controllers = [
-  ...joinRequestControllers,
-  ...raidPostControllers,
-  ...userControllers,
+  ...joinRequestsControllers,
+  ...raidPostsControllers,
+  ...usersControllers,
+  ...raidBossesControllers,
 ];

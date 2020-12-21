@@ -24,10 +24,10 @@ export class FindRaidBossService {
     });
 
     if (bosses.length === 0) {
-      return { posts: bosses, hasMore: false };
+      return { bosses, hasMore: false };
     }
     return {
-      posts: bosses.slice(0, take),
+      bosses: bosses.slice(0, take),
       hasMore: bosses.length === take + 1,
     };
   }

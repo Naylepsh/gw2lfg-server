@@ -25,9 +25,9 @@ describe("RaidBoss Service: find tests", () => {
   it("should return expected number of posts if there are still more posts to find", async () => {
     const params = { skip: 0, take: numberOfPosts - 1 };
 
-    const { posts } = await service.find(params);
+    const { bosses } = await service.find(params);
 
-    expect(posts.length).toBe(params.take);
+    expect(bosses.length).toBe(params.take);
   });
 
   it("should set hasMore to true if there are still more posts to find", async () => {

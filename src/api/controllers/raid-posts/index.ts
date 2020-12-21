@@ -3,7 +3,7 @@ import { PublishRaidPostController } from "./publish.controller";
 import { UnpublishRaidPostController } from "./unpublish.controller";
 import { UpdateRaidPostController } from "./update.controller";
 
-export const raidPostControllers = [
+export const raidPostsControllers = [
   FindRaidPostsController,
   PublishRaidPostController,
   UnpublishRaidPostController,
