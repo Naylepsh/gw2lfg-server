@@ -3,7 +3,7 @@ import * as jwt from "jsonwebtoken";
 import { createExpressServer, useContainer } from "routing-controllers";
 import request from "supertest";
 import Container from "typedi";
-import { LoginUserController } from "@api/controllers/user/login.controller";
+import { LoginUserController } from "@root/api/controllers/users/login.controller";
 import { User } from "@data/entities/user.entity";
 import { IUserRepository } from "@data/repositories/user/user.repository.interface";
 import { LoginService } from "@services/user/login";

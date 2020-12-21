@@ -12,7 +12,7 @@ import {
   clean,
 } from "./seeders";
 import { RaidPost } from "@data/entities/raid-post.entitity";
-import { SaveRaidPostDTO } from "@api/controllers/raid-post/save-raid-post.dto";
+import { SaveRaidPostDTO } from "@root/api/controllers/raid-posts/save-raid-post.dto";
 
 describe("Update raid post e2e tests", () => {
   const raidPostsUrl = "/raid-posts";

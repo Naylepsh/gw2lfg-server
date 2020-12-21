@@ -3,7 +3,7 @@ import request from "supertest";
 import { Action, createExpressServer, useContainer } from "routing-controllers";
 import Container from "typedi";
 import { CurrentUserJWTMiddleware } from "@api/middleware/current-user.middleware";
-import { PublishRaidPostController } from "@api/controllers/raid-post/publish.controller";
+import { PublishRaidPostController } from "@root/api/controllers/raid-posts/publish.controller";
 import { PublishRaidPostService } from "@services/raid-post/publish.service";
 import { RaidPostMemoryUnitOfWork } from "../../../helpers/uows/raid-post.memory-unit-of-work";
 import { addHours } from "../../../unit/services/raid-post/hours.util";

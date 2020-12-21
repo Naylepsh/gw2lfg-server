@@ -2,7 +2,7 @@ import "reflect-metadata";
 import { Action, createExpressServer, useContainer } from "routing-controllers";
 import request from "supertest";
 import Container from "typedi";
-import { UnpublishRaidPostController } from "@api/controllers/raid-post/unpublish.controller";
+import { UnpublishRaidPostController } from "@root/api/controllers/raid-posts/unpublish.controller";
 import { CurrentUserJWTMiddleware } from "@api/middleware/current-user.middleware";
 import { CreateJwtService } from "@api/services/token/create";
 import { RaidPost } from "@data/entities/raid-post.entitity";

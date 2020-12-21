@@ -1,7 +1,7 @@
 import "reflect-metadata";
 import request from "supertest";
 import Container from "typedi";
-import { SendRaidJoinRequestController } from "@api/controllers/join-request/send.controller";
+import { SendRaidJoinRequestController } from "@root/api/controllers/join-requests/send.controller";
 import { CurrentUserJWTMiddleware } from "@api/middleware/current-user.middleware";
 import { RaidPost } from "@data/entities/raid-post.entitity";
 import { LIRequirement } from "@data/entities/requirement.entity";

@@ -2,7 +2,7 @@ import "reflect-metadata";
 import request from "supertest";
 import { Container } from "typedi";
 import * as jwt from "jsonwebtoken";
-import { RegisterUserController } from "@api/controllers/user/register.controller";
+import { RegisterUserController } from "@root/api/controllers/users/register.controller";
 import { User } from "@data/entities/user.entity";
 import { IUserRepository } from "@data/repositories/user/user.repository.interface";
 import { RegisterService } from "@services/user/register";

@@ -2,7 +2,7 @@ import "reflect-metadata";
 import { Action, createExpressServer, useContainer } from "routing-controllers";
 import request from "supertest";
 import Container from "typedi";
-import { MeController } from "@api/controllers/user/me.controller";
+import { MeController } from "@root/api/controllers/users/me.controller";
 import { CurrentUserJWTMiddleware } from "@api/middleware/current-user.middleware";
 import { CreateJwtService } from "@api/services/token/create";
 import { User } from "@data/entities/user.entity";

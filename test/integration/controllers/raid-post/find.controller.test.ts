@@ -2,7 +2,7 @@ import "reflect-metadata";
 import { Action, createExpressServer, useContainer } from "routing-controllers";
 import request from "supertest";
 import Container from "typedi";
-import { FindRaidPostsController } from "@api/controllers/raid-post/find.controller";
+import { FindRaidPostsController } from "@root/api/controllers/raid-posts/find.controller";
 import { CurrentUserJWTMiddleware } from "@api/middleware/current-user.middleware";
 import { LIRequirement } from "@data/entities/requirement.entity";
 import { GetItems } from "@services/gw2-api/gw2-api.service";
