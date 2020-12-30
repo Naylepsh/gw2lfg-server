@@ -6,7 +6,8 @@ import {
   Post,
   UnauthorizedError,
 } from "routing-controllers";
-import { InvalidLoginDetailsError, LoginService } from "@services/user/login";
+import { LoginService } from "@services/user/login";
+import { InvalidLoginDetailsError } from "@root/services/user/errors/invalid-login-details.error";
 import { CreateJwtService } from "../../services/token/create";
 import { IRouteResponse } from "../../responses/routes/route.response.interface";
 

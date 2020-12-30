@@ -1,7 +1,7 @@
 import { Inject, Service } from "typedi";
 import { IRaidPostRepository } from "@data/repositories/raid-post/raid-post.repository.interface";
 import { raidPostRepositoryType } from "@loaders/typedi.constants";
-import { EntityNotFoundError } from "../errors/entity-not-found.error";
+import { EntityNotFoundError } from "../common/errors/entity-not-found.error";
 import { CheckPostAuthorshipDTO } from "./dtos/check-post-authorship.dto";
 
 @Service()

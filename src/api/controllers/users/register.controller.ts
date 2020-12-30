@@ -8,7 +8,8 @@ import {
   Post,
 } from "routing-controllers";
 import { User } from "@data/entities/user.entity";
-import { RegisterService, UsernameTakenError } from "@services/user/register";
+import { RegisterService } from "@services/user/register";
+import { UsernameTakenError } from "@root/services/user/errors/username-taken.error";
 import { UnprocessableEntityError } from "../../http-errors/unprocessable-entity.error";
 import { CreateJwtService } from "../../services/token/create";
 import { IRouteResponse } from "../../responses/routes/route.response.interface";

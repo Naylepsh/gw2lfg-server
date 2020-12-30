@@ -4,7 +4,7 @@ import { Role } from "@data/entities/role.entity";
 import { ItemRequirement } from "@data/entities/item.requirement.entity";
 import { IRaidPostUnitOfWork } from "@data/units-of-work/raid-post/raid-post.unit-of-work.interface";
 import { raidPostUnitOfWorkType } from "@loaders/typedi.constants";
-import { EntityNotFoundError } from "../errors/entity-not-found.error";
+import { EntityNotFoundError } from "../common/errors/entity-not-found.error";
 import { isDateInThePast } from "./utils/is-date-in-the-past";
 import { PastDateError } from "./errors/raid-post-errors";
 import { UpdateRaidPostDTO } from "./dtos/update-raid-post.dto";

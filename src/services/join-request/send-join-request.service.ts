@@ -9,12 +9,12 @@ import {
   requirementsCheckServiceType,
   userRepositoryType,
 } from "@loaders/typedi.constants";
-import { EntityAlreadyExistsError } from "../errors/entity-already-exists.error";
+import { EntityAlreadyExistsError } from "../common/errors/entity-already-exists.error";
 import {
   PostNotFoundError,
   RoleNotFoundError,
   UserNotFoundError,
-} from "../errors/entity-not-found.error";
+} from "../common/errors/entity-not-found.error";
 import { ICheckRequirementsService } from "../requirement/check-requirements.service.interface";
 import { SendJoinRequestDTO } from "./send-join-request.dto";
 import { RequirementsNotSatisfiedError } from "./requirements-not-satisfied.error";

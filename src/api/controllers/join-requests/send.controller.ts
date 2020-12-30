@@ -10,8 +10,8 @@ import {
   Post,
 } from "routing-controllers";
 import { User } from "@data/entities/user.entity";
-import { EntityAlreadyExistsError } from "@services/errors/entity-already-exists.error";
-import { PostNotFoundError } from "@services/errors/entity-not-found.error";
+import { EntityAlreadyExistsError } from "@root/services/common/errors/entity-already-exists.error";
+import { PostNotFoundError } from "@root/services/common/errors/entity-not-found.error";
 import {
   SendJoinRequestService,
 } from "@root/services/join-request/send-join-request.service";

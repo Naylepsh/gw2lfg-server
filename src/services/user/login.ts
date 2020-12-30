@@ -1,14 +1,9 @@
-import { IUserRepository } from "@data/repositories/user/user.repository.interface";
 import { compare } from "bcrypt";
 import { Inject, Service } from "typedi";
+import { IUserRepository } from "@data/repositories/user/user.repository.interface";
 import { userRepositoryType } from "@loaders/typedi.constants";
-
-export class InvalidLoginDetailsError extends Error {}
-
-export interface loginDTO {
-  username: string;
-  password: string;
-}
+import { loginDTO } from "./dtos/login.dto";
+import { InvalidLoginDetailsError } from "./errors/invalid-login-details.error";
 
 @Service()
 export class LoginService {
