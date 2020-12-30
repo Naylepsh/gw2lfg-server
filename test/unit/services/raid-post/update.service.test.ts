@@ -1,9 +1,8 @@
-import { LIRequirement } from "@data/entities/requirement.entity";
 import {
   UpdateRaidPostDTO,
   UpdateRaidPostService,
 } from "@services/raid-post/update.service";
-import { createAndSaveLIRequirement } from "../../../helpers/li-requirement.helper";
+import { createAndSaveItemRequirement } from "../../../helpers/item-requirement.helper";
 import { createAndSaveRaidBoss } from "../../../helpers/raid-boss.helper";
 import { createAndSaveRaidPost } from "../../../helpers/raid-post.helper";
 import { createAndSaveRole } from "../../../helpers/role.helper";
@@ -35,7 +34,8 @@ describe("RaidPost Service: update tests", () => {
 
   it("should change requirements when they differ from in-database ones", async () => {
     const user = await createAndSaveUser(uow.users, { username: "username" });
-    const requirement = await createAndSaveLIRequirement(uow.requirements, {
+    const requirement = await createAndSaveItemRequirement(uow.requirements, {
+      name: "Some Item",
       quantity: 1,
     });
     const raidPost = await createAndSaveRaidPost(uow.raidPosts, user, {
@@ -43,7 +43,7 @@ describe("RaidPost Service: update tests", () => {
       requirements: [requirement],
     });
     const updateDto = createUpdateDto(raidPost.id, {
-      requirementsProps: [{ name: LIRequirement.itemName, quantity: 2 }],
+      requirementsProps: { itemsProps: [{ name: "Some Item", quantity: 2 }] },
     });
 
     await service.update(updateDto);
@@ -127,7 +127,7 @@ describe("RaidPost Service: update tests", () => {
       server: dto.server ?? "EU",
       bossesIds: dto.bossesIds ?? [],
       rolesProps: dto.rolesProps ?? [],
-      requirementsProps: dto.requirementsProps ?? [],
+      requirementsProps: dto.requirementsProps ?? { itemsProps: [] },
     };
   }
 });

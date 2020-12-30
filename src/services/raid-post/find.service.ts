@@ -5,7 +5,7 @@ import {
   raidPostRepositoryType,
 } from "@loaders/typedi.constants";
 
-export interface FindRaidPostParams {
+export interface FindRaidPostDTO {
   skip: number;
   take: number;
 }
@@ -17,7 +17,7 @@ export class FindRaidPostService {
     private readonly repository: IRaidPostRepository
   ) {}
 
-  async find(params: FindRaidPostParams) {
+  async find(params: FindRaidPostDTO) {
     const { skip, take } = params;
 
     const posts = await this.repository.findMany({

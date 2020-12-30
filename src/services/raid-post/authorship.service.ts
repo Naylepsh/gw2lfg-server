@@ -3,7 +3,7 @@ import { IRaidPostRepository } from "@data/repositories/raid-post/raid-post.repo
 import { raidPostRepositoryType } from "@loaders/typedi.constants";
 import { EntityNotFoundError } from "../errors/entity-not-found.error";
 
-export interface CheckAuthorshipDTO {
+export interface CheckPostAuthorshipDTO {
   userId: number;
   postId: number;
 }
@@ -15,7 +15,7 @@ export class PostAuthorshipService {
     private readonly postRepository: IRaidPostRepository
   ) {}
 
-  async isPostAuthor(dto: CheckAuthorshipDTO) {
+  async isPostAuthor(dto: CheckPostAuthorshipDTO) {
     const post = await this.postRepository.findById(dto.postId);
 
     if (!post) {

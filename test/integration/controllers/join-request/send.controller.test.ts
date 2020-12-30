@@ -1,13 +1,12 @@
 import "reflect-metadata";
 import request from "supertest";
 import Container from "typedi";
-import { SendRaidJoinRequestController } from "@root/api/controllers/join-requests/send.controller";
+import items from "@root/services/gw2-items/items.json";
+import { SendRaidJoinRequestController } from "@api/controllers/join-requests/send.controller";
 import { CurrentUserJWTMiddleware } from "@api/middleware/current-user.middleware";
 import { RaidPost } from "@data/entities/raid-post.entitity";
-import { LIRequirement } from "@data/entities/requirement.entity";
 import { User } from "@data/entities/user.entity";
 import { GetItems } from "@services/gw2-api/gw2-api.service";
-import { nameToId } from "@services/gw2-items/gw2-items.service";
 import { Item } from "@services/gw2-items/item.interface";
 import { SendJoinRequestService } from "@services/join-request/send.service";
 import { CheckItemRequirementsService } from "@services/requirement/check-item-requirements.service";
@@ -18,6 +17,7 @@ import { MyStorage } from "../../../unit/services/item-storage";
 import { seedDbWithOnePost } from "../raid-post/seed-db";
 
 describe("SendRaidJoinRequestController integration tests", () => {
+  const liId = items["Legendary Insight"];
   let joinRequestRepo: JoinRequestMemoryRepository;
   let app: any;
   let token: string;
@@ -31,9 +31,7 @@ describe("SendRaidJoinRequestController integration tests", () => {
     ({ token, post, user } = await seedDbWithOnePost(uow));
 
     myStorage = new MyStorage(
-      new Map<string, Item[]>([
-        [user.apiKey, [{ id: nameToId(LIRequirement.itemName), count: 1 }]],
-      ])
+      new Map<string, Item[]>([[user.apiKey, [{ id: liId, count: 1 }]]])
     );
     const requirementChecker = new CheckItemRequirementsService(
       new GetItems(myStorage.fetch.bind(myStorage))
@@ -93,9 +91,7 @@ describe("SendRaidJoinRequestController integration tests", () => {
   });
 
   it("should return 403 if user did not meet post requirements", async () => {
-    myStorage.items.set(user.apiKey, [
-      { id: nameToId(LIRequirement.itemName), count: 0 },
-    ]);
+    myStorage.items.set(user.apiKey, [{ id: liId, count: 0 }]);
 
     const res = await request(app)
       .post(toUrl(post.id))
@@ -106,9 +102,7 @@ describe("SendRaidJoinRequestController integration tests", () => {
   });
 
   it("should return 422 if user has already sent a request", async () => {
-    myStorage.items.set(user.apiKey, [
-      { id: nameToId(LIRequirement.itemName), count: 100 },
-    ]);
+    myStorage.items.set(user.apiKey, [{ id: liId, count: 100 }]);
 
     await request(app)
       .post(toUrl(post.id))
@@ -123,9 +117,7 @@ describe("SendRaidJoinRequestController integration tests", () => {
   });
 
   it("should return 201 if valid data was passed", async () => {
-    myStorage.items.set(user.apiKey, [
-      { id: nameToId(LIRequirement.itemName), count: 100 },
-    ]);
+    myStorage.items.set(user.apiKey, [{ id: liId, count: 100 }]);
 
     const res = await request(app)
       .post(toUrl(post.id))
@@ -136,9 +128,7 @@ describe("SendRaidJoinRequestController integration tests", () => {
   });
 
   it("should save join request if valid data was passed", async () => {
-    myStorage.items.set(user.apiKey, [
-      { id: nameToId(LIRequirement.itemName), count: 100 },
-    ]);
+    myStorage.items.set(user.apiKey, [{ id: liId, count: 100 }]);
 
     await request(app)
       .post(toUrl(post.id))

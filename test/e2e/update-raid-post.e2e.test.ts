@@ -43,15 +43,15 @@ describe("Update raid post e2e tests", () => {
       description: "a very different description",
       bossesIds: post.bosses.map((boss) => boss.id),
       rolesProps: [],
-      requirementsProps: [],
+      requirementsProps: { itemsProps: [] },
     };
     await request(app)
       .put(toUrl(post.id))
       .send(postDto)
       .set(CurrentUserJWTMiddleware.AUTH_HEADER, token);
-    const { body} = await request(app).get(raidPostsUrl);
+    const { body } = await request(app).get(raidPostsUrl);
 
-    const posts = body.data
+    const posts = body.data;
     expect(posts.length).toBe(1);
     expect(posts[0]).toHaveProperty("description", postDto.description);
   });

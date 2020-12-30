@@ -1,5 +1,5 @@
 import { UnpublishRaidPostService } from "@services/raid-post/unpublish.service";
-import { createAndSaveLIRequirement } from "../../../helpers/li-requirement.helper";
+import { createAndSaveItemRequirement } from "../../../helpers/item-requirement.helper";
 import { createAndSaveRaidBoss } from "../../../helpers/raid-boss.helper";
 import { createAndSaveRaidPost } from "../../../helpers/raid-post.helper";
 import { createAndSaveRole } from "../../../helpers/role.helper";
@@ -17,7 +17,8 @@ describe("RaidPost Service: unpublish tests", () => {
       name: "boss",
       isCm: false,
     });
-    const requirement = await createAndSaveLIRequirement(uow.requirements, {
+    const requirement = await createAndSaveItemRequirement(uow.requirements, {
+      name: "Some Item",
       quantity: 1,
     });
     const role = await createAndSaveRole(uow.roles, { name: "DPS" });

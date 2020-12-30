@@ -6,7 +6,7 @@ import { RequirementRepository } from "@data/repositories/requirement/requiremen
 import { IRequirementRepository } from "@data/repositories/requirement/requirement.repository.interface";
 import { UserRepository } from "@data/repositories/user/user.repository";
 import { IUserRepository } from "@data/repositories/user/user.repository.interface";
-import { createAndSaveLIRequirement } from "../../../helpers/li-requirement.helper";
+import { createAndSaveItemRequirement } from "../../../helpers/item-requirement.helper";
 import { createAndSavePosting } from "../../../helpers/post.helper";
 import { createAndSaveUser } from "../../../helpers/user.helper";
 
@@ -62,9 +62,9 @@ describe("TypeORM posting repository tests", () => {
     const author = await createAndSaveUser(userRepository, {
       username: "username",
     });
-    const requirement = await createAndSaveLIRequirement(
+    const requirement = await createAndSaveItemRequirement(
       requirementRepository,
-      { quantity: 10 }
+      { name: "Some Item", quantity: 10 }
     );
     const post = await createAndSavePosting(postRepository, {
       author,

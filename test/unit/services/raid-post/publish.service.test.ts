@@ -1,7 +1,6 @@
-import { LIRequirement } from "@data/entities/requirement.entity";
 import {
   PublishDTO,
-  PublishRaidPostService
+  PublishRaidPostService,
 } from "@services/raid-post/publish.service";
 import { createAndSaveRaidBoss } from "../../../helpers/raid-boss.helper";
 import { RaidPostMemoryUnitOfWork } from "../../../helpers/uows/raid-post.memory-unit-of-work";
@@ -40,7 +39,7 @@ describe("RaidPost service: publish tests", () => {
     const date = addHours(new Date(), 1);
     const dto = createPublishDto(userId, [], {
       date,
-      requirementsProps: [{ name: LIRequirement.itemName, quantity: 10 }],
+      requirementsProps: { itemsProps: [{ name: "Some Item", quantity: 10 }] },
     });
     const reqsInDbBefore = uow.requirements.entities.length;
 
@@ -124,7 +123,7 @@ describe("RaidPost service: publish tests", () => {
       authorId,
       bossesIds,
       rolesProps: dto.rolesProps ?? [],
-      requirementsProps: dto.requirementsProps ?? [],
+      requirementsProps: dto.requirementsProps ?? { itemsProps: [] },
     };
   }
 });

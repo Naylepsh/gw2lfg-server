@@ -1,5 +1,9 @@
 import { IsDateString, IsInt } from "class-validator";
-import { RequirementArgs } from "@data/entities/requirement.factory";
+import { ItemRequirementProps } from "@data/entities/item.requirement.entity";
+
+interface RequirementsProps {
+  itemsProps: ItemRequirementProps[];
+}
 
 interface RolePropsDTO {
   name: string;
@@ -19,7 +23,9 @@ export class SaveRaidPostDTO {
   @IsInt({ each: true })
   bossesIds: number[];
 
+  // TODO: validate
   rolesProps: RolePropsDTO[] = [];
 
-  requirementsProps: RequirementArgs[] = [];
+  // TODO: validate
+  requirementsProps: RequirementsProps = { itemsProps: [] };
 }

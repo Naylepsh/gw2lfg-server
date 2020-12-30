@@ -1,7 +1,7 @@
 import { RaidPost } from "@data/entities/raid-post.entitity";
-import { LIRequirement } from "@data/entities/requirement.entity";
 import { Role } from "@data/entities/role.entity";
 import { User } from "@data/entities/user.entity";
+import { ItemRequirement } from "@data/entities/item.requirement.entity";
 import { IJoinRequestRepository } from "@data/repositories/join-request/join-request.repository.interface";
 import { IPostRepository } from "@data/repositories/post/post.repository.interface";
 import { IUserRepository } from "@data/repositories/user/user.repository.interface";
@@ -38,20 +38,20 @@ describe("JoinRequest Service: send tests", () => {
         apiKey,
       })
     );
-    const liRequirement = new LIRequirement({ quantity: 1 });
+    const itemRequirement = new ItemRequirement({ name: "item", quantity: 1 });
     const role = new Role({ name: "DPS", class: "Any" });
     const post = new RaidPost({
       date: new Date(),
       server: "EU",
       author: user,
       bosses: [],
-      requirements: [liRequirement],
+      requirements: [itemRequirement],
       roles: [role],
     });
     await postRepo.save(post);
     const fetchItems = storage(
       new Map<string, Item[]>([
-        [apiKey, [{ id: nameToId(LIRequirement.itemName), count: 10 }]],
+        [apiKey, [{ id: nameToId(itemRequirement.name), count: 10 }]],
       ])
     );
 
@@ -110,13 +110,13 @@ describe("JoinRequest Service: send tests", () => {
         apiKey: "api-key",
       })
     );
-    const liRequirement = new LIRequirement({ quantity: 2 });
+    const itemRequirement = new ItemRequirement({ name: "item", quantity: 2 });
     const post = new RaidPost({
       date: new Date(),
       server: "EU",
       author: user,
       bosses: [],
-      requirements: [liRequirement],
+      requirements: [itemRequirement],
     });
     const roleId = 3;
 
@@ -139,7 +139,7 @@ describe("JoinRequest Service: send tests", () => {
         apiKey,
       })
     );
-    const liRequirement = new LIRequirement({ quantity: 2 });
+    const itemRequirement = new ItemRequirement({ name: "item", quantity: 2 });
     const role = new Role({ name: "DPS", class: "Any" });
     role.id = 1;
     const post = new RaidPost({
@@ -147,13 +147,13 @@ describe("JoinRequest Service: send tests", () => {
       server: "EU",
       author: user,
       bosses: [],
-      requirements: [liRequirement],
+      requirements: [itemRequirement],
       roles: [role],
     });
     await postRepo.save(post);
     const fetchItems = storage(
       new Map<string, Item[]>([
-        [apiKey, [{ id: nameToId(LIRequirement.itemName), count: 1 }]],
+        [apiKey, [{ id: nameToId(itemRequirement.name), count: 1 }]],
       ])
     );
 

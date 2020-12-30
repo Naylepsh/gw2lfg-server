@@ -1,16 +1,14 @@
 import { Inject, Service } from "typedi";
 import { RaidPost } from "@data/entities/raid-post.entitity";
-import {
-  RequirementArgs,
-  requirementFactory,
-} from "@data/entities/requirement.factory";
 import { Role } from "@data/entities/role.entity";
+import { ItemRequirement } from "@data/entities/item.requirement.entity";
 import { IRaidPostUnitOfWork } from "@data/units-of-work/raid-post/raid-post.unit-of-work.interface";
 import { raidPostUnitOfWorkType } from "@loaders/typedi.constants";
 import { EntityNotFoundError } from "../errors/entity-not-found.error";
-import { isDateInThePast } from "./is-date-in-the-past";
-import { PastDateError } from "./raid-post-errors";
-import { RolePropsDTO } from "./role-props.dto";
+import { isDateInThePast } from "./utils/is-date-in-the-past";
+import { PastDateError } from "./errors/raid-post-errors";
+import { RolePropsDTO } from "./dtos/role-props.dto";
+import { RequirementsPropsDTO } from "./dtos/requirement-props.dto";
 
 export interface UpdateRaidPostDTO {
   id: number;
@@ -19,7 +17,7 @@ export interface UpdateRaidPostDTO {
   description?: string;
   bossesIds: number[];
   rolesProps: RolePropsDTO[];
-  requirementsProps: RequirementArgs[];
+  requirementsProps: RequirementsPropsDTO;
 }
 
 @Service()
@@ -75,25 +73,21 @@ export class UpdateRaidPostService {
 //   return author;
 // };
 
-const getBosses = async (uow: IRaidPostUnitOfWork, bossesIds: number[]) => {
-  const bosses = await uow.raidBosses.findByIds(bossesIds);
-  return bosses;
+const getBosses = (uow: IRaidPostUnitOfWork, bossesIds: number[]) => {
+  return uow.raidBosses.findByIds(bossesIds);
 };
 
-const createRoles = async (
-  rolesProps: RolePropsDTO[],
-  uow: IRaidPostUnitOfWork
-) => {
+const createRoles = (rolesProps: RolePropsDTO[], uow: IRaidPostUnitOfWork) => {
   const roles = rolesProps.map((props) => new Role(props));
   return uow.roles.saveMany(roles);
 };
 
-const createRequirements = async (
-  requirementsProps: RequirementArgs[],
+const createRequirements = (
+  requirementsProps: RequirementsPropsDTO,
   uow: IRaidPostUnitOfWork
 ) => {
-  const requirements = requirementsProps.map((req) =>
-    requirementFactory.createRequirement(req)
+  const requirements = requirementsProps.itemsProps.map(
+    (props) => new ItemRequirement(props)
   );
   return uow.requirements.saveMany(requirements);
 };

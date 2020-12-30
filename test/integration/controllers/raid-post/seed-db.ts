@@ -1,6 +1,6 @@
+import items from "@services/gw2-items/items.json";
 import { CreateJwtService } from "@api/services/token/create";
 import { RaidBoss } from "@data/entities/raid-boss.entity";
-import { LIRequirement } from "@data/entities/requirement.entity";
 import { User } from "@data/entities/user.entity";
 import { PublishRaidPostService } from "@services/raid-post/publish.service";
 import { RegisterService } from "@services/user/register";
@@ -21,6 +21,7 @@ export async function seedDbWithOnePost(uow: RaidPostMemoryUnitOfWork) {
   const savedBoss = await uow.raidBosses.save(boss);
   const bossesIds = [savedBoss.id];
 
+  const item = Object.keys(items)[0];
   const publishService = new PublishRaidPostService(uow);
   const dto = {
     server: "EU",
@@ -29,7 +30,7 @@ export async function seedDbWithOnePost(uow: RaidPostMemoryUnitOfWork) {
     rolesProps: [
       { name: "DPS", class: "Any", description: "condi, not scourge" },
     ],
-    requirementsProps: [{ name: LIRequirement.itemName, quantity: 10 }],
+    requirementsProps: { itemsProps: [{ name: item, quantity: 10 }] },
     authorId: userId,
   };
   const post = await publishService.publish(dto);

@@ -1,5 +1,4 @@
 import {
-  ChildEntity,
   Column,
   CreateDateColumn,
   Entity,
@@ -21,7 +20,7 @@ export abstract class Requirement {
   id: number;
 
   @Column()
-  name!: string;
+  name: string;
 
   @ManyToOne(() => Post, (post) => post.requirements)
   post: Post;
@@ -35,40 +34,6 @@ export abstract class Requirement {
   constructor(props?: RequirementProps) {
     if (props) {
       this.name = props.name;
-    }
-  }
-}
-
-export interface ItemRequirementProps extends RequirementProps {
-  quantity: number;
-}
-
-@ChildEntity()
-export abstract class ItemRequirement extends Requirement {
-  @Column({ type: "int" })
-  quantity: number;
-
-  constructor(props?: ItemRequirementProps) {
-    super(props);
-    if (props) {
-      this.quantity = props.quantity;
-    }
-  }
-}
-
-export interface LIRequirementProps {
-  quantity: number;
-}
-
-@ChildEntity()
-export class LIRequirement extends ItemRequirement {
-  public static itemName = "Legendary Insight";
-
-  constructor(props?: LIRequirementProps) {
-    if (props) {
-      super({ ...props, name: LIRequirement.itemName });
-    } else {
-      super();
     }
   }
 }

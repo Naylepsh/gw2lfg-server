@@ -2,9 +2,9 @@ import "reflect-metadata";
 import { Action, createExpressServer, useContainer } from "routing-controllers";
 import request from "supertest";
 import Container from "typedi";
-import { FindRaidPostsController } from "@root/api/controllers/raid-posts/find.controller";
+import items from "@root/services/gw2-items/items.json";
+import { FindRaidPostsController } from "@api/controllers/raid-posts/find.controller";
 import { CurrentUserJWTMiddleware } from "@api/middleware/current-user.middleware";
-import { LIRequirement } from "@data/entities/requirement.entity";
 import { GetItems } from "@services/gw2-api/gw2-api.service";
 import { nameToId } from "@services/gw2-items/gw2-items.service";
 import { Item } from "@services/gw2-items/item.interface";
@@ -28,7 +28,7 @@ describe("FindRaidPostsController integration tests", () => {
     findPosts = jest.spyOn(findRaidPostsService, "find");
     const myStorage = new MyStorage(
       new Map<string, Item[]>([
-        [user.apiKey, [{ id: nameToId(LIRequirement.itemName), count: 100 }]],
+        [user.apiKey, [{ id: items["Legendary Insight"], count: 100 }]],
       ])
     );
     const requirementChecker = new CheckItemRequirementsService(
