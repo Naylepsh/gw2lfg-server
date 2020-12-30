@@ -4,12 +4,7 @@ import {
   PrimaryColumn,
   UpdateDateColumn,
 } from "typeorm";
-
-export interface JoinRequestProps {
-  userId: number;
-  postId: number;
-  roleId: number;
-}
+import { JoinRequestProps } from "./join-request.props";
 
 @Entity()
 export class JoinRequest {

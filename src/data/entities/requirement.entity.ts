@@ -8,10 +8,7 @@ import {
   UpdateDateColumn,
 } from "typeorm";
 import { Post } from "./post.entity";
-
-export interface RequirementProps {
-  name: string;
-}
+import { RequirementProps } from "./requirement.props";
 
 @Entity()
 @TableInheritance({ column: { type: "varchar", name: "type" } })

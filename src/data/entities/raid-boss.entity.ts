@@ -1,9 +1,5 @@
 import { Column, Entity, PrimaryGeneratedColumn } from "typeorm";
-
-export interface RaidBossProps {
-  name: string;
-  isCm: boolean;
-}
+import { RaidBossProps } from "./raid-boss.props";
 
 @Entity()
 export class RaidBoss {

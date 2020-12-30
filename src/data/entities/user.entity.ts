@@ -7,12 +7,7 @@ import {
   UpdateDateColumn,
 } from "typeorm";
 import { Post } from "./post.entity";
-
-export interface UserProps {
-  username: string;
-  password: string;
-  apiKey: string;
-}
+import { UserProps } from "./user.props";
 
 @Entity()
 export class User {

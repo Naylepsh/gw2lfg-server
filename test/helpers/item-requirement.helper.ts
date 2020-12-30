@@ -1,4 +1,5 @@
-import { ItemRequirement, ItemRequirementProps } from "@data/entities/item.requirement.entity";
+import { ItemRequirement } from "@data/entities/item.requirement.entity";
+import { ItemRequirementProps } from "@root/data/entities/Item.requirement.props";
 import { IRequirementRepository } from "@data/repositories/requirement/requirement.repository.interface";
 
 
