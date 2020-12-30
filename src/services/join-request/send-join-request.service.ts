@@ -30,25 +30,22 @@ export class SendJoinRequestService {
   ) {}
 
   async sendJoinRequest({ userId, postId, roleId }: SendJoinRequestDTO) {
-    const user = await this.userRepo.findById(userId);
+    const [user, post, request] = await Promise.all([
+      this.userRepo.findById(userId),
+      this.postRepo.findById(postId),
+      this.joinRequestRepo.findByKey(userId, postId, roleId),
+    ]);
+
     if (!user) {
       throw new UserNotFoundError();
     }
-
-    const post = await this.postRepo.findById(postId);
     if (!post) {
       throw new PostNotFoundError();
     }
     if (!post.hasRole(roleId)) {
       throw new RoleNotFoundError();
     }
-
-    const _request = await this.joinRequestRepo.findByKey(
-      userId,
-      postId,
-      roleId
-    );
-    if (_request) {
+    if (request) {
       throw new EntityAlreadyExistsError();
     }
 
