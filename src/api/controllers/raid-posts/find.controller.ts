@@ -11,7 +11,7 @@ import {
   findRaidPostsServiceType,
   requirementsCheckServiceType,
 } from "@loaders/typedi.constants";
-import { FindRaidPostService } from "@services/raid-post/find.service";
+import { FindRaidPostService } from "@root/services/raid-post/find-raid-posts.service";
 import { ICheckRequirementsService } from "@services/requirement/check-requirements.service.interface";
 import {
   mapRaidPostToRaidPostResponse,

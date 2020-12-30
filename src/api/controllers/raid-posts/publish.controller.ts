@@ -6,7 +6,7 @@ import {
   Post,
 } from "routing-controllers";
 import { User } from "@data/entities/user.entity";
-import { PublishRaidPostService } from "@services/raid-post/publish.service";
+import { PublishRaidPostService } from "@root/services/raid-post/publish-raid-posts.service";
 import {
   mapRaidPostToRaidPostResponse,
   RaidPostResponse,

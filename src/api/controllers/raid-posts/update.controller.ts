@@ -9,9 +9,9 @@ import {
   Put,
 } from "routing-controllers";
 import { User } from "@data/entities/user.entity";
-import { PostAuthorshipService } from "@services/raid-post/authorship.service";
+import { CheckPostAuthorshipService } from "@root/services/raid-post/check-post-authorship.service";
 import { EntityNotFoundError } from "@services/errors/entity-not-found.error";
-import { UpdateRaidPostService } from "@services/raid-post/update.service";
+import { UpdateRaidPostService } from "@root/services/raid-post/update-raid-post.service";
 import { SaveRaidPostDTO } from "./save-raid-post.dto";
 import {
   mapRaidPostToRaidPostResponse,
@@ -25,7 +25,7 @@ interface UpdateRaidPostResponse extends IRouteResponse<RaidPostResponse> {}
 export class UpdateRaidPostController {
   constructor(
     private readonly updateService: UpdateRaidPostService,
-    private readonly authorshipService: PostAuthorshipService
+    private readonly authorshipService: CheckPostAuthorshipService
   ) {}
 
   @Put("/raid-posts/:id")

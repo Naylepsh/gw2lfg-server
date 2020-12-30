@@ -8,7 +8,7 @@ import { EntityNotFoundError } from "../errors/entity-not-found.error";
 import { isDateInThePast } from "./utils/is-date-in-the-past";
 import { PastDateError } from "./errors/raid-post-errors";
 import { RolePropsDTO } from "./dtos/role-props.dto";
-import { RequirementsPropsDTO } from "./dtos/requirement-props.dto";
+import { RequirementsPropsDTO } from "./dtos/requirements-props.dto";
 
 export interface UpdateRaidPostDTO {
   id: number;

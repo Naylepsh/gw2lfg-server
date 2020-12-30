@@ -7,8 +7,8 @@ import { CurrentUserJWTMiddleware } from "@api/middleware/current-user.middlewar
 import { CreateJwtService } from "@api/services/token/create";
 import { RaidPost } from "@data/entities/raid-post.entitity";
 import { User } from "@data/entities/user.entity";
-import { PostAuthorshipService } from "@services/raid-post/authorship.service";
-import { UpdateRaidPostService } from "@services/raid-post/update.service";
+import { CheckPostAuthorshipService } from "@root/services/raid-post/check-post-authorship.service";
+import { UpdateRaidPostService } from "@root/services/raid-post/update-raid-post.service";
 import { RegisterService } from "@services/user/register";
 import { RaidPostMemoryUnitOfWork } from "../../../helpers/uows/raid-post.memory-unit-of-work";
 import { addHours } from "../../../unit/services/raid-post/hours.util";
@@ -31,7 +31,7 @@ describe("UpdateRaidPostController integration tests", () => {
     registerService = new RegisterService(uow.users);
 
     const updateService = new UpdateRaidPostService(uow);
-    const authorshipService = new PostAuthorshipService(uow.raidPosts);
+    const authorshipService = new CheckPostAuthorshipService(uow.raidPosts);
     const controller = new UpdateRaidPostController(
       updateService,
       authorshipService

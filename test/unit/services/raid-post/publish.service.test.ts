@@ -1,7 +1,7 @@
 import {
-  PublishDTO,
   PublishRaidPostService,
-} from "@services/raid-post/publish.service";
+} from "@root/services/raid-post/publish-raid-posts.service";
+import { PublishRaidPostDTO } from "@root/services/raid-post/dtos/publish-raid-post.dto";
 import { createAndSaveRaidBoss } from "../../../helpers/raid-boss.helper";
 import { RaidPostMemoryUnitOfWork } from "../../../helpers/uows/raid-post.memory-unit-of-work";
 import { createAndSaveUser } from "../../../helpers/user.helper";
@@ -115,7 +115,7 @@ describe("RaidPost service: publish tests", () => {
   function createPublishDto(
     authorId: number,
     bossesIds: number[],
-    dto: Partial<PublishDTO>
+    dto: Partial<PublishRaidPostDTO>
   ) {
     return {
       date: dto.date ?? addHours(new Date(), 1),

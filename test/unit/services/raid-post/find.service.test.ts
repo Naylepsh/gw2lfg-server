@@ -1,7 +1,7 @@
 import { createAndSaveRaidPost } from "../../../helpers/raid-post.helper";
 import { RaidPostMemoryUnitOfWork } from "../../../helpers/uows/raid-post.memory-unit-of-work";
 import { createAndSaveUser } from "../../../helpers/user.helper";
-import { FindRaidPostService } from "@services/raid-post/find.service";
+import { FindRaidPostService } from "@root/services/raid-post/find-raid-posts.service";
 import { addHours } from "./hours.util";
 
 describe("RaidPosts Service: find tests", () => {

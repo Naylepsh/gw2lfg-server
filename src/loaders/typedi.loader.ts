@@ -14,8 +14,8 @@ import {
   postRepositoryType,
   raidPostUnitOfWorkType,
 } from "./typedi.constants";
-import "../services/raid-post/find.service";
-import "../services/raid-post/publish.service";
+import "../services/raid-post/find-raid-posts.service";
+import "../services/raid-post/publish-raid-posts.service";
 import { data } from "../data";
 
 export const loadTypeDI = () => {
