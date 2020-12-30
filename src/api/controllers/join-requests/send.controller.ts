@@ -13,9 +13,9 @@ import { User } from "@data/entities/user.entity";
 import { EntityAlreadyExistsError } from "@services/errors/entity-already-exists.error";
 import { PostNotFoundError } from "@services/errors/entity-not-found.error";
 import {
-  RequirementsNotSatisfiedError,
   SendJoinRequestService,
-} from "@services/join-request/send.service";
+} from "@root/services/join-request/send-join-request.service";
+import { RequirementsNotSatisfiedError } from "@root/services/join-request/requirements-not-satisfied.error";
 import { UnprocessableEntityError } from "../../http-errors/unprocessable-entity.error";
 import { IRouteResponse } from "../../responses/routes/route.response.interface";
 import { JoinRequest } from "../../../data/entities/join-request.entity";

@@ -29,65 +29,63 @@ export class UpdateRaidPostService {
   async update(dto: UpdateRaidPostDTO) {
     if (isDateInThePast(dto.date)) throw new PastDateError("date");
 
-    return this.uow.withTransaction(async () => {
-      const raidPost = await this.uow.raidPosts.findById(dto.id);
-
-      if (!raidPost) {
-        throw new EntityNotFoundError(`raid post with id ${dto.id} not found`);
-      }
-
-      const author = raidPost.author;
-      const bosses = await getBosses(this.uow, dto.bossesIds);
-
-      if (raidPost.hasRoles()) {
-        await this.uow.roles.delete(raidPost.roles);
-      }
-      const roles = await createRoles(dto.rolesProps, this.uow);
-
-      if (raidPost.hasRequirements()) {
-        await this.uow.requirements.delete(raidPost.requirements);
-      }
-      const requirements = await createRequirements(
-        dto.requirementsProps,
-        this.uow
-      );
-
-      const post = new RaidPost({
-        ...dto,
-        author,
-        requirements,
-        roles,
-        bosses,
-      });
-      post.id = raidPost.id;
-
-      return await this.uow.raidPosts.save(post);
+    return this.uow.withTransaction(() => {
+      return this.updatePost(dto);
     });
   }
+
+  private async updatePost(dto: UpdateRaidPostDTO) {
+    const raidPost = await this.uow.raidPosts.findById(dto.id);
+
+    if (!raidPost) {
+      throw new EntityNotFoundError(`raid post with id ${dto.id} not found`);
+    }
+
+    const author = raidPost.author;
+    const [bosses, roles, requirements] = await Promise.all([
+      this.uow.raidBosses.findByIds(dto.bossesIds),
+      this.overrideRoles(raidPost, dto),
+      this.overrideRequirements(raidPost, dto),
+    ]);
+
+    const post = new RaidPost({
+      ...dto,
+      author,
+      requirements,
+      roles,
+      bosses,
+    });
+    post.id = raidPost.id;
+
+    return await this.uow.raidPosts.save(post);
+  }
+
+  private async overrideRequirements(
+    raidPost: RaidPost,
+    dto: UpdateRaidPostDTO
+  ) {
+    if (raidPost.hasRequirements()) {
+      await this.uow.requirements.delete(raidPost.requirements);
+    }
+
+    const requirements = await this.uow.requirements.saveMany(
+      dto.requirementsProps.itemsProps.map(
+        (props) => new ItemRequirement(props)
+      )
+    );
+
+    return requirements;
+  }
+
+  private async overrideRoles(raidPost: RaidPost, dto: UpdateRaidPostDTO) {
+    if (raidPost.hasRoles()) {
+      await this.uow.roles.delete(raidPost.roles);
+    }
+
+    const roles = await this.uow.roles.saveMany(
+      dto.rolesProps.map((props) => new Role(props))
+    );
+
+    return roles;
+  }
 }
-
-// const getAuthor = async (uow: IRaidPostUnitOfWork, authorId: number) => {
-//   const author = await uow.users.findById(authorId);
-//   if (!author)
-//     throw new EntityNotFoundError(`user with id ${authorId} not found`);
-//   return author;
-// };
-
-const getBosses = (uow: IRaidPostUnitOfWork, bossesIds: number[]) => {
-  return uow.raidBosses.findByIds(bossesIds);
-};
-
-const createRoles = (rolesProps: RolePropsDTO[], uow: IRaidPostUnitOfWork) => {
-  const roles = rolesProps.map((props) => new Role(props));
-  return uow.roles.saveMany(roles);
-};
-
-const createRequirements = (
-  requirementsProps: RequirementsPropsDTO,
-  uow: IRaidPostUnitOfWork
-) => {
-  const requirements = requirementsProps.itemsProps.map(
-    (props) => new ItemRequirement(props)
-  );
-  return uow.requirements.saveMany(requirements);
-};

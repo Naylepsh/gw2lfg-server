@@ -1,14 +1,14 @@
 import { Inject } from "typedi";
-import { JoinRequest } from "../../data/entities/join-request.entity";
-import { IJoinRequestRepository } from "../../data/repositories/join-request/join-request.repository.interface";
-import { IPostRepository } from "../../data/repositories/post/post.repository.interface";
-import { IUserRepository } from "../../data/repositories/user/user.repository.interface";
+import { JoinRequest } from "@data/entities/join-request.entity";
+import { IJoinRequestRepository } from "@data/repositories/join-request/join-request.repository.interface";
+import { IPostRepository } from "@data/repositories/post/post.repository.interface";
+import { IUserRepository } from "@data/repositories/user/user.repository.interface";
 import {
   joinRequestRepositoryType,
   postRepositoryType,
   requirementsCheckServiceType,
   userRepositoryType,
-} from "../../loaders/typedi.constants";
+} from "@loaders/typedi.constants";
 import { EntityAlreadyExistsError } from "../errors/entity-already-exists.error";
 import {
   PostNotFoundError,
@@ -16,14 +16,8 @@ import {
   UserNotFoundError,
 } from "../errors/entity-not-found.error";
 import { ICheckRequirementsService } from "../requirement/check-requirements.service.interface";
-
-interface SendJoinRequestDTO {
-  userId: number;
-  postId: number;
-  roleId: number;
-}
-
-export class RequirementsNotSatisfiedError extends Error {}
+import { SendJoinRequestDTO } from "./send-join-request.dto";
+import { RequirementsNotSatisfiedError } from "./requirements-not-satisfied.error";
 
 export class SendJoinRequestService {
   constructor(

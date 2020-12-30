@@ -8,7 +8,7 @@ import { RaidPost } from "@data/entities/raid-post.entitity";
 import { User } from "@data/entities/user.entity";
 import { GetItems } from "@services/gw2-api/gw2-api.service";
 import { Item } from "@services/gw2-items/item.interface";
-import { SendJoinRequestService } from "@services/join-request/send.service";
+import { SendJoinRequestService } from "@root/services/join-request/send-join-request.service";
 import { CheckItemRequirementsService } from "@services/requirement/check-item-requirements.service";
 import { Action, createExpressServer, useContainer } from "routing-controllers";
 import { JoinRequestMemoryRepository } from "../../../helpers/repositories/join-request.memory-repository";

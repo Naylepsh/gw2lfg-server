@@ -11,7 +11,7 @@ import {
 } from "@services/gw2-api/gw2-api.service";
 import { nameToId } from "@services/gw2-items/gw2-items.service";
 import { Item } from "@services/gw2-items/item.interface";
-import { SendJoinRequestService } from "@services/join-request/send.service";
+import { SendJoinRequestService } from "@root/services/join-request/send-join-request.service";
 import { CheckItemRequirementsService } from "@services/requirement/check-item-requirements.service";
 import { JoinRequestMemoryRepository } from "../../../helpers/repositories/join-request.memory-repository";
 import { RaidPostMemoryRepository } from "../../../helpers/repositories/raid-post.memory-repository";

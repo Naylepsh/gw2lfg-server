@@ -2,7 +2,7 @@ import { IsOptional, IsPositive, Min } from "class-validator";
 import { Get, JsonController, QueryParams } from "routing-controllers";
 import { IRouteResponse } from "../../responses/routes/route.response.interface";
 import { RaidBoss } from "../../../data/entities/raid-boss.entity";
-import { FindRaidBossService } from "../../../services/raid-boss/find.service";
+import { FindRaidBossesService } from "../../../services/raid-boss/find-raid-bosses.service";
 
 class FindRaidBossesQueryParams {
   @IsOptional()
@@ -20,7 +20,7 @@ interface FindRaidBossesResponse extends IRouteResponse<RaidBoss[]> {
 
 @JsonController()
 export class FindRaidBossesController {
-  constructor(private readonly findService: FindRaidBossService) {}
+  constructor(private readonly findService: FindRaidBossesService) {}
 
   @Get("/raid-bosses")
   async findAll(

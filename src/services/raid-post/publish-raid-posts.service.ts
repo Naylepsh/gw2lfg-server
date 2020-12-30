@@ -27,16 +27,11 @@ export class PublishRaidPostService {
     const author = await this.uow.users.findById(publishDto.authorId);
     if (!author) throw new UserNotFoundError();
 
-    const requirements = publishDto.requirementsProps.itemsProps.map(
-      (props) => new ItemRequirement(props)
-    );
-    await this.uow.requirements.saveMany(requirements);
-
-    const roles = publishDto.rolesProps.map((props) => new Role(props));
-    await this.uow.roles.saveMany(roles);
-
-    const bossesIds = publishDto.bossesIds;
-    const bosses = await this.uow.raidBosses.findByIds(bossesIds);
+    const [bosses, requirements, roles] = await Promise.all([
+      this.uow.raidBosses.findByIds(publishDto.bossesIds),
+      this.saveRequirements(publishDto),
+      this.saveRoles(publishDto),
+    ]);
 
     const post = new RaidPost({
       ...publishDto,
@@ -47,5 +42,23 @@ export class PublishRaidPostService {
     });
 
     return this.uow.raidPosts.save(post);
+  }
+
+  private async saveRoles(publishDto: PublishRaidPostDTO) {
+    const roles = publishDto.rolesProps.map((props) => new Role(props));
+
+    await this.uow.roles.saveMany(roles);
+
+    return roles;
+  }
+
+  private async saveRequirements(publishDto: PublishRaidPostDTO) {
+    const requirements = publishDto.requirementsProps.itemsProps.map(
+      (props) => new ItemRequirement(props)
+    );
+
+    await this.uow.requirements.saveMany(requirements);
+
+    return requirements;
   }
 }
