@@ -1,7 +1,5 @@
-import {
-  UpdateRaidPostDTO,
-  UpdateRaidPostService,
-} from "@services/raid-post/update.service";
+import { UpdateRaidPostService } from "@services/raid-post/update-raid-post.service";
+import { UpdateRaidPostDTO } from "@services/raid-post/dtos/update-raid-post.dto";
 import { createAndSaveItemRequirement } from "../../../helpers/item-requirement.helper";
 import { createAndSaveRaidBoss } from "../../../helpers/raid-boss.helper";
 import { createAndSaveRaidPost } from "../../../helpers/raid-post.helper";

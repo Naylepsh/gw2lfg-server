@@ -9,23 +9,18 @@ import {
   Put,
 } from "routing-controllers";
 import { User } from "@data/entities/user.entity";
-import { PostAuthorshipService } from "@services/raid-post/authorship.service";
-import { EntityNotFoundError } from "@services/errors/entity-not-found.error";
-import { UpdateRaidPostService } from "@services/raid-post/update.service";
+import { CheckPostAuthorshipService } from "@root/services/raid-post/check-post-authorship.service";
+import { EntityNotFoundError } from "@root/services/common/errors/entity-not-found.error";
+import { UpdateRaidPostService } from "@root/services/raid-post/update-raid-post.service";
 import { SaveRaidPostDTO } from "./save-raid-post.dto";
-import {
-  mapRaidPostToRaidPostResponse,
-  RaidPostResponse,
-} from "../../responses/entities/raid-post.entity.response";
-import { IRouteResponse } from "../../responses/routes/route.response.interface";
-
-interface UpdateRaidPostResponse extends IRouteResponse<RaidPostResponse> {}
+import { mapRaidPostToRaidPostResponse } from "../../responses/entities/raid-post.entity.response";
+import { UpdateRaidPostResponse } from "./update-raid-post.response";
 
 @JsonController()
 export class UpdateRaidPostController {
   constructor(
     private readonly updateService: UpdateRaidPostService,
-    private readonly authorshipService: PostAuthorshipService
+    private readonly authorshipService: CheckPostAuthorshipService
   ) {}
 
   @Put("/raid-posts/:id")
@@ -42,7 +37,7 @@ export class UpdateRaidPostController {
       if (!isAuthor) throw new ForbiddenError();
 
       const post = await this.updateService.update({ ...dto, id: postId });
-      return { data: mapRaidPostToRaidPostResponse(post)}
+      return { data: mapRaidPostToRaidPostResponse(post) };
     } catch (e) {
       if (e instanceof EntityNotFoundError) {
         throw new NotFoundError();

@@ -10,21 +10,13 @@ import {
   Post,
 } from "routing-controllers";
 import { User } from "@data/entities/user.entity";
-import { EntityAlreadyExistsError } from "@services/errors/entity-already-exists.error";
-import { PostNotFoundError } from "@services/errors/entity-not-found.error";
-import {
-  RequirementsNotSatisfiedError,
-  SendJoinRequestService,
-} from "@services/join-request/send.service";
+import { EntityAlreadyExistsError } from "@root/services/common/errors/entity-already-exists.error";
+import { PostNotFoundError } from "@root/services/common/errors/entity-not-found.error";
+import { SendJoinRequestService } from "@root/services/join-request/send-join-request.service";
+import { RequirementsNotSatisfiedError } from "@root/services/join-request/requirements-not-satisfied.error";
 import { UnprocessableEntityError } from "../../http-errors/unprocessable-entity.error";
-import { IRouteResponse } from "../../responses/routes/route.response.interface";
-import { JoinRequest } from "../../../data/entities/join-request.entity";
-
-class SendJoinRequestDTO {
-  roleId: number;
-}
-
-interface SendJoinRequestResponse extends IRouteResponse<JoinRequest> {}
+import { SendJoinRequestDTO } from "./send-join-request.dto";
+import { SendJoinRequestResponse } from "./send-join-request.response";
 
 @JsonController()
 export class SendRaidJoinRequestController {

@@ -2,7 +2,7 @@ import items from "@services/gw2-items/items.json";
 import { CreateJwtService } from "@api/services/token/create";
 import { RaidBoss } from "@data/entities/raid-boss.entity";
 import { User } from "@data/entities/user.entity";
-import { PublishRaidPostService } from "@services/raid-post/publish.service";
+import { PublishRaidPostService } from "@root/services/raid-post/publish-raid-posts.service";
 import { RegisterService } from "@services/user/register";
 import { RaidPostMemoryUnitOfWork } from "../../../helpers/uows/raid-post.memory-unit-of-work";
 import { addHours } from "../../../unit/services/raid-post/hours.util";

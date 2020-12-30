@@ -1,4 +1,3 @@
-import { MinLength } from "class-validator";
 import {
   Body,
   InternalServerError,
@@ -6,19 +5,11 @@ import {
   Post,
   UnauthorizedError,
 } from "routing-controllers";
-import { InvalidLoginDetailsError, LoginService } from "@services/user/login";
+import { LoginService } from "@services/user/login";
+import { InvalidLoginDetailsError } from "@root/services/user/errors/invalid-login-details.error";
 import { CreateJwtService } from "../../services/token/create";
-import { IRouteResponse } from "../../responses/routes/route.response.interface";
-
-class LoginDTO {
-  @MinLength(6)
-  username: string;
-
-  @MinLength(6)
-  password: string;
-}
-
-interface LoginResponse extends IRouteResponse<{ token: string }> {}
+import { LoginDTO } from "./login.dto";
+import { LoginResponse } from "./login.response";
 
 @JsonController()
 export class LoginUserController {

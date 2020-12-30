@@ -1,10 +1,10 @@
-import { FindRaidBossService } from "@services/raid-boss/find.service";
+import { FindRaidBossesService } from "@root/services/raid-boss/find-raid-bosses.service";
 import { RaidBossMemoryRepository } from "../../../helpers/repositories/raid-boss.memory-repository";
 import { createAndSaveRaidBoss } from "../../../helpers/raid-boss.helper";
 
 describe("RaidBoss Service: find tests", () => {
   const bossRepo = new RaidBossMemoryRepository();
-  const service = new FindRaidBossService(bossRepo);
+  const service = new FindRaidBossesService(bossRepo);
   const numberOfPosts = 10;
 
   beforeEach(async () => {

@@ -1,4 +1,4 @@
-import { UnpublishRaidPostService } from "@services/raid-post/unpublish.service";
+import { UnpublishRaidPostService } from "@root/services/raid-post/unpublish-raid-post.service";
 import { createAndSaveItemRequirement } from "../../../helpers/item-requirement.helper";
 import { createAndSaveRaidBoss } from "../../../helpers/raid-boss.helper";
 import { createAndSaveRaidPost } from "../../../helpers/raid-post.helper";

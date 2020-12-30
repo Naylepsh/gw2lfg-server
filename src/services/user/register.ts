@@ -3,9 +3,7 @@ import { Inject, Service } from "typedi";
 import { User } from "@data/entities/user.entity";
 import { IUserRepository } from "@data/repositories/user/user.repository.interface";
 import { userRepositoryType } from "@loaders/typedi.constants";
-import { EntityAlreadyExistsError } from "../errors/entity-already-exists.error";
-
-export class UsernameTakenError extends EntityAlreadyExistsError {}
+import { UsernameTakenError } from "./errors/username-taken.error";
 
 @Service()
 export class RegisterService {

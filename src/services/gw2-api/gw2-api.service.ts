@@ -1,10 +1,8 @@
 import { Item } from "../gw2-items/item.interface";
-import {
-  fetchCharacters,
-  fetchItemsFromBank,
-  fetchItemsFromCharacter,
-  fetchItemsFromSharedInventory,
-} from "./gw2-api.proxy";
+import { fetchItemsFromCharacter } from "./fetchers/fetch-items-from-character";
+import { fetchCharacters } from "./fetchers/fetch-characters";
+import { fetchItemsFromSharedInventory } from "./fetchers/fetch-items-from-shared-inventory";
+import { fetchItemsFromBank } from "./fetchers/fetch-items-from-bank";
 
 type AllItemsFetcher = (apiKey: string) => Promise<Item[]>;
 

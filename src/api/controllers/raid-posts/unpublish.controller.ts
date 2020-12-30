@@ -9,15 +9,15 @@ import {
   Param,
 } from "routing-controllers";
 import { User } from "@data/entities/user.entity";
-import { PostAuthorshipService } from "@services/raid-post/authorship.service";
-import { EntityNotFoundError } from "@services/errors/entity-not-found.error";
-import { UnpublishRaidPostService } from "@services/raid-post/unpublish.service";
+import { CheckPostAuthorshipService } from "@root/services/raid-post/check-post-authorship.service";
+import { EntityNotFoundError } from "@root/services/common/errors/entity-not-found.error";
+import { UnpublishRaidPostService } from "@root/services/raid-post/unpublish-raid-post.service";
 
 @JsonController()
 export class UnpublishRaidPostController {
   constructor(
     private readonly unpublishService: UnpublishRaidPostService,
-    private readonly authorshipService: PostAuthorshipService
+    private readonly authorshipService: CheckPostAuthorshipService
   ) {}
 
   @HttpCode(204)

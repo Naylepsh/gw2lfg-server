@@ -1,4 +1,3 @@
-import { MinLength } from "class-validator";
 import {
   Body,
   HttpCode,
@@ -8,23 +7,12 @@ import {
   Post,
 } from "routing-controllers";
 import { User } from "@data/entities/user.entity";
-import { RegisterService, UsernameTakenError } from "@services/user/register";
+import { RegisterService } from "@services/user/register";
+import { UsernameTakenError } from "@root/services/user/errors/username-taken.error";
 import { UnprocessableEntityError } from "../../http-errors/unprocessable-entity.error";
 import { CreateJwtService } from "../../services/token/create";
-import { IRouteResponse } from "../../responses/routes/route.response.interface";
-
-class RegisterDTO {
-  @MinLength(6)
-  username: string;
-
-  @MinLength(6)
-  password: string;
-
-  @MinLength(1)
-  apiKey: string;
-}
-
-interface RegisterResponse extends IRouteResponse<{ token: string }> {}
+import { RegisterDTO } from "./register.dto";
+import { RegisterResponse } from "./register.response";
 
 @JsonController()
 export class RegisterUserController {

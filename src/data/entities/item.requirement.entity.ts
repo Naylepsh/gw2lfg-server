@@ -1,13 +1,6 @@
-import {
-  ChildEntity,
-  Column
-} from "typeorm";
-import { RequirementProps, Requirement } from "./requirement.entity";
-
-
-export interface ItemRequirementProps extends RequirementProps {
-  quantity: number;
-}
+import { ChildEntity, Column } from "typeorm";
+import { ItemRequirementProps } from "./Item.requirement.props";
+import { Requirement } from "./requirement.entity";
 
 @ChildEntity()
 export class ItemRequirement extends Requirement {

@@ -1,4 +1,3 @@
-import { IsOptional, IsPositive, Min } from "class-validator";
 import {
   CurrentUser,
   Get,
@@ -11,48 +10,12 @@ import {
   findRaidPostsServiceType,
   requirementsCheckServiceType,
 } from "@loaders/typedi.constants";
-import { FindRaidPostService } from "@services/raid-post/find.service";
+import { FindRaidPostService } from "@root/services/raid-post/find-raid-posts.service";
 import { ICheckRequirementsService } from "@services/requirement/check-requirements.service.interface";
-import {
-  mapRaidPostToRaidPostResponse,
-  RaidPostResponse,
-} from "../../responses/entities/raid-post.entity.response";
+import { mapRaidPostToRaidPostResponse } from "../../responses/entities/raid-post.entity.response";
 import { RaidPost } from "@data/entities/raid-post.entitity";
-import { IRouteResponse } from "../../responses/routes/route.response.interface";
-
-type FindSingleRaidPostDTO = RaidPostResponse & {
-  userMeetsRequirements: boolean;
-};
-type FindRaidPostsDTO = FindSingleRaidPostDTO[];
-
-class FindRaidPostsQueryParams {
-  @IsOptional()
-  @IsPositive()
-  take: number = 10;
-
-  @IsOptional()
-  @Min(0)
-  skip: number = 0;
-}
-
-/* TODO (maybe):
-use something like
-{
-  pagination: {
-    skip: ??
-    take: ??
-    total: ??
-  },
-  data: [...],
-  links: {
-    prev: ??,
-    next: ??
-  }
-}
-*/
-interface FindRaidPostsResponse extends IRouteResponse<FindRaidPostsDTO> {
-  hasMore: boolean;
-}
+import { FindRaidPostsResponse } from "./find-raid-posts.response";
+import { FindRaidPostsQueryParams } from "./find-raid-posts.query-params";
 
 @JsonController()
 export class FindRaidPostsController {

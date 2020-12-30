@@ -1,20 +1,16 @@
 import { Inject, Service } from "typedi";
 import { raidBossRepositoryType } from "@loaders/typedi.constants";
 import { IRaidBossRepository } from "../../data/repositories/raid-boss/raid-boss.repository.interface";
-
-export interface FindRaidBossParams {
-  skip: number;
-  take: number;
-}
+import { FindRaidBossesDTO } from "./find-raid-bosses.dto";
 
 @Service()
-export class FindRaidBossService {
+export class FindRaidBossesService {
   constructor(
     @Inject(raidBossRepositoryType)
     private readonly repository: IRaidBossRepository
   ) {}
 
-  async find(params: FindRaidBossParams) {
+  async find(params: FindRaidBossesDTO) {
     const { skip, take } = params;
 
     const bosses = await this.repository.findMany({

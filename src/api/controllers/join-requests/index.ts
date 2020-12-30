@@ -1,3 +1,3 @@
-import { SendRaidJoinRequestController } from "./send.controller";
+import { SendRaidJoinRequestController } from "./send-join-request.controller";
 
 export const joinRequestsControllers = [SendRaidJoinRequestController];

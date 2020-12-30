@@ -1,10 +1,8 @@
 import assert from "assert";
 import "@root/config";
-import {
-  fetchCharacters,
-  fetchItemsFromBank,
-  fetchItemsFromCharacter,
-} from "@services/gw2-api/gw2-api.proxy";
+import { fetchItemsFromCharacter } from "@root/services/gw2-api/fetchers/fetch-items-from-character";
+import { fetchCharacters } from "@root/services/gw2-api/fetchers/fetch-characters";
+import { fetchItemsFromBank } from "@root/services/gw2-api/fetchers/fetch-items-from-bank";
 
 const getSomeCharacterName = async (apiKey: string) => {
   const characters = await fetchCharacters(apiKey);
