@@ -2,7 +2,7 @@ import "reflect-metadata";
 import request from "supertest";
 import Container from "typedi";
 import items from "@root/services/gw2-items/items.json";
-import { SendRaidJoinRequestController } from "@api/controllers/join-requests/send.controller";
+import { SendRaidJoinRequestController } from "@root/api/controllers/join-requests/send-join-request.controller";
 import { CurrentUserJWTMiddleware } from "@api/middleware/current-user.middleware";
 import { RaidPost } from "@data/entities/raid-post.entitity";
 import { User } from "@data/entities/user.entity";

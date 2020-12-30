@@ -7,14 +7,9 @@ import {
 } from "routing-controllers";
 import { User } from "@data/entities/user.entity";
 import { PublishRaidPostService } from "@root/services/raid-post/publish-raid-posts.service";
-import {
-  mapRaidPostToRaidPostResponse,
-  RaidPostResponse,
-} from "../../responses/entities/raid-post.entity.response";
+import { mapRaidPostToRaidPostResponse } from "../../responses/entities/raid-post.entity.response";
 import { SaveRaidPostDTO } from "./save-raid-post.dto";
-import { IRouteResponse } from "../../responses/routes/route.response.interface";
-
-interface PublishRaidPostResponse extends IRouteResponse<RaidPostResponse> {}
+import { PublishRaidPostResponse } from "./publish-raid-post.response";
 
 @JsonController()
 export class PublishRaidPostController {
@@ -30,6 +25,6 @@ export class PublishRaidPostController {
       ...dto,
       authorId: user.id,
     });
-    return { data: mapRaidPostToRaidPostResponse(post) }
+    return { data: mapRaidPostToRaidPostResponse(post) };
   }
 }
