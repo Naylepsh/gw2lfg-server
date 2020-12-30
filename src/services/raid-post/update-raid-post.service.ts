@@ -7,18 +7,7 @@ import { raidPostUnitOfWorkType } from "@loaders/typedi.constants";
 import { EntityNotFoundError } from "../errors/entity-not-found.error";
 import { isDateInThePast } from "./utils/is-date-in-the-past";
 import { PastDateError } from "./errors/raid-post-errors";
-import { RolePropsDTO } from "./dtos/role-props.dto";
-import { RequirementsPropsDTO } from "./dtos/requirements-props.dto";
-
-export interface UpdateRaidPostDTO {
-  id: number;
-  date: Date;
-  server: string;
-  description?: string;
-  bossesIds: number[];
-  rolesProps: RolePropsDTO[];
-  requirementsProps: RequirementsPropsDTO;
-}
+import { UpdateRaidPostDTO } from "./dtos/update-raid-post.dto";
 
 @Service()
 export class UpdateRaidPostService {
