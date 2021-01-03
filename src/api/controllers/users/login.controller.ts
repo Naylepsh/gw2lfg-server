@@ -8,8 +8,8 @@ import {
 import { LoginService } from "@services/user/login";
 import { InvalidLoginDetailsError } from "@root/services/user/errors/invalid-login-details.error";
 import { CreateJwtService } from "../../services/token/create";
-import { LoginDTO } from "./login.dto";
-import { LoginResponse } from "./login.response";
+import { LoginDTO } from "./dtos/login.dto";
+import { LoginResponse } from "./responses/login.response";
 
 @JsonController()
 export class LoginUserController {

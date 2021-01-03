@@ -12,9 +12,9 @@ import { User } from "@data/entities/user.entity";
 import { CheckPostAuthorshipService } from "@root/services/raid-post/check-post-authorship.service";
 import { EntityNotFoundError } from "@root/services/common/errors/entity-not-found.error";
 import { UpdateRaidPostService } from "@root/services/raid-post/update-raid-post.service";
-import { SaveRaidPostDTO } from "./save-raid-post.dto";
+import { SaveRaidPostDTO } from "./dtos/save-raid-post.dto";
 import { mapRaidPostToRaidPostResponse } from "../../responses/entities/raid-post.entity.response";
-import { UpdateRaidPostResponse } from "./update-raid-post.response";
+import { UpdateRaidPostResponse } from "./responses/update-raid-post.response";
 
 @JsonController()
 export class UpdateRaidPostController {

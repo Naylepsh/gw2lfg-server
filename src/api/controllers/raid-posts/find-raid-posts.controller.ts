@@ -14,8 +14,8 @@ import { FindRaidPostService } from "@root/services/raid-post/find-raid-posts.se
 import { ICheckRequirementsService } from "@services/requirement/check-requirements.service.interface";
 import { mapRaidPostToRaidPostResponse } from "../../responses/entities/raid-post.entity.response";
 import { RaidPost } from "@data/entities/raid-post.entitity";
-import { FindRaidPostsResponse } from "./find-raid-posts.response";
-import { FindRaidPostsQueryParams } from "./find-raid-posts.query-params";
+import { FindRaidPostsResponse } from "./responses/find-raid-posts.response";
+import { FindRaidPostsQueryParams } from "./params/find-raid-posts.query-params";
 
 @JsonController()
 export class FindRaidPostsController {

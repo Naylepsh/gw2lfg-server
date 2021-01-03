@@ -8,8 +8,8 @@ import {
 import { User } from "@data/entities/user.entity";
 import { PublishRaidPostService } from "@root/services/raid-post/publish-raid-posts.service";
 import { mapRaidPostToRaidPostResponse } from "../../responses/entities/raid-post.entity.response";
-import { SaveRaidPostDTO } from "./save-raid-post.dto";
-import { PublishRaidPostResponse } from "./publish-raid-post.response";
+import { SaveRaidPostDTO } from "./dtos/save-raid-post.dto";
+import { PublishRaidPostResponse } from "./responses/publish-raid-post.response";
 
 @JsonController()
 export class PublishRaidPostController {

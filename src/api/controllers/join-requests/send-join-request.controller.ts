@@ -15,8 +15,8 @@ import { PostNotFoundError } from "@root/services/common/errors/entity-not-found
 import { SendJoinRequestService } from "@root/services/join-request/send-join-request.service";
 import { RequirementsNotSatisfiedError } from "@root/services/join-request/requirements-not-satisfied.error";
 import { UnprocessableEntityError } from "../../http-errors/unprocessable-entity.error";
-import { SendJoinRequestDTO } from "./send-join-request.dto";
-import { SendJoinRequestResponse } from "./send-join-request.response";
+import { SendJoinRequestDTO } from "./dtos/send-join-request.dto";
+import { SendJoinRequestResponse } from "./responses/send-join-request.response";
 
 @JsonController()
 export class SendRaidJoinRequestController {

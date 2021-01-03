@@ -1,6 +1,6 @@
 import { Get, JsonController, QueryParams } from "routing-controllers";
 import { FindRaidBossesService } from "../../../services/raid-boss/find-raid-bosses.service";
-import { FindRaidBossesQueryParams } from "./find-raid-bosses.query-params";
+import { FindRaidBossesQueryParams } from "./params/find-raid-bosses.query-params";
 import { FindRaidBossesResponse } from "./find-raid-bosses.response";
 
 @JsonController()

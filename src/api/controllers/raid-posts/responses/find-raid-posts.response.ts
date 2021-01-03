@@ -1,5 +1,5 @@
-import { RaidPostResponse } from "../../responses/entities/raid-post.entity.response";
-import { IRouteResponse } from "../../responses/routes/route.response.interface";
+import { RaidPostResponse } from "../../../responses/entities/raid-post.entity.response";
+import { IRouteResponse } from "../../../responses/route.response.interface";
 
 /* TODO (maybe):
 use something like

@@ -11,8 +11,8 @@ import { RegisterService } from "@services/user/register";
 import { UsernameTakenError } from "@root/services/user/errors/username-taken.error";
 import { UnprocessableEntityError } from "../../http-errors/unprocessable-entity.error";
 import { CreateJwtService } from "../../services/token/create";
-import { RegisterDTO } from "./register.dto";
-import { RegisterResponse } from "./register.response";
+import { RegisterDTO } from "./dtos/register.dto";
+import { RegisterResponse } from "./responses/register.response";
 
 @JsonController()
 export class RegisterUserController {
