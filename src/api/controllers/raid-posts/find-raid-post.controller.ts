@@ -1,17 +1,11 @@
-import {
-  CurrentUser,
-  Get,
-  JsonController,
-  NotFoundError,
-  Param,
-} from "routing-controllers";
+import { CurrentUser, Get, JsonController, Param } from "routing-controllers";
 import { Inject } from "typedi";
 import {
-  findRaidPostsServiceType,
+  findRaidPostServiceType,
   requirementsCheckServiceType,
 } from "@loaders/typedi.constants";
-import { FindRaidPostsService } from "@services/raid-post/find-raid-posts.service";
 import { ICheckRequirementsService } from "@services/requirement/check-requirements.service.interface";
+import { FindRaidPostService } from "@services/raid-post/find-raid-post.service";
 import { User } from "@data/entities/user.entity";
 import { mapRaidPostToRaidPostResponse } from "../../responses/entities/raid-post.entity.response";
 import { unsatisfyEachRequirement } from "./utils/unsatisfy-each-requirement";
@@ -21,8 +15,8 @@ import { FindRaidPostResponse } from "./responses/find-raid-post.response";
 @JsonController()
 export class FindRaidPostController {
   constructor(
-    @Inject(findRaidPostsServiceType)
-    private readonly findService: FindRaidPostsService,
+    @Inject(findRaidPostServiceType)
+    private readonly findService: FindRaidPostService,
     @Inject(requirementsCheckServiceType)
     private readonly requirementsCheckService: ICheckRequirementsService
   ) {}
@@ -32,19 +26,15 @@ export class FindRaidPostController {
     @Param("id") id: number,
     @CurrentUser() user?: User
   ): Promise<FindRaidPostResponse> {
-    const query = { skip: 0, take: 1, where: { id } };
-    const { posts } = await this.findService.find(query);
-    if (posts.length === 0) {
-      throw new NotFoundError();
-    }
+    const post = await this.findService.find({ id });
 
-    const _posts = user
+    const posts = user
       ? await checkIfUserMeetsPostsRequirements(
-          posts,
+          [post],
           user,
           this.requirementsCheckService
         )
-      : unsatisfyEachRequirement(posts);
-    return { data: _posts.map(mapRaidPostToRaidPostResponse)[0] };
+      : unsatisfyEachRequirement([post]);
+    return { data: posts.map(mapRaidPostToRaidPostResponse)[0] };
   }
 }

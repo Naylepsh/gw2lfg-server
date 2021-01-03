@@ -13,7 +13,7 @@ import {
 } from "./seeders";
 
 describe("Find raid post e2e tests", () => {
-  const timelimit = 30000;
+  const timelimit = 60000;
   let container: typeof Container;
   let app: any;
   let uow: IRaidPostUnitOfWork;

@@ -9,4 +9,5 @@ export const joinRequestRepositoryType = "join-request.repository";
 export const raidPostUnitOfWorkType = "raid-post.unit-of-work";
 
 export const requirementsCheckServiceType = "requirements-check.service";
-export const findRaidPostsServiceType = "find-raid-post.service";
+export const findRaidPostsServiceType = "find-raid-posts.service";
+export const findRaidPostServiceType = "find-raid-post.service";
