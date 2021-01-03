@@ -8,7 +8,7 @@ import { CurrentUserJWTMiddleware } from "@api/middleware/current-user.middlewar
 import { GetItems } from "@services/gw2-api/gw2-api.service";
 import { nameToId } from "@services/gw2-items/gw2-items.service";
 import { Item } from "@services/gw2-items/item.interface";
-import { FindRaidPostService } from "@root/services/raid-post/find-raid-posts.service";
+import { FindRaidPostsService } from "@root/services/raid-post/find-raid-posts.service";
 import { CheckItemRequirementsService } from "@services/requirement/check-item-requirements.service";
 import { RaidPostMemoryUnitOfWork } from "../../../helpers/uows/raid-post.memory-unit-of-work";
 import { MyStorage } from "../../../unit/services/item-storage";
@@ -24,7 +24,7 @@ describe("FindRaidPostsController integration tests", () => {
 
     const { user } = await seedDbWithOnePost(uow);
 
-    const findRaidPostsService = new FindRaidPostService(uow.raidPosts);
+    const findRaidPostsService = new FindRaidPostsService(uow.raidPosts);
     findPosts = jest.spyOn(findRaidPostsService, "find");
     const myStorage = new MyStorage(
       new Map<string, Item[]>([

@@ -7,19 +7,20 @@ import {
 import { FindRaidPostsDTO } from "./dtos/find-raid-posts.dto";
 
 @Service(findRaidPostsServiceType)
-export class FindRaidPostService {
+export class FindRaidPostsService {
   constructor(
     @Inject(raidPostRepositoryType)
     private readonly repository: IRaidPostRepository
   ) {}
 
-  async find(params: FindRaidPostsDTO) {
-    const { skip, take } = params;
+  async find(dto: FindRaidPostsDTO) {
+    const { skip, take, where } = dto;
 
     const posts = await this.repository.findMany({
       order: { date: "DESC" },
       skip,
       take: take + 1,
+      where
     });
 
     if (posts.length === 0) {

@@ -1,12 +1,12 @@
 import { createAndSaveRaidPost } from "../../../helpers/raid-post.helper";
 import { RaidPostMemoryUnitOfWork } from "../../../helpers/uows/raid-post.memory-unit-of-work";
 import { createAndSaveUser } from "../../../helpers/user.helper";
-import { FindRaidPostService } from "@root/services/raid-post/find-raid-posts.service";
+import { FindRaidPostsService } from "@root/services/raid-post/find-raid-posts.service";
 import { addHours } from "./hours.util";
 
 describe("RaidPosts Service: find tests", () => {
   const uow = RaidPostMemoryUnitOfWork.create();
-  const service = new FindRaidPostService(uow.raidPosts);
+  const service = new FindRaidPostsService(uow.raidPosts);
   const numberOfPosts = 10;
 
   beforeEach(async () => {
