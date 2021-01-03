@@ -7,7 +7,6 @@ import { MeResponse } from "./responses/me.response";
 export class MeController {
   @Get("/me")
   me(@CurrentUser({ required: true }) user: User): MeResponse {
-    const userResponse = mapUserToUserReponse(user);
-    return { data: { ...userResponse } };
+    return { data: mapUserToUserReponse(user) };
   }
 }

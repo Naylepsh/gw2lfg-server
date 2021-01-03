@@ -17,11 +17,13 @@ describe("FindRaidPostsController integration tests", () => {
   const url = "/raid-posts";
   let app: any;
   let findPosts: any;
+  let token: string;
 
   beforeEach(async () => {
     const uow = RaidPostMemoryUnitOfWork.create();
 
-    const { user } = await seedDbWithOnePost(uow);
+    const { user, token: jwt } = await seedDbWithOnePost(uow);
+    token = jwt;
 
     const findRaidPostsService = new FindRaidPostsService(uow.raidPosts);
     findPosts = jest.spyOn(findRaidPostsService, "find");
@@ -51,15 +53,15 @@ describe("FindRaidPostsController integration tests", () => {
   });
 
   it("should return 200 if no query params were passed", async () => {
-    const res = await request(app).get(url);
+    const { status } = await request(app).get(url);
 
-    expect(res.status).toBe(200);
+    expect(status).toBe(200);
   });
 
   it("should return 200 if some query params were passed", async () => {
-    const res = await request(app).get(`${url}?take=10&skip=5`);
+    const { status } = await request(app).get(`${url}?take=10&skip=5`);
 
-    expect(res.status).toBe(200);
+    expect(status).toBe(200);
   });
 
   it("should pass pagination arguments to service", async () => {
@@ -73,11 +75,11 @@ describe("FindRaidPostsController integration tests", () => {
 
   it("should return a list of posts with unsatisfied requirements each if user was not logged in", async () => {
     const queryParams = { take: 10, skip: 0 };
-    const res = await request(app).get(
+    const { body } = await request(app).get(
       `${url}?take=${queryParams.take}&skip=${queryParams.skip}`
     );
 
-    const posts = res.body.data;
+    const posts = body.data;
     expect(posts.length).toBeGreaterThan(0);
     for (const post of posts as any[]) {
       expect(post).toHaveProperty("userMeetsRequirements", false);
@@ -86,14 +88,13 @@ describe("FindRaidPostsController integration tests", () => {
 
   it("should return a list of posts with userMeetsRequirements set to true on some of them if user meets their requirements", async () => {
     const queryParams = { take: 10, skip: 0 };
-    const res = await request(app).get(
-      `${url}?take=${queryParams.take}&skip=${queryParams.skip}`
-    );
+    const { body } = await request(app)
+      .get(`${url}?take=${queryParams.take}&skip=${queryParams.skip}`)
+      .set(CurrentUserJWTMiddleware.AUTH_HEADER, token);
 
-    const requirementChecks = res.body.data.map(
-      (post: { userMeetsRequirements: boolean }) => post.userMeetsRequirements
+    const posts = body.data;
+    expect((posts as any[]).some((post) => post.userMeetsRequirements)).toBe(
+      true
     );
-    expect(res.body.data.length).toBeGreaterThan(0);
-    expect(requirementChecks.some((check: boolean) => check));
   });
 });
