@@ -1,6 +1,4 @@
-import {
-  PublishRaidPostService,
-} from "@root/services/raid-post/publish-raid-posts.service";
+import { PublishRaidPostService } from "@root/services/raid-post/publish-raid-posts.service";
 import { PublishRaidPostDTO } from "@root/services/raid-post/dtos/publish-raid-post.dto";
 import { createAndSaveRaidBoss } from "../../../helpers/raid-boss.helper";
 import { RaidPostMemoryUnitOfWork } from "../../../helpers/uows/raid-post.memory-unit-of-work";
@@ -41,11 +39,11 @@ describe("RaidPost service: publish tests", () => {
       date,
       requirementsProps: { itemsProps: [{ name: "Some Item", quantity: 10 }] },
     });
-    const reqsInDbBefore = uow.requirements.entities.length;
+    const reqsInDbBefore = uow.itemRequirements.entities.length;
 
     await publishService.publish(dto);
 
-    const reqsInDbAfter = uow.requirements.entities.length;
+    const reqsInDbAfter = uow.itemRequirements.entities.length;
     expect(reqsInDbAfter - reqsInDbBefore > 0).toBe(true);
   });
 

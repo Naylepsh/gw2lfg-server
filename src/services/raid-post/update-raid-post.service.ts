@@ -57,13 +57,13 @@ export class UpdateRaidPostService {
       await this.uow.requirements.delete(raidPost.requirements);
     }
 
-    const requirements = await this.uow.requirements.saveMany(
+    const itemRequirements = await this.uow.itemRequirements.saveMany(
       dto.requirementsProps.itemsProps.map(
         (props) => new ItemRequirement(props)
       )
     );
 
-    return requirements;
+    return itemRequirements;
   }
 
   private async overrideRoles(raidPost: RaidPost, dto: UpdateRaidPostDTO) {

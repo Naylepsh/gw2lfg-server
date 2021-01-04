@@ -13,6 +13,7 @@ import {
   requirementsCheckServiceType,
   postRepositoryType,
   raidPostUnitOfWorkType,
+  itemRequirementRepositoryType,
 } from "./typedi.constants";
 import "../services/raid-post/find-raid-post.service";
 import "../services/raid-post/find-raid-posts.service";
@@ -40,6 +41,11 @@ const loadDataLayerDependencies = () => {
 
   const requirementRepo = conn.getCustomRepository(repos.RequirementRepository);
   Container.set(requirementRepositoryType, requirementRepo);
+
+  const itemRequirementRepo = conn.getCustomRepository(
+    repos.ItemRequirementRepository
+  );
+  Container.set(itemRequirementRepositoryType, itemRequirementRepo);
 
   const postRepo = conn.getCustomRepository(repos.PostRepository);
   Container.set(postRepositoryType, postRepo);

@@ -53,12 +53,12 @@ export class PublishRaidPostService {
   }
 
   private async saveRequirements(publishDto: PublishRaidPostDTO) {
-    const requirements = publishDto.requirementsProps.itemsProps.map(
+    const itemRequirements = publishDto.requirementsProps.itemsProps.map(
       (props) => new ItemRequirement(props)
     );
 
-    await this.uow.requirements.saveMany(requirements);
+    await this.uow.itemRequirements.saveMany(itemRequirements);
 
-    return requirements;
+    return itemRequirements;
   }
 }

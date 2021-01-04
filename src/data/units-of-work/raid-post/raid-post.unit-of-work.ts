@@ -3,6 +3,7 @@ import { RaidPostRepository } from "../../repositories/raid-post/raid-post.repos
 import { RequirementRepository } from "../../repositories/requirement/requirement.repository";
 import { RoleRepository } from "../../repositories/role/role.repository";
 import { UserRepository } from "../../repositories/user/user.repository";
+import { ItemRequirementRepository } from "../../repositories/item-requirement/item-requirement.repository";
 import { IRaidPostUnitOfWork } from "./raid-post.unit-of-work.interface";
 import { GenericUnitOfWork } from "../generic.unit-of-work";
 import { Inject, Service } from "typedi";
@@ -28,6 +29,10 @@ export class RaidPostUnitOfWork implements IRaidPostUnitOfWork {
 
   get requirements() {
     return this.unitOfWork.getCustomRepository(RequirementRepository);
+  }
+
+  get itemRequirements() {
+    return this.unitOfWork.getCustomRepository(ItemRequirementRepository);
   }
 
   get roles() {

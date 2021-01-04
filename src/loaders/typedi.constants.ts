@@ -1,6 +1,7 @@
 export const userRepositoryType = "user.repository";
 export const roleRepositoryType = "role.repository";
 export const requirementRepositoryType = "requirement.repository";
+export const itemRequirementRepositoryType = "item-requirement.repository";
 export const postRepositoryType = "post.repository";
 export const raidPostRepositoryType = "raid-post.repository";
 export const raidBossRepositoryType = "raid-boss.repository";
