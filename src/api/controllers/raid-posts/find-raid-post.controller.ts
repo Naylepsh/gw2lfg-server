@@ -1,4 +1,11 @@
-import { CurrentUser, Get, InternalServerError, JsonController, NotFoundError, Param } from "routing-controllers";
+import {
+  CurrentUser,
+  Get,
+  InternalServerError,
+  JsonController,
+  NotFoundError,
+  Param,
+} from "routing-controllers";
 import { Inject } from "typedi";
 import {
   findRaidPostServiceType,
@@ -11,7 +18,7 @@ import { mapRaidPostToRaidPostResponse } from "../../responses/entities/raid-pos
 import { unsatisfyEachRequirement } from "./utils/unsatisfy-each-requirement";
 import { checkIfUserMeetsPostsRequirements } from "./utils/check-if-user-meets-posts-requirements";
 import { FindRaidPostResponse } from "./responses/find-raid-post.response";
-import { EntityNotFoundError } from "../../../services/common/errors/entity-not-found.error";
+import { EntityNotFoundError } from "@services/common/errors/entity-not-found.error";
 
 @JsonController()
 export class FindRaidPostController {
@@ -28,21 +35,21 @@ export class FindRaidPostController {
     @CurrentUser() user?: User
   ): Promise<FindRaidPostResponse> {
     try {
-    const post = await this.findService.find({ id });
+      const post = await this.findService.find({ id });
 
-    const posts = user
-      ? await checkIfUserMeetsPostsRequirements(
-          [post],
-          user,
-          this.requirementsCheckService
-        )
-      : unsatisfyEachRequirement([post]);
-    return { data: posts.map(mapRaidPostToRaidPostResponse)[0] };
+      const posts = user
+        ? await checkIfUserMeetsPostsRequirements(
+            [post],
+            user,
+            this.requirementsCheckService
+          )
+        : unsatisfyEachRequirement([post]);
+      return { data: posts.map(mapRaidPostToRaidPostResponse)[0] };
     } catch (error) {
       if (error instanceof EntityNotFoundError) {
-        throw new NotFoundError()
+        throw new NotFoundError();
       } else {
-        throw new InternalServerError(error.message)
+        throw new InternalServerError(error.message);
       }
     }
   }

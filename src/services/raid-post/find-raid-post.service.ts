@@ -6,6 +6,7 @@ import {
 } from "@loaders/typedi.constants";
 import { PostNotFoundError } from "../common/errors/entity-not-found.error";
 import { FindRaidPostDTO } from "./dtos/find-raid-post.dto";
+import { ItemRequirement } from "../../data/entities/item.requirement.entity";
 
 @Service(findRaidPostServiceType)
 export class FindRaidPostService {
@@ -21,6 +22,9 @@ export class FindRaidPostService {
     if (!post) {
       throw new PostNotFoundError();
     }
+    console.log(
+      post.requirements.filter((req) => req instanceof ItemRequirement)
+    );
 
     return post;
   }
