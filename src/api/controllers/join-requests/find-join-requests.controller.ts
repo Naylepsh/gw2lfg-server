@@ -12,7 +12,6 @@ export class FindJoinRequestsController {
   async find(
     @QueryParams() params: FindJoinRequestsParams
   ): Promise<FindJoinRequestsResponse> {
-    console.log("hi domo?!");
     const requests = await this.joinRequestService.find(params);
     return { data: requests.map(mapJoinRequestToJoinRequestResponse) };
   }

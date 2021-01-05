@@ -12,18 +12,25 @@ export class JoinRequestRepository
   implements IJoinRequestRepository {
   private static relations = ["user", "post", "role"];
 
-  findByKeys(keys: JoinRequestRelationKeys): Promise<JoinRequest[]> {
+  async findByKeys(keys: JoinRequestRelationKeys): Promise<JoinRequest[]> {
     const where = this.createWhereQuery(keys);
+    const tempRes = await this.findMany({});
 
     return this.findMany({ where, relations: JoinRequestRepository.relations });
   }
 
   private createWhereQuery(keys: JoinRequestRelationKeys) {
     const { userId, postId, roleId } = keys;
-    const user = userId ? { id: userId } : undefined;
-    const post = postId ? { id: postId } : undefined;
-    const role = roleId ? { id: roleId } : undefined;
-    const where = { user, post, role };
+    let where: { [key: string]: any } = {};
+    if (userId) {
+      where.user = { id: userId };
+    }
+    if (postId) {
+      where.post = { id: postId };
+    }
+    if (roleId) {
+      where.role = { id: roleId };
+    }
     return where;
   }
 }

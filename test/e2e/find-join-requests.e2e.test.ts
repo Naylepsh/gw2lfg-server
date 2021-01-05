@@ -53,11 +53,9 @@ describe("Find raid post join request e2e tests", () => {
         .set(CurrentUserJWTMiddleware.AUTH_HEADER, token)
         .send({ roleId });
 
-      // const { body, status } = await request(app).post(
-      //   `${joinRequestsUrl}?roleId=${roleId}`
-      // );
-      const { body, status } = await request(app).post(joinRequestsUrl);
-      console.log({ status, body });
+      const { body } = await request(app).get(
+        `${joinRequestsUrl}?roleId=${roleId}`
+      );
       const joinRequests = body.data;
 
       expect(joinRequests.length).toBe(1);
