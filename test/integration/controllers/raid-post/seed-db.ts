@@ -14,8 +14,8 @@ export async function seedDbWithOnePost(uow: RaidPostMemoryUnitOfWork) {
     password: "password",
     apiKey: "api-key",
   });
-  const { id: userId } = await registerService.register(user);
-  const token = new CreateJwtService().createToken(userId);
+  const savedUser = await registerService.register(user);
+  const token = new CreateJwtService().createToken(savedUser.id);
 
   const boss = new RaidBoss({ name: "boss", isCm: false });
   const savedBoss = await uow.raidBosses.save(boss);
@@ -31,8 +31,8 @@ export async function seedDbWithOnePost(uow: RaidPostMemoryUnitOfWork) {
       { name: "DPS", class: "Any", description: "condi, not scourge" },
     ],
     requirementsProps: { itemsProps: [{ name: item, quantity: 10 }] },
-    authorId: userId,
+    authorId: savedUser.id,
   };
   const post = await publishService.publish(dto);
-  return { token, bossesIds, post, user };
+  return { token, bossesIds, post, user: savedUser };
 }
