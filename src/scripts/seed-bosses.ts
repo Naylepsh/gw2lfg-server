@@ -1,5 +1,6 @@
 import dotenv from "dotenv";
 import { getConnection } from "typeorm";
+// SCRIPTS CANNOT USE MODULE ALIASES!
 import { RaidBossRepository } from "../data/repositories/raid-boss/raid-boss.repository";
 import { loadTypeORM } from "../loaders/typeorm.loader";
 import { raids } from "../data/entities/raid-boss/gw2-raids.json";
