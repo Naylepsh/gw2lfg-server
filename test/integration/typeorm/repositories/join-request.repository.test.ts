@@ -47,12 +47,13 @@ describe("whatever", () => {
     const joinRequestRepo = conn.getCustomRepository(JoinRequestRepository);
     await joinRequestRepo.save(new JoinRequest({ user, post, role }));
 
-    const foundJoinRequest = await joinRequestRepo.findByKeys({
+    const foundJoinRequests = await joinRequestRepo.findByKeys({
       userId: user.id,
       postId: post.id,
       roleId: role.id,
     });
-    expect(foundJoinRequest).toBeDefined();
+    expect(foundJoinRequests.length).toBeGreaterThan(0);
+    expect(foundJoinRequests[0]).toBeDefined();
   });
 });
 

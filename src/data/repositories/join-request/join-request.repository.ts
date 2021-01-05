@@ -10,10 +10,10 @@ import { IJoinRequestRepository } from "./join-request.repository.interface";
 export class JoinRequestRepository
   extends IdentifiableEntityRepository<JoinRequest>
   implements IJoinRequestRepository {
-  findByKeys(keys: FindKeys): Promise<JoinRequest | undefined> {
+  findByKeys(keys: FindKeys): Promise<JoinRequest[]> {
     const where = this.createWhereQuery(keys);
 
-    return this.findOne({ where });
+    return this.findMany({ where });
   }
 
   private createWhereQuery(keys: FindKeys) {

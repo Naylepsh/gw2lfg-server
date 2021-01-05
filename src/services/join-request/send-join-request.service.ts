@@ -18,6 +18,8 @@ import {
 import { ICheckRequirementsService } from "../requirement/check-requirements.service.interface";
 import { SendJoinRequestDTO } from "./send-join-request.dto";
 import { RequirementsNotSatisfiedError } from "./requirements-not-satisfied.error";
+import { MultipleRequestsForTheSameSpotError } from "./multiple-requests-for-the-same-spot.error";
+import { SpotIsTakenError } from "./spot-is-taken.error";
 
 export class SendJoinRequestService {
   constructor(
@@ -30,10 +32,10 @@ export class SendJoinRequestService {
   ) {}
 
   async sendJoinRequest({ userId, postId, roleId }: SendJoinRequestDTO) {
-    const [user, post, request] = await Promise.all([
+    const [user, post, requests] = await Promise.all([
       this.userRepo.findById(userId),
       this.postRepo.findById(postId),
-      this.joinRequestRepo.findByKeys(userId, postId, roleId),
+      this.joinRequestRepo.findByKeys({ postId, roleId }),
     ]);
     const role = post?.getRole(roleId);
 
@@ -46,8 +48,13 @@ export class SendJoinRequestService {
     if (!role) {
       throw new RoleNotFoundError();
     }
-    if (request) {
-      throw new EntityAlreadyExistsError();
+    if (requests.map((req) => req.user.id).includes(userId)) {
+      throw new MultipleRequestsForTheSameSpotError();
+    }
+    if (
+      requests.map((req) => req.status).some((status) => status === "ACCEPTED")
+    ) {
+      throw new SpotIsTakenError();
     }
 
     const areSatisfied = await this.checkRequirementsService.areRequirementsSatisfied(

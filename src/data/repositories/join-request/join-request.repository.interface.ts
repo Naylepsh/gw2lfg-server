@@ -4,5 +4,5 @@ import { FindKeys } from "./find-keys";
 
 export interface IJoinRequestRepository
   extends IIdentifiableEntityRepository<JoinRequest> {
-  findByKeys(keys: FindKeys): Promise<JoinRequest | undefined>;
+  findByKeys(keys: FindKeys): Promise<JoinRequest[]>;
 }

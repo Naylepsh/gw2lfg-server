@@ -21,7 +21,7 @@ import { storage } from "../item-storage";
 describe("JoinRequest Service: send tests", () => {
   let userRepo: IUserRepository;
   let postRepo: IPostRepository;
-  let joinRequestRepo: IJoinRequestRepository;
+  let joinRequestRepo: JoinRequestMemoryRepository;
 
   beforeEach(() => {
     userRepo = new UserMemoryRepository();
@@ -62,7 +62,11 @@ describe("JoinRequest Service: send tests", () => {
       new CheckItemRequirementsService(new GetItems(fetchItems))
     ).sendJoinRequest({ userId: user.id, postId: post.id, roleId: role.id });
 
-    const request = await joinRequestRepo.findByKeys(user.id, post.id, role.id);
+    const request = await joinRequestRepo.findByKeys({
+      userId: user.id,
+      postId: post.id,
+      roleId: role.id,
+    });
     expect(request).toBeDefined();
   });
 
@@ -164,6 +168,107 @@ describe("JoinRequest Service: send tests", () => {
         joinRequestRepo,
         new CheckItemRequirementsService(new GetItems(fetchItems))
       ).sendJoinRequest({ userId: user.id, postId: post.id, roleId: role.id })
+    ).rejects.toThrow();
+  });
+
+  it("should throw an error if user attempts to join more than once", async () => {
+    const apiKey = "api-key";
+    const user = await userRepo.save(
+      new User({
+        username: "username",
+        password: "password",
+        apiKey,
+      })
+    );
+    const itemRequirement = new ItemRequirement({ name: "item", quantity: 1 });
+    const role = new Role({ name: "DPS", class: "Any" });
+    const post = new RaidPost({
+      date: new Date(),
+      server: "EU",
+      author: user,
+      bosses: [],
+      requirements: [itemRequirement],
+      roles: [role],
+    });
+    await postRepo.save(post);
+    const fetchItems = storage(
+      new Map<string, Item[]>([
+        [apiKey, [{ id: nameToId(itemRequirement.name), count: 10 }]],
+      ])
+    );
+    const service = new SendJoinRequestService(
+      userRepo,
+      postRepo,
+      joinRequestRepo,
+      new CheckItemRequirementsService(new GetItems(fetchItems))
+    );
+
+    await service.sendJoinRequest({
+      userId: user.id,
+      postId: post.id,
+      roleId: role.id,
+    });
+
+    expect(
+      service.sendJoinRequest({
+        userId: user.id,
+        postId: post.id,
+        roleId: role.id,
+      })
+    ).rejects.toThrow();
+  });
+
+  it("should throw an error if user attempts join a taken spot", async () => {
+    const apiKey = "api-key";
+    const user = await userRepo.save(
+      new User({
+        username: "username",
+        password: "password",
+        apiKey,
+      })
+    );
+    const itemRequirement = new ItemRequirement({ name: "item", quantity: 1 });
+    const role = new Role({ name: "DPS", class: "Any" });
+    const post = new RaidPost({
+      date: new Date(),
+      server: "EU",
+      author: user,
+      bosses: [],
+      requirements: [itemRequirement],
+      roles: [role],
+    });
+    await postRepo.save(post);
+    const fetchItems = storage(
+      new Map<string, Item[]>([
+        [apiKey, [{ id: nameToId(itemRequirement.name), count: 10 }]],
+      ])
+    );
+    const service = new SendJoinRequestService(
+      userRepo,
+      postRepo,
+      joinRequestRepo,
+      new CheckItemRequirementsService(new GetItems(fetchItems))
+    );
+    await service.sendJoinRequest({
+      userId: user.id,
+      postId: post.id,
+      roleId: role.id,
+    });
+    joinRequestRepo.entities[0].status = "ACCEPTED";
+    const differentUser = await userRepo.save(
+      new User({
+        username: "different-username",
+        password: "password",
+        apiKey,
+      })
+    );
+
+    expect(
+      service.sendJoinRequest({
+        userId: differentUser.id,
+        postId: post.id,
+        roleId: role.id,
+      })
     ).rejects.toThrow();
   });
 });
