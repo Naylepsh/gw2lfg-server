@@ -8,15 +8,17 @@ import { IRaidPostUnitOfWork } from "@data/units-of-work/raid-post/raid-post.uni
 import { loadDependencies } from "@loaders/index";
 import {
   joinRequestRepositoryType,
-  raidPostUnitOfWorkType
+  raidPostUnitOfWorkType,
 } from "@loaders/typedi.constants";
 import {
-  clean, seedRaidBoss,
-  seedRaidPost, seedUserAndGetToken
+  clean,
+  seedRaidBoss,
+  seedRaidPost,
+  seedUserAndGetToken,
 } from "./seeders";
 
 describe("Send raid post join request e2e tests", () => {
-  const postsUrl = "/raid-posts";
+  const url = "/join-requests";
   const timelimit = 30000;
   let container: typeof Container;
   let app: any;
@@ -46,9 +48,9 @@ describe("Send raid post join request e2e tests", () => {
     async () => {
       const roleId = post.roles[0].id;
       await request(app)
-        .post(`${postsUrl}/${post.id}/join-request`)
+        .post(url)
         .set(CurrentUserJWTMiddleware.AUTH_HEADER, token)
-        .send({ roleId });
+        .send({ roleId, postId: post.id });
 
       const joinRequests = await joinRequestRepo.findMany({});
       expect(joinRequests.length).toBe(1);

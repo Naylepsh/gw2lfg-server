@@ -18,8 +18,7 @@ import {
 } from "./seeders";
 
 describe("Find raid post join request e2e tests", () => {
-  const joinRequestsUrl = "/join-requests";
-  const postsUrl = "/raid-posts";
+  const url = "/join-requests";
   const timelimit = 30000;
   let container: typeof Container;
   let app: any;
@@ -49,13 +48,11 @@ describe("Find raid post join request e2e tests", () => {
     async () => {
       const roleId = post.roles[0].id;
       await request(app)
-        .post(`${postsUrl}/${post.id}/join-request`)
+        .post(url)
         .set(CurrentUserJWTMiddleware.AUTH_HEADER, token)
-        .send({ roleId });
+        .send({ roleId, postId: post.id });
 
-      const { body } = await request(app).get(
-        `${joinRequestsUrl}?roleId=${roleId}`
-      );
+      const { body } = await request(app).get(`${url}?roleId=${roleId}`);
       const joinRequests = body.data;
 
       expect(joinRequests.length).toBe(1);
