@@ -1,5 +1,5 @@
 import { CurrentUserJWTMiddleware } from "@api/middleware/current-user.middleware";
-import { raids } from "@data/entities/gw2-raids.json";
+import { raids } from "@data/entities/raid-boss/gw2-raids.json";
 import { RaidBoss } from "@root/data/entities/raid-boss/raid-boss.entity";
 import { RaidPost } from "@root/data/entities/raid-post/raid-post.entitity";
 import { IRaidBossRepository } from "@data/repositories/raid-boss/raid-boss.repository.interface";
