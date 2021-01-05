@@ -35,6 +35,7 @@ export class SendJoinRequestService {
       this.postRepo.findById(postId),
       this.joinRequestRepo.findByKey(userId, postId, roleId),
     ]);
+    const role = post?.getRole(roleId);
 
     if (!user) {
       throw new UserNotFoundError();
@@ -42,7 +43,7 @@ export class SendJoinRequestService {
     if (!post) {
       throw new PostNotFoundError();
     }
-    if (!post.hasRole(roleId)) {
+    if (!role) {
       throw new RoleNotFoundError();
     }
     if (request) {
@@ -57,7 +58,7 @@ export class SendJoinRequestService {
       throw new RequirementsNotSatisfiedError();
     }
 
-    const joinRequest = new JoinRequest({ userId, postId, roleId });
+    const joinRequest = new JoinRequest({ user, post, role });
     return this.joinRequestRepo.save(joinRequest);
   }
 }

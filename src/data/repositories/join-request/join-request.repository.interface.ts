@@ -1,7 +1,8 @@
 import { JoinRequest } from "../../entities/join-request.entity";
-import { IRepository } from "../repository.interface";
+import { IIdentifiableEntityRepository } from "../repository.interface";
 
-export interface IJoinRequestRepository extends IRepository<JoinRequest> {
+export interface IJoinRequestRepository
+  extends IIdentifiableEntityRepository<JoinRequest> {
   findByKey(
     userId: number,
     postId: number,

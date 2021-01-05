@@ -1,21 +1,32 @@
 import {
   CreateDateColumn,
   Entity,
-  PrimaryColumn,
+  JoinColumn,
+  OneToOne,
+  PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from "typeorm";
 import { JoinRequestProps } from "./join-request.props";
+import { Post } from "./post.entity";
+import { Role } from "./role.entity";
+import { User } from "./user.entity";
 
 @Entity()
 export class JoinRequest {
-  @PrimaryColumn()
-  userId: number;
+  @PrimaryGeneratedColumn()
+  id: number;
 
-  @PrimaryColumn()
-  postId: number;
+  @OneToOne(() => User)
+  @JoinColumn()
+  user: User;
 
-  @PrimaryColumn()
-  roleId: number;
+  @OneToOne(() => Post)
+  @JoinColumn()
+  post: Post;
+
+  @OneToOne(() => Role)
+  @JoinColumn()
+  role: Role;
 
   @CreateDateColumn()
   createdAt: Date;
@@ -25,11 +36,13 @@ export class JoinRequest {
 
   constructor(props?: JoinRequestProps) {
     if (props) {
-      this.userId = props.userId;
-      this.postId = props.postId;
-      this.roleId = props.roleId;
+      const { user, post, role } = props;
+      if (!post.roles.map((role) => role.id).includes(role.id)) {
+        throw new Error("Specified role does not belong to specified post");
+      }
+      this.user = user;
+      this.post = post;
+      this.role = role;
     }
   }
 }
-
-// entity() RaidJoinRequest ...

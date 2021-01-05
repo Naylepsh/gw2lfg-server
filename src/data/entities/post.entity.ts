@@ -69,6 +69,14 @@ export class Post {
     return !this.isManyRelationEmpty(this.roles);
   }
 
+  getRole(id: number) {
+    if (!this.hasRoles()) {
+      return undefined;
+    }
+    const rolesWithThatId = this.roles.filter((role) => role.id === id);
+    return rolesWithThatId.length > 0 ? rolesWithThatId[0] : undefined;
+  }
+
   private isManyRelationEmpty(relation?: any[]) {
     return relation === undefined || relation.length == 0;
   }

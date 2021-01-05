@@ -1,5 +1,9 @@
+import { Post } from "./post.entity";
+import { Role } from "./role.entity";
+import { User } from "./user.entity";
+
 export interface JoinRequestProps {
-  userId: number;
-  postId: number;
-  roleId: number;
+  user: User;
+  post: Post;
+  role: Role;
 }
