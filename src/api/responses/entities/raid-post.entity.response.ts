@@ -1,7 +1,7 @@
 import { RaidPost } from "@root/data/entities/raid-post/raid-post.entitity";
 import { ItemRequirement } from "../../../data/entities/item-requirement/item.requirement.entity";
 import { DTO } from "./dto";
-import { mapUserToUserReponse, UserResponse } from "./user.entity.response";
+import { mapUserToUserResponse, UserResponse } from "./user.entity.response";
 
 type RaidPostDTO = DTO<RaidPost>;
 
@@ -19,7 +19,7 @@ export const mapRaidPostToRaidPostResponse = <R extends RaidPostDTO>(
   const itemRequirements = requirements.filter(
     (req) => req instanceof ItemRequirement
   ) as ItemRequirement[];
-  const userResponse = mapUserToUserReponse(author);
+  const userResponse = mapUserToUserResponse(author);
   return {
     ...rest,
     author: userResponse,

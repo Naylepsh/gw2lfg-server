@@ -9,7 +9,6 @@ import {
   requirementsCheckServiceType,
   userRepositoryType,
 } from "@loaders/typedi.constants";
-import { EntityAlreadyExistsError } from "../common/errors/entity-already-exists.error";
 import {
   PostNotFoundError,
   RoleNotFoundError,
