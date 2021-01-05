@@ -9,13 +9,21 @@ import { loadTypeORM } from "@loaders/typeorm.loader";
 
 describe("whatever", () => {
   let conn: Connection;
-  beforeEach(async () => {
+
+  beforeAll(async () => {
     conn = await loadTypeORM();
+  });
+
+  beforeEach(async () => {
     await clean();
   });
 
   afterEach(async () => {
     await clean();
+  });
+
+  afterAll(async () => {
+    await conn.close();
   });
 
   const clean = async () => {
@@ -54,6 +62,27 @@ describe("whatever", () => {
     });
     expect(foundJoinRequests.length).toBeGreaterThan(0);
     expect(foundJoinRequests[0]).toBeDefined();
+  });
+
+  it("should populate relations", async () => {
+    const post = await savePost(conn, "username1");
+    const user = await saveUser(conn, "username2");
+    const role = post.roles[0];
+
+    const joinRequestRepo = conn.getCustomRepository(JoinRequestRepository);
+    await joinRequestRepo.save(new JoinRequest({ user, post, role }));
+
+    const foundJoinRequests = await joinRequestRepo.findByKeys({
+      userId: user.id,
+      postId: post.id,
+      roleId: role.id,
+    });
+
+    expect(foundJoinRequests.length).toBeGreaterThan(0);
+    const joinRequest = foundJoinRequests[0];
+    expect(joinRequest).toHaveProperty("user");
+    expect(joinRequest).toHaveProperty("post");
+    expect(joinRequest).toHaveProperty("role");
   });
 });
 

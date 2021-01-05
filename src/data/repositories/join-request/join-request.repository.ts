@@ -10,10 +10,12 @@ import { IJoinRequestRepository } from "./join-request.repository.interface";
 export class JoinRequestRepository
   extends IdentifiableEntityRepository<JoinRequest>
   implements IJoinRequestRepository {
+  private static relations = ["user", "post", "role"];
+
   findByKeys(keys: JoinRequestRelationKeys): Promise<JoinRequest[]> {
     const where = this.createWhereQuery(keys);
 
-    return this.findMany({ where });
+    return this.findMany({ where, relations: JoinRequestRepository.relations });
   }
 
   private createWhereQuery(keys: JoinRequestRelationKeys) {
