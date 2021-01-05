@@ -2,7 +2,7 @@ import { Service } from "typedi";
 import { EntityRepository } from "typeorm";
 import { JoinRequest } from "../../entities/join-request/join-request.entity";
 import { IdentifiableEntityRepository } from "../generic.repository";
-import { FindKeys } from "./find-keys";
+import { JoinRequestRelationKeys } from "./join-request-relation-keys";
 import { IJoinRequestRepository } from "./join-request.repository.interface";
 
 @Service()
@@ -10,13 +10,13 @@ import { IJoinRequestRepository } from "./join-request.repository.interface";
 export class JoinRequestRepository
   extends IdentifiableEntityRepository<JoinRequest>
   implements IJoinRequestRepository {
-  findByKeys(keys: FindKeys): Promise<JoinRequest[]> {
+  findByKeys(keys: JoinRequestRelationKeys): Promise<JoinRequest[]> {
     const where = this.createWhereQuery(keys);
 
     return this.findMany({ where });
   }
 
-  private createWhereQuery(keys: FindKeys) {
+  private createWhereQuery(keys: JoinRequestRelationKeys) {
     const { userId, postId, roleId } = keys;
     const user = userId ? { id: userId } : undefined;
     const post = postId ? { id: postId } : undefined;

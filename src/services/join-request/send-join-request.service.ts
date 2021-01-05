@@ -1,4 +1,4 @@
-import { Inject } from "typedi";
+import { Inject, Service } from "typedi";
 import { JoinRequest } from "@root/data/entities/join-request/join-request.entity";
 import { IJoinRequestRepository } from "@data/repositories/join-request/join-request.repository.interface";
 import { IPostRepository } from "@data/repositories/post/post.repository.interface";
@@ -16,11 +16,12 @@ import {
   UserNotFoundError,
 } from "../common/errors/entity-not-found.error";
 import { ICheckRequirementsService } from "../requirement/check-requirements.service.interface";
-import { SendJoinRequestDTO } from "./send-join-request.dto";
-import { RequirementsNotSatisfiedError } from "./requirements-not-satisfied.error";
-import { MultipleRequestsForTheSameSpotError } from "./multiple-requests-for-the-same-spot.error";
-import { SpotIsTakenError } from "./spot-is-taken.error";
+import { SendJoinRequestDTO } from "./dtos/send-join-request.dto";
+import { RequirementsNotSatisfiedError } from "./errors/requirements-not-satisfied.error";
+import { MultipleRequestsForTheSameSpotError } from "./errors/multiple-requests-for-the-same-spot.error";
+import { SpotIsTakenError } from "./errors/spot-is-taken.error";
 
+@Service()
 export class SendJoinRequestService {
   constructor(
     @Inject(userRepositoryType) private readonly userRepo: IUserRepository,

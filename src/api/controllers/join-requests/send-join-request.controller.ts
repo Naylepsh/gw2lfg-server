@@ -13,7 +13,7 @@ import { User } from "@root/data/entities/user/user.entity";
 import { EntityAlreadyExistsError } from "@root/services/common/errors/entity-already-exists.error";
 import { PostNotFoundError } from "@root/services/common/errors/entity-not-found.error";
 import { SendJoinRequestService } from "@root/services/join-request/send-join-request.service";
-import { RequirementsNotSatisfiedError } from "@root/services/join-request/requirements-not-satisfied.error";
+import { RequirementsNotSatisfiedError } from "@root/services/join-request/errors/requirements-not-satisfied.error";
 import { UnprocessableEntityError } from "../../http-errors/unprocessable-entity.error";
 import { SendJoinRequestDTO } from "./dtos/send-join-request.dto";
 import { SendJoinRequestResponse } from "./responses/send-join-request.response";
