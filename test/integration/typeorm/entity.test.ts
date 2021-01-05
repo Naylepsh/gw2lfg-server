@@ -1,4 +1,4 @@
-import { Connection } from "typeorm";
+import { Connection, In } from "typeorm";
 import { RaidBoss } from "@root/data/entities/raid-boss/raid-boss.entity";
 import { RaidPost } from "@root/data/entities/raid-post/raid-post.entitity";
 import { Role } from "@root/data/entities/role/role.entity";
@@ -7,7 +7,8 @@ import { loadTypeORM } from "@loaders/typeorm.loader";
 
 describe("whatever", () => {
   let conn: Connection;
-  beforeEach(async () => {
+
+  beforeAll(async () => {
     conn = await loadTypeORM();
     await clean();
   });
@@ -60,5 +61,46 @@ describe("whatever", () => {
     const roles = await roleRepo.find({});
 
     expect(roles.length).toBe(1);
+  });
+
+  it("should find by id in array", async () => {
+    const userRepo = conn.getRepository(User);
+    const user = await userRepo.save(
+      new User({ username: "u", password: "p", apiKey: "a" })
+    );
+    const foundUser = await userRepo.findOne({ where: { id: In([user.id]) } });
+    expect(foundUser).toBeDefined();
+    expect(foundUser).toHaveProperty("username", user.username);
+  });
+
+  it("should find by id in array in nested relation", async () => {
+    const bossRepo = conn.getRepository(RaidBoss);
+    const boss = await bossRepo.save({ name: "b", isCm: false });
+
+    const userRepo = conn.getRepository(User);
+    const user = await userRepo.save(
+      new User({ username: "u", password: "p", apiKey: "a" })
+    );
+
+    const roleRepo = conn.getRepository(Role);
+    const role = new Role({ name: "dps", class: "Any" });
+    await roleRepo.save(role);
+
+    const postRepo = conn.getRepository(RaidPost);
+    const post = new RaidPost({
+      date: new Date(),
+      server: "s",
+      author: user,
+      roles: [role],
+      bosses: [boss],
+    });
+    await postRepo.save(post);
+
+    const postFound = await postRepo.findOne({
+      where: { author: { id: In([user.id]) } },
+    });
+
+    expect(postFound).toBeDefined();
+    expect(postFound).toHaveProperty("id", post.id);
   });
 });
