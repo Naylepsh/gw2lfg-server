@@ -1,9 +1,9 @@
 import { Service } from "typedi";
 import {
   Requirement,
-} from "@data/entities/requirement.entity";
-import { ItemRequirement } from "@root/data/entities/item.requirement.entity";
-import { User } from "@data/entities/user.entity";
+} from "@root/data/entities/requirement/requirement.entity";
+import { ItemRequirement } from "@root/data/entities/item-requirement/item.requirement.entity";
+import { User } from "@root/data/entities/user/user.entity";
 import { ConcreteItemsFetcher } from "../gw2-api/gw2-api.service";
 import { nameToId } from "../gw2-items/gw2-items.service";
 import { ICheckRequirementsService } from "./check-requirements.service.interface";

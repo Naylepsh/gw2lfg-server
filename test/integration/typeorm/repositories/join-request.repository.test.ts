@@ -1,10 +1,10 @@
 import { Connection } from "typeorm";
-import { RaidBoss } from "@data/entities/raid-boss.entity";
-import { RaidPost } from "@data/entities/raid-post.entitity";
-import { Role } from "@data/entities/role.entity";
-import { User } from "@data/entities/user.entity";
+import { RaidBoss } from "@root/data/entities/raid-boss/raid-boss.entity";
+import { RaidPost } from "@root/data/entities/raid-post/raid-post.entitity";
+import { Role } from "@root/data/entities/role/role.entity";
+import { User } from "@root/data/entities/user/user.entity";
 import { JoinRequestRepository } from "@data/repositories/join-request/join-request.repository";
-import { JoinRequest } from "@data/entities/join-request.entity";
+import { JoinRequest } from "@root/data/entities/join-request/join-request.entity";
 import { loadTypeORM } from "@loaders/typeorm.loader";
 
 describe("whatever", () => {

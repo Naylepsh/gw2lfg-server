@@ -1,4 +1,4 @@
-import { User } from "../../entities/user.entity";
+import { User } from "../../entities/user/user.entity";
 import { IdentifiableEntityRepository } from "../generic.repository";
 import { EntityRepository } from "typeorm";
 import { IUserRepository } from "./user.repository.interface";

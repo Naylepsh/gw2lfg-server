@@ -6,7 +6,7 @@ import {
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from "typeorm";
-import { Post } from "./post.entity";
+import { Post } from "../post/post.entity";
 import { UserProps } from "./user.props";
 
 @Entity()

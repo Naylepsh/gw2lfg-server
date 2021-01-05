@@ -7,9 +7,9 @@ import {
   UpdateDateColumn,
 } from "typeorm";
 import { JoinRequestProps } from "./join-request.props";
-import { Post } from "./post.entity";
-import { Role } from "./role.entity";
-import { User } from "./user.entity";
+import { Post } from "../post/post.entity";
+import { Role } from "../role/role.entity";
+import { User } from "../user/user.entity";
 
 @Entity()
 export class JoinRequest {

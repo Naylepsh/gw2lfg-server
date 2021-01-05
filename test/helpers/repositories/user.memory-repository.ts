@@ -1,4 +1,4 @@
-import { User } from "@data/entities/user.entity";
+import { User } from "@root/data/entities/user/user.entity";
 import { IUserRepository } from "@data/repositories/user/user.repository.interface";
 import { turnIntoPromise } from "../turn-into-promise";
 import { IdentifiableMemoryRepository } from "./memory-repository";

@@ -1,6 +1,6 @@
 import { ChildEntity, Column } from "typeorm";
 import { ItemRequirementProps } from "./Item.requirement.props";
-import { Requirement } from "./requirement.entity";
+import { Requirement } from "../requirement/requirement.entity";
 
 @ChildEntity()
 export class ItemRequirement extends Requirement {

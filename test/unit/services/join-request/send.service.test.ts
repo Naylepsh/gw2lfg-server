@@ -1,7 +1,7 @@
-import { RaidPost } from "@data/entities/raid-post.entitity";
-import { Role } from "@data/entities/role.entity";
-import { User } from "@data/entities/user.entity";
-import { ItemRequirement } from "@data/entities/item.requirement.entity";
+import { RaidPost } from "@root/data/entities/raid-post/raid-post.entitity";
+import { Role } from "@root/data/entities/role/role.entity";
+import { User } from "@root/data/entities/user/user.entity";
+import { ItemRequirement } from "@root/data/entities/item-requirement/item.requirement.entity";
 import { IJoinRequestRepository } from "@data/repositories/join-request/join-request.repository.interface";
 import { IPostRepository } from "@data/repositories/post/post.repository.interface";
 import { IUserRepository } from "@data/repositories/user/user.repository.interface";

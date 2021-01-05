@@ -1,6 +1,6 @@
 import { Service } from "typedi";
 import { EntityRepository } from "typeorm";
-import { JoinRequest } from "../../entities/join-request.entity";
+import { JoinRequest } from "../../entities/join-request/join-request.entity";
 import { IdentifiableEntityRepository } from "../generic.repository";
 import { IJoinRequestRepository } from "./join-request.repository.interface";
 

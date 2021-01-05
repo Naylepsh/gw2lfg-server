@@ -1,4 +1,4 @@
-import { Requirement } from "../../entities/requirement.entity";
+import { Requirement } from "../../entities/requirement/requirement.entity";
 import { IIdentifiableEntityRepository } from "../repository.interface";
 
 export interface IRequirementRepository

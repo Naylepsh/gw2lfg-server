@@ -1,4 +1,4 @@
-import { JoinRequest } from "../../entities/join-request.entity";
+import { JoinRequest } from "../../entities/join-request/join-request.entity";
 import { IIdentifiableEntityRepository } from "../repository.interface";
 
 export interface IJoinRequestRepository

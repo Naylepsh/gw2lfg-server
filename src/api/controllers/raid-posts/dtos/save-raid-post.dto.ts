@@ -1,5 +1,5 @@
 import { IsDateString, IsInt } from "class-validator";
-import { ItemRequirementProps } from "@root/data/entities/Item.requirement.props";
+import { ItemRequirementProps } from "@root/data/entities/item-requirement/Item.requirement.props";
 
 interface RequirementsProps {
   itemsProps: ItemRequirementProps[];

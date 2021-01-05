@@ -5,7 +5,7 @@ import {
   QueryParams,
 } from "routing-controllers";
 import { Inject } from "typedi";
-import { User } from "@data/entities/user.entity";
+import { User } from "@root/data/entities/user/user.entity";
 import {
   findRaidPostsServiceType,
   requirementsCheckServiceType,

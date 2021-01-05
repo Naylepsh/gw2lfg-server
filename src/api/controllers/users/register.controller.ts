@@ -6,7 +6,7 @@ import {
   OnUndefined,
   Post,
 } from "routing-controllers";
-import { User } from "@data/entities/user.entity";
+import { User } from "@root/data/entities/user/user.entity";
 import { RegisterService } from "@services/user/register";
 import { UsernameTakenError } from "@root/services/user/errors/username-taken.error";
 import { UnprocessableEntityError } from "../../http-errors/unprocessable-entity.error";

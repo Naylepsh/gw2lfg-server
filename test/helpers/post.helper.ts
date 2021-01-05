@@ -1,6 +1,6 @@
-import { Post } from "@data/entities/post.entity";
-import { Requirement } from "@data/entities/requirement.entity";
-import { User } from "@data/entities/user.entity";
+import { Post } from "@root/data/entities/post/post.entity";
+import { Requirement } from "@root/data/entities/requirement/requirement.entity";
+import { User } from "@root/data/entities/user/user.entity";
 import { IPostRepository } from "@data/repositories/post/post.repository.interface";
 
 interface PostProps {

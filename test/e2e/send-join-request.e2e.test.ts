@@ -2,7 +2,7 @@ import "reflect-metadata";
 import request from "supertest";
 import Container from "typedi";
 import { CurrentUserJWTMiddleware } from "@api/middleware/current-user.middleware";
-import { RaidPost } from "@data/entities/raid-post.entitity";
+import { RaidPost } from "@root/data/entities/raid-post/raid-post.entitity";
 import { IJoinRequestRepository } from "@data/repositories/join-request/join-request.repository.interface";
 import { IRaidPostUnitOfWork } from "@data/units-of-work/raid-post/raid-post.unit-of-work.interface";
 import { loadDependencies } from "@loaders/index";

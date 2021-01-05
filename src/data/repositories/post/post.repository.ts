@@ -1,6 +1,6 @@
 import { Service } from "typedi";
 import { EntityRepository } from "typeorm";
-import { Post } from "../../entities/post.entity";
+import { Post } from "../../entities/post/post.entity";
 import { IdentifiableEntityRepository } from "../generic.repository";
 import { IPostRepository } from "./post.repository.interface";
 

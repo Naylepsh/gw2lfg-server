@@ -7,7 +7,7 @@ import {
   TableInheritance,
   UpdateDateColumn,
 } from "typeorm";
-import { Post } from "./post.entity";
+import { Post } from "../post/post.entity";
 import { RequirementProps } from "./requirement.props";
 
 @Entity()

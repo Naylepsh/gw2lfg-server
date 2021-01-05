@@ -11,7 +11,7 @@ import {
   seedRaidPost,
   clean,
 } from "./seeders";
-import { RaidPost } from "@data/entities/raid-post.entitity";
+import { RaidPost } from "@root/data/entities/raid-post/raid-post.entitity";
 import { SaveRaidPostDTO } from "@root/api/controllers/raid-posts/dtos/save-raid-post.dto";
 
 describe("Update raid post e2e tests", () => {

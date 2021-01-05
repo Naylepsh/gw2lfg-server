@@ -8,7 +8,7 @@ import {
   Param,
   Put,
 } from "routing-controllers";
-import { User } from "@data/entities/user.entity";
+import { User } from "@root/data/entities/user/user.entity";
 import { CheckPostAuthorshipService } from "@root/services/raid-post/check-post-authorship.service";
 import { EntityNotFoundError } from "@root/services/common/errors/entity-not-found.error";
 import { UpdateRaidPostService } from "@root/services/raid-post/update-raid-post.service";

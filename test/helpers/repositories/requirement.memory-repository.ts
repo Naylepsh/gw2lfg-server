@@ -1,4 +1,4 @@
-import { Requirement } from "@data/entities/requirement.entity";
+import { Requirement } from "@root/data/entities/requirement/requirement.entity";
 import { IRequirementRepository } from "@data/repositories/requirement/requirement.repository.interface";
 import { IdentifiableMemoryRepository } from "./memory-repository";
 

@@ -1,4 +1,4 @@
-import { ItemRequirementProps } from "@root/data/entities/Item.requirement.props";
+import { ItemRequirementProps } from "@root/data/entities/item-requirement/Item.requirement.props";
 
 export interface RequirementsPropsDTO {
   itemsProps: ItemRequirementProps[];

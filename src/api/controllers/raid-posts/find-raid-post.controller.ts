@@ -13,7 +13,7 @@ import {
 } from "@loaders/typedi.constants";
 import { ICheckRequirementsService } from "@services/requirement/check-requirements.service.interface";
 import { FindRaidPostService } from "@services/raid-post/find-raid-post.service";
-import { User } from "@data/entities/user.entity";
+import { User } from "@root/data/entities/user/user.entity";
 import { mapRaidPostToRaidPostResponse } from "../../responses/entities/raid-post.entity.response";
 import { unsatisfyEachRequirement } from "./utils/unsatisfy-each-requirement";
 import { checkIfUserMeetsPostsRequirements } from "./utils/check-if-user-meets-posts-requirements";

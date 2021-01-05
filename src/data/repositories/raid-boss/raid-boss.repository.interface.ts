@@ -1,4 +1,4 @@
-import { RaidBoss } from "../../entities/raid-boss.entity";
+import { RaidBoss } from "../../entities/raid-boss/raid-boss.entity";
 import { IIdentifiableEntityRepository } from "../repository.interface";
 
 export interface IRaidBossRepository

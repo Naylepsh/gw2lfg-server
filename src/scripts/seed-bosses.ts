@@ -3,7 +3,7 @@ import { getConnection } from "typeorm";
 import { RaidBossRepository } from "@data/repositories/raid-boss/raid-boss.repository";
 import { loadTypeORM } from "@loaders/typeorm.loader";
 import { raids } from "@data/entities/gw2-raids.json";
-import { RaidBoss } from "@data/entities/raid-boss.entity";
+import { RaidBoss } from "@root/data/entities/raid-boss/raid-boss.entity";
 
 dotenv.config({ path: "./.env.dev" });
 

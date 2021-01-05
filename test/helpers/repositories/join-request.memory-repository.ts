@@ -1,4 +1,4 @@
-import { JoinRequest } from "@data/entities/join-request.entity";
+import { JoinRequest } from "@root/data/entities/join-request/join-request.entity";
 import { IJoinRequestRepository } from "@data/repositories/join-request/join-request.repository.interface";
 import { IdentifiableMemoryRepository } from "./memory-repository";
 

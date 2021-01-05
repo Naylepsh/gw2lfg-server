@@ -1,4 +1,4 @@
-import { Role } from "@data/entities/role.entity";
+import { Role } from "@root/data/entities/role/role.entity";
 import { IRoleRepository } from "@data/repositories/role/role.repository.interface";
 
 interface RoleProps {

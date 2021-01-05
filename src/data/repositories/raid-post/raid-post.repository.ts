@@ -1,6 +1,6 @@
 import { Service } from "typedi";
 import { EntityRepository } from "typeorm";
-import { RaidPost } from "../../entities/raid-post.entitity";
+import { RaidPost } from "../../entities/raid-post/raid-post.entitity";
 import { IdentifiableEntityRepository } from "../generic.repository";
 import { FindManyParams } from "../repository.interface";
 import { IRaidPostRepository } from "./raid-post.repository.interface";

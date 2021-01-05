@@ -1,8 +1,8 @@
 import { Inject, Service } from "typedi";
-import { RaidPost } from "@data/entities/raid-post.entitity";
-import { Role } from "@data/entities/role.entity";
+import { RaidPost } from "@root/data/entities/raid-post/raid-post.entitity";
+import { Role } from "@root/data/entities/role/role.entity";
 import { IRaidPostUnitOfWork } from "@data/units-of-work/raid-post/raid-post.unit-of-work.interface";
-import { ItemRequirement } from "@data/entities/item.requirement.entity";
+import { ItemRequirement } from "@root/data/entities/item-requirement/item.requirement.entity";
 import { raidPostUnitOfWorkType } from "@loaders/typedi.constants";
 import { UserNotFoundError } from "../common/errors/entity-not-found.error";
 import { isDateInThePast } from "./utils/is-date-in-the-past";

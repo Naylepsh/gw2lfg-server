@@ -1,6 +1,6 @@
 import { ChildEntity, JoinTable, ManyToMany } from "typeorm";
-import { Post } from "./post.entity";
-import { RaidBoss } from "./raid-boss.entity";
+import { Post } from "../post/post.entity";
+import { RaidBoss } from "../raid-boss/raid-boss.entity";
 import { RaidPostProps } from "./raid-post.props";
 
 @ChildEntity()

@@ -9,9 +9,9 @@ import {
   UpdateDateColumn,
 } from "typeorm";
 import { PostProps } from "./post.props";
-import { Requirement } from "./requirement.entity";
-import { Role } from "./role.entity";
-import { User } from "./user.entity";
+import { Requirement } from "../requirement/requirement.entity";
+import { Role } from "../role/role.entity";
+import { User } from "../user/user.entity";
 
 @Entity()
 @TableInheritance({ column: { type: "varchar", name: "type" } })

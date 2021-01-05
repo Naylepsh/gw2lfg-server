@@ -1,6 +1,6 @@
-import { Requirement } from "./requirement.entity";
-import { Role } from "./role.entity";
-import { User } from "./user.entity";
+import { Requirement } from "../requirement/requirement.entity";
+import { Role } from "../role/role.entity";
+import { User } from "../user/user.entity";
 
 export interface PostProps {
   author: User;

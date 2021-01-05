@@ -9,7 +9,7 @@ import {
   Param,
   Post,
 } from "routing-controllers";
-import { User } from "@data/entities/user.entity";
+import { User } from "@root/data/entities/user/user.entity";
 import { EntityAlreadyExistsError } from "@root/services/common/errors/entity-already-exists.error";
 import { PostNotFoundError } from "@root/services/common/errors/entity-not-found.error";
 import { SendJoinRequestService } from "@root/services/join-request/send-join-request.service";

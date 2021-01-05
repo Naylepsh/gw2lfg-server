@@ -1,5 +1,5 @@
 import { Connection, getConnection } from "typeorm";
-import { User } from "@data/entities/user.entity";
+import { User } from "@root/data/entities/user/user.entity";
 import { loadTypeORM } from "@loaders/typeorm.loader";
 import { GenericUnitOfWork } from "@data/units-of-work/generic.unit-of-work";
 import { UserRepository } from "@data/repositories/user/user.repository";

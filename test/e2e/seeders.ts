@@ -1,7 +1,7 @@
 import { CurrentUserJWTMiddleware } from "@api/middleware/current-user.middleware";
 import { raids } from "@data/entities/gw2-raids.json";
-import { RaidBoss } from "@data/entities/raid-boss.entity";
-import { RaidPost } from "@data/entities/raid-post.entitity";
+import { RaidBoss } from "@root/data/entities/raid-boss/raid-boss.entity";
+import { RaidPost } from "@root/data/entities/raid-post/raid-post.entitity";
 import { IRaidBossRepository } from "@data/repositories/raid-boss/raid-boss.repository.interface";
 import { IRaidPostUnitOfWork } from "@data/units-of-work/raid-post/raid-post.unit-of-work.interface";
 import { raidBossRepositoryType } from "@loaders/typedi.constants";

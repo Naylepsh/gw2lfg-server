@@ -1,5 +1,5 @@
-import { RaidPost } from "@data/entities/raid-post.entitity";
-import { ItemRequirement } from "../../../data/entities/item.requirement.entity";
+import { RaidPost } from "@root/data/entities/raid-post/raid-post.entitity";
+import { ItemRequirement } from "../../../data/entities/item-requirement/item.requirement.entity";
 import { DTO } from "./dto";
 import { mapUserToUserReponse, UserResponse } from "./user.entity.response";
 

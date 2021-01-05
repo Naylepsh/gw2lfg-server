@@ -1,5 +1,5 @@
 import { Inject } from "typedi";
-import { JoinRequest } from "@data/entities/join-request.entity";
+import { JoinRequest } from "@root/data/entities/join-request/join-request.entity";
 import { IJoinRequestRepository } from "@data/repositories/join-request/join-request.repository.interface";
 import { IPostRepository } from "@data/repositories/post/post.repository.interface";
 import { IUserRepository } from "@data/repositories/user/user.repository.interface";
