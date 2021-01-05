@@ -33,7 +33,7 @@ export class SendJoinRequestService {
     const [user, post, request] = await Promise.all([
       this.userRepo.findById(userId),
       this.postRepo.findById(postId),
-      this.joinRequestRepo.findByKey(userId, postId, roleId),
+      this.joinRequestRepo.findByKeys(userId, postId, roleId),
     ]);
     const role = post?.getRole(roleId);
 

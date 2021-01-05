@@ -5,7 +5,7 @@ import { IdentifiableMemoryRepository } from "./memory-repository";
 export class JoinRequestMemoryRepository
   extends IdentifiableMemoryRepository<JoinRequest>
   implements IJoinRequestRepository {
-  findByKey(userId: number, postId: number): Promise<JoinRequest | undefined> {
+  findByKeys(userId: number, postId: number): Promise<JoinRequest | undefined> {
     return this.findOne({ where: { userId, postId } });
   }
 }

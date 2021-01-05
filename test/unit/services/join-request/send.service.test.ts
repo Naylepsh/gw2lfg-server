@@ -62,7 +62,7 @@ describe("JoinRequest Service: send tests", () => {
       new CheckItemRequirementsService(new GetItems(fetchItems))
     ).sendJoinRequest({ userId: user.id, postId: post.id, roleId: role.id });
 
-    const request = await joinRequestRepo.findByKey(user.id, post.id, role.id);
+    const request = await joinRequestRepo.findByKeys(user.id, post.id, role.id);
     expect(request).toBeDefined();
   });
 
