@@ -1,7 +1,5 @@
 import { Service } from "typedi";
-import {
-  Requirement,
-} from "@root/data/entities/requirement/requirement.entity";
+import { Requirement } from "@root/data/entities/requirement/requirement.entity";
 import { ItemRequirement } from "@root/data/entities/item-requirement/item.requirement.entity";
 import { User } from "@root/data/entities/user/user.entity";
 import { ConcreteItemsFetcher } from "../gw2-api/gw2-api.service";
@@ -20,16 +18,24 @@ export class CheckItemRequirementsService implements ICheckRequirementsService {
 
     const userItems = await this.getItems.fetch(requiredItemsIds, user.apiKey);
 
-    let areSatisfied = true;
-    for (const userItem of userItems) {
-      for (const requiredItem of requiredItems) {
-        if (userItem.id === nameToId(requiredItem.name)) {
-          if (userItem.count < requiredItem.quantity) {
-            areSatisfied = false;
-          }
+    let areAllRequirementsSatisfied = true;
+    for (const requiredItem of requiredItems) {
+      let isItemRequirementSatisfied = false;
+      for (const userItem of userItems) {
+        const isRequiredItem = userItem.id === nameToId(requiredItem.name);
+        const hasEnough = userItem.count >= requiredItem.quantity;
+        if (isRequiredItem && hasEnough) {
+          isItemRequirementSatisfied = true;
+          break;
         }
       }
+
+      if (!isItemRequirementSatisfied) {
+        areAllRequirementsSatisfied = false;
+        break;
+      }
     }
-    return areSatisfied;
+
+    return areAllRequirementsSatisfied;
   }
 }
