@@ -6,12 +6,12 @@ import { fetchItemsFromBank } from "../fetchers/fetch-items-from-bank";
 
 type AllItemsFetcher = (apiKey: string) => Promise<Item[]>;
 
-export interface ConcreteItemsFetcher {
+export interface ItemsFetcher {
   fetch(ids: string[], apiKey: string): Promise<Item[]>;
 }
 
-export class GetItemsFromMultipleSources implements ConcreteItemsFetcher {
-  constructor(private readonly fetchers: ConcreteItemsFetcher[]) {}
+export class GetItemsFromMultipleSources implements ItemsFetcher {
+  constructor(private readonly fetchers: ItemsFetcher[]) {}
 
   async fetch(ids: string[], apiKey: string): Promise<Item[]> {
     const itemStacks = await Promise.all(
@@ -37,7 +37,7 @@ export class GetItemsFromMultipleSources implements ConcreteItemsFetcher {
   }
 }
 
-export class GetItems implements ConcreteItemsFetcher {
+export class GetItems implements ItemsFetcher {
   constructor(private readonly fetchAllItems: AllItemsFetcher) {}
 
   async fetch(ids: string[], apiKey: string): Promise<Item[]> {
@@ -69,7 +69,7 @@ export const getItemFromCharacter = (characterName: string) => {
   );
 };
 
-export class GetItemsFromEntireAccount implements ConcreteItemsFetcher {
+export class GetItemsFromEntireAccount implements ItemsFetcher {
   constructor() {}
 
   async fetch(ids: string[], apiKey: string): Promise<Item[]> {

@@ -6,7 +6,7 @@ import { IJoinRequestRepository } from "@data/repositories/join-request/join-req
 import { IPostRepository } from "@data/repositories/post/post.repository.interface";
 import { IUserRepository } from "@data/repositories/user/user.repository.interface";
 import {
-  ConcreteItemsFetcher,
+  ItemsFetcher,
   GetItems,
 } from "@root/services/gw2-api/items/get-items.gw2-api.service";
 import { nameToId } from "@services/gw2-items/gw2-items.service";
@@ -273,7 +273,7 @@ describe("JoinRequest Service: send tests", () => {
   });
 });
 
-class DummyItemFetcher implements ConcreteItemsFetcher {
+class DummyItemFetcher implements ItemsFetcher {
   fetch(_ids: string[], _apiKey: string): Promise<Item[]> {
     return new Promise((resolve) => resolve([]));
   }

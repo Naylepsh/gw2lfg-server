@@ -1,8 +1,9 @@
 import assert from "assert";
 import "@root/config";
-import { fetchItemsFromCharacter } from "@root/services/gw2-api/fetchers/fetch-items-from-character";
-import { fetchCharacters } from "@root/services/gw2-api/fetchers/fetch-characters";
-import { fetchItemsFromBank } from "@root/services/gw2-api/fetchers/fetch-items-from-bank";
+import { fetchItemsFromCharacter } from "@services/gw2-api/fetchers/fetch-items-from-character";
+import { fetchCharacters } from "@services/gw2-api/fetchers/fetch-characters";
+import { fetchItemsFromBank } from "@services/gw2-api/fetchers/fetch-items-from-bank";
+import { fetchAccount } from "@services/gw2-api/fetchers/fetch-account";
 
 const getSomeCharacterName = async (apiKey: string) => {
   const characters = await fetchCharacters(apiKey);
@@ -11,7 +12,7 @@ const getSomeCharacterName = async (apiKey: string) => {
   return characters[0];
 };
 
-describe("GW2 API proxy test", () => {
+describe("GW2 API fetchers test", () => {
   let apiKey: string;
   const timeLimit = 10000;
 
@@ -75,5 +76,13 @@ describe("GW2 API proxy test", () => {
       },
       timeLimit
     );
+
+    it("should fetch account name", async () => {
+      // account name format: name.numerical-suffix
+      const { name } = await fetchAccount(apiKey);
+
+      expect(name).toBeDefined();
+      expect(name.split(".").length).toBe(2);
+    });
   });
 });
