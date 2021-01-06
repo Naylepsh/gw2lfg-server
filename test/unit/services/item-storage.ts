@@ -1,4 +1,4 @@
-import { GetItems } from "@services/gw2-api/gw2-api.service";
+import { GetItems } from "@root/services/gw2-api/items/get-items.gw2-api.service";
 import { Item } from "@services/gw2-items/item.interface";
 
 type ItemStorage = Map<string, Item[]>;

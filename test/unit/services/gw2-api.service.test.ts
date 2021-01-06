@@ -1,7 +1,7 @@
 import {
   GetItems,
   GetItemsFromMultipleSources,
-} from "@services/gw2-api/gw2-api.service";
+} from "@root/services/gw2-api/items/get-items.gw2-api.service";
 import { Item } from "@services/gw2-items/item.interface";
 import { storage, createFetchersForItemGroups } from "./item-storage";
 

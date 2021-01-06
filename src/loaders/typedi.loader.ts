@@ -1,6 +1,6 @@
 import Container from "typedi";
 import { getConnection, Connection } from "typeorm";
-import { GetItemsFromEntireAccount } from "../services/gw2-api/gw2-api.service";
+import { GetItemsFromEntireAccount } from "../services/gw2-api/items/get-items.gw2-api.service";
 import { CheckItemRequirementsService } from "../services/requirement/check-item-requirements.service";
 import { CheckRequirementsService } from "../services/requirement/check-requirements.service";
 import {

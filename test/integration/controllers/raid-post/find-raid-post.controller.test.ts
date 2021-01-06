@@ -4,7 +4,7 @@ import request from "supertest";
 import Container from "typedi";
 import items from "@root/services/gw2-items/items.json";
 import { CurrentUserJWTMiddleware } from "@api/middleware/current-user.middleware";
-import { GetItems } from "@services/gw2-api/gw2-api.service";
+import { GetItems } from "@root/services/gw2-api/items/get-items.gw2-api.service";
 import { Item } from "@services/gw2-items/item.interface";
 import { CheckItemRequirementsService } from "@services/requirement/check-item-requirements.service";
 import { RaidPostMemoryUnitOfWork } from "../../../helpers/uows/raid-post.memory-unit-of-work";

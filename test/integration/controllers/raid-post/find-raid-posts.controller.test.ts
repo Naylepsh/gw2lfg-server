@@ -5,7 +5,7 @@ import Container from "typedi";
 import items from "@root/services/gw2-items/items.json";
 import { FindRaidPostsController } from "@root/api/controllers/raid-posts/find-raid-posts.controller";
 import { CurrentUserJWTMiddleware } from "@api/middleware/current-user.middleware";
-import { GetItems } from "@services/gw2-api/gw2-api.service";
+import { GetItems } from "@root/services/gw2-api/items/get-items.gw2-api.service";
 import { Item } from "@services/gw2-items/item.interface";
 import { FindRaidPostsService } from "@root/services/raid-post/find-raid-posts.service";
 import { CheckItemRequirementsService } from "@services/requirement/check-item-requirements.service";

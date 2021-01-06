@@ -8,7 +8,7 @@ import { IUserRepository } from "@data/repositories/user/user.repository.interfa
 import {
   ConcreteItemsFetcher,
   GetItems,
-} from "@services/gw2-api/gw2-api.service";
+} from "@root/services/gw2-api/items/get-items.gw2-api.service";
 import { nameToId } from "@services/gw2-items/gw2-items.service";
 import { Item } from "@services/gw2-items/item.interface";
 import { SendJoinRequestService } from "@root/services/join-request/send-join-request.service";
