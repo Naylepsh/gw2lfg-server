@@ -5,7 +5,7 @@ import {
   Post,
   UnauthorizedError,
 } from "routing-controllers";
-import { LoginService } from "@services/user/login";
+import { LoginService } from "@root/services/user/login.service";
 import { InvalidLoginDetailsError } from "@root/services/user/errors/invalid-login-details.error";
 import { CreateJwtService } from "../../services/token/create";
 import { LoginDTO } from "./dtos/login.dto";

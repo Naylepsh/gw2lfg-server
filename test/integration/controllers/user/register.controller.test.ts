@@ -5,7 +5,7 @@ import * as jwt from "jsonwebtoken";
 import { RegisterUserController } from "@root/api/controllers/users/register.controller";
 import { User } from "@root/data/entities/user/user.entity";
 import { IUserRepository } from "@data/repositories/user/user.repository.interface";
-import { RegisterService } from "@services/user/register";
+import { RegisterService } from "@root/services/user/register.service";
 import { UserMemoryRepository } from "../../../helpers/repositories/user.memory-repository";
 import { createExpressServer, useContainer } from "routing-controllers";
 

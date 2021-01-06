@@ -7,7 +7,7 @@ import { CurrentUserJWTMiddleware } from "@api/middleware/current-user.middlewar
 import { CreateJwtService } from "@api/services/token/create";
 import { User } from "@root/data/entities/user/user.entity";
 import { IUserRepository } from "@data/repositories/user/user.repository.interface";
-import { RegisterService } from "@services/user/register";
+import { RegisterService } from "@root/services/user/register.service";
 import { UserMemoryRepository } from "../../../helpers/repositories/user.memory-repository";
 
 describe("MeController integration tests", () => {

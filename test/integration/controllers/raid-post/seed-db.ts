@@ -3,7 +3,7 @@ import { CreateJwtService } from "@api/services/token/create";
 import { RaidBoss } from "@root/data/entities/raid-boss/raid-boss.entity";
 import { User } from "@root/data/entities/user/user.entity";
 import { PublishRaidPostService } from "@root/services/raid-post/publish-raid-posts.service";
-import { RegisterService } from "@services/user/register";
+import { RegisterService } from "@root/services/user/register.service";
 import { RaidPostMemoryUnitOfWork } from "../../../helpers/uows/raid-post.memory-unit-of-work";
 import { addHours } from "../../../unit/services/raid-post/hours.util";
 

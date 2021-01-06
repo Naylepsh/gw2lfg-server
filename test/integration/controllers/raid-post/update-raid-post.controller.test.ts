@@ -9,7 +9,7 @@ import { RaidPost } from "@root/data/entities/raid-post/raid-post.entitity";
 import { User } from "@root/data/entities/user/user.entity";
 import { CheckPostAuthorshipService } from "@root/services/raid-post/check-post-authorship.service";
 import { UpdateRaidPostService } from "@root/services/raid-post/update-raid-post.service";
-import { RegisterService } from "@services/user/register";
+import { RegisterService } from "@root/services/user/register.service";
 import { RaidPostMemoryUnitOfWork } from "../../../helpers/uows/raid-post.memory-unit-of-work";
 import { addHours } from "../../../unit/services/raid-post/hours.util";
 import { seedDbWithOnePost } from "./seed-db";

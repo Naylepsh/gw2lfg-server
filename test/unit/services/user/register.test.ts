@@ -1,4 +1,4 @@
-import { RegisterService } from "@services/user/register";
+import { RegisterService } from "@root/services/user/register.service";
 import { createDummyUser } from "../../../helpers/user.helper";
 import { UserMemoryRepository } from "../../../helpers/repositories/user.memory-repository";
 

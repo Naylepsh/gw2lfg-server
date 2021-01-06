@@ -7,7 +7,7 @@ import {
   Post,
 } from "routing-controllers";
 import { User } from "@root/data/entities/user/user.entity";
-import { RegisterService } from "@services/user/register";
+import { RegisterService } from "@root/services/user/register.service";
 import { UsernameTakenError } from "@root/services/user/errors/username-taken.error";
 import { UnprocessableEntityError } from "../../http-errors/unprocessable-entity.error";
 import { CreateJwtService } from "../../services/token/create";
