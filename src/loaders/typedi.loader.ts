@@ -19,6 +19,7 @@ import "../services/raid-post/find-raid-post.service";
 import "../services/raid-post/find-raid-posts.service";
 import "../services/raid-post/publish-raid-posts.service";
 import "../services/join-request/find-join-requests.service";
+import "../services/gw2-api/account/find-account.gw2-api.service";
 import { data } from "../data";
 
 export const loadTypeDI = () => {

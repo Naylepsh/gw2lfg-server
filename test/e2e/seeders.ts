@@ -2,6 +2,7 @@ import { CurrentUserJWTMiddleware } from "@api/middleware/current-user.middlewar
 import { raids } from "@data/entities/raid-boss/gw2-raids.json";
 import { RaidBoss } from "@root/data/entities/raid-boss/raid-boss.entity";
 import { RaidPost } from "@root/data/entities/raid-post/raid-post.entitity";
+import { User } from "@data/entities/user/user.entity";
 import { IRaidBossRepository } from "@data/repositories/raid-boss/raid-boss.repository.interface";
 import { IRaidPostUnitOfWork } from "@data/units-of-work/raid-post/raid-post.unit-of-work.interface";
 import { raidBossRepositoryType } from "@loaders/typedi.constants";
@@ -15,7 +16,7 @@ interface IUser {
   apiKey: string;
 }
 
-const user: IUser = {
+const _user: IUser = {
   username: "username",
   password: "password",
   apiKey: process.env.GW2API_TOKEN as string,
@@ -57,24 +58,13 @@ export const seedRaidBoss = async (container: typeof Container) => {
   return id;
 };
 
-export const seedUserAndGetToken = async (app: any) => {
-  const loginUrl = "/login";
-
-  await seedUser(app);
-
-  const { body } = await request(app)
-    .post(loginUrl)
-    .send({ username: user.username, password: user.password });
-
-  return body.data.token;
-};
-
-export const seedUser = async (app: any): Promise<IUser> => {
+export const seedUser = async (app: any) => {
   const registerUrl = "/register";
 
-  await request(app).post(registerUrl).send(user);
+  const { body } = await request(app).post(registerUrl).send(_user);
 
-  return { ...user };
+  const user: User = { ...body.data.user, ..._user };
+  return { user, token: body.data.token as string };
 };
 
 export const clean = async (uow: IRaidPostUnitOfWork) => {

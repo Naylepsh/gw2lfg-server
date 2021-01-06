@@ -6,7 +6,6 @@ import {
   InternalServerError,
   JsonController,
   NotFoundError,
-  Param,
   Post,
 } from "routing-controllers";
 import { User } from "@root/data/entities/user/user.entity";

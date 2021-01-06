@@ -13,6 +13,7 @@ import { UnprocessableEntityError } from "../../http-errors/unprocessable-entity
 import { CreateJwtService } from "../../services/token/create";
 import { RegisterDTO } from "./dtos/register.dto";
 import { RegisterResponse } from "./responses/register.response";
+import { mapUserToUserResponse } from "../../responses/entities/user.entity.response";
 
 @JsonController()
 export class RegisterUserController {
@@ -29,7 +30,7 @@ export class RegisterUserController {
       const user = new User(dto);
       const registeredUser = await this.registerService.register(user);
       const token = this.authService.createToken(registeredUser.id);
-      return { data: { token } };
+      return { data: { token, user: mapUserToUserResponse(registeredUser) } };
     } catch (e) {
       if (e instanceof UsernameTakenError) {
         throw new UnprocessableEntityError(e.message);

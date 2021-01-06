@@ -10,7 +10,7 @@ import { addHours } from "../unit/services/raid-post/hours.util";
 import { IRaidPostUnitOfWork } from "@data/units-of-work/raid-post/raid-post.unit-of-work.interface";
 import { CurrentUserJWTMiddleware } from "@api/middleware/current-user.middleware";
 import { IRaidPostRepository } from "@data/repositories/raid-post/raid-post.repository.interface";
-import { seedUserAndGetToken, seedRaidBoss, clean } from "./seeders";
+import { seedRaidBoss, clean, seedUser } from "./seeders";
 
 describe("Publish raid post e2e tests", () => {
   const publishUrl = "/raid-posts";
@@ -25,7 +25,7 @@ describe("Publish raid post e2e tests", () => {
 
     uow = container.get(raidPostUnitOfWorkType);
 
-    token = await seedUserAndGetToken(app);
+    ({ token } = await seedUser(app));
     bossesIds = [await seedRaidBoss(container)];
   });
 

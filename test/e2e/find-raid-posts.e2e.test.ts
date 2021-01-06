@@ -5,12 +5,7 @@ import { loadDependencies } from "@loaders/index";
 import { raidPostUnitOfWorkType } from "@loaders/typedi.constants";
 import { IRaidPostUnitOfWork } from "@data/units-of-work/raid-post/raid-post.unit-of-work.interface";
 import { CurrentUserJWTMiddleware } from "@api/middleware/current-user.middleware";
-import {
-  seedUserAndGetToken,
-  seedRaidBoss,
-  seedRaidPost,
-  clean,
-} from "./seeders";
+import { seedRaidBoss, seedRaidPost, clean, seedUser } from "./seeders";
 
 describe("Find raid posts e2e tests", () => {
   const timelimit = 30000;
@@ -26,7 +21,7 @@ describe("Find raid posts e2e tests", () => {
 
     uow = container.get(raidPostUnitOfWorkType);
 
-    token = await seedUserAndGetToken(app);
+    ({ token } = await seedUser(app));
     const bossesIds = [await seedRaidBoss(container)];
     ({ id: postId } = await seedRaidPost(app, bossesIds, token));
   });
@@ -42,7 +37,7 @@ describe("Find raid posts e2e tests", () => {
         .get(findUrl)
         .set(CurrentUserJWTMiddleware.AUTH_HEADER, token);
 
-        const posts = body.data
+      const posts = body.data;
       expect(posts.length).toBe(1);
       expect(posts[0]).toHaveProperty("id", postId);
     },

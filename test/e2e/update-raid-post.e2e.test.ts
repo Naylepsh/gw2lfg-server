@@ -5,12 +5,7 @@ import { loadDependencies } from "@loaders/index";
 import { raidPostUnitOfWorkType } from "@loaders/typedi.constants";
 import { IRaidPostUnitOfWork } from "@data/units-of-work/raid-post/raid-post.unit-of-work.interface";
 import { CurrentUserJWTMiddleware } from "@api/middleware/current-user.middleware";
-import {
-  seedUserAndGetToken,
-  seedRaidBoss,
-  seedRaidPost,
-  clean,
-} from "./seeders";
+import { seedRaidBoss, seedRaidPost, clean, seedUser } from "./seeders";
 import { RaidPost } from "@root/data/entities/raid-post/raid-post.entitity";
 import { SaveRaidPostDTO } from "@root/api/controllers/raid-posts/dtos/save-raid-post.dto";
 
@@ -27,7 +22,7 @@ describe("Update raid post e2e tests", () => {
 
     uow = container.get(raidPostUnitOfWorkType);
 
-    token = await seedUserAndGetToken(app);
+    ({ token } = await seedUser(app));
     const bossesIds = [await seedRaidBoss(container)];
     post = await seedRaidPost(app, bossesIds, token);
   });

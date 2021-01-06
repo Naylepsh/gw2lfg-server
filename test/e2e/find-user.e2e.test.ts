@@ -1,6 +1,5 @@
 import "reflect-metadata";
 import request from "supertest";
-import * as jwt from "jsonwebtoken";
 import Container from "typedi";
 import { IUserRepository } from "@data/repositories/user/user.repository.interface";
 import { loadDependencies } from "@loaders/index";
@@ -8,7 +7,6 @@ import { userRepositoryType } from "@loaders/typedi.constants";
 import { seedUser } from "./seeders";
 
 describe("Login e2e tests", () => {
-  const loginUrl = "/login";
   let app: any;
   let userRepo: IUserRepository;
 
@@ -23,15 +21,16 @@ describe("Login e2e tests", () => {
     await userRepo.delete({});
   });
 
-  it("should return a jwt", async () => {
+  it("return a user with their gw2 account", async () => {
     const { user } = await seedUser(app);
 
-    const response = await request(app)
-      .post(loginUrl)
-      .send({ username: user.username, password: user.password });
-    const token = response.body.data.token;
-    const decoded = jwt.decode(token);
+    const { body } = await request(app).get(toUrl(user.id));
 
-    expect(decoded).toHaveProperty("id");
+    expect(body.data).toHaveProperty("user");
+    expect(body.data).toHaveProperty("account");
   });
+
+  const toUrl = (id: number) => {
+    return `/users/${id}`;
+  };
 });

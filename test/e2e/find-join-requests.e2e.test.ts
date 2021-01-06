@@ -10,12 +10,7 @@ import {
   joinRequestRepositoryType,
   raidPostUnitOfWorkType,
 } from "@loaders/typedi.constants";
-import {
-  clean,
-  seedRaidBoss,
-  seedRaidPost,
-  seedUserAndGetToken,
-} from "./seeders";
+import { clean, seedRaidBoss, seedRaidPost, seedUser } from "./seeders";
 
 describe("Find raid post join request e2e tests", () => {
   const url = "/join-requests";
@@ -33,7 +28,7 @@ describe("Find raid post join request e2e tests", () => {
     uow = container.get(raidPostUnitOfWorkType);
     joinRequestRepo = container.get(joinRequestRepositoryType);
 
-    token = await seedUserAndGetToken(app);
+    ({ token } = await seedUser(app));
     const bossesIds = [await seedRaidBoss(container)];
     post = await seedRaidPost(app, bossesIds, token);
   });
