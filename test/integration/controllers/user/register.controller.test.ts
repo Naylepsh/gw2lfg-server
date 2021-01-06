@@ -8,6 +8,7 @@ import { IUserRepository } from "@data/repositories/user/user.repository.interfa
 import { RegisterService } from "@root/services/user/register.service";
 import { UserMemoryRepository } from "../../../helpers/repositories/user.memory-repository";
 import { createExpressServer, useContainer } from "routing-controllers";
+import { FakeApiKeyChecker } from "../../../unit/services/fake-api-key-checker";
 
 describe("RegisterUserController integration tests", () => {
   const url = "/register";
@@ -21,7 +22,8 @@ describe("RegisterUserController integration tests", () => {
       apiKey: "api-key",
     });
     userRepo = new UserMemoryRepository([user]);
-    const registerService = new RegisterService(userRepo);
+    const apiKeyChecker = new FakeApiKeyChecker(true);
+    const registerService = new RegisterService(userRepo, apiKeyChecker);
     const controller = new RegisterUserController(registerService);
 
     Container.set(RegisterUserController, controller);

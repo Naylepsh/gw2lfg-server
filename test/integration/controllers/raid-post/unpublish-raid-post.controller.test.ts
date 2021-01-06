@@ -12,6 +12,7 @@ import { UnpublishRaidPostService } from "@root/services/raid-post/unpublish-rai
 import { RegisterService } from "@root/services/user/register.service";
 import { RaidPostMemoryUnitOfWork } from "../../../helpers/uows/raid-post.memory-unit-of-work";
 import { seedDbWithOnePost } from "./seed-db";
+import { FakeApiKeyChecker } from "../../../unit/services/fake-api-key-checker";
 
 describe("UnpublishRaidPostController integration tests", () => {
   let url = "/raid-posts";
@@ -26,7 +27,8 @@ describe("UnpublishRaidPostController integration tests", () => {
 
     ({ token, post } = await seedDbWithOnePost(uow));
 
-    registerService = new RegisterService(uow.users);
+    const apiKeyChecker = new FakeApiKeyChecker(true);
+    registerService = new RegisterService(uow.users, apiKeyChecker);
 
     const unpublishService = new UnpublishRaidPostService(uow);
     const authorshipService = new CheckPostAuthorshipService(uow.raidPosts);

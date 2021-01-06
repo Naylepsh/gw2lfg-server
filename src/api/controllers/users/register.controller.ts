@@ -1,4 +1,5 @@
 import {
+  BadRequestError,
   Body,
   HttpCode,
   InternalServerError,
@@ -6,9 +7,10 @@ import {
   OnUndefined,
   Post,
 } from "routing-controllers";
-import { User } from "@root/data/entities/user/user.entity";
-import { RegisterService } from "@root/services/user/register.service";
-import { UsernameTakenError } from "@root/services/user/errors/username-taken.error";
+import { User } from "@data/entities/user/user.entity";
+import { RegisterService } from "@services/user/register.service";
+import { UsernameTakenError } from "@services/user/errors/username-taken.error";
+import { InvalidApiKeyError } from "@services/user/errors/invalid-api-key.error";
 import { UnprocessableEntityError } from "../../http-errors/unprocessable-entity.error";
 import { CreateJwtService } from "../../services/token/create";
 import { RegisterDTO } from "./dtos/register.dto";
@@ -34,6 +36,8 @@ export class RegisterUserController {
     } catch (e) {
       if (e instanceof UsernameTakenError) {
         throw new UnprocessableEntityError(e.message);
+      } else if (e instanceof InvalidApiKeyError) {
+        throw new BadRequestError("Invalid api key");
       } else {
         throw new InternalServerError(e.message);
       }

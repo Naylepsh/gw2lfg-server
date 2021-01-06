@@ -2,18 +2,33 @@ import { hash } from "bcrypt";
 import { Inject, Service } from "typedi";
 import { User } from "@root/data/entities/user/user.entity";
 import { IUserRepository } from "@data/repositories/user/user.repository.interface";
-import { userRepositoryType } from "@loaders/typedi.constants";
+import {
+  checkApiKeyValidityServiceType,
+  userRepositoryType,
+} from "@loaders/typedi.constants";
 import { UsernameTakenError } from "./errors/username-taken.error";
+import { ICheckApiKeyValidityService } from "../gw2-api/api-key/api-key-check.gw2-api.service";
+import { InvalidApiKeyError } from "./errors/invalid-api-key.error";
 
 @Service()
 export class RegisterService {
   constructor(
-    @Inject(userRepositoryType) private readonly userRepository: IUserRepository
+    @Inject(userRepositoryType)
+    private readonly userRepository: IUserRepository,
+    @Inject(checkApiKeyValidityServiceType)
+    private readonly checkApiKeyService: ICheckApiKeyValidityService
   ) {}
 
   async register(user: User) {
-    if (await this.isUsernameTaken(user.username)) {
+    const [isUsernameTaken, isValidApiKey] = await Promise.all([
+      this.isUsernameTaken(user.username),
+      this.checkApiKeyService.isValid(user.apiKey),
+    ]);
+    if (isUsernameTaken) {
       throw new UsernameTakenError();
+    }
+    if (!isValidApiKey) {
+      throw new InvalidApiKeyError();
     }
 
     const _user = { ...user };

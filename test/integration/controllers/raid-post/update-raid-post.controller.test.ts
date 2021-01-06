@@ -13,6 +13,7 @@ import { RegisterService } from "@root/services/user/register.service";
 import { RaidPostMemoryUnitOfWork } from "../../../helpers/uows/raid-post.memory-unit-of-work";
 import { addHours } from "../../../unit/services/raid-post/hours.util";
 import { seedDbWithOnePost } from "./seed-db";
+import { FakeApiKeyChecker } from "../../../unit/services/fake-api-key-checker";
 
 describe("UpdateRaidPostController integration tests", () => {
   let url = "/raid-posts";
@@ -28,7 +29,8 @@ describe("UpdateRaidPostController integration tests", () => {
 
     ({ token, bossesIds, post } = await seedDbWithOnePost(uow));
 
-    registerService = new RegisterService(uow.users);
+    const apiKeyChecker = new FakeApiKeyChecker(true);
+    registerService = new RegisterService(uow.users, apiKeyChecker);
 
     const updateService = new UpdateRaidPostService(uow);
     const authorshipService = new CheckPostAuthorshipService(uow.raidPosts);
