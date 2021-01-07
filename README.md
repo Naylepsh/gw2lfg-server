@@ -4,8 +4,10 @@ Backend for gw2lfg service. Allows organisation of raid events with automated pl
 
 ## PREREQUISITES
 
-- `node 12.x`
-- `yarn`
+- `tsc 3.x` (tested on `3.9.7`)
+- `node 12.x` (tested on `12.16.3`)
+- `nodemon 2.x` (tested on `2.0.4`)
+- `yarn 1.x` (tested on `1.22.4`)
 - `PostgreSQL` (tested on `12.3`)
 
 ## SETUP
@@ -49,3 +51,4 @@ The option of running all the tests at the same time was kind of buggy, thus it 
 - Routing Controllers
 - TypeORM
 - TypeDI
+- Jest
