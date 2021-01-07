@@ -29,8 +29,8 @@ Backend for gw2lfg service. Allows organisation of raid events with automated pl
 ## WORKING WITH DATABASE
 
 - `yarn seed:bosses` - seeds the database with currently available raid bosses
-- `yarn migration:generate <migration-name>` - to generate a migration
-- `yarn migration:run` - to run a migration
+- `yarn migration:generate <migration-name>` - generates a migration
+- `yarn migration:run` - runs a migration
 
 ## TESTING
 
