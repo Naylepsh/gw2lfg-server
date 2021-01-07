@@ -9,7 +9,6 @@ import { IUserRepository } from "@data/repositories/user/user.repository.interfa
 import { LoginService } from "@root/services/user/login.service";
 import { RegisterService } from "@root/services/user/register.service";
 import { UserMemoryRepository } from "../../../helpers/repositories/user.memory-repository";
-import { FakeApiKeyChecker } from "../../../unit/services/fake-api-key-checker";
 
 describe("LoginUserController integration tests", () => {
   const url = "/login";
@@ -23,8 +22,7 @@ describe("LoginUserController integration tests", () => {
       apiKey: "api-key",
     });
     userRepo = new UserMemoryRepository();
-    const apiKeyChecker = new FakeApiKeyChecker(true);
-    const registerService = new RegisterService(userRepo, apiKeyChecker);
+    const registerService = new RegisterService(userRepo);
     await registerService.register(user);
     const loginService = new LoginService(userRepo);
     const controller = new LoginUserController(loginService);

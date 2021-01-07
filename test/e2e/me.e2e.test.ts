@@ -10,6 +10,7 @@ import { seedUser } from "./seeders";
 describe("Me e2e tests", () => {
   const loginUrl = "/login";
   const meUrl = "/me";
+  const timeLimit = 15000;
   let app: any;
   let userRepo: IUserRepository;
 
@@ -24,20 +25,24 @@ describe("Me e2e tests", () => {
     await userRepo.delete({});
   });
 
-  it("should return logged in user data", async () => {
-    const { user } = await seedUser(app);
+  it(
+    "should return logged in user data",
+    async () => {
+      const { user } = await seedUser(app);
 
-    const loginResponse = await request(app)
-      .post(loginUrl)
-      .send({ username: user.username, password: user.password });
-    const token = loginResponse.body.data.token;
+      const loginResponse = await request(app)
+        .post(loginUrl)
+        .send({ username: user.username, password: user.password });
+      const token = loginResponse.body.data.token;
 
-    const { body } = await request(app)
-      .get(meUrl)
-      .set(CurrentUserJWTMiddleware.AUTH_HEADER, token);
-    const data = body.data;
+      const { body } = await request(app)
+        .get(meUrl)
+        .set(CurrentUserJWTMiddleware.AUTH_HEADER, token);
+      const data = body.data;
 
-    expect(data).toHaveProperty("id");
-    expect(data).toHaveProperty("username", user.username);
-  });
+      expect(data).toHaveProperty("id");
+      expect(data).toHaveProperty("username", user.username);
+    },
+    timeLimit
+  );
 });

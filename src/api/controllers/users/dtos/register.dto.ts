@@ -1,4 +1,5 @@
 import { MinLength } from "class-validator";
+import { IsValidApiKey } from "../validators/api-key.validator";
 
 export class RegisterDTO {
   @MinLength(6)
@@ -8,5 +9,6 @@ export class RegisterDTO {
   password: string;
 
   @MinLength(1)
+  @IsValidApiKey()
   apiKey: string;
 }

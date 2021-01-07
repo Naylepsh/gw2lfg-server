@@ -3,7 +3,6 @@ import { LoginService } from "@root/services/user/login.service";
 import { RegisterService } from "@root/services/user/register.service";
 import { UserMemoryRepository } from "../../../helpers/repositories/user.memory-repository";
 import { createDummyUser } from "../../../helpers/user.helper";
-import { FakeApiKeyChecker } from "../fake-api-key-checker";
 
 describe("User service: login tests", () => {
   let userRepository: IUserRepository;
@@ -13,8 +12,7 @@ describe("User service: login tests", () => {
   beforeEach(() => {
     userRepository = new UserMemoryRepository();
     loginService = new LoginService(userRepository);
-    const apiKeyChecker = new FakeApiKeyChecker(true);
-    registerService = new RegisterService(userRepository, apiKeyChecker);
+    registerService = new RegisterService(userRepository);
   });
 
   it("should throw an error if user does not exist", async () => {

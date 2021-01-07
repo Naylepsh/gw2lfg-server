@@ -31,9 +31,7 @@ export class UpdateRaidPostService {
       throw new EntityNotFoundError(`raid post with id ${dto.id} not found`);
     }
 
-    await this.uow.joinRequests.delete({
-      where: { post: { id: raidPost.id } },
-    });
+    await this.uow.joinRequests.delete({ post: { id: raidPost.id } });
 
     const author = raidPost.author;
     const [bosses, roles, requirements] = await Promise.all([

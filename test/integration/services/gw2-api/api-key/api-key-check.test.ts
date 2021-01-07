@@ -1,6 +1,7 @@
 import assert from "assert";
 import "@root/config";
 import { CheckApiKeyValidityService } from "@services/gw2-api/api-key/api-key-check.gw2-api.service";
+import { getGw2ApiKey } from "../../../../helpers/get-gw2-api-key";
 
 describe("GW2 api key validity check test", () => {
   const timeLimit = 10000;
@@ -21,8 +22,7 @@ describe("GW2 api key validity check test", () => {
   it(
     "should return true when given api is valid",
     async () => {
-      assert(typeof process.env.GW2API_TOKEN !== "undefined");
-      const apiKey = process.env.GW2API_TOKEN;
+      const apiKey = getGw2ApiKey();
       const apiKeyChecker = new CheckApiKeyValidityService();
 
       const isValid = await apiKeyChecker.isValid(apiKey);

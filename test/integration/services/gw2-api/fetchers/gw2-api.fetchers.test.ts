@@ -4,6 +4,7 @@ import { fetchItemsFromCharacter } from "@services/gw2-api/fetchers/fetch-items-
 import { fetchCharacters } from "@services/gw2-api/fetchers/fetch-characters";
 import { fetchItemsFromBank } from "@services/gw2-api/fetchers/fetch-items-from-bank";
 import { fetchAccount } from "@services/gw2-api/fetchers/fetch-account";
+import { getGw2ApiKey } from "../../../../helpers/get-gw2-api-key";
 
 const getSomeCharacterName = async (apiKey: string) => {
   const characters = await fetchCharacters(apiKey);
@@ -17,8 +18,7 @@ describe("GW2 API fetchers test", () => {
   const timeLimit = 10000;
 
   beforeAll(() => {
-    assert(typeof process.env.GW2API_TOKEN !== "undefined");
-    apiKey = process.env.GW2API_TOKEN;
+    apiKey = getGw2ApiKey();
   });
 
   describe("fetch items from bank", () => {

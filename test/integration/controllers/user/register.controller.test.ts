@@ -6,9 +6,10 @@ import { RegisterUserController } from "@root/api/controllers/users/register.con
 import { User } from "@root/data/entities/user/user.entity";
 import { IUserRepository } from "@data/repositories/user/user.repository.interface";
 import { RegisterService } from "@root/services/user/register.service";
+import { checkApiKeyValidityServiceType } from "@loaders/typedi.constants";
 import { UserMemoryRepository } from "../../../helpers/repositories/user.memory-repository";
 import { createExpressServer, useContainer } from "routing-controllers";
-import { FakeApiKeyChecker } from "../../../unit/services/fake-api-key-checker";
+import { FakeApiKeyChecker } from "../../../helpers/fake-api-key-checker";
 
 describe("RegisterUserController integration tests", () => {
   const url = "/register";
@@ -22,11 +23,14 @@ describe("RegisterUserController integration tests", () => {
       apiKey: "api-key",
     });
     userRepo = new UserMemoryRepository([user]);
-    const apiKeyChecker = new FakeApiKeyChecker(true);
-    const registerService = new RegisterService(userRepo, apiKeyChecker);
+    const registerService = new RegisterService(userRepo);
     const controller = new RegisterUserController(registerService);
-
     Container.set(RegisterUserController, controller);
+
+    const areAllApiKeysValid = true;
+    const apiKeyValidityChecker = new FakeApiKeyChecker(areAllApiKeysValid);
+    Container.set(checkApiKeyValidityServiceType, apiKeyValidityChecker);
+
     useContainer(Container);
 
     app = createExpressServer({
@@ -34,14 +38,24 @@ describe("RegisterUserController integration tests", () => {
     });
   });
 
-  it("should return 400 if request is missing user data", async () => {
-    const invalidUserData = {
-      username: "newUser",
-    };
+  it("should return 400 if request contains invalid data", async () => {
+    // excluded properties: username, password, apiKey
+    const invalidUserData = {};
 
-    const result = await request(app).post(url).send(invalidUserData);
+    const { status } = await request(app).post(url).send(invalidUserData);
 
-    expect(result.status).toBe(400);
+    expect(status).toBe(400);
+  });
+
+  it("should provide an error message for each of the missing properties if request is missing data", async () => {
+    // excluded properties: username, password, apiKey
+    const numberOfMissingProperties = 3;
+    const invalidUserData = {};
+
+    const { body } = await request(app).post(url).send(invalidUserData);
+
+    expect(body).toHaveProperty("errors");
+    expect(body.errors.length).toBe(numberOfMissingProperties);
   });
 
   it("should return 422 if user already exists", async () => {
@@ -51,9 +65,9 @@ describe("RegisterUserController integration tests", () => {
       apiKey: "some-api-key",
     };
 
-    const result = await request(app).post(url).send(validUserData);
+    const { status } = await request(app).post(url).send(validUserData);
 
-    expect(result.status).toBe(422);
+    expect(status).toBe(422);
   });
 
   it("should return 201 if valid data was passed", async () => {
@@ -63,9 +77,9 @@ describe("RegisterUserController integration tests", () => {
       apiKey: "api-key",
     };
 
-    const result = await request(app).post(url).send(validUserData);
+    const { status } = await request(app).post(url).send(validUserData);
 
-    expect(result.status).toBe(201);
+    expect(status).toBe(201);
   });
 
   it("should return a token if valid data was passed", async () => {
@@ -75,8 +89,8 @@ describe("RegisterUserController integration tests", () => {
       apiKey: "api-key",
     };
 
-    const result = await request(app).post(url).send(validUserData);
-    const token = result.body.data.token;
+    const { body } = await request(app).post(url).send(validUserData);
+    const token = body.data.token;
     const decoded = jwt.decode(token);
 
     expect(decoded).toHaveProperty("id");

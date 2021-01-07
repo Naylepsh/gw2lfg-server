@@ -9,6 +9,7 @@ import { raidBossRepositoryType } from "@loaders/typedi.constants";
 import request from "supertest";
 import Container from "typedi";
 import { addHours } from "../unit/services/raid-post/hours.util";
+import { getGw2ApiKey } from "../helpers/get-gw2-api-key";
 
 interface IUser {
   username: string;
@@ -19,7 +20,7 @@ interface IUser {
 const _user: IUser = {
   username: "username",
   password: "password",
-  apiKey: process.env.GW2API_TOKEN as string,
+  apiKey: getGw2ApiKey(),
 };
 
 export const seedRaidPost = async (

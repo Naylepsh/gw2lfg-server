@@ -6,11 +6,9 @@ import { PublishRaidPostService } from "@root/services/raid-post/publish-raid-po
 import { RegisterService } from "@root/services/user/register.service";
 import { RaidPostMemoryUnitOfWork } from "../../../helpers/uows/raid-post.memory-unit-of-work";
 import { addHours } from "../../../unit/services/raid-post/hours.util";
-import { FakeApiKeyChecker } from "../../../unit/services/fake-api-key-checker";
 
 export async function seedDbWithOnePost(uow: RaidPostMemoryUnitOfWork) {
-  const apiKeyChecker = new FakeApiKeyChecker(true);
-  const registerService = new RegisterService(uow.users, apiKeyChecker);
+  const registerService = new RegisterService(uow.users);
   const user = new User({
     username: "existingUser",
     password: "password",

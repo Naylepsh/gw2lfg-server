@@ -9,7 +9,6 @@ import { User } from "@root/data/entities/user/user.entity";
 import { IUserRepository } from "@data/repositories/user/user.repository.interface";
 import { RegisterService } from "@root/services/user/register.service";
 import { UserMemoryRepository } from "../../../helpers/repositories/user.memory-repository";
-import { FakeApiKeyChecker } from "../../../unit/services/fake-api-key-checker";
 
 describe("MeController integration tests", () => {
   const url = "/me";
@@ -25,8 +24,7 @@ describe("MeController integration tests", () => {
       apiKey: "api-key",
     });
     userRepo = new UserMemoryRepository();
-    const apiKeyChecker = new FakeApiKeyChecker(true);
-    const registerService = new RegisterService(userRepo, apiKeyChecker);
+    const registerService = new RegisterService(userRepo);
     user = await registerService.register(_user);
     token = new CreateJwtService().createToken(user.id);
 
