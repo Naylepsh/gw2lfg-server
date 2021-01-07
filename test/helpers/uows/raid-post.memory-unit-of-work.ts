@@ -1,5 +1,6 @@
 import { IRaidPostUnitOfWork } from "@data/units-of-work/raid-post/raid-post.unit-of-work.interface";
 import { ItemRequirementMemoryRepository } from "../repositories/item-requirements.memory-repository";
+import { JoinRequestMemoryRepository } from "../repositories/join-request.memory-repository";
 import { RaidBossMemoryRepository } from "../repositories/raid-boss.memory-repository";
 import { RaidPostMemoryRepository } from "../repositories/raid-post.memory-repository";
 import { RequirementMemoryRepository } from "../repositories/requirement.memory-repository";
@@ -14,7 +15,8 @@ export class RaidPostMemoryUnitOfWork implements IRaidPostUnitOfWork {
     public roles: RoleMemoryRepository,
     public requirements: RequirementMemoryRepository,
     public raidPosts: RaidPostMemoryRepository,
-    public itemRequirements: ItemRequirementMemoryRepository
+    public itemRequirements: ItemRequirementMemoryRepository,
+    public joinRequests: JoinRequestMemoryRepository
   ) {}
 
   async withTransaction<T>(work: () => T): Promise<T> {
@@ -38,7 +40,8 @@ export class RaidPostMemoryUnitOfWork implements IRaidPostUnitOfWork {
       new RoleMemoryRepository(),
       new RequirementMemoryRepository(),
       new RaidPostMemoryRepository(),
-      new ItemRequirementMemoryRepository()
+      new ItemRequirementMemoryRepository(),
+      new JoinRequestMemoryRepository()
     );
   }
 }

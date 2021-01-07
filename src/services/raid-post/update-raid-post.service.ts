@@ -9,6 +9,7 @@ import { isDateInThePast } from "./utils/is-date-in-the-past";
 import { PastDateError } from "./errors/raid-post-errors";
 import { UpdateRaidPostDTO } from "./dtos/update-raid-post.dto";
 
+// Update will remove all join requests pointing to the post!
 @Service()
 export class UpdateRaidPostService {
   constructor(
@@ -29,6 +30,10 @@ export class UpdateRaidPostService {
     if (!raidPost) {
       throw new EntityNotFoundError(`raid post with id ${dto.id} not found`);
     }
+
+    await this.uow.joinRequests.delete({
+      where: { post: { id: raidPost.id } },
+    });
 
     const author = raidPost.author;
     const [bosses, roles, requirements] = await Promise.all([
