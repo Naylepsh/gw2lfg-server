@@ -22,7 +22,6 @@ describe("FindJoinRequestsController: integration tests", () => {
   let app: any;
   let post: RaidPost;
   let user: User;
-  let sendJoinRequestService: SendJoinRequestService;
 
   beforeEach(async () => {
     const uow = RaidPostMemoryUnitOfWork.create();
@@ -30,12 +29,7 @@ describe("FindJoinRequestsController: integration tests", () => {
     ({ post, user } = await seedDbWithOnePost(uow));
 
     joinRequestRepo = new JoinRequestMemoryRepository();
-    sendJoinRequestService = seedDbWithOneJoinRequest(
-      user,
-      uow,
-      joinRequestRepo,
-      post
-    );
+    await seedDbWithOneJoinRequest(user, uow, joinRequestRepo, post);
 
     const findJoinRequestsService = new FindJoinRequestsService(
       joinRequestRepo
@@ -51,7 +45,7 @@ describe("FindJoinRequestsController: integration tests", () => {
     });
   });
 
-  const seedDbWithOneJoinRequest = (
+  const seedDbWithOneJoinRequest = async (
     user: User,
     uow: RaidPostMemoryUnitOfWork,
     joinRequestRepo: JoinRequestMemoryRepository,
@@ -69,13 +63,11 @@ describe("FindJoinRequestsController: integration tests", () => {
       joinRequestRepo,
       requirementChecker
     );
-    sendJoinRequestService.sendJoinRequest({
+    await sendJoinRequestService.sendJoinRequest({
       userId: user.id,
       postId: post.id,
       roleId: post.roles[0].id,
     });
-
-    return sendJoinRequestService;
   };
 
   it("should return all join requests with given query params", async () => {

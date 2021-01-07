@@ -37,7 +37,7 @@ describe("GW2 API fetchers test", () => {
       async () => {
         const invalidApiKey = "invalid-key";
 
-        expect(fetchItemsFromBank(invalidApiKey)).rejects.toThrow();
+        await expect(fetchItemsFromBank(invalidApiKey)).rejects.toThrow();
       },
       timeLimit
     );
@@ -61,7 +61,7 @@ describe("GW2 API fetchers test", () => {
         // characters names cannot include numbers
         const charName = "-1";
 
-        expect(fetchItemsFromCharacter(charName, apiKey)).rejects.toThrow();
+        await expect(fetchItemsFromCharacter(charName, apiKey)).rejects.toThrow();
       },
       timeLimit
     );
@@ -72,7 +72,7 @@ describe("GW2 API fetchers test", () => {
         const name = await getSomeCharacterName(apiKey);
         const invalidApiKey = "invalid-key";
 
-        expect(fetchItemsFromCharacter(name, invalidApiKey)).rejects.toThrow();
+        await expect(fetchItemsFromCharacter(name, invalidApiKey)).rejects.toThrow();
       },
       timeLimit
     );
