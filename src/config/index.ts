@@ -4,6 +4,7 @@ import { ConnectionOptions } from "typeorm";
 
 const env = process.env.NODE_ENV || "dev";
 const is_prod = env === "prod";
+
 dotenv.config({ path: `src/../.env.${env}` });
 
 interface ConfigProperties {
@@ -46,6 +47,8 @@ const database: ConnectionOptions = {
   password: parseEnvString("DATABASE_PASSWORD"),
   synchronize: !is_prod,
   entities: getEntities("../data/entities/**/*"),
+  migrations: [path.join(__dirname, "../data/migrations/*.js")],
+  migrationsRun: true,
 };
 
 interface JwtProperties {

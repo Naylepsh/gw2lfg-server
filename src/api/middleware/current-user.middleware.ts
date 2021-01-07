@@ -5,7 +5,7 @@ import { userRepositoryType } from "@loaders/typedi.constants";
 import { DecodeJWTService } from "../services/token/decode";
 
 export class CurrentUserJWTMiddleware {
-  static readonly AUTH_HEADER = "x-auth-token";
+  static readonly AUTH_HEADER = "gw2lfg-auth-token";
   decodeTokenService = new DecodeJWTService();
 
   constructor(
