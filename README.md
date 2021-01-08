@@ -14,7 +14,7 @@ Backend for gw2lfg service. Allows organisation of raid events with automated pl
 
 1. **Env Variables**
    - `example.env.test` contains example env config. `GW2API_TOKEN` variable is only required for testing environment.
-   - Separate `env.<env-name>` files are needed for each environment you want to run (possibly `test`, `dev`, `prod`).
+   - Separate `env.<env-name>` files are needed for each environment you want to run (`test`, `dev`, or your own custom environments).  
      If, for example, you only intend to run `dev`, you only need `env.dev` file.
 2. **Database**
    - Look at the `ormconfig.js` file. It's a sample setup of database connection,
@@ -26,7 +26,7 @@ Backend for gw2lfg service. Allows organisation of raid events with automated pl
 1. Follow `SETUP` section first and install `PREREQUISITIES`
 2. `yarn install` - installing dependencies
 3. `yarn build` - build the app
-4. `yarn dev` - run the app
+4. `yarn start` - run the app
 
 Server will be available at `localhost:<port-specified-in-env>`
 

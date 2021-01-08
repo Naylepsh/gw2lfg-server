@@ -3,16 +3,13 @@ import path from "path";
 import { ConnectionOptions } from "typeorm";
 
 const env = process.env.NODE_ENV || "dev";
-const is_prod = env === "prod";
+const is_test = env === "test";
 
 dotenv.config({ path: `src/../.env.${env}` });
 
-interface ConfigProperties {
-  database: ConnectionOptions;
-  jwt: JwtProperties;
-  port: number;
-}
-
+/*
+Finds the env variable of string type or throws if one could not be found
+*/
 const parseEnvString = (name: string) => {
   const env = process.env[name];
   if (env === undefined) {
@@ -22,6 +19,9 @@ const parseEnvString = (name: string) => {
   return env;
 };
 
+/*
+Finds the env variable of number type or throws if one could not be found
+*/
 const parseEnvNumber = (name: string) => {
   const env = parseInt(parseEnvString(name));
   if (isNaN(env)) {
@@ -31,13 +31,15 @@ const parseEnvNumber = (name: string) => {
   return env;
 };
 
-const getEntities = (pathToDir: string) => {
-  const extensions = ["ts", "js"];
-  return extensions.map((extension: string) => {
-    return path.join(__dirname, pathToDir, `*${extension}`);
-  });
-};
+interface ConfigProperties {
+  database: ConnectionOptions;
+  jwt: JwtOptions;
+  port: number;
+}
 
+/*
+Connection options needed for TypeORM
+*/
 const database: ConnectionOptions = {
   type: "postgres",
   host: parseEnvString("DATABASE_HOST"),
@@ -45,26 +47,32 @@ const database: ConnectionOptions = {
   database: parseEnvString("DATABASE_NAME"),
   username: parseEnvString("DATABASE_USERNAME"),
   password: parseEnvString("DATABASE_PASSWORD"),
-  synchronize: !is_prod,
-  entities: getEntities("../data/entities/**/*"),
+  synchronize: is_test,
+  entities: [path.join(__dirname, "../data/entities/**/*.js")],
   migrations: [path.join(__dirname, "../data/migrations/*.js")],
   migrationsRun: true,
 };
 
-interface JwtProperties {
+interface JwtOptions {
   secret: string;
   options: {
     expiresIn: string;
   };
 }
 
-const jwt: JwtProperties = {
+/*
+JWT options for authentication
+*/
+const jwt: JwtOptions = {
   secret: parseEnvString("JWT_SECRET"),
   options: {
     expiresIn: "1d",
   },
 };
 
+/*
+Server port
+*/
 const port = parseEnvNumber("PORT");
 
 export const config: ConfigProperties = {
