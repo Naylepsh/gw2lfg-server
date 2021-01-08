@@ -11,6 +11,12 @@ import { mapRaidPostToRaidPostResponse } from "../../responses/entities/raid-pos
 import { SaveRaidPostDTO } from "./dtos/save-raid-post.dto";
 import { PublishRaidPostResponse } from "./responses/publish-raid-post.response";
 
+/*
+Controller for POST /raid-posts requests.
+Takes post props and saves it in database if those props are valid.
+Returns created resource.
+User has to be authenticated to use.
+*/
 @JsonController()
 export class PublishRaidPostController {
   constructor(private readonly publishService: PublishRaidPostService) {}
@@ -25,6 +31,7 @@ export class PublishRaidPostController {
       ...dto,
       authorId: user.id,
     });
+
     return { data: mapRaidPostToRaidPostResponse(post) };
   }
 }

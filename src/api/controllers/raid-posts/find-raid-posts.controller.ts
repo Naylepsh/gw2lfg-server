@@ -19,6 +19,12 @@ import { unsatisfyEachRequirement } from "./utils/unsatisfy-each-requirement";
 import { checkIfUserMeetsPostsRequirements } from "./utils/check-if-user-meets-posts-requirements";
 import { MoreThan } from "typeorm";
 
+/*
+Controller for GET /raid-posts requests.
+Returns paginated posts according to query params (skip and take) which are scheduled to happen in the future.
+Providing user token will check whether that user meets the posts'requirements to join
+but it's not required.
+*/
 @JsonController()
 export class FindRaidPostsController {
   constructor(
@@ -39,6 +45,9 @@ export class FindRaidPostsController {
       // searching for posts which planned event date is somewhere in the future
       where: { date: MoreThan(now) },
     });
+
+    // if user is not authenticated we say that they fail to meet the requirements
+    // otherwise we properly check
     const _posts = user
       ? await checkIfUserMeetsPostsRequirements(
           posts,
@@ -46,6 +55,7 @@ export class FindRaidPostsController {
           this.requirementsCheckService
         )
       : unsatisfyEachRequirement(posts);
+
     return { data: _posts.map(mapRaidPostToRaidPostResponse), hasMore };
   }
 }

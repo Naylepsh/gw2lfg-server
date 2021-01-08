@@ -2,6 +2,7 @@ import { User } from "@root/data/entities/user/user.entity";
 import { ICheckRequirementsService } from "@services/requirement/check-requirements.service.interface";
 import { RaidPost } from "@root/data/entities/raid-post/raid-post.entitity";
 
+// checks if user meets posts' requirements using requirementsCheckService
 export async function checkIfUserMeetsPostsRequirements(
   posts: RaidPost[],
   user: User,

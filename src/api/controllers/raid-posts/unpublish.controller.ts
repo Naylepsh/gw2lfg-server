@@ -13,6 +13,11 @@ import { CheckPostAuthorshipService } from "@root/services/raid-post/check-post-
 import { EntityNotFoundError } from "@root/services/common/errors/entity-not-found.error";
 import { UnpublishRaidPostService } from "@root/services/raid-post/unpublish-raid-post.service";
 
+/*
+Controller for DELETE /raid-posts/:id requests.
+Removes the post of given id from the database.
+User has to be both authenticated and the post's author to use.
+*/
 @JsonController()
 export class UnpublishRaidPostController {
   constructor(

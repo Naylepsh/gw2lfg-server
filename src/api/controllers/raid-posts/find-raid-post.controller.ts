@@ -20,6 +20,12 @@ import { checkIfUserMeetsPostsRequirements } from "./utils/check-if-user-meets-p
 import { FindRaidPostResponse } from "./responses/find-raid-post.response";
 import { EntityNotFoundError } from "@services/common/errors/entity-not-found.error";
 
+/*
+Controller for GET /raid-posts/:id requests.
+Returns a post with matching id or throws 404 if post could not be found.
+Providing user token will check whether that user meets the post's requirements to join
+but it's not required.
+*/
 @JsonController()
 export class FindRaidPostController {
   constructor(
@@ -37,6 +43,9 @@ export class FindRaidPostController {
     try {
       const post = await this.findService.find({ id });
 
+      // checkIfUserMeetsPostsRequirements takes and returns a post array
+      // if user is not authenticated we say that they fail to meet the requirements
+      // otherwise we properly check
       const posts = user
         ? await checkIfUserMeetsPostsRequirements(
             [post],
@@ -44,7 +53,11 @@ export class FindRaidPostController {
             this.requirementsCheckService
           )
         : unsatisfyEachRequirement([post]);
-      return { data: posts.map(mapRaidPostToRaidPostResponse)[0] };
+      const postWithRequirementsChecked = posts[0];
+
+      return {
+        data: mapRaidPostToRaidPostResponse(postWithRequirementsChecked),
+      };
     } catch (error) {
       if (error instanceof EntityNotFoundError) {
         throw new NotFoundError();
