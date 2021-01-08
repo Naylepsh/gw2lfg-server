@@ -49,7 +49,12 @@ const database: ConnectionOptions = {
   username: parseEnvString("DATABASE_USERNAME"),
   password: parseEnvString("DATABASE_PASSWORD"),
   synchronize: is_test,
-  entities: [path.join(__dirname, "../data/entities/**/*.js")],
+  entities: [
+    // .js needed for dev environment where code has been compiled to js
+    path.join(__dirname, "../data/entities/**/*.js"),
+    // .ts needed for test environent where code just stays in ts
+    path.join(__dirname, "../data/entities/**/*.ts"),
+  ],
   migrations: [path.join(__dirname, "../data/migrations/*.js")],
   migrationsRun: true,
 };
