@@ -3,6 +3,9 @@ import { IRaidPostUnitOfWork } from "@data/units-of-work/raid-post/raid-post.uni
 import { raidPostUnitOfWorkType } from "@loaders/typedi.constants";
 import { UnpublishRaidPostDTO } from "./dtos/unpublish-raid-post.dto";
 
+/*
+Service for deletion of raid posts.
+*/
 @Service()
 export class UnpublishRaidPostService {
   constructor(

@@ -7,6 +7,10 @@ import {
 import { PostNotFoundError } from "../common/errors/entity-not-found.error";
 import { FindRaidPostDTO } from "./dtos/find-raid-post.dto";
 
+/*
+Service for finding a raid post with matching id.
+Throws an error if the post could not be found.
+*/
 @Service(findRaidPostServiceType)
 export class FindRaidPostService {
   constructor(

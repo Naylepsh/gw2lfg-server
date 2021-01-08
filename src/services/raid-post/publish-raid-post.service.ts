@@ -6,9 +6,13 @@ import { ItemRequirement } from "@root/data/entities/item-requirement/item.requi
 import { raidPostUnitOfWorkType } from "@loaders/typedi.constants";
 import { UserNotFoundError } from "../common/errors/entity-not-found.error";
 import { isDateInThePast } from "./utils/is-date-in-the-past";
-import { PastDateError } from "./errors/raid-post-errors";
+import { DateIsInThePastError } from "./errors/date-is-in-the-past.error";
 import { PublishRaidPostDTO } from "./dtos/publish-raid-post.dto";
 
+/*
+Service for raid post creation.
+Creates and saves a given raid post if it contains valid data.
+*/
 @Service()
 export class PublishRaidPostService {
   constructor(
@@ -16,7 +20,8 @@ export class PublishRaidPostService {
   ) {}
 
   async publish(publishDto: PublishRaidPostDTO) {
-    if (isDateInThePast(publishDto.date)) throw new PastDateError("date");
+    if (isDateInThePast(publishDto.date))
+      throw new DateIsInThePastError("date");
 
     return await this.uow.withTransaction(() =>
       this.createAndSavePost(publishDto)
@@ -27,6 +32,7 @@ export class PublishRaidPostService {
     const author = await this.uow.users.findById(publishDto.authorId);
     if (!author) throw new UserNotFoundError();
 
+    // prepare related entities
     const [bosses, requirements, roles] = await Promise.all([
       this.uow.raidBosses.findByIds(publishDto.bossesIds),
       this.saveRequirements(publishDto),

@@ -6,6 +6,12 @@ import {
 } from "@loaders/typedi.constants";
 import { FindRaidPostsDTO } from "./dtos/find-raid-posts.dto";
 
+/*
+Service for finding raid posts.
+Returns paginated results.
+Requires pagination params.
+Where query is optional.
+*/
 @Service(findRaidPostsServiceType)
 export class FindRaidPostsService {
   constructor(
@@ -20,7 +26,7 @@ export class FindRaidPostsService {
       order: { date: "DESC" },
       skip,
       take: take + 1,
-      where
+      where,
     });
 
     if (posts.length === 0) {

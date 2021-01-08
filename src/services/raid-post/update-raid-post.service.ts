@@ -6,10 +6,13 @@ import { IRaidPostUnitOfWork } from "@data/units-of-work/raid-post/raid-post.uni
 import { raidPostUnitOfWorkType } from "@loaders/typedi.constants";
 import { EntityNotFoundError } from "../common/errors/entity-not-found.error";
 import { isDateInThePast } from "./utils/is-date-in-the-past";
-import { PastDateError } from "./errors/raid-post-errors";
+import { DateIsInThePastError } from "./errors/date-is-in-the-past.error";
 import { UpdateRaidPostDTO } from "./dtos/update-raid-post.dto";
 
-// Update will remove all join requests pointing to the post!
+/*
+Service for updating raid posts.
+IMPORTANT! Update will remove all join requests pointing to the post!
+*/
 @Service()
 export class UpdateRaidPostService {
   constructor(
@@ -17,7 +20,7 @@ export class UpdateRaidPostService {
   ) {}
 
   async update(dto: UpdateRaidPostDTO) {
-    if (isDateInThePast(dto.date)) throw new PastDateError("date");
+    if (isDateInThePast(dto.date)) throw new DateIsInThePastError("date");
 
     return this.uow.withTransaction(() => {
       return this.updatePost(dto);
@@ -33,6 +36,7 @@ export class UpdateRaidPostService {
 
     await this.uow.joinRequests.delete({ post: { id: raidPost.id } });
 
+    // prepare related entities
     const author = raidPost.author;
     const [bosses, roles, requirements] = await Promise.all([
       this.uow.raidBosses.findByIds(dto.bossesIds),
@@ -52,6 +56,7 @@ export class UpdateRaidPostService {
     return await this.uow.raidPosts.save(post);
   }
 
+  // removes previous requirements and saves new ones
   private async overrideRequirements(
     raidPost: RaidPost,
     dto: UpdateRaidPostDTO
@@ -69,6 +74,7 @@ export class UpdateRaidPostService {
     return itemRequirements;
   }
 
+  // removes previous roles and saves new ones
   private async overrideRoles(raidPost: RaidPost, dto: UpdateRaidPostDTO) {
     if (raidPost.hasRoles()) {
       await this.uow.roles.delete(raidPost.roles);
