@@ -1,17 +1,18 @@
-import { Get, JsonController, QueryParams } from "routing-controllers";
+import { Get, JsonController } from "routing-controllers";
 import { FindRaidBossesService } from "../../../services/raid-boss/find-raid-bosses.service";
-import { FindRaidBossesQueryParams } from "./params/find-raid-bosses.query-params";
 import { FindRaidBossesResponse } from "./find-raid-bosses.response";
 
+/*
+Controller for GET /raid-bosses requests.
+Returns all bosses from the database.
+*/
 @JsonController()
 export class FindRaidBossesController {
   constructor(private readonly findService: FindRaidBossesService) {}
 
   @Get("/raid-bosses")
-  async findAll(
-    @QueryParams() query: FindRaidBossesQueryParams
-  ): Promise<FindRaidBossesResponse> {
-    const { bosses, hasMore } = await this.findService.find(query);
-    return { data: bosses, hasMore };
+  async findAll(): Promise<FindRaidBossesResponse> {
+    const bosses = await this.findService.find();
+    return { data: bosses };
   }
 }
