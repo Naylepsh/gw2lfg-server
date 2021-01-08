@@ -1,13 +1,20 @@
+import "module-alias/register"; // needed for usage of module aliases
 import dotenv from "dotenv";
+import path from "path";
 import { getConnection } from "typeorm";
-// SCRIPTS CANNOT USE MODULE ALIASES!
-import { RaidBossRepository } from "../data/repositories/raid-boss/raid-boss.repository";
-import { loadTypeORM } from "../loaders/typeorm.loader";
-import { raids } from "../data/entities/raid-boss/gw2-raids.json";
-import { RaidBoss } from "../data/entities/raid-boss/raid-boss.entity";
+import { RaidBossRepository } from "@data/repositories/raid-boss/raid-boss.repository";
+import { loadTypeORM } from "@loaders/typeorm.loader";
+import { raids } from "@data/entities/raid-boss/gw2-raids.json";
+import { RaidBoss } from "@data/entities/raid-boss/raid-boss.entity";
 
-dotenv.config({ path: "./.env.dev" });
+const env = process.env.NODE_ENV || "dev";
 
+const pathToConfigFile = path.join(__dirname, `../../.env.${env}`);
+dotenv.config({ path: pathToConfigFile });
+
+/*
+Script that seeds the database with raid bosses
+*/
 const main = async () => {
   await loadTypeORM();
   const conn = getConnection();
@@ -19,10 +26,13 @@ const main = async () => {
 
   await raidBossRepo.saveMany(missingBosses);
 
-  console.log(`found ${raidBossesInDb.length} bosses in database.`);
-  console.log(`added ${missingBosses.length} bosses.`);
+  console.log(`Found ${raidBossesInDb.length} bosses in database.`);
+  console.log(`Added ${missingBosses.length} bosses.`);
 };
 
+/*
+Checks which bosses are missing from the given array
+*/
 const addMissingBosses = (raidBossesInDb: RaidBoss[]) => {
   const encounters: RaidBoss[] = [];
 
@@ -31,6 +41,8 @@ const addMissingBosses = (raidBossesInDb: RaidBoss[]) => {
       const raidBoss = new RaidBoss({ name: encounter.name, isCm: false });
       addBossIfNeeded(raidBossesInDb, raidBoss, encounters);
 
+      // we treat raid boss with normal mode and the same raid boss but with challenge mode enabled
+      // as different entities
       if (encounter.hasCm) {
         const raidBoss = new RaidBoss({ name: encounter.name, isCm: true });
         addBossIfNeeded(raidBossesInDb, raidBoss, encounters);
@@ -41,6 +53,9 @@ const addMissingBosses = (raidBossesInDb: RaidBoss[]) => {
   return encounters;
 };
 
+/*
+If raidBossesInDb does not contain raidBoss, puts it in encounters
+*/
 const addBossIfNeeded = (
   raidBossesInDb: RaidBoss[],
   raidBoss: RaidBoss,

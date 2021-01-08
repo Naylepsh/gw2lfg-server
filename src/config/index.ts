@@ -5,7 +5,8 @@ import { ConnectionOptions } from "typeorm";
 const env = process.env.NODE_ENV || "dev";
 const is_test = env === "test";
 
-dotenv.config({ path: `src/../.env.${env}` });
+const pathToConfigFile = path.join(__dirname, `../../.env.${env}`);
+dotenv.config({ path: pathToConfigFile });
 
 /*
 Finds the env variable of string type or throws if one could not be found
