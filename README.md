@@ -28,6 +28,8 @@ Backend for gw2lfg service. Allows organisation of raid events with automated pl
 3. `yarn build` - build the app
 4. `yarn dev` - run the app
 
+Server will be available at `localhost:<port-specified-in-env>`
+
 ## WORKING WITH DATABASE
 
 - `yarn seed:bosses` - seeds the database with currently available raid bosses
