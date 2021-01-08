@@ -5,6 +5,9 @@ import { IUserRepository } from "@data/repositories/user/user.repository.interfa
 import { userRepositoryType } from "@loaders/typedi.constants";
 import { UsernameTakenError } from "./errors/username-taken.error";
 
+/*
+Service for creating new users.
+*/
 @Service()
 export class RegisterService {
   constructor(
@@ -12,6 +15,7 @@ export class RegisterService {
     private readonly userRepository: IUserRepository
   ) {}
 
+  // saves a user in database as long as their username is unique
   async register(user: User) {
     const isUsernameTaken = await this.isUsernameTaken(user.username);
     if (isUsernameTaken) {
