@@ -3,9 +3,8 @@ import { IdentifiableEntityRepository } from "../generic-identifiable-entity.rep
 import { EntityRepository } from "typeorm";
 import { IUserRepository } from "./user.repository.interface";
 import { Service } from "typedi";
-import { userRepositoryType } from "@loaders/typedi.constants";
 
-@Service(userRepositoryType)
+@Service()
 @EntityRepository(User)
 export class UserRepository
   extends IdentifiableEntityRepository<User>

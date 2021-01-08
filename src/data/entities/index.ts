@@ -7,7 +7,8 @@ import { Requirement } from "./requirement/requirement.entity";
 import { Role } from "./role/role.entity";
 import { User } from "./user/user.entity";
 
-export default {
+// Available entities
+export const entities = {
   Requirement,
   ItemRequirement,
   JoinRequest,
