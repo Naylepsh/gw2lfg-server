@@ -9,6 +9,9 @@ import Container from "typedi";
 import { checkApiKeyValidityServiceType } from "@loaders/typedi.constants";
 import { ICheckApiKeyValidityService } from "@services/gw2-api/api-key/api-key-check.gw2-api.service";
 
+/*
+Custom validation constraint for checking whether given GW2 API key is valid
+*/
 @ValidatorConstraint({ async: true })
 export class IsValidApiKeyConstraint implements ValidatorConstraintInterface {
   async validate(apiKey: string, _args: ValidationArguments) {
@@ -26,6 +29,10 @@ export class IsValidApiKeyConstraint implements ValidatorConstraintInterface {
   }
 }
 
+/*
+Custom validation decorator to be used with class-validator.
+Uses custom IsValidApiKeyConstraint to check API key validity.
+*/
 export function IsValidApiKey(validationOptions?: ValidationOptions) {
   return function (object: Object, propertyName: string) {
     registerDecorator({

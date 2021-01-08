@@ -4,7 +4,7 @@ import { PublishRaidPostController } from "./publish-raid-post.controller";
 import { UnpublishRaidPostController } from "./unpublish.controller";
 import { UpdateRaidPostController } from "./update-raid-post.controller";
 
-// All raid posts controllers
+// Available raid posts controllers
 export const raidPostsControllers = [
   FindRaidPostController,
   FindRaidPostsController,

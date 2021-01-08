@@ -17,6 +17,11 @@ import { RegisterDTO } from "./dtos/register.dto";
 import { RegisterResponse } from "./responses/register.response";
 import { mapUserToUserResponse } from "../../responses/entities/user.entity.response";
 
+/*
+Controller for POST /register
+Registers an user in the database if provided data is valid.
+Returns created resource and jwt on success.
+*/
 @JsonController()
 export class RegisterUserController {
   authService = new CreateJwtService();

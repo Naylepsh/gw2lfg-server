@@ -11,6 +11,11 @@ import { CreateJwtService } from "../../services/token/create";
 import { LoginDTO } from "./dtos/login.dto";
 import { LoginResponse } from "./responses/login.response";
 
+/*
+Controller for POST /login
+Checks whether a user with matching username and password exists in database.
+Returns a jwt on success.
+*/
 @JsonController()
 export class LoginUserController {
   authService = new CreateJwtService();

@@ -9,6 +9,10 @@ import { FindUserService } from "@services/user/find-user.service";
 import { EntityNotFoundError } from "@services/common/errors/entity-not-found.error";
 import { mapUserToUserResponse } from "../../responses/entities/user.entity.response";
 
+/*
+Controller for GET /users/:id requests.
+Returns an user with matching id on success.
+*/
 @JsonController()
 export class FindUserController {
   constructor(private readonly findUserService: FindUserService) {}
