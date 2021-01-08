@@ -33,6 +33,7 @@ export class UnpublishRaidPostController {
     @Param("id") postId: number
   ) {
     try {
+      // Only the author can delete their posts
       const isAuthor = await this.authorshipService.isPostAuthor({
         userId: user.id,
         postId,

@@ -11,7 +11,7 @@ import { mapUserToUserResponse } from "../../responses/entities/user.entity.resp
 
 /*
 Controller for GET /users/:id requests.
-Returns an user with matching id on success.
+Returns an user with matching id and their gw2 account on success.
 */
 @JsonController()
 export class FindUserController {
@@ -21,6 +21,7 @@ export class FindUserController {
   async find(@Param("id") id: number) {
     try {
       const { user, account } = await this.findUserService.find({ id });
+
       return {
         data: {
           user: mapUserToUserResponse(user),

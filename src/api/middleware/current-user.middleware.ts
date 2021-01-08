@@ -4,6 +4,10 @@ import { IUserRepository } from "@data/repositories/user/user.repository.interfa
 import { userRepositoryType } from "@loaders/typedi.constants";
 import { DecodeJWTService } from "../services/token/decode";
 
+/*
+Middleware for dealing with jwt based authentication.
+Decodes the jwt and returns a user associated with it from the database.
+*/
 export class CurrentUserJWTMiddleware {
   static readonly AUTH_HEADER = "gw2lfg-auth-token";
   decodeTokenService = new DecodeJWTService();
@@ -23,6 +27,7 @@ export class CurrentUserJWTMiddleware {
       const decoded = this.decodeTokenService.decodeToken(token as string);
       const id = parseInt(decoded.id);
       const user = await this.userRepo.findById(id);
+      // middleware has to return null to trigger failure
       return user ?? null;
     } catch (e) {
       return null;

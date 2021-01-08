@@ -38,6 +38,7 @@ export class SendRaidJoinRequestController {
         postId: dto.postId,
         roleId: dto.roleId,
       });
+
       return { data: joinRequest };
     } catch (e) {
       if (e instanceof EntityNotFoundError) {

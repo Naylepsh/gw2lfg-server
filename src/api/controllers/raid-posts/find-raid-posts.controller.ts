@@ -42,7 +42,7 @@ export class FindRaidPostsController {
     const now = new Date();
     const { posts, hasMore } = await this.findService.find({
       ...query,
-      // searching for posts which planned event date is somewhere in the future
+      // searching for raid posts scheduled to happen in the future
       where: { date: MoreThan(now) },
     });
 

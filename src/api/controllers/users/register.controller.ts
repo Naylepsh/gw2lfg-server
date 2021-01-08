@@ -20,7 +20,7 @@ import { mapUserToUserResponse } from "../../responses/entities/user.entity.resp
 /*
 Controller for POST /register
 Registers an user in the database if provided data is valid.
-Returns created resource and jwt on success.
+Returns created resource and jwt associated with the user on success.
 */
 @JsonController()
 export class RegisterUserController {
@@ -30,13 +30,12 @@ export class RegisterUserController {
   @HttpCode(201)
   @OnUndefined(201)
   @Post("/register")
-  async register(
-    @Body({ validate: true }) dto: RegisterDTO
-  ): Promise<RegisterResponse> {
+  async register(@Body() dto: RegisterDTO): Promise<RegisterResponse> {
     try {
       const user = new User(dto);
       const registeredUser = await this.registerService.register(user);
       const token = this.authService.createToken(registeredUser.id);
+
       return { data: { token, user: mapUserToUserResponse(registeredUser) } };
     } catch (e) {
       if (e instanceof UsernameTakenError) {

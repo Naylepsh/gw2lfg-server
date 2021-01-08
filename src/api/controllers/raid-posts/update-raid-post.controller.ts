@@ -37,6 +37,7 @@ export class UpdateRaidPostController {
     @Body() dto: SaveRaidPostDTO
   ): Promise<UpdateRaidPostResponse> {
     try {
+      // Only the author can update their posts
       const isAuthor = await this.authorshipService.isPostAuthor({
         userId: user.id,
         postId,

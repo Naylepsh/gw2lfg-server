@@ -17,6 +17,7 @@ export class FindJoinRequestsController {
     @QueryParams() params: FindJoinRequestsParams
   ): Promise<FindJoinRequestsResponse> {
     const requests = await this.joinRequestService.find(params);
+
     return { data: requests.map(mapJoinRequestToJoinRequestResponse) };
   }
 }

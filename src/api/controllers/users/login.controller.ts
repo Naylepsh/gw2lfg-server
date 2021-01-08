@@ -14,7 +14,7 @@ import { LoginResponse } from "./responses/login.response";
 /*
 Controller for POST /login
 Checks whether a user with matching username and password exists in database.
-Returns a jwt on success.
+Returns a jwt associated with the user on success.
 */
 @JsonController()
 export class LoginUserController {
@@ -23,10 +23,11 @@ export class LoginUserController {
   constructor(private readonly loginService: LoginService) {}
 
   @Post("/login")
-  async login(@Body({ validate: true }) dto: LoginDTO): Promise<LoginResponse> {
+  async login(@Body() dto: LoginDTO): Promise<LoginResponse> {
     try {
       const user = await this.loginService.login(dto);
       const token = this.authService.createToken(user.id);
+
       return { data: { token } };
     } catch (e) {
       if (e instanceof InvalidLoginDetailsError) {

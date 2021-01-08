@@ -13,6 +13,7 @@ export class FindRaidBossesController {
   @Get("/raid-bosses")
   async findAll(): Promise<FindRaidBossesResponse> {
     const bosses = await this.findService.find();
+
     return { data: bosses };
   }
 }
