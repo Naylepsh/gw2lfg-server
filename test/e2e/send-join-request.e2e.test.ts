@@ -14,7 +14,7 @@ import { clean, seedRaidBoss, seedRaidPost, seedUser } from "./seeders";
 
 describe("Send raid post join request e2e tests", () => {
   const url = "/join-requests";
-  const timelimit = 30000;
+  const timelimit = 60000;
   let container: typeof Container;
   let app: any;
   let uow: IRaidPostUnitOfWork;

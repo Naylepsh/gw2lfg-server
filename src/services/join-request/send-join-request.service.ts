@@ -20,6 +20,10 @@ import { RequirementsNotSatisfiedError } from "./errors/requirements-not-satisfi
 import { MultipleRequestsForTheSameSpotError } from "./errors/multiple-requests-for-the-same-spot.error";
 import { SpotIsTakenError } from "./errors/spot-is-taken.error";
 
+/*
+Service for handling sent join requests.
+Checks whether given join request is valid and if so, stores it in database.
+*/
 @Service()
 export class SendJoinRequestService {
   constructor(
@@ -39,6 +43,7 @@ export class SendJoinRequestService {
     ]);
     const role = post?.getRole(roleId);
 
+    // if any of the given ids of related object points to no object - throw a corresponding NotFound error
     if (!user) {
       throw new UserNotFoundError();
     }
@@ -48,15 +53,18 @@ export class SendJoinRequestService {
     if (!role) {
       throw new RoleNotFoundError();
     }
+    // user cannot request the same spot twice
     if (requests.map((req) => req.user.id).includes(userId)) {
       throw new MultipleRequestsForTheSameSpotError();
     }
+    // user cannot request a spot that is already taken by someone
     if (
       requests.map((req) => req.status).some((status) => status === "ACCEPTED")
     ) {
       throw new SpotIsTakenError();
     }
 
+    // user has to satisfy post's requirements to join
     const areSatisfied = await this.checkRequirementsService.areRequirementsSatisfied(
       post.requirements,
       user
