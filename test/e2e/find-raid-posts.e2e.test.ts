@@ -24,7 +24,7 @@ describe("Find raid posts e2e tests", () => {
     ({ token } = await seedUser(app));
     const bossesIds = [await seedRaidBoss(container)];
     ({ id: postId } = await seedRaidPost(app, bossesIds, token));
-  });
+  }, timelimit);
 
   afterEach(async () => {
     await clean(uow);

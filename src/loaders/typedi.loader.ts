@@ -4,7 +4,6 @@ import { data } from "../data";
 // Imported only so that the TypeDI can acquire their metadata.
 // As long as it's not a interface, just importing it is enough for TypeDI
 import { services } from "../services";
-import { GetItemsFromEntireAccount } from "../services/gw2-api/items/get-items.gw2-api.service";
 import {
   itemRequirementRepositoryType,
   joinRequestRepositoryType,
@@ -70,7 +69,11 @@ const loadDataLayerDependencies = () => {
 };
 
 const loadServiceLayerDependencies = () => {
-  const { CheckItemRequirementsService, CheckRequirementsService } = services;
+  const {
+    CheckItemRequirementsService,
+    CheckRequirementsService,
+    GetItemsFromEntireAccount,
+  } = services;
   const itemFetcher = new GetItemsFromEntireAccount();
   const itemRequirementCheckService = new CheckItemRequirementsService(
     itemFetcher

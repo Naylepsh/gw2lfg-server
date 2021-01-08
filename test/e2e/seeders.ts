@@ -62,7 +62,12 @@ export const seedRaidBoss = async (container: typeof Container) => {
 export const seedUser = async (app: any) => {
   const registerUrl = "/register";
 
-  const { body } = await request(app).post(registerUrl).send(_user);
+  const { body, status } = await request(app).post(registerUrl).send(_user);
+  if (status !== 201) {
+    console.log("Official GW2API error!! Try again later");
+    console.log(body);
+    throw new Error("stopping jest");
+  }
 
   const user: User = { ...body.data.user, ..._user };
   return { user, token: body.data.token as string };
