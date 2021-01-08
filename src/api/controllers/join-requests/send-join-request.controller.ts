@@ -17,6 +17,11 @@ import { UnprocessableEntityError } from "../../http-errors/unprocessable-entity
 import { SendJoinRequestDTO } from "./dtos/send-join-request.dto";
 import { SendJoinRequestResponse } from "./responses/send-join-request.response";
 
+/*
+Controller for POST /join-requests requests.
+Creates a join request if sent body satisfies conditions set joinRequestService.
+User has to be authenticated to use this route.
+*/
 @JsonController()
 export class SendRaidJoinRequestController {
   constructor(private readonly joinRequestService: SendJoinRequestService) {}
@@ -25,7 +30,7 @@ export class SendRaidJoinRequestController {
   @Post("/join-requests")
   async sendJoinRequest(
     @CurrentUser({ required: true }) user: User,
-    @Body({ validate: false }) dto: SendJoinRequestDTO
+    @Body() dto: SendJoinRequestDTO
   ): Promise<SendJoinRequestResponse> {
     try {
       const joinRequest = await this.joinRequestService.sendJoinRequest({
