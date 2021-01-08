@@ -1,28 +1,26 @@
 import Container from "typedi";
-import { getConnection, Connection } from "typeorm";
+import { Connection, getConnection } from "typeorm";
+import { data } from "../data";
+// Imported only so that the TypeDI can acquire their metadata.
+// As long as it's not a interface, just importing it is enough for TypeDI
+import { services } from "../services";
 import { GetItemsFromEntireAccount } from "../services/gw2-api/items/get-items.gw2-api.service";
-import { CheckItemRequirementsService } from "../services/requirement/check-item-requirements.service";
-import { CheckRequirementsService } from "../services/requirement/check-requirements.service";
 import {
+  itemRequirementRepositoryType,
   joinRequestRepositoryType,
+  postRepositoryType,
   raidBossRepositoryType,
   raidPostRepositoryType,
+  raidPostUnitOfWorkType,
   requirementRepositoryType,
+  requirementsCheckServiceType,
   roleRepositoryType,
   userRepositoryType,
-  requirementsCheckServiceType,
-  postRepositoryType,
-  raidPostUnitOfWorkType,
-  itemRequirementRepositoryType,
 } from "./typedi.constants";
-import "../services/raid-post/find-raid-post.service";
-import "../services/raid-post/find-raid-posts.service";
-import "../services/raid-post/publish-raid-post.service";
-import "../services/join-request/find-join-requests.service";
-import "../services/gw2-api/account/find-account.gw2-api.service";
-import "../services/gw2-api/api-key/api-key-check.gw2-api.service";
-import { data } from "../data";
 
+/*
+Loads interfaces that TypeDI cannot automatically resolve
+*/
 export const loadTypeDI = () => {
   loadDataLayerDependencies();
   loadServiceLayerDependencies();
@@ -30,6 +28,10 @@ export const loadTypeDI = () => {
   return Container;
 };
 
+/*
+Loads concrete classes from /data directory into TypeDI container, so that
+TypeDI knows what implementation to use when encountered an interface
+*/
 const loadDataLayerDependencies = () => {
   const { repositories: repos, unitsOfWork: uows } = data;
 
@@ -68,6 +70,7 @@ const loadDataLayerDependencies = () => {
 };
 
 const loadServiceLayerDependencies = () => {
+  const { CheckItemRequirementsService, CheckRequirementsService } = services;
   const itemFetcher = new GetItemsFromEntireAccount();
   const itemRequirementCheckService = new CheckItemRequirementsService(
     itemFetcher

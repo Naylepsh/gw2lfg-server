@@ -7,7 +7,7 @@ export interface AccountFetcher {
 }
 
 @Service(findAccountServiceType)
-export class FindAccount implements AccountFetcher {
+export class FindAccountService implements AccountFetcher {
   fetch(apiKey: string): Promise<Gw2Account> {
     return fetchAccount(apiKey);
   }
