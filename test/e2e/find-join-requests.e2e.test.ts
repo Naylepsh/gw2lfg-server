@@ -14,7 +14,7 @@ import { clean, seedRaidBoss, seedRaidPost, seedUser } from "./seeders";
 
 describe("Find raid post join request e2e tests", () => {
   const url = "/join-requests";
-  const timelimit = 30000;
+  const timelimit = 60000;
   let container: typeof Container;
   let app: any;
   let uow: IRaidPostUnitOfWork;
@@ -31,7 +31,7 @@ describe("Find raid post join request e2e tests", () => {
     ({ token } = await seedUser(app));
     const bossesIds = [await seedRaidBoss(container)];
     post = await seedRaidPost(app, bossesIds, token);
-  });
+  }, timelimit);
 
   afterEach(async () => {
     await joinRequestRepo.delete({});

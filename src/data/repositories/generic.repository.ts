@@ -1,11 +1,13 @@
 import { AbstractRepository, EntityRepository } from "typeorm";
 import {
-  FindManyParams,
-  FindOneParams,
-  IIdentifiableEntityRepository,
   IRepository,
 } from "./repository.interface";
+import { FindManyParams } from "./find-many.params";
+import { FindOneParams } from "./find-one.params";
 
+/*
+Generic repository over TypeORM repository containing common CRUD operations.
+*/
 @EntityRepository()
 export class GenericRepository<Entity>
   extends AbstractRepository<Entity>
@@ -28,18 +30,5 @@ export class GenericRepository<Entity>
 
   async delete(criteria: any = {}): Promise<void> {
     await this.repository.delete(criteria);
-  }
-}
-
-@EntityRepository()
-export class IdentifiableEntityRepository<Entity>
-  extends GenericRepository<Entity>
-  implements IIdentifiableEntityRepository<Entity> {
-  findById(id: number, relations: string[] = []): Promise<Entity | undefined> {
-    return this.repository.findOne(id, { relations });
-  }
-
-  findByIds(ids: number[]): Promise<Entity[]> {
-    return this.repository.findByIds(ids);
   }
 }

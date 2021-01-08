@@ -1,9 +1,9 @@
 import {
-  FindManyParams,
-  FindOneParams,
-  IIdentifiableEntityRepository,
   IRepository,
 } from "@data/repositories/repository.interface";
+import { IIdentifiableEntityRepository } from "@root/data/repositories/identifiable-entity.repository.interface";
+import { FindManyParams } from "@root/data/repositories/find-many.params";
+import { FindOneParams } from "@root/data/repositories/find-one.params";
 
 export class MemoryRepository<Entity> implements IRepository<Entity> {
   entities: Entity[] = [];

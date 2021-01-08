@@ -9,6 +9,7 @@ import { seedUser } from "./seeders";
 describe("Login e2e tests", () => {
   let app: any;
   let userRepo: IUserRepository;
+  const timeLimit = 30000;
 
   beforeEach(async () => {
     let container: typeof Container;
@@ -21,14 +22,18 @@ describe("Login e2e tests", () => {
     await userRepo.delete({});
   });
 
-  it("return a user with their gw2 account", async () => {
-    const { user } = await seedUser(app);
+  it(
+    "return a user with their gw2 account",
+    async () => {
+      const { user } = await seedUser(app);
 
-    const { body } = await request(app).get(toUrl(user.id));
+      const { body } = await request(app).get(toUrl(user.id));
 
-    expect(body.data).toHaveProperty("user");
-    expect(body.data).toHaveProperty("account");
-  });
+      expect(body.data).toHaveProperty("user");
+      expect(body.data).toHaveProperty("account");
+    },
+    timeLimit
+  );
 
   const toUrl = (id: number) => {
     return `/users/${id}`;

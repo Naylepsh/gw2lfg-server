@@ -1,4 +1,4 @@
-import { IIdentifiableEntityRepository } from "../repository.interface";
+import { IIdentifiableEntityRepository } from "../identifiable-entity.repository.interface";
 import { User } from "../../entities/user/user.entity";
 
 export interface IUserRepository extends IIdentifiableEntityRepository<User> {

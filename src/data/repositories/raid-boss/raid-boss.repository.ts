@@ -1,7 +1,7 @@
 import { Service } from "typedi";
 import { EntityRepository } from "typeorm";
 import { RaidBoss } from "../../entities/raid-boss/raid-boss.entity";
-import { IdentifiableEntityRepository } from "../generic.repository";
+import { IdentifiableEntityRepository } from "../generic-identifiable-entity.repository";
 import { IRaidBossRepository } from "./raid-boss.repository.interface";
 
 @Service()

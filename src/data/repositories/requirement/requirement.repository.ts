@@ -1,7 +1,7 @@
 import { Service } from "typedi";
 import { EntityRepository } from "typeorm";
 import { Requirement } from "../../entities/requirement/requirement.entity";
-import { IdentifiableEntityRepository } from "../generic.repository";
+import { IdentifiableEntityRepository } from "../generic-identifiable-entity.repository";
 import { IRequirementRepository } from "./requirement.repository.interface";
 
 @Service()
