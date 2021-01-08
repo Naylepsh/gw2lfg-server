@@ -4,6 +4,9 @@ import { charactersUrl } from "../gw2-api.constants";
 import { removeEmptySlots } from "../utils/remove-empty-slots";
 import { sendRequestWithBearerToken } from "../utils/send-request-with-bearer-token";
 
+/*
+Fetches items from a character associated with given API key from official GW2 API
+*/
 export const fetchItemsFromCharacter = async (
   characterName: string,
   apiKey: string

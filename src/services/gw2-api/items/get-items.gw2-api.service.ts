@@ -10,6 +10,9 @@ export interface ItemsFetcher {
   fetch(ids: string[], apiKey: string): Promise<Item[]>;
 }
 
+/*
+Takes an array of item fetchers and merges their results
+*/
 export class GetItemsFromMultipleSources implements ItemsFetcher {
   constructor(private readonly fetchers: ItemsFetcher[]) {}
 
@@ -23,6 +26,8 @@ export class GetItemsFromMultipleSources implements ItemsFetcher {
       counts.set(id, 0);
     }
 
+    // the same item can appear multiple times in inventory and have different quantity
+    // that's why it's merged here
     for (const items of itemStacks) {
       for (const id of ids) {
         const count = countItemStacks(items, id);
@@ -30,6 +35,7 @@ export class GetItemsFromMultipleSources implements ItemsFetcher {
       }
     }
 
+    // map a map into an array of items (id, count)
     return Array.from(counts.keys()).map((id) => ({
       id,
       count: counts.get(id)!,
@@ -37,6 +43,9 @@ export class GetItemsFromMultipleSources implements ItemsFetcher {
   }
 }
 
+/*
+Uses a fetcher to fetch all items, leaves only those with given ids and merges items occurring multple times
+*/
 export class GetItems implements ItemsFetcher {
   constructor(private readonly fetchAllItems: AllItemsFetcher) {}
 
@@ -51,24 +60,30 @@ export class GetItems implements ItemsFetcher {
   }
 }
 
+/*
+Counts the quantity of an item with given id in given items
+*/
 const countItemStacks = (items: Item[], id: string) => {
   return items
     .filter((item) => item.id === id)
     .reduce((count, item) => count + item.count, 0);
 };
 
-export const getItemFromBank = new GetItems(fetchItemsFromBank);
+export const getItemsFromBank = new GetItems(fetchItemsFromBank);
 
-export const getItemFromSharedInventory = new GetItems(
+export const getItemsFromSharedInventory = new GetItems(
   fetchItemsFromSharedInventory
 );
 
-export const getItemFromCharacter = (characterName: string) => {
+export const getItemsFromCharacter = (characterName: string) => {
   return new GetItems((apiKey: string) =>
     fetchItemsFromCharacter(characterName, apiKey)
   );
 };
 
+/*
+Fetches all items with given ids from the account associated with given API key
+*/
 export class GetItemsFromEntireAccount implements ItemsFetcher {
   constructor() {}
 
@@ -76,13 +91,13 @@ export class GetItemsFromEntireAccount implements ItemsFetcher {
     try {
       const characters = await fetchCharacters(apiKey);
       const characterItemFetchers = await Promise.all(
-        characters.map((character) => getItemFromCharacter(character))
+        characters.map((character) => getItemsFromCharacter(character))
       );
 
       return new GetItemsFromMultipleSources([
         ...characterItemFetchers,
-        getItemFromBank,
-        getItemFromSharedInventory,
+        getItemsFromBank,
+        getItemsFromSharedInventory,
       ]).fetch(ids, apiKey);
     } catch (error) {
       return [];

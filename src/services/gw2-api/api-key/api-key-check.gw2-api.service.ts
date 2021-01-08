@@ -12,6 +12,12 @@ export interface ICheckApiKeyValidityService {
   isValid(apiKey: string): Promise<boolean>;
 }
 
+/*
+Concrete CheckApiKeyValidityService implementations that checks given apiKey against official GW2API.
+Sends requests to all official GW2API routes used using given apiKey.
+If any of them failed, the key is either invalid itself or has insufficient permission
+for us that's the same thing - the key is invalid.
+*/
 @Service(checkApiKeyValidityServiceType)
 export class CheckApiKeyValidityService implements ICheckApiKeyValidityService {
   async isValid(apiKey: string): Promise<boolean> {
@@ -22,6 +28,7 @@ export class CheckApiKeyValidityService implements ICheckApiKeyValidityService {
         sendRequestWithBearerToken(inventoryUrl, apiKey),
         sendRequestWithBearerToken(bankUrl, apiKey),
       ]);
+
       return true;
     } catch (error) {
       return false;

@@ -6,6 +6,7 @@ import {
   GetItemsFromMultipleSources,
 } from "./items/get-items.gw2-api.service";
 
+// Available gw2-api services
 export default {
   FindAccountService,
   CheckApiKeyValidityService,
