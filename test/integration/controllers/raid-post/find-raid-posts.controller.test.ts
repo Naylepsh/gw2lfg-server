@@ -16,7 +16,6 @@ import { seedDbWithOnePost } from "./seed-db";
 describe("FindRaidPostsController integration tests", () => {
   const url = "/raid-posts";
   let app: any;
-  let findPosts: any;
   let token: string;
 
   beforeEach(async () => {
@@ -26,7 +25,6 @@ describe("FindRaidPostsController integration tests", () => {
     token = jwt;
 
     const findRaidPostsService = new FindRaidPostsService(uow.raidPosts);
-    findPosts = jest.spyOn(findRaidPostsService, "find");
     const myStorage = new MyStorage(
       new Map<string, Item[]>([
         [user.apiKey, [{ id: items["Legendary Insight"], count: 100 }]],
@@ -62,15 +60,6 @@ describe("FindRaidPostsController integration tests", () => {
     const { status } = await request(app).get(`${url}?take=10&skip=5`);
 
     expect(status).toBe(200);
-  });
-
-  it("should pass pagination arguments to service", async () => {
-    const queryParams = { take: 10, skip: 5 };
-    await request(app).get(
-      `${url}?take=${queryParams.take}&skip=${queryParams.skip}`
-    );
-
-    expect(findPosts).toHaveBeenCalledWith(queryParams);
   });
 
   it("should return a list of posts with unsatisfied requirements each if user was not logged in", async () => {

@@ -17,6 +17,7 @@ import { FindRaidPostsResponse } from "./responses/find-raid-posts.response";
 import { FindRaidPostsQueryParams } from "./params/find-raid-posts.query-params";
 import { unsatisfyEachRequirement } from "./utils/unsatisfy-each-requirement";
 import { checkIfUserMeetsPostsRequirements } from "./utils/check-if-user-meets-posts-requirements";
+import { MoreThan } from "typeorm";
 
 @JsonController()
 export class FindRaidPostsController {
@@ -32,7 +33,12 @@ export class FindRaidPostsController {
     @QueryParams() query: FindRaidPostsQueryParams,
     @CurrentUser() user?: User
   ): Promise<FindRaidPostsResponse> {
-    const { posts, hasMore } = await this.findService.find(query);
+    const now = new Date();
+    const { posts, hasMore } = await this.findService.find({
+      ...query,
+      // searching for posts which planned event date is somewhere in the future
+      where: { date: MoreThan(now) },
+    });
     const _posts = user
       ? await checkIfUserMeetsPostsRequirements(
           posts,
