@@ -23,7 +23,7 @@ export class FindRaidPostsService {
     const { skip, take, where } = dto;
 
     const posts = await this.repository.findMany({
-      order: { date: "DESC" },
+      order: { date: "ASC" },
       skip,
       take: take + 1,
       where,
