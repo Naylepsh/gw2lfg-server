@@ -18,6 +18,7 @@ import { UpdateJoinRequestDTO } from "./dtos/update-join-request.dto";
 /*
 Controller for PUT /join-requests/:id requests.
 Updates the status of a post with given id.
+Status can be changed only by the post's author that the request points to.
 User has to be authenticated to use this route.
 */
 @JsonController()
@@ -35,7 +36,7 @@ export class UpdateJoinRequestController {
     @Body() dto: UpdateJoinRequestDTO
   ): Promise<SendJoinRequestResponse> {
     try {
-      const canChangeStatus = await this.joinRequestPermissionService.canUserChangeJoinRequestStatus(
+      const canChangeStatus = await this.joinRequestPermissionService.canUserChangeStatus(
         { userId: user.id, joinRequestId: id }
       );
       if (!canChangeStatus) {

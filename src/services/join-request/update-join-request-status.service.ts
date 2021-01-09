@@ -6,7 +6,6 @@ import { UpdateJoinRequestStatusDTO } from "./dtos/update-join-request-status.dt
 
 /*
 Service for updating the status of join requests.
-Status can be changed only by the post's author that the request points to.
 */
 @Service()
 export class UpdateJoinRequestStatusService {

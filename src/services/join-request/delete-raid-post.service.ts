@@ -1,10 +1,7 @@
 import { Inject, Service } from "typedi";
 import { joinRequestRepositoryType } from "@loaders/typedi.constants";
 import { IJoinRequestRepository } from "@data/repositories/join-request/join-request.repository.interface";
-
-interface DeleteJoinRequestDTO {
-  id: number;
-}
+import { DeleteJoinRequestDTO } from "./dtos/delete-join-request.dto";
 
 /*
 Service for deleting join request with matching id.

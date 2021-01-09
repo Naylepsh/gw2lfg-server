@@ -14,6 +14,7 @@ import { seedRaidBoss, clean, seedUser } from "./seeders";
 
 describe("Publish raid post e2e tests", () => {
   const publishUrl = "/raid-posts";
+  const timeLimit = 15000;
   let container: typeof Container;
   let app: any;
   let uow: IRaidPostUnitOfWork;
@@ -27,30 +28,34 @@ describe("Publish raid post e2e tests", () => {
 
     ({ token } = await seedUser(app));
     bossesIds = [await seedRaidBoss(container)];
-  });
+  }, timeLimit);
 
   afterEach(async () => {
     await clean(uow);
   });
 
-  it("should create a raid post", async () => {
-    const post = {
-      server: "EU",
-      date: addHours(new Date(), 10),
-      description: "bring potions and food",
-      bossesIds,
-    };
+  it(
+    "should create a raid post",
+    async () => {
+      const post = {
+        server: "EU",
+        date: addHours(new Date(), 10),
+        description: "bring potions and food",
+        bossesIds,
+      };
 
-    const { body } = await request(app)
-      .post(publishUrl)
-      .send(post)
-      .set(CurrentUserJWTMiddleware.AUTH_HEADER, token);
+      const { body } = await request(app)
+        .post(publishUrl)
+        .send(post)
+        .set(CurrentUserJWTMiddleware.AUTH_HEADER, token);
 
-    const raidPostRepo: IRaidPostRepository = container.get(
-      raidPostRepositoryType
-    );
-    const postInDbAfer = await raidPostRepo.findById(body.data.id);
-    expect(postInDbAfer).toBeDefined();
-    expect(postInDbAfer).toHaveProperty("server", post.server);
-  });
+      const raidPostRepo: IRaidPostRepository = container.get(
+        raidPostRepositoryType
+      );
+      const postInDbAfer = await raidPostRepo.findById(body.data.id);
+      expect(postInDbAfer).toBeDefined();
+      expect(postInDbAfer).toHaveProperty("server", post.server);
+    },
+    timeLimit
+  );
 });
