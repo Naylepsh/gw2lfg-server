@@ -7,7 +7,7 @@ import { fetchItemsFromBank } from "../fetchers/fetch-items-from-bank";
 type AllItemsFetcher = (apiKey: string) => Promise<Item[]>;
 
 export interface ItemsFetcher {
-  fetch(ids: string[], apiKey: string): Promise<Item[]>;
+  fetch(ids: number[], apiKey: string): Promise<Item[]>;
 }
 
 /*
@@ -16,12 +16,12 @@ Takes an array of item fetchers and merges their results
 export class GetItemsFromMultipleSources implements ItemsFetcher {
   constructor(private readonly fetchers: ItemsFetcher[]) {}
 
-  async fetch(ids: string[], apiKey: string): Promise<Item[]> {
+  async fetch(ids: number[], apiKey: string): Promise<Item[]> {
     const itemStacks = await Promise.all(
       this.fetchers.map((fetcher) => fetcher.fetch(ids, apiKey))
     );
 
-    const counts = new Map<string, number>();
+    const counts = new Map<number, number>();
     for (const id of ids) {
       counts.set(id, 0);
     }
@@ -49,7 +49,7 @@ Uses a fetcher to fetch all items, leaves only those with given ids and merges i
 export class GetItems implements ItemsFetcher {
   constructor(private readonly fetchAllItems: AllItemsFetcher) {}
 
-  async fetch(ids: string[], apiKey: string): Promise<Item[]> {
+  async fetch(ids: number[], apiKey: string): Promise<Item[]> {
     try {
       const items = await this.fetchAllItems(apiKey);
 
@@ -63,7 +63,7 @@ export class GetItems implements ItemsFetcher {
 /*
 Counts the quantity of an item with given id in given items
 */
-const countItemStacks = (items: Item[], id: string) => {
+const countItemStacks = (items: Item[], id: number) => {
   return items
     .filter((item) => item.id === id)
     .reduce((count, item) => count + item.count, 0);
@@ -87,7 +87,7 @@ Fetches all items with given ids from the account associated with given API key
 export class GetItemsFromEntireAccount implements ItemsFetcher {
   constructor() {}
 
-  async fetch(ids: string[], apiKey: string): Promise<Item[]> {
+  async fetch(ids: number[], apiKey: string): Promise<Item[]> {
     try {
       const characters = await fetchCharacters(apiKey);
       const characterItemFetchers = await Promise.all(

@@ -1,10 +1,9 @@
-import assert from "assert";
 import "@root/config";
 import { CheckApiKeyValidityService } from "@services/gw2-api/api-key/api-key-check.gw2-api.service";
 import { getGw2ApiKey } from "../../../../helpers/get-gw2-api-key";
 
 describe("GW2 api key validity check test", () => {
-  const timeLimit = 10000;
+  const timeLimit = 20000;
 
   it(
     "should return false when given api is invalid",

@@ -2,7 +2,6 @@ import { RaidPost } from "@root/data/entities/raid-post/raid-post.entitity";
 import { Role } from "@root/data/entities/role/role.entity";
 import { User } from "@root/data/entities/user/user.entity";
 import { ItemRequirement } from "@root/data/entities/item-requirement/item.requirement.entity";
-import { IJoinRequestRepository } from "@data/repositories/join-request/join-request.repository.interface";
 import { IPostRepository } from "@data/repositories/post/post.repository.interface";
 import { IUserRepository } from "@data/repositories/user/user.repository.interface";
 import {
@@ -17,11 +16,13 @@ import { JoinRequestMemoryRepository } from "../../../helpers/repositories/join-
 import { RaidPostMemoryRepository } from "../../../helpers/repositories/raid-post.memory-repository";
 import { UserMemoryRepository } from "../../../helpers/repositories/user.memory-repository";
 import { storage } from "../item-storage";
+import items from "@services/gw2-items/items.json";
 
 describe("JoinRequest Service: send tests", () => {
   let userRepo: IUserRepository;
   let postRepo: IPostRepository;
   let joinRequestRepo: JoinRequestMemoryRepository;
+  const validItemName = Object.keys(items)[0];
 
   beforeEach(() => {
     userRepo = new UserMemoryRepository();
@@ -38,7 +39,10 @@ describe("JoinRequest Service: send tests", () => {
         apiKey,
       })
     );
-    const itemRequirement = new ItemRequirement({ name: "item", quantity: 1 });
+    const itemRequirement = new ItemRequirement({
+      name: validItemName,
+      quantity: 1,
+    });
     const role = new Role({ name: "DPS", class: "Any" });
     const post = new RaidPost({
       date: new Date(),
@@ -114,7 +118,10 @@ describe("JoinRequest Service: send tests", () => {
         apiKey: "api-key",
       })
     );
-    const itemRequirement = new ItemRequirement({ name: "item", quantity: 2 });
+    const itemRequirement = new ItemRequirement({
+      name: validItemName,
+      quantity: 2,
+    });
     const post = new RaidPost({
       date: new Date(),
       server: "EU",
@@ -143,7 +150,10 @@ describe("JoinRequest Service: send tests", () => {
         apiKey,
       })
     );
-    const itemRequirement = new ItemRequirement({ name: "item", quantity: 2 });
+    const itemRequirement = new ItemRequirement({
+      name: validItemName,
+      quantity: 2,
+    });
     const role = new Role({ name: "DPS", class: "Any" });
     role.id = 1;
     const post = new RaidPost({
@@ -180,7 +190,10 @@ describe("JoinRequest Service: send tests", () => {
         apiKey,
       })
     );
-    const itemRequirement = new ItemRequirement({ name: "item", quantity: 1 });
+    const itemRequirement = new ItemRequirement({
+      name: validItemName,
+      quantity: 1,
+    });
     const role = new Role({ name: "DPS", class: "Any" });
     const post = new RaidPost({
       date: new Date(),
@@ -227,7 +240,10 @@ describe("JoinRequest Service: send tests", () => {
         apiKey,
       })
     );
-    const itemRequirement = new ItemRequirement({ name: "item", quantity: 1 });
+    const itemRequirement = new ItemRequirement({
+      name: validItemName,
+      quantity: 1,
+    });
     const role = new Role({ name: "DPS", class: "Any" });
     const post = new RaidPost({
       date: new Date(),
@@ -274,7 +290,7 @@ describe("JoinRequest Service: send tests", () => {
 });
 
 class DummyItemFetcher implements ItemsFetcher {
-  fetch(_ids: string[], _apiKey: string): Promise<Item[]> {
+  fetch(_ids: number[], _apiKey: string): Promise<Item[]> {
     return new Promise((resolve) => resolve([]));
   }
 }

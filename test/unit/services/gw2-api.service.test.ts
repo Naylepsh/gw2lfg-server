@@ -8,7 +8,7 @@ import { storage, createFetchersForItemGroups } from "./item-storage";
 describe("test gw2 api service", () => {
   describe("get item from single source", () => {
     it("should return item with zero quantity if it was not found", async () => {
-      const id = "1";
+      const id = 1;
       const apiKey = "AP1-K3Y";
       const fetchItems = storage();
 
@@ -19,12 +19,12 @@ describe("test gw2 api service", () => {
     });
 
     it("should sum all occurernces of an item in the source", async () => {
-      const id = "1";
+      const id = 1;
       const apiKey = "AP1-K3Y";
       const items = [
         { id, count: 1 },
         { id, count: 3 },
-        { id: "2", count: 10 },
+        { id: 2, count: 10 },
       ];
       const fetchItems = storage(
         new Map<string, Item[]>([[apiKey, items]])
@@ -39,7 +39,7 @@ describe("test gw2 api service", () => {
 
   describe("get item from multiple sources", () => {
     it("should sum all occurrences of an item in all the sources", async () => {
-      const id = "1";
+      const id = 1;
       const apiKey = "AP1-K3Y";
       const fetchers = createFetchersForItemGroups([
         new Map<string, Item[]>(),
@@ -67,9 +67,9 @@ describe("test gw2 api service", () => {
 
   describe("get multiple items from single source", () => {
     it("should sum all occurernces of an item in the source", async () => {
-      const id1 = "1";
-      const id2 = "2";
-      const otherId = "3";
+      const id1 = 1;
+      const id2 = 2;
+      const otherId = 3;
       const apiKey = "AP1-K3Y";
       const items = [
         { id: id2, count: 1 },
