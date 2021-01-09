@@ -49,6 +49,7 @@ The option of running all the tests at the same time was kind of buggy, thus it 
 
 ## TECHNOLOGIES USED
 
+- TypeScript
 - Express.js
 - Routing Controllers
 - TypeORM
