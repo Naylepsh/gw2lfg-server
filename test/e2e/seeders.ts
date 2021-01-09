@@ -75,6 +75,7 @@ export const seedUser = async (app: any) => {
 
 export const clean = async (uow: IRaidPostUnitOfWork) => {
   return await uow.withTransaction(async () => {
+    await uow.joinRequests.delete({})
     await uow.roles.delete({});
     await uow.raidPosts.delete({});
     await uow.raidBosses.delete({});

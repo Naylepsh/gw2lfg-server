@@ -12,6 +12,10 @@ export class JoinRequestRepository
   implements IJoinRequestRepository {
   private static relations = ["user", "post", "role"];
 
+  findById(id: number, relations: string[] = JoinRequestRepository.relations) {
+    return super.findById(id, relations);
+  }
+
   async findByKeys(keys: JoinRequestRelationKeys): Promise<JoinRequest[]> {
     const where = this.createWhereQuery(keys);
 

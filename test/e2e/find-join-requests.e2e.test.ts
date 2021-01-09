@@ -34,12 +34,11 @@ describe("Find raid post join request e2e tests", () => {
   }, timelimit);
 
   afterEach(async () => {
-    await joinRequestRepo.delete({});
     await clean(uow);
   });
 
   it(
-    "should create a join request",
+    "should find a join request",
     async () => {
       const roleId = post.roles[0].id;
       await request(app)

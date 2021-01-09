@@ -11,9 +11,10 @@ import {
   raidPostUnitOfWorkType,
 } from "@loaders/typedi.constants";
 import { clean, seedRaidBoss, seedRaidPost, seedUser } from "./seeders";
+import { JoinRequestStatus } from "../data/entities/join-request/join-request.status";
 
-describe("Send raid post join request e2e tests", () => {
-  const url = "/join-requests";
+describe("Update join request e2e tests", () => {
+  const joinRequestsUrl = "/join-requests";
   const timelimit = 60000;
   let container: typeof Container;
   let app: any;
@@ -31,23 +32,34 @@ describe("Send raid post join request e2e tests", () => {
     ({ token } = await seedUser(app));
     const bossesIds = [await seedRaidBoss(container)];
     post = await seedRaidPost(app, bossesIds, token);
-  });
+  }, timelimit);
 
   afterEach(async () => {
     await clean(uow);
   });
 
   it(
-    "should create a join request",
+    "should update a join request",
     async () => {
       const roleId = post.roles[0].id;
-      await request(app)
-        .post(url)
+      const createRequestResponse = await request(app)
+        .post(joinRequestsUrl)
         .set(CurrentUserJWTMiddleware.AUTH_HEADER, token)
         .send({ roleId, postId: post.id });
+      const requestId = createRequestResponse.body.data.id;
 
-      const joinRequests = await joinRequestRepo.findMany({});
-      expect(joinRequests.length).toBe(1);
+      const newStatus: JoinRequestStatus = "ACCEPTED";
+      await request(app)
+        .put(`${joinRequestsUrl}/${requestId}`)
+        .set(CurrentUserJWTMiddleware.AUTH_HEADER, token)
+        .send({ status: newStatus });
+
+      const { body } = await request(app).get(
+        `${joinRequestsUrl}/${requestId}`
+      );
+      const joinRequest = body.data;
+
+      expect(joinRequest).toHaveProperty("status", newStatus);
     },
     timelimit
   );

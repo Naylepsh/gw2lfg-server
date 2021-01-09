@@ -20,8 +20,11 @@ export class RaidPostRepository
     });
   }
 
-  findById(id: number): Promise<RaidPost | undefined> {
+  findById(
+    id: number,
+    relations: string[] = RaidPostRepository.relations
+  ): Promise<RaidPost | undefined> {
     // find raid post with matching id and populate relations
-    return super.findById(id, RaidPostRepository.relations);
+    return super.findById(id, relations);
   }
 }
