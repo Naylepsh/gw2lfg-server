@@ -41,8 +41,6 @@ export class SendRaidJoinRequestController {
 
       return { data: joinRequest };
     } catch (error) {
-      console.log(error);
-      console.log(error.message);
       if (error instanceof EntityNotFoundError) {
         throw new NotFoundError(error.message);
       } else if (error instanceof EntityAlreadyExistsError) {

@@ -16,7 +16,6 @@ import { JoinRequestStatus } from "../data/entities/join-request/join-request.st
 describe("Update join request e2e tests", () => {
   const joinRequestsUrl = "/join-requests";
   const timelimit = 60000;
-  let container: typeof Container;
   let app: any;
   let uow: IRaidPostUnitOfWork;
   let joinRequestRepo: IJoinRequestRepository;
@@ -24,13 +23,13 @@ describe("Update join request e2e tests", () => {
   let post: RaidPost;
 
   beforeEach(async () => {
-    ({ app, container } = await loadDependencies());
+    ({ app } = await loadDependencies());
 
-    uow = container.get(raidPostUnitOfWorkType);
-    joinRequestRepo = container.get(joinRequestRepositoryType);
+    uow = Container.get(raidPostUnitOfWorkType);
+    joinRequestRepo = Container.get(joinRequestRepositoryType);
 
     ({ token } = await seedUser(app));
-    const bossesIds = [await seedRaidBoss(container)];
+    const bossesIds = [await seedRaidBoss(Container)];
     post = await seedRaidPost(app, bossesIds, token);
   }, timelimit);
 

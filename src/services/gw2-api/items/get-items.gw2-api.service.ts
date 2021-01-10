@@ -3,6 +3,8 @@ import { fetchItemsFromCharacter } from "../fetchers/fetch-items-from-character"
 import { fetchCharacters } from "../fetchers/fetch-characters";
 import { fetchItemsFromSharedInventory } from "../fetchers/fetch-items-from-shared-inventory";
 import { fetchItemsFromBank } from "../fetchers/fetch-items-from-bank";
+import { Service } from "typedi";
+import { getItemsFromEntireAccountFetcherType } from "../../../loaders/typedi.constants";
 
 type AllItemsFetcher = (apiKey: string) => Promise<Item[]>;
 
@@ -84,6 +86,7 @@ export const getItemsFromCharacter = (characterName: string) => {
 /*
 Fetches all items with given ids from the account associated with given API key
 */
+Service(getItemsFromEntireAccountFetcherType);
 export class GetItemsFromEntireAccount implements ItemsFetcher {
   constructor() {}
 

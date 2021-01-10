@@ -1,4 +1,4 @@
-import gw2ApiSerices from "./gw2-api";
+import gw2ApiServices from "./gw2-api";
 import joinRequestSerivces from "./join-request";
 import raidBossServices from "./raid-boss";
 import raidPostServices from "./raid-post";
@@ -11,7 +11,7 @@ to get their dependencies resolved.
 Gw2items does not contain any dependencies and can be loaded anytime, thus it's skipped
 */
 export const services = {
-  ...gw2ApiSerices,
+  ...gw2ApiServices,
   ...joinRequestSerivces,
   ...raidBossServices,
   ...raidPostServices,

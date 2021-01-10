@@ -13,10 +13,9 @@ describe("Login e2e tests", () => {
   let userRepo: IUserRepository;
 
   beforeEach(async () => {
-    let container: typeof Container;
-    ({ app, container } = await loadDependencies());
+    ({ app } = await loadDependencies());
 
-    userRepo = container.get(userRepositoryType);
+    userRepo = Container.get(userRepositoryType);
   });
 
   afterEach(async () => {

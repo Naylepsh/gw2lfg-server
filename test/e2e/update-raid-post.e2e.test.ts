@@ -17,13 +17,12 @@ describe("Update raid post e2e tests", () => {
   let post: RaidPost;
 
   beforeEach(async () => {
-    let container: typeof Container;
-    ({ app, container } = await loadDependencies());
+    ({ app } = await loadDependencies());
 
-    uow = container.get(raidPostUnitOfWorkType);
+    uow = Container.get(raidPostUnitOfWorkType);
 
     ({ token } = await seedUser(app));
-    const bossesIds = [await seedRaidBoss(container)];
+    const bossesIds = [await seedRaidBoss(Container)];
     post = await seedRaidPost(app, bossesIds, token);
   });
 

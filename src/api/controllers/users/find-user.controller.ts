@@ -20,12 +20,12 @@ export class FindUserController {
   @Get("/users/:id")
   async find(@Param("id") id: number) {
     try {
-      const { user, account } = await this.findUserService.find({ id });
+      const { user, ...rest } = await this.findUserService.find({ id });
 
       return {
         data: {
           user: mapUserToUserResponse(user),
-          account,
+          ...rest,
         },
       };
     } catch (error) {

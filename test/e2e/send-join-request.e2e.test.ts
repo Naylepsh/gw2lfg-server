@@ -15,7 +15,6 @@ import { clean, seedRaidBoss, seedRaidPost, seedUser } from "./seeders";
 describe("Send raid post join request e2e tests", () => {
   const url = "/join-requests";
   const timelimit = 60000;
-  let container: typeof Container;
   let app: any;
   let uow: IRaidPostUnitOfWork;
   let joinRequestRepo: IJoinRequestRepository;
@@ -23,13 +22,13 @@ describe("Send raid post join request e2e tests", () => {
   let post: RaidPost;
 
   beforeEach(async () => {
-    ({ app, container } = await loadDependencies());
+    ({ app } = await loadDependencies());
 
-    uow = container.get(raidPostUnitOfWorkType);
-    joinRequestRepo = container.get(joinRequestRepositoryType);
+    uow = Container.get(raidPostUnitOfWorkType);
+    joinRequestRepo = Container.get(joinRequestRepositoryType);
 
     ({ token } = await seedUser(app));
-    const bossesIds = [await seedRaidBoss(container)];
+    const bossesIds = [await seedRaidBoss(Container)];
     post = await seedRaidPost(app, bossesIds, token);
   });
 

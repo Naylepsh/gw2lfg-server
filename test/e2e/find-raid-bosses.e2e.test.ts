@@ -8,17 +8,16 @@ import { seedRaidBoss } from "./seeders";
 
 describe("Find raid posts e2e tests", () => {
   const findUrl = "/raid-bosses";
-  let container: typeof Container;
   let app: any;
   let raidBossRepo: IRaidBossRepository;
   let bossId: number;
 
   beforeEach(async () => {
-    ({ app, container } = await loadDependencies());
+    ({ app } = await loadDependencies());
 
-    raidBossRepo = container.get(raidBossRepositoryType);
+    raidBossRepo = Container.get(raidBossRepositoryType);
 
-    bossId = await seedRaidBoss(container);
+    bossId = await seedRaidBoss(Container);
   });
 
   afterEach(async () => {

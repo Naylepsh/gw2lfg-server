@@ -5,6 +5,7 @@ import { data } from "../data";
 // As long as it's not a interface, just importing it is enough for TypeDI.
 import { services } from "../services";
 import {
+  getItemsFromEntireAccountFetcherType,
   itemRequirementRepositoryType,
   joinRequestRepositoryType,
   postRepositoryType,
@@ -96,4 +97,6 @@ const loadServiceLayerDependencies = () => {
   */
   Container.set(CheckRequirementsService, checkRequirementService);
   Container.set(requirementsCheckServiceType, checkRequirementService);
+
+  Container.set(getItemsFromEntireAccountFetcherType, itemFetcher);
 };

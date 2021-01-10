@@ -15,19 +15,18 @@ import { seedRaidBoss, clean, seedUser } from "./seeders";
 describe("Publish raid post e2e tests", () => {
   const publishUrl = "/raid-posts";
   const timeLimit = 15000;
-  let container: typeof Container;
   let app: any;
   let uow: IRaidPostUnitOfWork;
   let token: string;
   let bossesIds: number[];
 
   beforeEach(async () => {
-    ({ app, container } = await loadDependencies());
+    ({ app } = await loadDependencies());
 
-    uow = container.get(raidPostUnitOfWorkType);
+    uow = Container.get(raidPostUnitOfWorkType);
 
     ({ token } = await seedUser(app));
-    bossesIds = [await seedRaidBoss(container)];
+    bossesIds = [await seedRaidBoss(Container)];
   }, timeLimit);
 
   afterEach(async () => {
@@ -49,7 +48,7 @@ describe("Publish raid post e2e tests", () => {
         .send(post)
         .set(CurrentUserJWTMiddleware.AUTH_HEADER, token);
 
-      const raidPostRepo: IRaidPostRepository = container.get(
+      const raidPostRepo: IRaidPostRepository = Container.get(
         raidPostRepositoryType
       );
       const postInDbAfer = await raidPostRepo.findById(body.data.id);

@@ -9,19 +9,18 @@ import { seedRaidBoss, seedRaidPost, clean, seedUser } from "./seeders";
 
 describe("Find raid post e2e tests", () => {
   const timelimit = 60000;
-  let container: typeof Container;
   let app: any;
   let uow: IRaidPostUnitOfWork;
   let token: string;
   let postId: number;
 
   beforeEach(async () => {
-    ({ app, container } = await loadDependencies());
+    ({ app } = await loadDependencies());
 
-    uow = container.get(raidPostUnitOfWorkType);
+    uow = Container.get(raidPostUnitOfWorkType);
 
     ({ token } = await seedUser(app));
-    const bossesIds = [await seedRaidBoss(container)];
+    const bossesIds = [await seedRaidBoss(Container)];
     ({ id: postId } = await seedRaidPost(app, bossesIds, token));
   }, timelimit);
 
