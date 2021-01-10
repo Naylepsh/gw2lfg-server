@@ -12,6 +12,7 @@ import { Gw2Account } from "../gw2-api/fetchers/fetch-account";
 import { FindUserDTO } from "./dtos/find-user.dto";
 import { ItemsFetcher } from "../gw2-api/items/get-items.gw2-api.service";
 import items from "../gw2-items/items.json";
+import { idToName } from "../gw2-items/gw2-items.service";
 
 export interface UserWithGw2Account {
   user: User;
@@ -46,6 +47,13 @@ export class FindUserService {
       await this.itemsFetcher.fetch(itemIds, user.apiKey),
     ]);
 
-    return { user, account, items: countedItems };
+    return {
+      user,
+      account,
+      items: countedItems.map(({ id, count }) => ({
+        name: idToName(id),
+        quantity: count,
+      })),
+    };
   }
 }
