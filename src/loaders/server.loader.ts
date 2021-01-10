@@ -8,9 +8,9 @@ import { userRepositoryType } from "./typedi.constants";
 /*
 Loads Express.js server
 */
-export const loadServer = (container: typeof Container) => {
+export const loadServer = () => {
   const currentUserMiddleware = new CurrentUserJWTMiddleware(
-    container.get(userRepositoryType)
+    Container.get(userRepositoryType)
   );
 
   const app = createExpressServer({

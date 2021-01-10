@@ -1,4 +1,5 @@
 import { CheckPostAuthorshipService } from "./check-post-authorship.service";
+import { DeleteOldPostsService } from "./delete-old-posts.service";
 import { FindRaidPostService } from "./find-raid-post.service";
 import { FindRaidPostsService } from "./find-raid-posts.service";
 import { PublishRaidPostService } from "./publish-raid-post.service";
@@ -13,4 +14,5 @@ export default {
   PublishRaidPostService,
   UnpublishRaidPostService,
   UpdateRaidPostService,
+  DeleteOldPostsService,
 };

@@ -23,8 +23,6 @@ Loads interfaces that TypeDI cannot automatically resolve
 export const loadTypeDI = () => {
   loadDataLayerDependencies();
   loadServiceLayerDependencies();
-
-  return Container;
 };
 
 /*
