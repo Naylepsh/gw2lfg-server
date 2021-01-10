@@ -5,6 +5,7 @@ import {
   bankUrl,
   charactersUrl,
   inventoryUrl,
+  tokenInfoUrl,
 } from "../gw2-api.constants";
 import { sendRequestWithBearerToken } from "../utils/send-request-with-bearer-token";
 
@@ -14,22 +15,25 @@ export interface ICheckApiKeyValidityService {
 
 /*
 Concrete CheckApiKeyValidityService implementations that checks given apiKey against official GW2API.
-Sends requests to all official GW2API routes used using given apiKey.
-If any of them failed, the key is either invalid itself or has insufficient permission
-for us that's the same thing - the key is invalid.
+Sends request to official GW2API /tokeninfo and checks if given API key is valid and has all the required permissions.
 */
 @Service(checkApiKeyValidityServiceType)
 export class CheckApiKeyValidityService implements ICheckApiKeyValidityService {
   async isValid(apiKey: string): Promise<boolean> {
     try {
-      await Promise.all([
-        sendRequestWithBearerToken(accountUrl, apiKey),
-        sendRequestWithBearerToken(charactersUrl, apiKey),
-        sendRequestWithBearerToken(inventoryUrl, apiKey),
-        sendRequestWithBearerToken(bankUrl, apiKey),
-      ]);
+      const requiredPermissions = [
+        "account",
+        "characters",
+        "inventories",
+        "progression",
+      ];
 
-      return true;
+      const { data } = await sendRequestWithBearerToken(tokenInfoUrl, apiKey);
+      const permissions: string[] = data.permissions;
+
+      return requiredPermissions.every((permission) =>
+        permissions.includes(permission)
+      );
     } catch (error) {
       return false;
     }
