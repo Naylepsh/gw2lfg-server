@@ -22,9 +22,7 @@ export class FindUserItemsController {
       const items = await this.findUserItemsService.find({ id });
 
       return {
-        data: {
-          items,
-        },
+        data: items,
       };
     } catch (error) {
       if (error instanceof EntityNotFoundError) {
