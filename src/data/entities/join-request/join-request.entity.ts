@@ -2,8 +2,7 @@ import {
   Column,
   CreateDateColumn,
   Entity,
-  JoinColumn,
-  OneToOne,
+  ManyToOne,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from "typeorm";
@@ -18,16 +17,13 @@ export class JoinRequest {
   @PrimaryGeneratedColumn()
   id: number;
 
-  @OneToOne(() => User)
-  @JoinColumn()
+  @ManyToOne(() => User)
   user: User;
 
-  @OneToOne(() => Post)
-  @JoinColumn()
+  @ManyToOne(() => Post)
   post: Post;
 
-  @OneToOne(() => Role)
-  @JoinColumn()
+  @ManyToOne(() => Role)
   role: Role;
 
   @Column()

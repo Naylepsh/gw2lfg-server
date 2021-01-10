@@ -33,7 +33,7 @@ Server will be available at `localhost:<port-specified-in-env>`
 ## WORKING WITH DATABASE
 
 - `yarn seed:bosses` - seeds the database with currently available raid bosses
-- `yarn migration:generate <migration-name>` - generates a migration
+- `yarn migration:generate <migration-name>` - generates a migration (migration has to be compiled with `yarn build` before it can be run!)
 - `yarn migration:run` - runs a migration
 
 ## TESTING

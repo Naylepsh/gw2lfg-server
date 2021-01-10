@@ -40,15 +40,17 @@ export class SendRaidJoinRequestController {
       });
 
       return { data: joinRequest };
-    } catch (e) {
-      if (e instanceof EntityNotFoundError) {
-        throw new NotFoundError(e.message);
-      } else if (e instanceof EntityAlreadyExistsError) {
-        throw new UnprocessableEntityError(e.message);
-      } else if (e instanceof RequirementsNotSatisfiedError) {
+    } catch (error) {
+      console.log(error);
+      console.log(error.message);
+      if (error instanceof EntityNotFoundError) {
+        throw new NotFoundError(error.message);
+      } else if (error instanceof EntityAlreadyExistsError) {
+        throw new UnprocessableEntityError(error.message);
+      } else if (error instanceof RequirementsNotSatisfiedError) {
         throw new ForbiddenError();
       } else {
-        throw new InternalServerError(e.message);
+        throw new InternalServerError(error.message);
       }
     }
   }
