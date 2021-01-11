@@ -1,4 +1,4 @@
-import { IsDateString, IsInt } from "class-validator";
+import { IsDateString, IsInt, IsOptional, IsString } from "class-validator";
 import { ItemRequirementProps } from "@root/data/entities/item-requirement/Item.requirement.props";
 
 interface RequirementsProps {
@@ -15,17 +15,19 @@ export class SaveRaidPostDTO {
   @IsDateString()
   date: Date;
 
-  // TODO: Custom @IsServer() validator
+  @IsString()
   server: string;
 
+  @IsOptional()
+  @IsString()
   description?: string;
 
   @IsInt({ each: true })
   bossesIds: number[];
 
-  // TODO: validate
+  @IsOptional()
   rolesProps: RolePropsDTO[] = [];
 
-  // TODO: validate
+  @IsOptional()
   requirementsProps: RequirementsProps = { itemsProps: [] };
 }

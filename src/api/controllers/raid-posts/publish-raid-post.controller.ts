@@ -27,6 +27,8 @@ export class PublishRaidPostController {
     @CurrentUser({ required: true }) user: User,
     @Body() dto: SaveRaidPostDTO
   ): Promise<PublishRaidPostResponse> {
+    // if user passed authentication but somehow publish service could not find such a user
+    // then something is unexpectedly wrong, thus implicitly throwing InternalServerError
     const post = await this.publishService.publish({
       ...dto,
       authorId: user.id,
