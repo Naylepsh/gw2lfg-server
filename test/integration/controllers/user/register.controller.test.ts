@@ -58,7 +58,7 @@ describe("RegisterUserController integration tests", () => {
     expect(body.errors.length).toBe(numberOfMissingProperties);
   });
 
-  it("should return 422 if user already exists", async () => {
+  it("should return 409 if user already exists", async () => {
     const validUserData = {
       username: "existingUser",
       password: "password",
@@ -67,7 +67,7 @@ describe("RegisterUserController integration tests", () => {
 
     const { status } = await request(app).post(url).send(validUserData);
 
-    expect(status).toBe(422);
+    expect(status).toBe(409);
   });
 
   it("should return 201 if valid data was passed", async () => {

@@ -665,5 +665,9 @@ Returns json data about a single user's raid posts. Providing jwt will check whe
 - **Sample Call:**
 
   ```javascript
-  axios.get("/users/2/raid-posts");
+  axios.get("/users/2/raid-posts", {
+    headers: {
+      "gw2lfg-auth-token": "my.jwt.token",
+    },
+  });
   ```

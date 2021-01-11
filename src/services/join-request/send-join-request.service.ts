@@ -37,8 +37,11 @@ export class SendJoinRequestService {
 
   async sendJoinRequest({ userId, postId, roleId }: SendJoinRequestDTO) {
     const [user, post, requests] = await Promise.all([
-      this.userRepo.findById(userId),
-      this.postRepo.findById(postId),
+      this.userRepo.findOne({ where: { id: userId } }),
+      this.postRepo.findOne({
+        where: { id: postId },
+        relations: ["roles", "requirements"],
+      }),
       this.joinRequestRepo.findByKeys({ postId, roleId }),
     ]);
     const role = post?.getRole(roleId);

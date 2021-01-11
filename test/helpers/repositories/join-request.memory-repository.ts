@@ -8,6 +8,13 @@ export class JoinRequestMemoryRepository
   implements IJoinRequestRepository {
   findByKeys(keys: JoinRequestRelationKeys): Promise<JoinRequest[]> {
     const { userId, postId, roleId } = keys;
-    return this.findMany({ where: { userId, postId, roleId } });
+    // return this.findMany({ where: { userId, postId, roleId } });
+    return this.findMany({
+      where: {
+        user: { id: userId },
+        post: { id: postId },
+        role: { id: roleId },
+      },
+    });
   }
 }

@@ -16,6 +16,7 @@ import { RequirementsNotSatisfiedError } from "@root/services/join-request/error
 import { ConflictError } from "../../http-errors/conflict.error";
 import { SendJoinRequestDTO } from "./dtos/send-join-request.dto";
 import { SendJoinRequestResponse } from "./responses/send-join-request.response";
+import { mapJoinRequestToJoinRequestResponse } from "../../responses/entities/join-request.entity.response";
 
 /*
 Controller for POST /join-requests requests.
@@ -39,7 +40,7 @@ export class SendRaidJoinRequestController {
         roleId: dto.roleId,
       });
 
-      return { data: joinRequest };
+      return { data: mapJoinRequestToJoinRequestResponse(joinRequest) };
     } catch (error) {
       if (error instanceof EntityNotFoundError) {
         throw new NotFoundError(error.message);

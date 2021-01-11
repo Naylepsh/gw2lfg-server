@@ -19,7 +19,7 @@ export class UpdateJoinRequestStatusService {
 
     const request = await this.joinRequestRepo.findOne({
       where: { id },
-      relations: ["post", "post.author"],
+      relations: ["user", "post", "role"],
     });
 
     if (!request) {

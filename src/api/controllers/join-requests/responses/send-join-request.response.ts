@@ -1,4 +1,5 @@
 import { IRouteResponse } from "../../../responses/route.response.interface";
-import { JoinRequest } from "@root/data/entities/join-request/join-request.entity";
+import { JoinRequestResponse } from "../../../responses/entities/join-request.entity.response";
 
-export interface SendJoinRequestResponse extends IRouteResponse<JoinRequest> {}
+export interface SendJoinRequestResponse
+  extends IRouteResponse<JoinRequestResponse> {}

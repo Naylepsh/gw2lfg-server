@@ -1,6 +1,4 @@
-import {
-  IRepository,
-} from "@data/repositories/repository.interface";
+import { IRepository } from "@data/repositories/repository.interface";
 import { IIdentifiableEntityRepository } from "@root/data/repositories/identifiable-entity.repository.interface";
 import { FindManyParams } from "@root/data/repositories/find-many.params";
 import { FindOneParams } from "@root/data/repositories/find-one.params";
@@ -60,6 +58,13 @@ export class MemoryRepository<Entity> implements IRepository<Entity> {
       });
     }
 
+    // simple where handling, won't work for nested clauses
+    if (params?.where) {
+      entities = entities.filter((entity) =>
+        this.handleWhere(entity, params.where)
+      );
+    }
+
     if (params?.skip) {
       entities = entities.slice(params.skip);
     }
@@ -69,6 +74,21 @@ export class MemoryRepository<Entity> implements IRepository<Entity> {
     }
 
     return new Promise((resolve) => resolve(entities));
+  }
+
+  handleWhere(entity: any, where: any) {
+    for (const [key, value] of Object.entries(where)) {
+      if (value === undefined) {
+        continue;
+      }
+      if (typeof value === "object") {
+        const res = this.handleWhere(entity[key], value);
+        if (!res) return false;
+      } else if ((entity as any)[key] !== value) {
+        return false;
+      }
+    }
+    return true;
   }
 
   delete(_criteria?: any): Promise<void> {
@@ -83,7 +103,7 @@ interface Identifiable {
 export class IdentifiableMemoryRepository<Entity extends Identifiable>
   extends MemoryRepository<Entity>
   implements IIdentifiableEntityRepository<Entity> {
-  nextId = 0;
+  nextId = 1;
 
   constructor(entities: Entity[] = []) {
     super(entities);

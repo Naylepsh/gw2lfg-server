@@ -1,9 +1,11 @@
-import { IsNumber } from "class-validator";
+import { IsInt, IsPositive } from "class-validator";
 
 export class SendJoinRequestDTO {
-  @IsNumber()
+  @IsInt()
+  @IsPositive()
   postId: number;
 
-  @IsNumber()
+  @IsInt()
+  @IsPositive()
   roleId: number;
 }

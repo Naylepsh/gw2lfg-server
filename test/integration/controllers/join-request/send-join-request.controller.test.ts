@@ -101,7 +101,7 @@ describe("SendRaidJoinRequestController integration tests", () => {
     expect(res.status).toBe(403);
   });
 
-  it("should return 422 if user has already sent a request", async () => {
+  it("should return 409 if user has already sent a request", async () => {
     myStorage.items.set(user.apiKey, [{ id: liId, count: 100 }]);
 
     await request(app)
@@ -113,7 +113,7 @@ describe("SendRaidJoinRequestController integration tests", () => {
       .set(CurrentUserJWTMiddleware.AUTH_HEADER, token)
       .send({ roleId: post.roles[0].id, postId: post.id });
 
-    expect(res.status).toBe(422);
+    expect(res.status).toBe(409);
   });
 
   it("should return 201 if valid data was passed", async () => {

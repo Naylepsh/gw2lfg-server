@@ -14,6 +14,7 @@ import { UpdateJoinRequestStatusService } from "@services/join-request/update-jo
 import { CheckJoinRequestStatusChangePermissionService } from "@services/join-request/check-join-request-status-change-permission.service";
 import { SendJoinRequestResponse } from "./responses/send-join-request.response";
 import { UpdateJoinRequestDTO } from "./dtos/update-join-request.dto";
+import { mapJoinRequestToJoinRequestResponse } from "../../responses/entities/join-request.entity.response";
 
 /*
 Controller for PUT /join-requests/:id requests.
@@ -48,7 +49,7 @@ export class UpdateJoinRequestController {
         newStatus: dto.status,
       });
 
-      return { data: joinRequest };
+      return { data: mapJoinRequestToJoinRequestResponse(joinRequest) };
     } catch (e) {
       if (e instanceof EntityNotFoundError) {
         throw new NotFoundError(e.message);

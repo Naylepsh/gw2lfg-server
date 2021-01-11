@@ -1,6 +1,6 @@
 import { Get, JsonController, QueryParams } from "routing-controllers";
 import { FindJoinRequestsService } from "@services/join-request/find-join-requests.service";
-import { FindJoinRequestsParams } from "./params/find-join-requests.params";
+import { FindJoinRequestsQueryParams } from "./params/find-join-requests.params";
 import { FindJoinRequestsResponse } from "./responses/find-join-requests.response";
 import { mapJoinRequestToJoinRequestResponse } from "../../responses/entities/join-request.entity.response";
 
@@ -14,7 +14,7 @@ export class FindJoinRequestsController {
 
   @Get("/join-requests")
   async find(
-    @QueryParams() params: FindJoinRequestsParams
+    @QueryParams() params: FindJoinRequestsQueryParams
   ): Promise<FindJoinRequestsResponse> {
     const requests = await this.joinRequestService.find(params);
 

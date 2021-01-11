@@ -130,7 +130,9 @@ Providing auth token will check whether a user with associated token can join th
 
   ```javascript
   axios.get("/raid-posts?skip=1&take=1", {
-    apiKey: "S0m3-V4L1D-GW2-API-K3Y",
+    headers: {
+      "gw2lfg-auth-token": "my.jwt.token",
+    },
   });
   ```
 
@@ -277,24 +279,34 @@ Returns json data about created resource.
 - **Sample Call:**
 
   ```javascript
-  axios.post("/raid-posts", {
-    date: "2021-01-05T17:53:38.545Z",
-    server: "EU",
-    description: "bring pots and food",
-    bossesIds: [1,2,3],
-    rolesProps: [{
-      name: 'dps',
-      class: 'warrior'
-    }],
-    requirementsProps: {
-      itemsProps: [{
-        name: 'Legendary Insight',
-        quantity: 10
-      }]
+  axios.post(
+    "/raid-posts",
+    {
+      date: "2021-01-05T17:53:38.545Z",
+      server: "EU",
+      description: "bring pots and food",
+      bossesIds: [1, 2, 3],
+      rolesProps: [
+        {
+          name: "dps",
+          class: "warrior",
+        },
+      ],
+      requirementsProps: {
+        itemsProps: [
+          {
+            name: "Legendary Insight",
+            quantity: 10,
+          },
+        ],
+      },
+    },
+    {
+      headers: {
+        "gw2lfg-auth-token": "my.jwt.token",
+      },
     }
-  } {
-    apiKey: "S0m3-V4L1D-GW2-API-K3Y",
-  });
+  );
   ```
 
 ## Find Raid Post
@@ -400,7 +412,9 @@ Providing auth token will check whether a user with associated token can join th
 
   ```javascript
   axios.get("/raid-posts?skip=1&take=1", {
-    apiKey: "S0m3-V4L1D-GW2-API-K3Y",
+    headers: {
+      "gw2lfg-auth-token": "my.jwt.token",
+    },
   });
   ```
 
@@ -559,24 +573,34 @@ Returns json data about updated resource.
 - **Sample Call:**
 
   ```javascript
-  axios.put("/raid-posts", {
-    date: "2021-01-05T17:53:38.545Z",
-    server: "EU",
-    description: "bring pots and food",
-    bossesIds: [1,2,3],
-    rolesProps: [{
-      name: 'dps',
-      class: 'warrior'
-    }],
-    requirementsProps: {
-      itemsProps: [{
-        name: 'Legendary Insight',
-        quantity: 10
-      }]
+  axios.put(
+    "/raid-posts",
+    {
+      date: "2021-01-05T17:53:38.545Z",
+      server: "EU",
+      description: "bring pots and food",
+      bossesIds: [1, 2, 3],
+      rolesProps: [
+        {
+          name: "dps",
+          class: "warrior",
+        },
+      ],
+      requirementsProps: {
+        itemsProps: [
+          {
+            name: "Legendary Insight",
+            quantity: 10,
+          },
+        ],
+      },
+    },
+    {
+      headers: {
+        "gw2lfg-auth-token": "my.jwt.token",
+      },
     }
-  } {
-    apiKey: "S0m3-V4L1D-GW2-API-K3Y",
-  });
+  );
   ```
 
 ## Delete Raid Post
@@ -614,7 +638,7 @@ Deletes a single raid post.
   - **Code:** 204 <br />
     **Content:**
     ```
-    {}
+
     ```
 
 - **Error Response:**
@@ -642,6 +666,8 @@ Deletes a single raid post.
 
   ```javascript
   axios.delete("/raid-posts", {
-    apiKey: "S0m3-V4L1D-GW2-API-K3Y",
+    headers: {
+      "gw2lfg-auth-token": "my.jwt.token",
+    },
   });
   ```

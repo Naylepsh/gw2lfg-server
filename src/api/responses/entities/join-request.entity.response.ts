@@ -1,5 +1,10 @@
-import { JoinRequest } from "../../../data/entities/join-request/join-request.entity";
+import { JoinRequest } from "@data/entities/join-request/join-request.entity";
+import { RaidPost } from "../../../data/entities/raid-post/raid-post.entitity";
 import { DTO } from "./dto";
+import {
+  mapRaidPostToRaidPostResponse,
+  RaidPostResponse,
+} from "./raid-post.entity.response";
 import { mapUserToUserResponse, UserResponse } from "./user.entity.response";
 
 // Join Request without methods
@@ -18,7 +23,9 @@ export const mapJoinRequestToJoinRequestResponse = <R extends JoinRequestDTO>(
   joinRequest: R
 ) => {
   const { user, ...rest } = joinRequest;
+
   const userResponse = mapUserToUserResponse(user);
+
   return {
     ...rest,
     user: userResponse,
