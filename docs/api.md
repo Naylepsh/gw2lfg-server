@@ -39,3 +39,4 @@ API uses following complex types:
 
 - [Users](users-api.md)
 - [Raid Posts](raid-posts-api.md)
+- [Raid Bosses](raid-bosses-api.md)
