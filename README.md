@@ -74,6 +74,10 @@ Registers an user. Returns json data about created resource and associated jwt.
 
   `POST`
 
+- **Additional Headers**
+
+  None
+
 - **URL Params**
 
   None
@@ -192,6 +196,10 @@ Logins an user. Returns json data with associated jwt.
 - **Method:**
 
   `POST`
+
+- **Additional Headers**
+
+  None
 
 - **URL Params**
 
@@ -369,17 +377,17 @@ Returns json data about a single user
     **Content:**
     ```
     {
-      "data": {
-        "user": {
-          "id": 2,
-          "username": "username2",
-          "createdAt": "2021-01-09T08:21:15.128Z",
-          "updatedAt": "2021-01-09T08:21:15.128Z"
+      data: {
+        user: {
+          id: 2,
+          username: "username2",
+          createdAt: "2021-01-09T08:21:15.128Z",
+          updatedAt: "2021-01-09T08:21:15.128Z",
         },
-        "account": {
-          "name": "username2acc.1234",
-        }
-      }
+        account: {
+          name: "username2acc.1234",
+        },
+      },
     }
     ```
 
