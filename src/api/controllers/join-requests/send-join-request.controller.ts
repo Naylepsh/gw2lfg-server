@@ -13,7 +13,7 @@ import { EntityAlreadyExistsError } from "@root/services/common/errors/entity-al
 import { EntityNotFoundError } from "@root/services/common/errors/entity-not-found.error";
 import { SendJoinRequestService } from "@root/services/join-request/send-join-request.service";
 import { RequirementsNotSatisfiedError } from "@root/services/join-request/errors/requirements-not-satisfied.error";
-import { UnprocessableEntityError } from "../../http-errors/unprocessable-entity.error";
+import { ConflictError } from "../../http-errors/conflict.error";
 import { SendJoinRequestDTO } from "./dtos/send-join-request.dto";
 import { SendJoinRequestResponse } from "./responses/send-join-request.response";
 
@@ -44,7 +44,7 @@ export class SendRaidJoinRequestController {
       if (error instanceof EntityNotFoundError) {
         throw new NotFoundError(error.message);
       } else if (error instanceof EntityAlreadyExistsError) {
-        throw new UnprocessableEntityError(error.message);
+        throw new ConflictError(error.message);
       } else if (error instanceof RequirementsNotSatisfiedError) {
         throw new ForbiddenError();
       } else {

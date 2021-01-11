@@ -11,7 +11,7 @@ import { User } from "@data/entities/user/user.entity";
 import { RegisterService } from "@services/user/register.service";
 import { UsernameTakenError } from "@services/user/errors/username-taken.error";
 import { InvalidApiKeyError } from "@services/user/errors/invalid-api-key.error";
-import { UnprocessableEntityError } from "../../http-errors/unprocessable-entity.error";
+import { ConflictError } from "../../http-errors/conflict.error";
 import { CreateJwtService } from "../../services/token/create";
 import { RegisterDTO } from "./dtos/register.dto";
 import { RegisterResponse } from "./responses/register.response";
@@ -39,7 +39,7 @@ export class RegisterUserController {
       return { data: { token, user: mapUserToUserResponse(registeredUser) } };
     } catch (e) {
       if (e instanceof UsernameTakenError) {
-        throw new UnprocessableEntityError(e.message);
+        throw new ConflictError("Username already in use");
       } else if (e instanceof InvalidApiKeyError) {
         throw new BadRequestError("Invalid api key");
       } else {

@@ -55,3 +55,228 @@ The option of running all the tests at the same time was kind of buggy, thus it 
 - TypeORM
 - TypeDI
 - Jest
+
+## API
+
+### Users
+
+#### Register
+
+---
+
+Registers an user. Returns created resource and associated jwt.
+
+- **URL**
+
+  /register
+
+- **Method:**
+
+  `POST`
+
+- **URL Params**
+
+  None
+
+- **Data Params**
+
+  **Required**:
+
+  `username=[string]`
+
+  `password=[string]`
+
+  `apiKey=[string]`
+
+- **Success Response:**
+
+  - **Code:** 201 <br />
+    **Content:**
+    ```
+    {
+      data: {
+        user: {
+          id: 1,
+          username: "sample-username",
+          createdAt: "2021-01-09T08:21:15.128Z",
+          updatedAt: "2021-01-09T08:21:15.128Z"
+        },
+        token: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwiaWQiOjEsImlhdCI6MTUxNjIzOTAyMn0.sp3k-Xf-Um4tKxTMNnJ777_q43IyaN17TyS0-pzAaIY"
+      }
+    }
+    ```
+
+- **Error Response:**
+
+  - **Code:** 400 BAD REQUEST <br />
+    **Content:**
+    ```
+    {
+      "name": "BadRequestError",
+      "message": "Invalid body, check 'errors' property for more info.",
+      "errors": [
+        {
+          "target": {
+            "username": "u",
+            "password": "p",
+            "apiKey": "e"
+          },
+          "value": "u",
+          "property": "username",
+          "children": [],
+          "constraints": {
+            "minLength": "username must be longer than or equal to 6 characters"
+          }
+        },
+        {
+          "target": {
+            "username": "u",
+            "password": "p",
+            "apiKey": "e"
+          },
+          "value": "p",
+          "property": "password",
+          "children": [],
+          "constraints": {
+            "minLength": "password must be longer than or equal to 6 characters"
+          }
+        },
+        {
+          "target": {
+            "username": "u",
+            "password": "p",
+            "apiKey": "e"
+          },
+          "value": "e",
+          "property": "apiKey",
+          "children": [],
+          "constraints": {
+            "IsValidApiKeyConstraint": "Invalid API key"
+          }
+        }
+      ]
+    }
+    ```
+
+  OR
+
+  - **Code:** 409 CONFLICT <br />
+    **Content:**
+    ```
+    {
+      "name": "ConflictError",
+      "message": "Username already in use"
+    }
+    ```
+
+- **Sample Call:**
+
+  ```javascript
+  axios.post("/register", {
+    username: "username",
+    password: "password",
+    apiKey: "S0m3-V4L1D-GW2-API-K3Y",
+  });
+  ```
+
+#### Login
+
+---
+
+Logins an user. Returns associated jwt.
+
+- **URL**
+
+  /login
+
+- **Method:**
+
+  `POST`
+
+- **URL Params**
+
+  None
+
+- **Data Params**
+
+  **Required**:
+
+  `username=[string]`
+
+  `password=[string]`
+
+- **Success Response:**
+
+  - **Code:** 200 <br />
+    **Content:**
+    ```
+    {
+      data: {
+        token: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwiaWQiOjEsImlhdCI6MTUxNjIzOTAyMn0.sp3k-Xf-Um4tKxTMNnJ777_q43IyaN17TyS0-pzAaIY"
+      }
+    }
+    ```
+
+- **Error Response:**
+
+  - **Code:** 400 BAD REQUEST <br />
+    **Content:**
+    ```
+    {
+      "name": "BadRequestError",
+      "message": "Invalid body, check 'errors' property for more info.",
+      "errors": [
+        {
+          "target": {
+            "username": "u",
+            "password": "p",
+          },
+          "value": "u",
+          "property": "username",
+          "children": [],
+          "constraints": {
+            "minLength": "username must be longer than or equal to 6 characters"
+          }
+        },
+        {
+          "target": {
+            "username": "u",
+            "password": "p",
+          },
+          "value": "p",
+          "property": "password",
+          "children": [],
+          "constraints": {
+            "minLength": "password must be longer than or equal to 6 characters"
+          }
+        }
+      ]
+    }
+    ```
+
+  OR
+
+  - **Code:** 401 UNAUTHORIZED <br />
+    **Content:**
+    ```
+    {
+      "name": "UnauthorizedError",
+    }
+    ```
+
+- **Sample Call:**
+
+  ```javascript
+  axios.post("/login", {
+    username: "username",
+    password: "password",
+  });
+  ```
+
+#### Me
+
+#### Find User
+
+#### Find User's Items
+
+#### Find User's Raid Posts
