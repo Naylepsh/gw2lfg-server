@@ -101,7 +101,7 @@ Registers an user. Returns created resource and associated jwt.
           createdAt: "2021-01-09T08:21:15.128Z",
           updatedAt: "2021-01-09T08:21:15.128Z"
         },
-        token: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwiaWQiOjEsImlhdCI6MTUxNjIzOTAyMn0.sp3k-Xf-Um4tKxTMNnJ777_q43IyaN17TyS0-pzAaIY"
+        token: "my.jwt.token"
       }
     }
     ```
@@ -212,7 +212,7 @@ Logins an user. Returns associated jwt.
     ```
     {
       data: {
-        token: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwiaWQiOjEsImlhdCI6MTUxNjIzOTAyMn0.sp3k-Xf-Um4tKxTMNnJ777_q43IyaN17TyS0-pzAaIY"
+        token: "my.jwt.token"
       }
     }
     ```
@@ -274,6 +274,73 @@ Logins an user. Returns associated jwt.
   ```
 
 #### Me
+
+Gets user info that's associated with given jwt.
+
+- **URL**
+
+  /me
+
+- **Method:**
+
+  `GET`
+
+- **Additional Headers**
+
+  **Required:**
+
+  `gw2lfg-auth-token:[string]`
+
+- **URL Params**
+
+  None
+
+- **Data Params**
+
+  None
+
+- **Success Response:**
+
+  - **Code:** 200 <br />
+    **Content:**
+    ```
+    {
+      "data": {
+        "id": 2,
+        "username": "username2",
+        "createdAt": "2021-01-09T08:21:15.128Z",
+        "updatedAt": "2021-01-09T08:21:15.128Z"
+      }
+    }
+    ```
+
+- **Error Response:**
+
+  - **Code:** 401 UNAUTHORIZED <br />
+    **Content:**
+    ```
+    {
+      "name": "AuthorizationRequiredError",
+      "message": "Authorization is required for request on GET /me",
+    }
+    ```
+
+- **Sample Call:**
+
+  ```javascript
+  axios.post(
+    "/me",
+    {
+      username: "username",
+      password: "password",
+    },
+    {
+      headers: {
+        "gw2lfg-auth-token": "my.jwt.token",
+      },
+    }
+  );
+  ```
 
 #### Find User
 
