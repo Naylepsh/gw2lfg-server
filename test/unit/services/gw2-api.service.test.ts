@@ -2,7 +2,7 @@ import {
   GetItems,
   GetItemsFromMultipleSources,
 } from "@root/services/gw2-api/items/get-items.gw2-api.service";
-import { Item } from "@services/gw2-items/item.interface";
+import { GW2ApiItem } from "@services/gw2-items/item.interface";
 import { storage, createFetchersForItemGroups } from "./item-storage";
 
 describe("test gw2 api service", () => {
@@ -27,7 +27,7 @@ describe("test gw2 api service", () => {
         { id: 2, count: 10 },
       ];
       const fetchItems = storage(
-        new Map<string, Item[]>([[apiKey, items]])
+        new Map<string, GW2ApiItem[]>([[apiKey, items]])
       );
 
       const item = await new GetItems(fetchItems).fetch([id], apiKey);
@@ -42,9 +42,9 @@ describe("test gw2 api service", () => {
       const id = 1;
       const apiKey = "AP1-K3Y";
       const fetchers = createFetchersForItemGroups([
-        new Map<string, Item[]>(),
-        new Map<string, Item[]>([[apiKey, [{ id, count: 5 }]]]),
-        new Map<string, Item[]>([
+        new Map<string, GW2ApiItem[]>(),
+        new Map<string, GW2ApiItem[]>([[apiKey, [{ id, count: 5 }]]]),
+        new Map<string, GW2ApiItem[]>([
           [
             apiKey,
             [
@@ -78,7 +78,7 @@ describe("test gw2 api service", () => {
         { id: otherId, count: 10 },
       ];
       const fetchItems = storage(
-        new Map<string, Item[]>([[apiKey, items]])
+        new Map<string, GW2ApiItem[]>([[apiKey, items]])
       );
 
       const foundItems = await new GetItems(fetchItems).fetch(

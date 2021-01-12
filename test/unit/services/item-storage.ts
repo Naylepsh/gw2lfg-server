@@ -1,14 +1,14 @@
 import { GetItems } from "@root/services/gw2-api/items/get-items.gw2-api.service";
-import { Item } from "@services/gw2-items/item.interface";
+import { GW2ApiItem } from "@services/gw2-items/item.interface";
 
-type ItemStorage = Map<string, Item[]>;
+type ItemStorage = Map<string, GW2ApiItem[]>;
 
-export const storage = (items: ItemStorage = new Map<string, Item[]>()) => {
-  return (apiKey: string): Promise<Item[]> =>
+export const storage = (items: ItemStorage = new Map<string, GW2ApiItem[]>()) => {
+  return (apiKey: string): Promise<GW2ApiItem[]> =>
     new Promise((resolve) => resolve(items.get(apiKey) ?? []));
 };
 
-const createItemFetcher = (items: ItemStorage = new Map<string, Item[]>()) => {
+const createItemFetcher = (items: ItemStorage = new Map<string, GW2ApiItem[]>()) => {
   const itemsFetcher = storage(items);
   return new GetItems(itemsFetcher);
 };
@@ -18,9 +18,9 @@ export const createFetchersForItemGroups = (itemGroups: ItemStorage[]) => {
 };
 
 export class MyStorage {
-  constructor(public readonly items: ItemStorage = new Map<string, Item[]>()) {}
+  constructor(public readonly items: ItemStorage = new Map<string, GW2ApiItem[]>()) {}
 
-  fetch(apiKey: string): Promise<Item[]> {
+  fetch(apiKey: string): Promise<GW2ApiItem[]> {
     return new Promise((resolve) => resolve(this.items.get(apiKey) ?? []));
   }
 }

@@ -9,7 +9,7 @@ import {
   GetItems,
 } from "@root/services/gw2-api/items/get-items.gw2-api.service";
 import { nameToId } from "@services/gw2-items/gw2-items.service";
-import { Item } from "@services/gw2-items/item.interface";
+import { GW2ApiItem } from "@services/gw2-items/item.interface";
 import { SendJoinRequestService } from "@root/services/join-request/send-join-request.service";
 import { CheckItemRequirementsService } from "@services/requirement/check-item-requirements.service";
 import { JoinRequestMemoryRepository } from "../../../helpers/repositories/join-request.memory-repository";
@@ -17,11 +17,14 @@ import { RaidPostMemoryRepository } from "../../../helpers/repositories/raid-pos
 import { UserMemoryRepository } from "../../../helpers/repositories/user.memory-repository";
 import { storage } from "../item-storage";
 import items from "@services/gw2-items/items.json";
+import { CheckRequirementsService } from "@services/requirement/check-requirements.service";
+import { FindUserItemsService } from "@services/user/find-user-items.service";
 
 describe("JoinRequest Service: send tests", () => {
   let userRepo: IUserRepository;
   let postRepo: IPostRepository;
   let joinRequestRepo: JoinRequestMemoryRepository;
+  const itemReqCheckService = new CheckItemRequirementsService();
   const validItemName = Object.keys(items)[0];
 
   beforeEach(() => {
@@ -54,16 +57,21 @@ describe("JoinRequest Service: send tests", () => {
     });
     await postRepo.save(post);
     const fetchItems = storage(
-      new Map<string, Item[]>([
+      new Map<string, GW2ApiItem[]>([
         [apiKey, [{ id: nameToId(itemRequirement.name), count: 10 }]],
       ])
+    );
+
+    const findUserItemsService = new FindUserItemsService(
+      userRepo,
+      new GetItems(fetchItems)
     );
 
     await new SendJoinRequestService(
       userRepo,
       postRepo,
       joinRequestRepo,
-      new CheckItemRequirementsService(new GetItems(fetchItems))
+      new CheckRequirementsService(itemReqCheckService, findUserItemsService)
     ).sendJoinRequest({ userId: user.id, postId: post.id, roleId: role.id });
 
     const request = await joinRequestRepo.findByKeys({
@@ -79,12 +87,17 @@ describe("JoinRequest Service: send tests", () => {
     const postId = 2;
     const roleId = 1;
 
+    const findUserItemsService = new FindUserItemsService(
+      userRepo,
+      new DummyItemFetcher()
+    );
+
     expect(
       new SendJoinRequestService(
         userRepo,
         postRepo,
         joinRequestRepo,
-        new CheckItemRequirementsService(new DummyItemFetcher())
+        new CheckRequirementsService(itemReqCheckService, findUserItemsService)
       ).sendJoinRequest({ userId, postId, roleId })
     ).rejects.toThrow();
   });
@@ -100,12 +113,17 @@ describe("JoinRequest Service: send tests", () => {
     const postId = 2;
     const roleId = 3;
 
+    const findUserItemsService = new FindUserItemsService(
+      userRepo,
+      new DummyItemFetcher()
+    );
+
     expect(
       new SendJoinRequestService(
         userRepo,
         postRepo,
         joinRequestRepo,
-        new CheckItemRequirementsService(new DummyItemFetcher())
+        new CheckRequirementsService(itemReqCheckService, findUserItemsService)
       ).sendJoinRequest({ userId: user.id, postId, roleId })
     ).rejects.toThrow();
   });
@@ -131,12 +149,17 @@ describe("JoinRequest Service: send tests", () => {
     });
     const roleId = 3;
 
+    const findUserItemsService = new FindUserItemsService(
+      userRepo,
+      new DummyItemFetcher()
+    );
+
     expect(
       new SendJoinRequestService(
         userRepo,
         postRepo,
         joinRequestRepo,
-        new CheckItemRequirementsService(new DummyItemFetcher())
+        new CheckRequirementsService(itemReqCheckService, findUserItemsService)
       ).sendJoinRequest({ userId: user.id, postId: post.id, roleId })
     ).rejects.toThrow();
   });
@@ -166,9 +189,14 @@ describe("JoinRequest Service: send tests", () => {
     });
     await postRepo.save(post);
     const fetchItems = storage(
-      new Map<string, Item[]>([
+      new Map<string, GW2ApiItem[]>([
         [apiKey, [{ id: nameToId(itemRequirement.name), count: 1 }]],
       ])
+    );
+
+    const findUserItemsService = new FindUserItemsService(
+      userRepo,
+      new GetItems(fetchItems)
     );
 
     expect(
@@ -176,7 +204,7 @@ describe("JoinRequest Service: send tests", () => {
         userRepo,
         postRepo,
         joinRequestRepo,
-        new CheckItemRequirementsService(new GetItems(fetchItems))
+        new CheckRequirementsService(itemReqCheckService, findUserItemsService)
       ).sendJoinRequest({ userId: user.id, postId: post.id, roleId: role.id })
     ).rejects.toThrow();
   });
@@ -205,15 +233,19 @@ describe("JoinRequest Service: send tests", () => {
     });
     await postRepo.save(post);
     const fetchItems = storage(
-      new Map<string, Item[]>([
+      new Map<string, GW2ApiItem[]>([
         [apiKey, [{ id: nameToId(itemRequirement.name), count: 10 }]],
       ])
+    );
+    const findUserItemsService = new FindUserItemsService(
+      userRepo,
+      new GetItems(fetchItems)
     );
     const service = new SendJoinRequestService(
       userRepo,
       postRepo,
       joinRequestRepo,
-      new CheckItemRequirementsService(new GetItems(fetchItems))
+      new CheckRequirementsService(itemReqCheckService, findUserItemsService)
     );
 
     await service.sendJoinRequest({
@@ -255,15 +287,19 @@ describe("JoinRequest Service: send tests", () => {
     });
     await postRepo.save(post);
     const fetchItems = storage(
-      new Map<string, Item[]>([
+      new Map<string, GW2ApiItem[]>([
         [apiKey, [{ id: nameToId(itemRequirement.name), count: 10 }]],
       ])
+    );
+    const findUserItemsService = new FindUserItemsService(
+      userRepo,
+      new GetItems(fetchItems)
     );
     const service = new SendJoinRequestService(
       userRepo,
       postRepo,
       joinRequestRepo,
-      new CheckItemRequirementsService(new GetItems(fetchItems))
+      new CheckRequirementsService(itemReqCheckService, findUserItemsService)
     );
     await service.sendJoinRequest({
       userId: user.id,
@@ -290,7 +326,7 @@ describe("JoinRequest Service: send tests", () => {
 });
 
 class DummyItemFetcher implements ItemsFetcher {
-  fetch(_ids: number[], _apiKey: string): Promise<Item[]> {
+  fetch(_ids: number[], _apiKey: string): Promise<GW2ApiItem[]> {
     return new Promise((resolve) => resolve([]));
   }
 }

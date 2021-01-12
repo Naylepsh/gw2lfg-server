@@ -7,7 +7,7 @@ import { CurrentUserJWTMiddleware } from "@api/middleware/current-user.middlewar
 import { RaidPost } from "@root/data/entities/raid-post/raid-post.entitity";
 import { User } from "@root/data/entities/user/user.entity";
 import { GetItems } from "@root/services/gw2-api/items/get-items.gw2-api.service";
-import { Item } from "@services/gw2-items/item.interface";
+import { GW2ApiItem } from "@services/gw2-items/item.interface";
 import { SendJoinRequestService } from "@root/services/join-request/send-join-request.service";
 import { CheckItemRequirementsService } from "@services/requirement/check-item-requirements.service";
 import { Action, createExpressServer, useContainer } from "routing-controllers";
@@ -15,6 +15,8 @@ import { JoinRequestMemoryRepository } from "../../../helpers/repositories/join-
 import { RaidPostMemoryUnitOfWork } from "../../../helpers/uows/raid-post.memory-unit-of-work";
 import { MyStorage } from "../../../unit/services/item-storage";
 import { seedDbWithOnePost } from "../raid-post/seed-db";
+import { CheckRequirementsService } from "@services/requirement/check-requirements.service";
+import { FindUserItemsService } from "@services/user/find-user-items.service";
 
 describe("SendRaidJoinRequestController integration tests", () => {
   const liId = items["Legendary Insight"];
@@ -32,10 +34,16 @@ describe("SendRaidJoinRequestController integration tests", () => {
     ({ token, post, user } = await seedDbWithOnePost(uow));
 
     myStorage = new MyStorage(
-      new Map<string, Item[]>([[user.apiKey, [{ id: liId, count: 1 }]]])
+      new Map<string, GW2ApiItem[]>([[user.apiKey, [{ id: liId, count: 1 }]]])
     );
-    const requirementChecker = new CheckItemRequirementsService(
+    const itemRequirementChecker = new CheckItemRequirementsService();
+    const findUserItemsService = new FindUserItemsService(
+      uow.users,
       new GetItems(myStorage.fetch.bind(myStorage))
+    );
+    const requirementChecker = new CheckRequirementsService(
+      itemRequirementChecker,
+      findUserItemsService
     );
     joinRequestRepo = new JoinRequestMemoryRepository();
     const sendJoinRequestService = new SendJoinRequestService(

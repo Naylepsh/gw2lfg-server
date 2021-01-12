@@ -76,18 +76,17 @@ At the moment it's only CheckRequirementsService that needs a special loading ca
 */
 const loadServiceLayerDependencies = () => {
   const {
-    CheckItemRequirementsService,
-    CheckRequirementsService,
+    // CheckItemRequirementsService,
+    // CheckRequirementsService,
     GetItemsFromEntireAccount,
   } = services;
 
   const itemFetcher = new GetItemsFromEntireAccount();
-  const itemRequirementCheckService = new CheckItemRequirementsService(
-    itemFetcher
-  );
-  const checkRequirementService = new CheckRequirementsService([
-    itemRequirementCheckService,
-  ]);
+  // const itemRequirementCheckService = new CheckItemRequirementsService(
+  // );
+  // const checkRequirementService = new CheckRequirementsService([
+  //   itemRequirementCheckService,
+  // ]);
 
   /* 
   Because check requirements service can be depended on in two forms:
@@ -95,8 +94,8 @@ const loadServiceLayerDependencies = () => {
   2. As an interface
   We point to the same implementation for those two cases
   */
-  Container.set(CheckRequirementsService, checkRequirementService);
-  Container.set(requirementsCheckServiceType, checkRequirementService);
+  // Container.set(CheckRequirementsService, checkRequirementService);
+  // Container.set(requirementsCheckServiceType, checkRequirementService);
 
   Container.set(getItemsFromEntireAccountFetcherType, itemFetcher);
 };

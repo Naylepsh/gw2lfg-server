@@ -1,4 +1,4 @@
-import { Item } from "../../gw2-items/item.interface";
+import { GW2ApiItem } from "../../gw2-items/item.interface";
 import { fetchItemsFromCharacter } from "../fetchers/fetch-items-from-character";
 import { fetchCharacters } from "../fetchers/fetch-characters";
 import { fetchItemsFromSharedInventory } from "../fetchers/fetch-items-from-shared-inventory";
@@ -6,10 +6,10 @@ import { fetchItemsFromBank } from "../fetchers/fetch-items-from-bank";
 import { Service } from "typedi";
 import { getItemsFromEntireAccountFetcherType } from "../../../loaders/typedi.constants";
 
-type AllItemsFetcher = (apiKey: string) => Promise<Item[]>;
+type AllItemsFetcher = (apiKey: string) => Promise<GW2ApiItem[]>;
 
 export interface ItemsFetcher {
-  fetch(ids: number[], apiKey: string): Promise<Item[]>;
+  fetch(ids: number[], apiKey: string): Promise<GW2ApiItem[]>;
 }
 
 /*
@@ -18,7 +18,7 @@ Takes an array of item fetchers and merges their results
 export class GetItemsFromMultipleSources implements ItemsFetcher {
   constructor(private readonly fetchers: ItemsFetcher[]) {}
 
-  async fetch(ids: number[], apiKey: string): Promise<Item[]> {
+  async fetch(ids: number[], apiKey: string): Promise<GW2ApiItem[]> {
     const itemStacks = await Promise.all(
       this.fetchers.map((fetcher) => fetcher.fetch(ids, apiKey))
     );
@@ -51,7 +51,7 @@ Uses a fetcher to fetch all items, leaves only those with given ids and merges i
 export class GetItems implements ItemsFetcher {
   constructor(private readonly fetchAllItems: AllItemsFetcher) {}
 
-  async fetch(ids: number[], apiKey: string): Promise<Item[]> {
+  async fetch(ids: number[], apiKey: string): Promise<GW2ApiItem[]> {
     try {
       const items = await this.fetchAllItems(apiKey);
 
@@ -65,7 +65,7 @@ export class GetItems implements ItemsFetcher {
 /*
 Counts the quantity of an item with given id in given items
 */
-const countItemStacks = (items: Item[], id: number) => {
+const countItemStacks = (items: GW2ApiItem[], id: number) => {
   return items
     .filter((item) => item.id === id)
     .reduce((count, item) => count + item.count, 0);
@@ -90,7 +90,7 @@ Service(getItemsFromEntireAccountFetcherType);
 export class GetItemsFromEntireAccount implements ItemsFetcher {
   constructor() {}
 
-  async fetch(ids: number[], apiKey: string): Promise<Item[]> {
+  async fetch(ids: number[], apiKey: string): Promise<GW2ApiItem[]> {
     try {
       const characters = await fetchCharacters(apiKey);
       const characterItemFetchers = await Promise.all(

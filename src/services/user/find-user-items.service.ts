@@ -1,6 +1,7 @@
 import { Inject, Service } from "typedi";
 import { IUserRepository } from "@data/repositories/user/user.repository.interface";
 import {
+  findUserItemsServiceType,
   getItemsFromEntireAccountFetcherType,
   userRepositoryType,
 } from "@loaders/typedi.constants";
@@ -13,7 +14,7 @@ import { idToName } from "../gw2-items/gw2-items.service";
 /*
 Service for finding a user with matching id and getting his item stats from GW2 API
 */
-@Service()
+@Service(findUserItemsServiceType)
 export class FindUserItemsService {
   constructor(
     @Inject(userRepositoryType)
