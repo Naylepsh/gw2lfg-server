@@ -671,3 +671,55 @@ Returns json data about a single user's raid posts. Providing jwt will check whe
     },
   });
   ```
+
+## Find User's Weekly Raid Clear
+
+---
+
+Returns json data about a single user's weekly raid clear status
+
+- **URL**
+
+  /user/:id/raid-clear
+
+- **Method:**
+
+  `GET`
+
+- **Additional Headers**
+
+  None
+
+- **URL Params**
+
+  None
+
+- **Data Params**
+
+  None
+
+- **Success Response:**
+
+  - **Code:** 200 <br />
+    **Content:**
+    ```
+    {
+      data: ["Vale Guardian", "Cairn", "Mursaat Overseer", "Samarog"],
+    }
+    ```
+
+- **Error Response:**
+
+  - **Code:** 404 NOT FOUND <br />
+    **Content:**
+    ```
+    {
+      name: "NotFoundError"
+    }
+    ```
+
+- **Sample Call:**
+
+  ```javascript
+  axios.get("/users/2/raid-clear");
+  ```
