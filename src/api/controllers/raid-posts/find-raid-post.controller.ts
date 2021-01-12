@@ -31,32 +31,16 @@ export class FindRaidPostController {
   constructor(
     @Inject(findRaidPostServiceType)
     private readonly findService: FindRaidPostService,
-    @Inject(requirementsCheckServiceType)
-    private readonly requirementsCheckService: ICheckRequirementsService
   ) {}
 
   @Get("/raid-posts/:id")
   async find(
     @Param("id") id: number,
-    @CurrentUser() user?: User
   ): Promise<FindRaidPostResponse> {
     try {
       const post = await this.findService.find({ id });
-
-      // checkIfUserMeetsPostsRequirements takes and returns a post array
-      // if user is not authenticated we say that they fail to meet the requirements
-      // otherwise we properly check
-      const posts = user
-        ? await checkIfUserMeetsPostsRequirements(
-            [post],
-            user,
-            this.requirementsCheckService
-          )
-        : unsatisfyEachRequirement([post]);
-      const postWithRequirementsChecked = posts[0];
-
       return {
-        data: mapRaidPostToRaidPostResponse(postWithRequirementsChecked),
+        data: mapRaidPostToRaidPostResponse(post),
       };
     } catch (error) {
       if (error instanceof EntityNotFoundError) {

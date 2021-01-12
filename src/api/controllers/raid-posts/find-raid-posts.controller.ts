@@ -29,15 +29,12 @@ but it's not required.
 export class FindRaidPostsController {
   constructor(
     @Inject(findRaidPostsServiceType)
-    private readonly findService: FindRaidPostsService,
-    @Inject(requirementsCheckServiceType)
-    private readonly requirementsCheckService: ICheckRequirementsService
+    private readonly findService: FindRaidPostsService
   ) {}
 
   @Get("/raid-posts")
   async findAll(
-    @QueryParams() query: FindRaidPostsQueryParams,
-    @CurrentUser() user?: User
+    @QueryParams() query: FindRaidPostsQueryParams
   ): Promise<FindRaidPostsResponse> {
     const now = new Date();
     const { posts, hasMore } = await this.findService.find({
@@ -46,16 +43,6 @@ export class FindRaidPostsController {
       where: { date: MoreThan(now) },
     });
 
-    // if user is not authenticated we say that they fail to meet the requirements
-    // otherwise we properly check
-    const _posts = user
-      ? await checkIfUserMeetsPostsRequirements(
-          posts,
-          user,
-          this.requirementsCheckService
-        )
-      : unsatisfyEachRequirement(posts);
-
-    return { data: _posts.map(mapRaidPostToRaidPostResponse), hasMore };
+    return { data: posts.map(mapRaidPostToRaidPostResponse), hasMore };
   }
 }

@@ -3,7 +3,7 @@ import { IRouteResponse } from "../../../responses/route.response.interface";
 
 export interface FindRaidPostsResponse
   extends IRouteResponse<
-    (RaidPostResponse & { userMeetsRequirements: boolean })[]
+    RaidPostResponse[]
   > {
   hasMore: boolean;
 }
