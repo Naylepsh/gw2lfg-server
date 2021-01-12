@@ -8,11 +8,11 @@ export async function checkIfUserMeetsPostsRequirements(
   user: User,
   requirementsCheckService: ICheckRequirementsService
 ) {
-  const satisfiesRequirements = await Promise.all(
-    posts.map((post) =>
-      requirementsCheckService.areRequirementsSatisfied(post.requirements, user)
-    )
+  const satisfiesRequirements = await requirementsCheckService.areRequirementsSatisfied(
+    posts,
+    user
   );
+
   const _posts = posts.map((post, index) => ({
     ...post,
     userMeetsRequirements: satisfiesRequirements[index],

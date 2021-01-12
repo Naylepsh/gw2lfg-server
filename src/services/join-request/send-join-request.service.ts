@@ -19,6 +19,7 @@ import { SendJoinRequestDTO } from "./dtos/send-join-request.dto";
 import { RequirementsNotSatisfiedError } from "./errors/requirements-not-satisfied.error";
 import { MultipleRequestsForTheSameSpotError } from "./errors/multiple-requests-for-the-same-spot.error";
 import { SpotIsTakenError } from "./errors/spot-is-taken.error";
+import { RaidPost } from "@data/entities/raid-post/raid-post.entitity";
 
 /*
 Service for creation of join requests.
@@ -68,8 +69,10 @@ export class SendJoinRequestService {
     }
 
     // user has to satisfy post's requirements to join
-    const areSatisfied = await this.checkRequirementsService.areRequirementsSatisfied(
-      post.requirements,
+    const [
+      areSatisfied,
+    ] = await this.checkRequirementsService.areRequirementsSatisfied(
+      [post as RaidPost],
       user
     );
     if (!areSatisfied) {

@@ -8,11 +8,10 @@ import { CurrentUserJWTMiddleware } from "@api/middleware/current-user.middlewar
 import { GetItems } from "@root/services/gw2-api/items/get-items.gw2-api.service";
 import { GW2ApiItem } from "@services/gw2-items/item.interface";
 import { FindRaidPostsService } from "@root/services/raid-post/find-raid-posts.service";
-import { CheckItemRequirementsService } from "@services/requirement/check-item-requirements.service";
 import { RaidPostMemoryUnitOfWork } from "../../../helpers/uows/raid-post.memory-unit-of-work";
 import { MyStorage } from "../../../unit/services/item-storage";
 import { seedDbWithOnePost } from "./seed-db";
-import { CheckRequirementsService } from "@services/requirement/check-requirements.service";
+import { CheckItemRequirementsService } from "@services/requirement/check-requirements.service";
 import { FindUserItemsService } from "@services/user/find-user-items.service";
 
 describe("FindRaidPostsController integration tests", () => {
@@ -32,13 +31,11 @@ describe("FindRaidPostsController integration tests", () => {
         [user.apiKey, [{ id: items["Legendary Insight"], count: 100 }]],
       ])
     );
-    const itemRequirementChecker = new CheckItemRequirementsService();
     const findUserItemsService = new FindUserItemsService(
       uow.users,
       new GetItems(myStorage.fetch.bind(myStorage))
     );
-    const requirementChecker = new CheckRequirementsService(
-      itemRequirementChecker,
+    const requirementChecker = new CheckItemRequirementsService(
       findUserItemsService
     );
     const controller = new FindRaidPostsController(

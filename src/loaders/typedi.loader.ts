@@ -13,7 +13,6 @@ import {
   raidPostRepositoryType,
   raidPostUnitOfWorkType,
   requirementRepositoryType,
-  requirementsCheckServiceType,
   roleRepositoryType,
   userRepositoryType,
 } from "./typedi.constants";

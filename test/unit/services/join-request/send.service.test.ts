@@ -11,20 +11,19 @@ import {
 import { nameToId } from "@services/gw2-items/gw2-items.service";
 import { GW2ApiItem } from "@services/gw2-items/item.interface";
 import { SendJoinRequestService } from "@root/services/join-request/send-join-request.service";
-import { CheckItemRequirementsService } from "@services/requirement/check-item-requirements.service";
 import { JoinRequestMemoryRepository } from "../../../helpers/repositories/join-request.memory-repository";
 import { RaidPostMemoryRepository } from "../../../helpers/repositories/raid-post.memory-repository";
 import { UserMemoryRepository } from "../../../helpers/repositories/user.memory-repository";
 import { storage } from "../item-storage";
 import items from "@services/gw2-items/items.json";
-import { CheckRequirementsService } from "@services/requirement/check-requirements.service";
+import { CheckItemRequirementsService } from "@services/requirement/check-requirements.service";
 import { FindUserItemsService } from "@services/user/find-user-items.service";
+import { findUserItemsServiceType } from "../../../loaders/typedi.constants";
 
 describe("JoinRequest Service: send tests", () => {
   let userRepo: IUserRepository;
   let postRepo: IPostRepository;
   let joinRequestRepo: JoinRequestMemoryRepository;
-  const itemReqCheckService = new CheckItemRequirementsService();
   const validItemName = Object.keys(items)[0];
 
   beforeEach(() => {
@@ -71,7 +70,7 @@ describe("JoinRequest Service: send tests", () => {
       userRepo,
       postRepo,
       joinRequestRepo,
-      new CheckRequirementsService(itemReqCheckService, findUserItemsService)
+      new CheckItemRequirementsService(findUserItemsService)
     ).sendJoinRequest({ userId: user.id, postId: post.id, roleId: role.id });
 
     const request = await joinRequestRepo.findByKeys({
@@ -97,7 +96,7 @@ describe("JoinRequest Service: send tests", () => {
         userRepo,
         postRepo,
         joinRequestRepo,
-        new CheckRequirementsService(itemReqCheckService, findUserItemsService)
+        new CheckItemRequirementsService(findUserItemsService)
       ).sendJoinRequest({ userId, postId, roleId })
     ).rejects.toThrow();
   });
@@ -123,7 +122,7 @@ describe("JoinRequest Service: send tests", () => {
         userRepo,
         postRepo,
         joinRequestRepo,
-        new CheckRequirementsService(itemReqCheckService, findUserItemsService)
+        new CheckItemRequirementsService(findUserItemsService)
       ).sendJoinRequest({ userId: user.id, postId, roleId })
     ).rejects.toThrow();
   });
@@ -159,7 +158,7 @@ describe("JoinRequest Service: send tests", () => {
         userRepo,
         postRepo,
         joinRequestRepo,
-        new CheckRequirementsService(itemReqCheckService, findUserItemsService)
+        new CheckItemRequirementsService(findUserItemsService)
       ).sendJoinRequest({ userId: user.id, postId: post.id, roleId })
     ).rejects.toThrow();
   });
@@ -204,7 +203,7 @@ describe("JoinRequest Service: send tests", () => {
         userRepo,
         postRepo,
         joinRequestRepo,
-        new CheckRequirementsService(itemReqCheckService, findUserItemsService)
+        new CheckItemRequirementsService(findUserItemsService)
       ).sendJoinRequest({ userId: user.id, postId: post.id, roleId: role.id })
     ).rejects.toThrow();
   });
@@ -245,7 +244,7 @@ describe("JoinRequest Service: send tests", () => {
       userRepo,
       postRepo,
       joinRequestRepo,
-      new CheckRequirementsService(itemReqCheckService, findUserItemsService)
+      new CheckItemRequirementsService(findUserItemsService)
     );
 
     await service.sendJoinRequest({
@@ -299,7 +298,7 @@ describe("JoinRequest Service: send tests", () => {
       userRepo,
       postRepo,
       joinRequestRepo,
-      new CheckRequirementsService(itemReqCheckService, findUserItemsService)
+      new CheckItemRequirementsService(findUserItemsService)
     );
     await service.sendJoinRequest({
       userId: user.id,

@@ -9,13 +9,12 @@ import { User } from "@root/data/entities/user/user.entity";
 import { GetItems } from "@root/services/gw2-api/items/get-items.gw2-api.service";
 import { GW2ApiItem } from "@services/gw2-items/item.interface";
 import { SendJoinRequestService } from "@root/services/join-request/send-join-request.service";
-import { CheckItemRequirementsService } from "@services/requirement/check-item-requirements.service";
 import { Action, createExpressServer, useContainer } from "routing-controllers";
 import { JoinRequestMemoryRepository } from "../../../helpers/repositories/join-request.memory-repository";
 import { RaidPostMemoryUnitOfWork } from "../../../helpers/uows/raid-post.memory-unit-of-work";
 import { MyStorage } from "../../../unit/services/item-storage";
 import { seedDbWithOnePost } from "../raid-post/seed-db";
-import { CheckRequirementsService } from "@services/requirement/check-requirements.service";
+import { CheckItemRequirementsService } from "@services/requirement/check-requirements.service";
 import { FindUserItemsService } from "@services/user/find-user-items.service";
 
 describe("SendRaidJoinRequestController integration tests", () => {
@@ -36,13 +35,11 @@ describe("SendRaidJoinRequestController integration tests", () => {
     myStorage = new MyStorage(
       new Map<string, GW2ApiItem[]>([[user.apiKey, [{ id: liId, count: 1 }]]])
     );
-    const itemRequirementChecker = new CheckItemRequirementsService();
     const findUserItemsService = new FindUserItemsService(
       uow.users,
       new GetItems(myStorage.fetch.bind(myStorage))
     );
-    const requirementChecker = new CheckRequirementsService(
-      itemRequirementChecker,
+    const requirementChecker = new CheckItemRequirementsService(
       findUserItemsService
     );
     joinRequestRepo = new JoinRequestMemoryRepository();
