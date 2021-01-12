@@ -5,7 +5,6 @@
 ---
 
 Returns json data about multiple raid posts.
-Providing auth token will check whether a user with associated token can join those raids.
 
 - **URL**
 
@@ -17,9 +16,7 @@ Providing auth token will check whether a user with associated token can join th
 
 - **Additional Headers**
 
-  **Optional:**
-
-  `gw2lfg-auth-token: [string]`
+  None
 
 - **URL Params**
 
@@ -64,7 +61,6 @@ Providing auth token will check whether a user with associated token can join th
               updatedAt: "2021-01-05T17:53:38.545Z",
             },
           ],
-          userMeetsRequirements: false,
           author: {
             id: 1,
             username: "username1",
@@ -129,11 +125,7 @@ Providing auth token will check whether a user with associated token can join th
 - **Sample Call:**
 
   ```javascript
-  axios.get("/raid-posts?skip=1&take=1", {
-    headers: {
-      "gw2lfg-auth-token": "my.jwt.token",
-    },
-  });
+  axios.get("/raid-posts?skip=1&take=1");
   ```
 
 ## Create Raid Post
@@ -314,7 +306,6 @@ Returns json data about created resource.
 ---
 
 Returns json data about single raid post.
-Providing auth token will check whether a user with associated token can join that raid.
 
 - **URL**
 
@@ -326,9 +317,7 @@ Providing auth token will check whether a user with associated token can join th
 
 - **Additional Headers**
 
-  **Optional:**
-
-  `gw2lfg-auth-token: [string]`
+  None
 
 - **URL Params**
 
@@ -376,7 +365,6 @@ Providing auth token will check whether a user with associated token can join th
             updatedAt: "2021-01-05T17:53:38.545Z",
           },
         ],
-        userMeetsRequirements: false,
         author: {
           id: 1,
           username: "username1",
@@ -411,11 +399,7 @@ Providing auth token will check whether a user with associated token can join th
 - **Sample Call:**
 
   ```javascript
-  axios.get("/raid-posts?skip=1&take=1", {
-    headers: {
-      "gw2lfg-auth-token": "my.jwt.token",
-    },
-  });
+  axios.get("/raid-posts?skip=1&take=1");
   ```
 
 ## Update Raid Post
@@ -637,6 +621,7 @@ Deletes a single raid post.
 
   - **Code:** 204 <br />
     **Content:**
+
     ```
 
     ```

@@ -4,7 +4,6 @@ import Container from "typedi";
 import { loadDependencies } from "@loaders/index";
 import { raidPostUnitOfWorkType } from "@loaders/typedi.constants";
 import { IRaidPostUnitOfWork } from "@data/units-of-work/raid-post/raid-post.unit-of-work.interface";
-import { CurrentUserJWTMiddleware } from "@api/middleware/current-user.middleware";
 import { seedRaidBoss, seedRaidPost, clean, seedUser } from "./seeders";
 
 describe("Find raid posts e2e tests", () => {
@@ -32,9 +31,7 @@ describe("Find raid posts e2e tests", () => {
   it(
     "should find a seeded post",
     async () => {
-      const { body } = await request(app)
-        .get(findUrl)
-        .set(CurrentUserJWTMiddleware.AUTH_HEADER, token);
+      const { body } = await request(app).get(findUrl);
 
       const posts = body.data;
       expect(posts.length).toBe(1);

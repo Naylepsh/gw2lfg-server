@@ -1,18 +1,11 @@
 import "reflect-metadata";
-import { Action, createExpressServer, useContainer } from "routing-controllers";
+import { createExpressServer, useContainer } from "routing-controllers";
 import request from "supertest";
 import Container from "typedi";
-import items from "@root/services/gw2-items/items.json";
 import { FindRaidPostsController } from "@root/api/controllers/raid-posts/find-raid-posts.controller";
-import { CurrentUserJWTMiddleware } from "@api/middleware/current-user.middleware";
-import { GetItems } from "@root/services/gw2-api/items/get-items.gw2-api.service";
-import { GW2ApiItem } from "@services/gw2-items/item.interface";
 import { FindRaidPostsService } from "@root/services/raid-post/find-raid-posts.service";
 import { RaidPostMemoryUnitOfWork } from "../../../helpers/uows/raid-post.memory-unit-of-work";
-import { MyStorage } from "../../../unit/services/item-storage";
 import { seedDbWithOnePost } from "./seed-db";
-import { CheckItemRequirementsService } from "@services/requirement/check-requirements.service";
-import { FindUserItemsService } from "@services/user/find-user-items.service";
 
 describe("FindRaidPostsController integration tests", () => {
   const url = "/raid-posts";
@@ -22,36 +15,17 @@ describe("FindRaidPostsController integration tests", () => {
   beforeEach(async () => {
     const uow = RaidPostMemoryUnitOfWork.create();
 
-    const { user, token: jwt } = await seedDbWithOnePost(uow);
+    const { token: jwt } = await seedDbWithOnePost(uow);
     token = jwt;
 
     const findRaidPostsService = new FindRaidPostsService(uow.raidPosts);
-    const myStorage = new MyStorage(
-      new Map<string, GW2ApiItem[]>([
-        [user.apiKey, [{ id: items["Legendary Insight"], count: 100 }]],
-      ])
-    );
-    const findUserItemsService = new FindUserItemsService(
-      uow.users,
-      new GetItems(myStorage.fetch.bind(myStorage))
-    );
-    const requirementChecker = new CheckItemRequirementsService(
-      findUserItemsService
-    );
-    const controller = new FindRaidPostsController(
-      findRaidPostsService,
-      requirementChecker
-    );
+    const controller = new FindRaidPostsController(findRaidPostsService);
 
     Container.set(FindRaidPostsController, controller);
     useContainer(Container);
 
-    const currentUserMiddleware = new CurrentUserJWTMiddleware(uow.users);
-
     app = createExpressServer({
       controllers: [FindRaidPostsController],
-      currentUserChecker: async (action: Action) =>
-        await currentUserMiddleware.getCurrentUser(action),
     });
   });
 
@@ -66,37 +40,4 @@ describe("FindRaidPostsController integration tests", () => {
 
     expect(status).toBe(200);
   });
-
-  /*
-  This won't work. Controller uses special TypeORM function for handling dates.
-  My in-memory repository has no way to deal with that. It works perfectly without that date condition tho. 
-  */
-  // it("should return a list of posts with unsatisfied requirements each if user was not logged in", async () => {
-  //   const queryParams = { take: 10, skip: 0 };
-  //   const { body } = await request(app).get(
-  //     `${url}?take=${queryParams.take}&skip=${queryParams.skip}`
-  //   );
-
-  //   const posts = body.data;
-  //   expect(posts.length).toBeGreaterThan(0);
-  //   for (const post of posts as any[]) {
-  //     expect(post).toHaveProperty("userMeetsRequirements", false);
-  //   }
-  // });
-
-  /*
-  This won't work. Controller uses special TypeORM function for handling dates.
-  My in-memory repository has no way to deal with that. It works perfectly without that date condition tho. 
-  */
-  // it("should return a list of posts with userMeetsRequirements set to true on some of them if user meets their requirements", async () => {
-  //   const queryParams = { take: 10, skip: 0 };
-  //   const { body } = await request(app)
-  //     .get(`${url}?take=${queryParams.take}&skip=${queryParams.skip}`)
-  //     .set(CurrentUserJWTMiddleware.AUTH_HEADER, token);
-
-  //   const posts = body.data;
-  //   expect((posts as any[]).some((post) => post.userMeetsRequirements)).toBe(
-  //     true
-  //   );
-  // });
 });
