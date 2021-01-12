@@ -5,6 +5,7 @@ import {
   GetItemsFromEntireAccount,
   GetItemsFromMultipleSources,
 } from "./items/get-items.gw2-api.service";
+import { FindRaidClearStatusService } from "./raids/find-raid-clear-status.gw2-api.service";
 
 // Available gw2-api services
 export default {
@@ -13,4 +14,5 @@ export default {
   GetItemsFromEntireAccount,
   GetItemsFromMultipleSources,
   GetItems,
+  FindRaidClearStatusService,
 };

@@ -5,7 +5,7 @@ import {
   userRepositoryType,
 } from "@loaders/typedi.constants";
 import { UserNotFoundError } from "../common/errors/entity-not-found.error";
-import { AccountFetcher } from "../gw2-api/account/find-account.gw2-api.service";
+import { IFindAccountService } from "../gw2-api/account/find-account.gw2-api.service";
 import { FindUserDTO } from "./dtos/find-user.dto";
 
 /*
@@ -17,7 +17,7 @@ export class FindUserService {
     @Inject(userRepositoryType)
     private readonly userRepository: IUserRepository,
     @Inject(findAccountServiceType)
-    private readonly accountFetcher: AccountFetcher
+    private readonly accountFetcher: IFindAccountService
   ) {}
 
   async find(dto: FindUserDTO) {
@@ -26,7 +26,7 @@ export class FindUserService {
       throw new UserNotFoundError();
     }
 
-    const account = await this.accountFetcher.fetch(user.apiKey);
+    const account = await this.accountFetcher.findAccount(user.apiKey);
 
     return {
       user,

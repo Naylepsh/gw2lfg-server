@@ -28,6 +28,7 @@ export const requirementsCheckServiceType = "requirements-check.service";
 export const findRaidPostsServiceType = "find-raid-posts.service";
 export const findRaidPostServiceType = "find-raid-post.service";
 export const findAccountServiceType = "find-account.service";
+export const findRaidClearStatusServiceType = "find-raid-clear-status.service";
 export const checkApiKeyValidityServiceType = "check-api-key.service";
 export const getItemsFromEntireAccountFetcherType =
   "get-items-from-entire-account.fetcher";

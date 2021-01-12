@@ -9,8 +9,8 @@ import { FindUserItemsService } from "@services/user/find-user-items.service";
 import { EntityNotFoundError } from "@services/common/errors/entity-not-found.error";
 
 /*
-Controller for GET /users/:id requests.
-Returns an user with matching id and their gw2 account on success.
+Controller for GET /users/:id/items requests.
+Returns items of an user with matching id.
 */
 @JsonController()
 export class FindUserItemsController {
