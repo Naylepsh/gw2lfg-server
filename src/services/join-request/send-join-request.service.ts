@@ -72,7 +72,7 @@ export class SendJoinRequestService {
     const [
       areSatisfied,
     ] = await this.checkRequirementsService.areRequirementsSatisfied(
-      [post as RaidPost],
+      [post],
       user
     );
     if (!areSatisfied) {

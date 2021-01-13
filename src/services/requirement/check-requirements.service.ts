@@ -5,10 +5,8 @@ import {
   findUserItemsServiceType,
   requirementsCheckServiceType,
 } from "@loaders/typedi.constants";
-import {
-  ICheckRequirementsService,
-  Item,
-} from "./check-requirements.service.interface";
+import { ICheckRequirementsService } from "./check-requirements.service.interface";
+import { Item } from "./item";
 import { FindUserItemsService } from "../user/find-user-items.service";
 import { RaidPost } from "@data/entities/raid-post/raid-post.entitity";
 import { ItemRequirement } from "@data/entities/item-requirement/item.requirement.entity";

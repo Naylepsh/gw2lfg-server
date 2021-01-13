@@ -4,72 +4,10 @@ import { fetchCharacters } from "../fetchers/fetch-characters";
 import { fetchItemsFromSharedInventory } from "../fetchers/fetch-items-from-shared-inventory";
 import { fetchItemsFromBank } from "../fetchers/fetch-items-from-bank";
 import { Service } from "typedi";
-import { getItemsFromEntireAccountFetcherType } from "../../../loaders/typedi.constants";
-
-type AllItemsFetcher = (apiKey: string) => Promise<GW2ApiItem[]>;
-
-export interface ItemsFetcher {
-  fetch(ids: number[], apiKey: string): Promise<GW2ApiItem[]>;
-}
-
-/*
-Takes an array of item fetchers and merges their results
-*/
-export class GetItemsFromMultipleSources implements ItemsFetcher {
-  constructor(private readonly fetchers: ItemsFetcher[]) {}
-
-  async fetch(ids: number[], apiKey: string): Promise<GW2ApiItem[]> {
-    const itemStacks = await Promise.all(
-      this.fetchers.map((fetcher) => fetcher.fetch(ids, apiKey))
-    );
-
-    const counts = new Map<number, number>();
-    for (const id of ids) {
-      counts.set(id, 0);
-    }
-
-    // the same item can appear multiple times in inventory and have different quantity
-    // that's why it's merged here
-    for (const items of itemStacks) {
-      for (const id of ids) {
-        const count = countItemStacks(items, id);
-        counts.set(id, counts.get(id)! + count);
-      }
-    }
-
-    // map a map into an array of items (id, count)
-    return Array.from(counts.keys()).map((id) => ({
-      id,
-      count: counts.get(id)!,
-    }));
-  }
-}
-
-/*
-Uses a fetcher to fetch all items, leaves only those with given ids and merges items occurring multple times
-*/
-export class GetItems implements ItemsFetcher {
-  constructor(private readonly fetchAllItems: AllItemsFetcher) {}
-
-  async fetch(ids: number[], apiKey: string): Promise<GW2ApiItem[]> {
-    try {
-      const items = await this.fetchAllItems(apiKey);
-
-      return ids.map((id) => ({ id, count: countItemStacks(items, id) }));
-    } catch (error) {
-      return [];
-    }
-  }
-}
-
-/*
-Counts the quantity of an item with given id in given items
-*/
-const countItemStacks = (items: GW2ApiItem[], id: number) => {
-  return items
-    .filter((item) => item.id === id)
-    .reduce((count, item) => count + item.count, 0);
-};
+import { getItemsFromEntireAccountFetcherType } from "@loaders/typedi.constants";
+import { GetItemsFromMultipleSources } from "./get-items-from-multiple-sources.fetcher";
+import { GetItems } from "./get-items.fetcher";
+import { ItemsFetcher } from "./items-fetcher.interface";
 
 export const getItemsFromBank = new GetItems(fetchItemsFromBank);
 

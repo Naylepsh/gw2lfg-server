@@ -6,7 +6,7 @@ import { SendRaidJoinRequestController } from "@root/api/controllers/join-reques
 import { CurrentUserJWTMiddleware } from "@api/middleware/current-user.middleware";
 import { RaidPost } from "@root/data/entities/raid-post/raid-post.entitity";
 import { User } from "@root/data/entities/user/user.entity";
-import { GetItems } from "@root/services/gw2-api/items/get-items.gw2-api.service";
+import { GetItems } from "@root/services/gw2-api/items/get-items.fetcher";
 import { GW2ApiItem } from "@services/gw2-items/item.interface";
 import { SendJoinRequestService } from "@root/services/join-request/send-join-request.service";
 import { Action, createExpressServer, useContainer } from "routing-controllers";

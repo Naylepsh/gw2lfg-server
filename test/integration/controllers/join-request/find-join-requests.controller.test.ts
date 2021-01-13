@@ -5,7 +5,7 @@ import items from "@root/services/gw2-items/items.json";
 import { RaidPost } from "@root/data/entities/raid-post/raid-post.entitity";
 import { User } from "@root/data/entities/user/user.entity";
 import { SendJoinRequestService } from "@services/join-request/send-join-request.service";
-import { GetItems } from "@root/services/gw2-api/items/get-items.gw2-api.service";
+import { GetItems } from "@root/services/gw2-api/items/get-items.fetcher";
 import { GW2ApiItem } from "@services/gw2-items/item.interface";
 import { FindJoinRequestsService } from "@services/join-request/find-join-requests.service";
 import { FindJoinRequestsController } from "@api/controllers/join-requests/find-join-requests.controller";
