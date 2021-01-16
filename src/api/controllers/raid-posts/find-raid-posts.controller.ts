@@ -22,8 +22,6 @@ import { MoreThan } from "typeorm";
 /*
 Controller for GET /raid-posts requests.
 Returns paginated posts according to query params (skip and take) which are scheduled to happen in the future.
-Providing user token will check whether that user meets the posts'requirements to join
-but it's not required.
 */
 @JsonController()
 export class FindRaidPostsController {
