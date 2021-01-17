@@ -7,6 +7,8 @@ Generic implementation of Unit of Work pattern.
 Allows execution of multiple operations on multiple repositions in single transaction.
 Call to withTransaction has to preceed all operations on repositories.
 UoW has a lifetime of only one transaction, after that it cannot run anymore.
+
+https://jideowosakin.com/unit-of-work-pattern-in-typescript/
 */
 @Service()
 export class GenericUnitOfWork implements IUnitOfWork {
