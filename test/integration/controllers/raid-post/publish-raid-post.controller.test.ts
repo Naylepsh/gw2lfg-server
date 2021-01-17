@@ -8,6 +8,7 @@ import { PublishRaidPostService } from "@root/services/raid-post/publish-raid-po
 import { RaidPostMemoryUnitOfWork } from "../../../helpers/uows/raid-post.memory-unit-of-work";
 import { addHours } from "../../../unit/services/raid-post/hours.util";
 import { seedDbWithOnePost } from "./seed-db";
+import { AUTH_HEADER, toBearerToken } from "../../../helpers/to-bearer-token";
 
 describe("PublishRaidPostController integration tests", () => {
   const url = "/raid-posts";
@@ -43,10 +44,12 @@ describe("PublishRaidPostController integration tests", () => {
   });
 
   it("should return 400 if some properties were missing", async () => {
+    const emptyPayload = {};
+
     const res = await request(app)
       .post(url)
-      .send({})
-      .set(CurrentUserJWTMiddleware.AUTH_HEADER, token);
+      .send(emptyPayload)
+      .set(AUTH_HEADER, toBearerToken(token));
 
     expect(res.status).toBe(400);
   });
@@ -61,7 +64,7 @@ describe("PublishRaidPostController integration tests", () => {
     const res = await request(app)
       .post(url)
       .send(dto)
-      .set(CurrentUserJWTMiddleware.AUTH_HEADER, token);
+      .set(AUTH_HEADER, toBearerToken(token));
 
     expect(res.status).toBe(201);
   });
@@ -76,7 +79,7 @@ describe("PublishRaidPostController integration tests", () => {
     await request(app)
       .post(url)
       .send(dto)
-      .set(CurrentUserJWTMiddleware.AUTH_HEADER, token);
+      .set(AUTH_HEADER, toBearerToken(token));
 
     expect(uow.committed).toBeTruthy();
   });

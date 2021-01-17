@@ -11,6 +11,7 @@ import {
   raidPostUnitOfWorkType,
 } from "@loaders/typedi.constants";
 import { clean, seedRaidBoss, seedRaidPost, seedUser } from "./seeders";
+import { AUTH_HEADER, toBearerToken } from "../helpers/to-bearer-token";
 
 describe("Find raid post join request e2e tests", () => {
   const url = "/join-requests";
@@ -18,8 +19,8 @@ describe("Find raid post join request e2e tests", () => {
   let app: any;
   let uow: IRaidPostUnitOfWork;
   let joinRequestRepo: IJoinRequestRepository;
-  let token: string;
   let post: RaidPost;
+  let token: string;
 
   beforeEach(async () => {
     ({ app } = await loadDependencies());
@@ -42,8 +43,8 @@ describe("Find raid post join request e2e tests", () => {
       const roleId = post.roles[0].id;
       await request(app)
         .post(url)
-        .set(CurrentUserJWTMiddleware.AUTH_HEADER, token)
-        .send({ roleId, postId: post.id });
+        .send({ roleId, postId: post.id })
+        .set(AUTH_HEADER, toBearerToken(token));
 
       const { body } = await request(app).get(`${url}?roleId=${roleId}`);
       const joinRequests = body.data;

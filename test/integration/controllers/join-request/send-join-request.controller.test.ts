@@ -16,6 +16,7 @@ import { MyStorage } from "../../../unit/services/item-storage";
 import { seedDbWithOnePost } from "../raid-post/seed-db";
 import { CheckItemRequirementsService } from "@services/requirement/check-requirements.service";
 import { FindUserItemsService } from "@services/user/find-user-items.service";
+import { AUTH_HEADER, toBearerToken } from "../../../helpers/to-bearer-token";
 
 describe("SendRaidJoinRequestController integration tests", () => {
   const liId = items["Legendary Insight"];
@@ -78,7 +79,7 @@ describe("SendRaidJoinRequestController integration tests", () => {
 
     const res = await request(app)
       .post(url)
-      .set(CurrentUserJWTMiddleware.AUTH_HEADER, token)
+      .set(AUTH_HEADER, toBearerToken(token))
       .send({ roleId: post.roles[0].id, postId: idOfNonExistingPost });
 
     expect(res.status).toBe(404);
@@ -89,7 +90,7 @@ describe("SendRaidJoinRequestController integration tests", () => {
 
     const res = await request(app)
       .post(url)
-      .set(CurrentUserJWTMiddleware.AUTH_HEADER, token)
+      .set(AUTH_HEADER, toBearerToken(token))
       .send({ roleId: idOfNonExistsingRole, postId: post.id });
 
     expect(res.status).toBe(404);
@@ -100,7 +101,7 @@ describe("SendRaidJoinRequestController integration tests", () => {
 
     const res = await request(app)
       .post(url)
-      .set(CurrentUserJWTMiddleware.AUTH_HEADER, token)
+      .set(AUTH_HEADER, toBearerToken(token))
       .send({ roleId: post.roles[0].id, postId: post.id });
 
     expect(res.status).toBe(403);
@@ -111,11 +112,11 @@ describe("SendRaidJoinRequestController integration tests", () => {
 
     await request(app)
       .post(url)
-      .set(CurrentUserJWTMiddleware.AUTH_HEADER, token)
+      .set(AUTH_HEADER, toBearerToken(token))
       .send({ roleId: post.roles[0].id, postId: post.id });
     const res = await request(app)
       .post(url)
-      .set(CurrentUserJWTMiddleware.AUTH_HEADER, token)
+      .set(AUTH_HEADER, toBearerToken(token))
       .send({ roleId: post.roles[0].id, postId: post.id });
 
     expect(res.status).toBe(409);
@@ -126,7 +127,7 @@ describe("SendRaidJoinRequestController integration tests", () => {
 
     const res = await request(app)
       .post(url)
-      .set(CurrentUserJWTMiddleware.AUTH_HEADER, token)
+      .set(AUTH_HEADER, toBearerToken(token))
       .send({ roleId: post.roles[0].id, postId: post.id });
 
     expect(res.status).toBe(201);
@@ -137,7 +138,7 @@ describe("SendRaidJoinRequestController integration tests", () => {
 
     await request(app)
       .post(url)
-      .set(CurrentUserJWTMiddleware.AUTH_HEADER, token)
+      .set(AUTH_HEADER, toBearerToken(token))
       .send({ roleId: post.roles[0].id, postId: post.id });
 
     expect(joinRequestRepo.entities.length).toBe(1);

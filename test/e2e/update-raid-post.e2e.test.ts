@@ -8,6 +8,7 @@ import { CurrentUserJWTMiddleware } from "@api/middleware/current-user.middlewar
 import { seedRaidBoss, seedRaidPost, clean, seedUser } from "./seeders";
 import { RaidPost } from "@root/data/entities/raid-post/raid-post.entitity";
 import { SaveRaidPostDTO } from "@root/api/controllers/raid-posts/dtos/save-raid-post.dto";
+import { AUTH_HEADER, toBearerToken } from "../helpers/to-bearer-token";
 
 describe("Update raid post e2e tests", () => {
   const raidPostsUrl = "/raid-posts";
@@ -42,7 +43,7 @@ describe("Update raid post e2e tests", () => {
     await request(app)
       .put(toUrl(post.id))
       .send(postDto)
-      .set(CurrentUserJWTMiddleware.AUTH_HEADER, token);
+      .set(AUTH_HEADER, toBearerToken(token));
     const { body } = await request(app).get(raidPostsUrl);
 
     const posts = body.data;

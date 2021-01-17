@@ -10,6 +10,7 @@ import request from "supertest";
 import Container from "typedi";
 import { addHours } from "../unit/services/raid-post/hours.util";
 import { getGw2ApiKey } from "../helpers/get-gw2-api-key";
+import { AUTH_HEADER, toBearerToken } from "../helpers/to-bearer-token";
 
 interface IUser {
   username: string;
@@ -41,7 +42,7 @@ export const seedRaidPost = async (
   const { body } = await request(app)
     .post(publishUrl)
     .send(post)
-    .set(CurrentUserJWTMiddleware.AUTH_HEADER, token);
+    .set(AUTH_HEADER, toBearerToken(token));
 
   const raidPost = new RaidPost(body.data);
   raidPost.id = body.data.id;
@@ -75,7 +76,7 @@ export const seedUser = async (app: any) => {
 
 export const clean = async (uow: IRaidPostUnitOfWork) => {
   return await uow.withTransaction(async () => {
-    await uow.joinRequests.delete({})
+    await uow.joinRequests.delete({});
     await uow.roles.delete({});
     await uow.raidPosts.delete({});
     await uow.raidBosses.delete({});

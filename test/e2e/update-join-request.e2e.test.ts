@@ -12,6 +12,7 @@ import {
 } from "@loaders/typedi.constants";
 import { clean, seedRaidBoss, seedRaidPost, seedUser } from "./seeders";
 import { JoinRequestStatus } from "../data/entities/join-request/join-request.status";
+import { AUTH_HEADER, toBearerToken } from "../helpers/to-bearer-token";
 
 describe("Update join request e2e tests", () => {
   const joinRequestsUrl = "/join-requests";
@@ -43,14 +44,14 @@ describe("Update join request e2e tests", () => {
       const roleId = post.roles[0].id;
       const createRequestResponse = await request(app)
         .post(joinRequestsUrl)
-        .set(CurrentUserJWTMiddleware.AUTH_HEADER, token)
+        .set(AUTH_HEADER, toBearerToken(token))
         .send({ roleId, postId: post.id });
       const requestId = createRequestResponse.body.data.id;
 
       const newStatus: JoinRequestStatus = "ACCEPTED";
       await request(app)
         .put(`${joinRequestsUrl}/${requestId}`)
-        .set(CurrentUserJWTMiddleware.AUTH_HEADER, token)
+        .set(AUTH_HEADER, toBearerToken(token))
         .send({ status: newStatus });
 
       const { body } = await request(app).get(

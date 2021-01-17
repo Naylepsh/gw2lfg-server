@@ -12,6 +12,7 @@ import { UnpublishRaidPostService } from "@root/services/raid-post/unpublish-rai
 import { RegisterService } from "@root/services/user/register.service";
 import { RaidPostMemoryUnitOfWork } from "../../../helpers/uows/raid-post.memory-unit-of-work";
 import { seedDbWithOnePost } from "./seed-db";
+import { AUTH_HEADER, toBearerToken } from "../../../helpers/to-bearer-token";
 
 describe("UnpublishRaidPostController integration tests", () => {
   let url = "/raid-posts";
@@ -64,7 +65,7 @@ describe("UnpublishRaidPostController integration tests", () => {
 
     const res = await request(app)
       .delete(toUrl(post.id))
-      .set(CurrentUserJWTMiddleware.AUTH_HEADER, otherUserToken);
+      .set(AUTH_HEADER, toBearerToken(otherUserToken));
 
     expect(res.status).toBe(403);
   });
@@ -72,7 +73,7 @@ describe("UnpublishRaidPostController integration tests", () => {
   it("should return 204 if valid data was passed", async () => {
     const res = await request(app)
       .delete(toUrl(post.id))
-      .set(CurrentUserJWTMiddleware.AUTH_HEADER, token);
+      .set(AUTH_HEADER, toBearerToken(token));
 
     expect(res.status).toBe(204);
   });
@@ -80,10 +81,10 @@ describe("UnpublishRaidPostController integration tests", () => {
   it("should return 204 if post does not exists", async () => {
     await request(app)
       .delete(toUrl(post.id))
-      .set(CurrentUserJWTMiddleware.AUTH_HEADER, token);
+      .set(AUTH_HEADER, toBearerToken(token));
     const res = await request(app)
       .delete(toUrl(post.id))
-      .set(CurrentUserJWTMiddleware.AUTH_HEADER, token);
+      .set(AUTH_HEADER, toBearerToken(token));
 
     expect(res.status).toBe(204);
   });
@@ -91,7 +92,7 @@ describe("UnpublishRaidPostController integration tests", () => {
   it("should remove a post if it existed", async () => {
     await request(app)
       .delete(toUrl(post.id))
-      .set(CurrentUserJWTMiddleware.AUTH_HEADER, token);
+      .set(AUTH_HEADER, toBearerToken(token));
 
     expect(uow.committed).toBeTruthy();
   });

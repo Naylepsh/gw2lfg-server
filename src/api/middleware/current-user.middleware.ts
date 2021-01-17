@@ -9,7 +9,6 @@ Middleware for dealing with jwt based authentication.
 Decodes the jwt and returns a user associated with it from the database.
 */
 export class CurrentUserJWTMiddleware {
-  static readonly AUTH_HEADER = "gw2lfg-auth-token";
   decodeTokenService = new DecodeJWTService();
 
   constructor(
@@ -18,11 +17,13 @@ export class CurrentUserJWTMiddleware {
 
   async getCurrentUser(action: Action) {
     try {
-      const token =
-        action.request.headers[CurrentUserJWTMiddleware.AUTH_HEADER];
-      if (!token) {
+      const authToken = action.request.headers["authorization"] as string;
+      const tokenType = "Bearer ";
+      if (!authToken || !authToken.startsWith(tokenType)) {
         return null;
       }
+
+      const token = authToken.slice(tokenType.length);
 
       const decoded = this.decodeTokenService.decodeToken(token as string);
       const id = parseInt(decoded.id);

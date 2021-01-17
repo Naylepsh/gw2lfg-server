@@ -11,6 +11,7 @@ import {
   raidPostUnitOfWorkType,
 } from "@loaders/typedi.constants";
 import { clean, seedRaidBoss, seedRaidPost, seedUser } from "./seeders";
+import { AUTH_HEADER, toBearerToken } from "../helpers/to-bearer-token";
 
 describe("Delete join request e2e tests", () => {
   const joinRequestsUrl = "/join-requests";
@@ -42,13 +43,13 @@ describe("Delete join request e2e tests", () => {
       const roleId = post.roles[0].id;
       const createRequestResponse = await request(app)
         .post(joinRequestsUrl)
-        .set(CurrentUserJWTMiddleware.AUTH_HEADER, token)
+        .set(AUTH_HEADER, toBearerToken(token))
         .send({ roleId, postId: post.id });
       const requestId = createRequestResponse.body.data.id;
 
       await request(app)
         .delete(`${joinRequestsUrl}/${requestId}`)
-        .set(CurrentUserJWTMiddleware.AUTH_HEADER, token);
+        .set(AUTH_HEADER, toBearerToken(token));
 
       await request(app).get(`${joinRequestsUrl}/${requestId}`);
 

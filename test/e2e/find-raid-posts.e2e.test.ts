@@ -11,7 +11,6 @@ describe("Find raid posts e2e tests", () => {
   const findUrl = "/raid-posts";
   let app: any;
   let uow: IRaidPostUnitOfWork;
-  let token: string;
   let postId: number;
 
   beforeEach(async () => {
@@ -19,7 +18,7 @@ describe("Find raid posts e2e tests", () => {
 
     uow = Container.get(raidPostUnitOfWorkType);
 
-    ({ token } = await seedUser(app));
+    const { token } = await seedUser(app);
     const bossesIds = [await seedRaidBoss(Container)];
     ({ id: postId } = await seedRaidPost(app, bossesIds, token));
   }, timelimit);

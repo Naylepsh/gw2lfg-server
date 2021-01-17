@@ -11,6 +11,7 @@ import { IRaidPostUnitOfWork } from "@data/units-of-work/raid-post/raid-post.uni
 import { CurrentUserJWTMiddleware } from "@api/middleware/current-user.middleware";
 import { IRaidPostRepository } from "@data/repositories/raid-post/raid-post.repository.interface";
 import { seedRaidBoss, clean, seedUser } from "./seeders";
+import { AUTH_HEADER, toBearerToken } from "../helpers/to-bearer-token";
 
 describe("Publish raid post e2e tests", () => {
   const publishUrl = "/raid-posts";
@@ -46,7 +47,7 @@ describe("Publish raid post e2e tests", () => {
       const { body } = await request(app)
         .post(publishUrl)
         .send(post)
-        .set(CurrentUserJWTMiddleware.AUTH_HEADER, token);
+        .set(AUTH_HEADER, toBearerToken(token));
 
       const raidPostRepo: IRaidPostRepository = Container.get(
         raidPostRepositoryType

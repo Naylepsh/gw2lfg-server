@@ -6,6 +6,7 @@ import { loadDependencies } from "@loaders/index";
 import { userRepositoryType } from "@loaders/typedi.constants";
 import { CurrentUserJWTMiddleware } from "@api/middleware/current-user.middleware";
 import { seedUser } from "./seeders";
+import { AUTH_HEADER, toBearerToken } from "../helpers/to-bearer-token";
 
 describe("Me e2e tests", () => {
   const loginUrl = "/login";
@@ -36,7 +37,7 @@ describe("Me e2e tests", () => {
 
       const { body } = await request(app)
         .get(meUrl)
-        .set(CurrentUserJWTMiddleware.AUTH_HEADER, token);
+        .set(AUTH_HEADER, toBearerToken(token));
       const data = body.data;
 
       expect(data).toHaveProperty("id");

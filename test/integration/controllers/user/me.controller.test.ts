@@ -9,6 +9,7 @@ import { User } from "@root/data/entities/user/user.entity";
 import { IUserRepository } from "@data/repositories/user/user.repository.interface";
 import { RegisterService } from "@root/services/user/register.service";
 import { UserMemoryRepository } from "../../../helpers/repositories/user.memory-repository";
+import { AUTH_HEADER, toBearerToken } from "../../../helpers/to-bearer-token";
 
 describe("MeController integration tests", () => {
   const url = "/me";
@@ -51,7 +52,7 @@ describe("MeController integration tests", () => {
   it("should return 200 if user is logged in", async () => {
     const result = await request(app)
       .get(url)
-      .set(CurrentUserJWTMiddleware.AUTH_HEADER, token);
+      .set(AUTH_HEADER, toBearerToken(token));
 
     expect(result.status).toBe(200);
   });
@@ -59,7 +60,7 @@ describe("MeController integration tests", () => {
   it("should return user data (without confidential data) if user is logged in", async () => {
     const { body } = await request(app)
       .get(url)
-      .set(CurrentUserJWTMiddleware.AUTH_HEADER, token);
+      .set(AUTH_HEADER, toBearerToken(token));
     const data = body.data;
 
     expect(data).toHaveProperty("id", user.id);
