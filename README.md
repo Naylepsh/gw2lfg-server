@@ -5,7 +5,7 @@ Backend for gw2lfg service. Allows organisation of raid events with automated pl
 ## PREREQUISITES
 
 - `tsc 3.x` (tested on `3.9.7`)
-- `node 12.x` (tested on `12.16.3`)
+- `node 12+` (tested on `12.16.3` and `14.15.4`)
 - `nodemon 2.x` (tested on `2.0.4`)
 - `yarn 1.x` (tested on `1.22.4`)
 - `PostgreSQL` (tested on `12.3`)
@@ -26,7 +26,7 @@ Backend for gw2lfg service. Allows organisation of raid events with automated pl
 1. Follow `SETUP` section first and install `PREREQUISITIES`
 2. `yarn install` - installing dependencies
 3. `yarn build` - build the app
-4. `yarn seed:bosses` - fill database with bosses (only has to be done once, on the first build)
+4. `yarn seed:bosses` - fill database with bosses (only has to be done once - after the initial build)
 5. `yarn start` - run the app
 
 Server will be available at `localhost:<port-specified-in-env>`
