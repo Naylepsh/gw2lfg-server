@@ -25,8 +25,8 @@ Backend for gw2lfg service. Allows organisation of raid events with automated pl
 
 1. Follow `SETUP` section first and install `PREREQUISITIES`
 2. `yarn install` - installing dependencies
-3. `yarn seed:bosses` - fill database with bosses (only has to be done once, on the first build)
-4. `yarn build` - build the app
+3. `yarn build` - build the app
+4. `yarn seed:bosses` - fill database with bosses (only has to be done once, on the first build)
 5. `yarn start` - run the app
 
 Server will be available at `localhost:<port-specified-in-env>`
