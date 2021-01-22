@@ -1,4 +1,10 @@
-import { Column, Entity, PrimaryGeneratedColumn } from "typeorm";
+import {
+  Column,
+  CreateDateColumn,
+  Entity,
+  PrimaryGeneratedColumn,
+  UpdateDateColumn,
+} from "typeorm";
 import { RaidBossProps } from "./raid-boss.props";
 
 @Entity()
@@ -11,6 +17,12 @@ export class RaidBoss {
 
   @Column()
   isCm!: boolean;
+
+  @CreateDateColumn()
+  createdAt: Date;
+
+  @UpdateDateColumn()
+  updatedAt: Date;
 
   constructor(props?: RaidBossProps) {
     if (props) {
