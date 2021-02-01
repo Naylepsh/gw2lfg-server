@@ -1,6 +1,6 @@
 import { RegisterService } from "@root/services/user/register.service";
-import { createDummyUser } from "../../../helpers/user.helper";
-import { UserMemoryRepository } from "../../../helpers/repositories/user.memory-repository";
+import { createDummyUser } from "../../../common/user.helper";
+import { UserMemoryRepository } from "../../../common/repositories/user.memory-repository";
 
 describe("User service: register tests", () => {
   it("should throw an error if username is taken", async () => {

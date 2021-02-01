@@ -6,7 +6,7 @@ import { raidPostUnitOfWorkType } from "@loaders/typedi.constants";
 import { IRaidPostUnitOfWork } from "@data/units-of-work/raid-post/raid-post.unit-of-work.interface";
 import { CurrentUserJWTMiddleware } from "@api/middleware/current-user.middleware";
 import { seedRaidBoss, seedRaidPost, clean, seedUser } from "./seeders";
-import { AUTH_HEADER, toBearerToken } from "../helpers/to-bearer-token";
+import { AUTH_HEADER, toBearerToken } from "../common/to-bearer-token";
 
 describe("Unpublish raid post e2e tests", () => {
   const raidPostsUrl = "/raid-posts";

@@ -11,7 +11,7 @@ import {
   raidPostUnitOfWorkType,
 } from "@loaders/typedi.constants";
 import { clean, seedRaidBoss, seedRaidPost, seedUser } from "./seeders";
-import { AUTH_HEADER, toBearerToken } from "../helpers/to-bearer-token";
+import { AUTH_HEADER, toBearerToken } from "../common/to-bearer-token";
 
 describe("Send raid post join request e2e tests", () => {
   const url = "/join-requests";

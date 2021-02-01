@@ -4,7 +4,7 @@ import Container from "typedi";
 import { IUserRepository } from "@data/repositories/user/user.repository.interface";
 import { loadDependencies } from "@loaders/index";
 import { userRepositoryType } from "@loaders/typedi.constants";
-import { getGw2ApiKey } from "../helpers/get-gw2-api-key";
+import { getGw2ApiKey } from "../common/get-gw2-api-key";
 
 describe("Register e2e tests", () => {
   const url = "/register";

@@ -1,10 +1,10 @@
 import { UnpublishRaidPostService } from "@root/services/raid-post/unpublish-raid-post.service";
-import { createAndSaveItemRequirement } from "../../../helpers/item-requirement.helper";
-import { createAndSaveRaidBoss } from "../../../helpers/raid-boss.helper";
-import { createAndSaveRaidPost } from "../../../helpers/raid-post.helper";
-import { createAndSaveRole } from "../../../helpers/role.helper";
-import { RaidPostMemoryUnitOfWork } from "../../../helpers/uows/raid-post.memory-unit-of-work";
-import { createAndSaveUser } from "../../../helpers/user.helper";
+import { createAndSaveItemRequirement } from "../../../common/item-requirement.helper";
+import { createAndSaveRaidBoss } from "../../../common/raid-boss.helper";
+import { createAndSaveRaidPost } from "../../../common/raid-post.helper";
+import { createAndSaveRole } from "../../../common/role.helper";
+import { RaidPostMemoryUnitOfWork } from "../../../common/uows/raid-post.memory-unit-of-work";
+import { createAndSaveUser } from "../../../common/user.helper";
 
 describe("RaidPost Service: unpublish tests", () => {
   const uow = RaidPostMemoryUnitOfWork.create();

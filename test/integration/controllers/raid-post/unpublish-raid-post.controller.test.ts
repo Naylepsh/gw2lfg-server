@@ -10,9 +10,9 @@ import { User } from "@root/data/entities/user/user.entity";
 import { CheckPostAuthorshipService } from "@root/services/raid-post/check-post-authorship.service";
 import { UnpublishRaidPostService } from "@root/services/raid-post/unpublish-raid-post.service";
 import { RegisterService } from "@root/services/user/register.service";
-import { RaidPostMemoryUnitOfWork } from "../../../helpers/uows/raid-post.memory-unit-of-work";
+import { RaidPostMemoryUnitOfWork } from "../../../common/uows/raid-post.memory-unit-of-work";
 import { seedDbWithOnePost } from "./seed-db";
-import { AUTH_HEADER, toBearerToken } from "../../../helpers/to-bearer-token";
+import { AUTH_HEADER, toBearerToken } from "../../../common/to-bearer-token";
 
 describe("UnpublishRaidPostController integration tests", () => {
   let url = "/raid-posts";

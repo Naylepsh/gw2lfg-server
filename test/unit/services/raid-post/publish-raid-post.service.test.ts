@@ -1,9 +1,9 @@
 import { PublishRaidPostService } from "@root/services/raid-post/publish-raid-post.service";
 import { PublishRaidPostDTO } from "@root/services/raid-post/dtos/publish-raid-post.dto";
-import { createAndSaveRaidBoss } from "../../../helpers/raid-boss.helper";
-import { RaidPostMemoryUnitOfWork } from "../../../helpers/uows/raid-post.memory-unit-of-work";
-import { createAndSaveUser } from "../../../helpers/user.helper";
-import { addHours, subtractHours } from "./hours.util";
+import { createAndSaveRaidBoss } from "../../../common/raid-boss.helper";
+import { RaidPostMemoryUnitOfWork } from "../../../common/uows/raid-post.memory-unit-of-work";
+import { createAndSaveUser } from "../../../common/user.helper";
+import { addHours, subtractHours } from "../../../common/hours.util";
 
 describe("RaidPost service: publish tests", () => {
   const uow = RaidPostMemoryUnitOfWork.create();

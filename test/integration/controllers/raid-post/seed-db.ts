@@ -4,8 +4,8 @@ import { RaidBoss } from "@root/data/entities/raid-boss/raid-boss.entity";
 import { User } from "@root/data/entities/user/user.entity";
 import { PublishRaidPostService } from "@root/services/raid-post/publish-raid-post.service";
 import { RegisterService } from "@root/services/user/register.service";
-import { RaidPostMemoryUnitOfWork } from "../../../helpers/uows/raid-post.memory-unit-of-work";
-import { addHours } from "../../../unit/services/raid-post/hours.util";
+import { RaidPostMemoryUnitOfWork } from "../../../common/uows/raid-post.memory-unit-of-work";
+import { addHours } from "../../../common/hours.util";
 
 export async function seedDbWithOnePost(uow: RaidPostMemoryUnitOfWork) {
   const registerService = new RegisterService(uow.users);

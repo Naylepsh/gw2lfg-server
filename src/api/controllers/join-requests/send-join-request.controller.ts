@@ -1,4 +1,5 @@
 import {
+  BadRequestError,
   Body,
   CurrentUser,
   ForbiddenError,
@@ -8,10 +9,11 @@ import {
   NotFoundError,
   Post,
 } from "routing-controllers";
-import { User } from "@root/data/entities/user/user.entity";
-import { EntityAlreadyExistsError } from "@root/services/common/errors/entity-already-exists.error";
-import { EntityNotFoundError } from "@root/services/common/errors/entity-not-found.error";
-import { SendJoinRequestService } from "@root/services/join-request/send-join-request.service";
+import { User } from "@data/entities/user/user.entity";
+import { EntityAlreadyExistsError } from "@services/common/errors/entity-already-exists.error";
+import { EntityNotFoundError } from "@services/common/errors/entity-not-found.error";
+import { SendJoinRequestService } from "@services/join-request/send-join-request.service";
+import { SignUpsTimeEndedError } from "@services/join-request/errors/signs-ups-time-ended.error";
 import { RequirementsNotSatisfiedError } from "@root/services/join-request/errors/requirements-not-satisfied.error";
 import { ConflictError } from "../../http-errors/conflict.error";
 import { SendJoinRequestDTO } from "./dtos/send-join-request.dto";
@@ -48,6 +50,8 @@ export class SendRaidJoinRequestController {
         throw new ConflictError(error.message);
       } else if (error instanceof RequirementsNotSatisfiedError) {
         throw new ForbiddenError();
+      } else if (error instanceof SignUpsTimeEndedError) {
+        throw new BadRequestError("Sign-ups time ended.");
       } else {
         throw new InternalServerError(error.message);
       }

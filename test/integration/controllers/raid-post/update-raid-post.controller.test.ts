@@ -10,10 +10,10 @@ import { User } from "@root/data/entities/user/user.entity";
 import { CheckPostAuthorshipService } from "@root/services/raid-post/check-post-authorship.service";
 import { UpdateRaidPostService } from "@root/services/raid-post/update-raid-post.service";
 import { RegisterService } from "@root/services/user/register.service";
-import { RaidPostMemoryUnitOfWork } from "../../../helpers/uows/raid-post.memory-unit-of-work";
-import { addHours } from "../../../unit/services/raid-post/hours.util";
+import { RaidPostMemoryUnitOfWork } from "../../../common/uows/raid-post.memory-unit-of-work";
+import { addHours } from "../../../common/hours.util";
 import { seedDbWithOnePost } from "./seed-db";
-import { AUTH_HEADER, toBearerToken } from "../../../helpers/to-bearer-token";
+import { AUTH_HEADER, toBearerToken } from "../../../common/to-bearer-token";
 
 describe("UpdateRaidPostController integration tests", () => {
   let url = "/raid-posts";

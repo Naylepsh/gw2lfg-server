@@ -2,7 +2,7 @@ import "reflect-metadata";
 import { Action, createExpressServer, useContainer } from "routing-controllers";
 import request from "supertest";
 import Container from "typedi";
-import { RaidPostMemoryUnitOfWork } from "../../../helpers/uows/raid-post.memory-unit-of-work";
+import { RaidPostMemoryUnitOfWork } from "../../../common/uows/raid-post.memory-unit-of-work";
 import { seedDbWithOnePost } from "./seed-db";
 import { FindRaidPostService } from "@services/raid-post/find-raid-post.service";
 import { FindRaidPostController } from "@api/controllers/raid-posts/find-raid-post.controller";

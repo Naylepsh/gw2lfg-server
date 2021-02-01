@@ -6,9 +6,9 @@ import { RequirementRepository } from "@data/repositories/requirement/requiremen
 import { IRequirementRepository } from "@data/repositories/requirement/requirement.repository.interface";
 import { UserRepository } from "@data/repositories/user/user.repository";
 import { IUserRepository } from "@data/repositories/user/user.repository.interface";
-import { createAndSaveItemRequirement } from "../../../helpers/item-requirement.helper";
-import { createAndSavePosting } from "../../../helpers/post.helper";
-import { createAndSaveUser } from "../../../helpers/user.helper";
+import { createAndSaveItemRequirement } from "../../../common/item-requirement.helper";
+import { createAndSavePosting } from "../../../common/post.helper";
+import { createAndSaveUser } from "../../../common/user.helper";
 
 describe("TypeORM posting repository tests", () => {
   let connection: Connection;

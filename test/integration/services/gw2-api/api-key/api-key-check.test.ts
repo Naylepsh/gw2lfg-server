@@ -1,6 +1,6 @@
 import "@root/config";
 import { CheckApiKeyValidityService } from "@services/gw2-api/api-key/api-key-check.gw2-api.service";
-import { getGw2ApiKey } from "../../../../helpers/get-gw2-api-key";
+import { getGw2ApiKey } from "../../../../common/get-gw2-api-key";
 
 describe("GW2 api key validity check test", () => {
   const timeLimit = 20000;

@@ -4,7 +4,7 @@ import { fetchItemsFromCharacter } from "@services/gw2-api/fetchers/fetch-items-
 import { fetchCharacters } from "@services/gw2-api/fetchers/fetch-characters";
 import { fetchItemsFromBank } from "@services/gw2-api/fetchers/fetch-items-from-bank";
 import { fetchAccount } from "@services/gw2-api/fetchers/fetch-account";
-import { getGw2ApiKey } from "../../../../helpers/get-gw2-api-key";
+import { getGw2ApiKey } from "../../../../common/get-gw2-api-key";
 
 const getSomeCharacterName = async (apiKey: string) => {
   const characters = await fetchCharacters(apiKey);

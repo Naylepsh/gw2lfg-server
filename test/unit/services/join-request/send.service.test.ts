@@ -9,14 +9,14 @@ import { ItemsFetcher } from "@root/services/gw2-api/items/items-fetcher.interfa
 import { nameToId } from "@services/gw2-items/gw2-items.service";
 import { GW2ApiItem } from "@services/gw2-items/item.interface";
 import { SendJoinRequestService } from "@root/services/join-request/send-join-request.service";
-import { JoinRequestMemoryRepository } from "../../../helpers/repositories/join-request.memory-repository";
-import { RaidPostMemoryRepository } from "../../../helpers/repositories/raid-post.memory-repository";
-import { UserMemoryRepository } from "../../../helpers/repositories/user.memory-repository";
+import { JoinRequestMemoryRepository } from "../../../common/repositories/join-request.memory-repository";
+import { RaidPostMemoryRepository } from "../../../common/repositories/raid-post.memory-repository";
+import { UserMemoryRepository } from "../../../common/repositories/user.memory-repository";
 import { storage } from "../item-storage";
 import items from "@services/gw2-items/items.json";
 import { CheckItemRequirementsService } from "@services/requirement/check-requirements.service";
 import { FindUserItemsService } from "@services/user/find-user-items.service";
-import { findUserItemsServiceType } from "../../../loaders/typedi.constants";
+import { addHours } from "../../../common/hours.util";
 
 describe("JoinRequest Service: send tests", () => {
   let userRepo: IUserRepository;
@@ -45,7 +45,7 @@ describe("JoinRequest Service: send tests", () => {
     });
     const role = new Role({ name: "DPS", class: "Any" });
     const post = new RaidPost({
-      date: new Date(),
+      date: addHours(new Date(), 1),
       server: "EU",
       author: user,
       bosses: [],
@@ -138,7 +138,7 @@ describe("JoinRequest Service: send tests", () => {
       quantity: 2,
     });
     const post = new RaidPost({
-      date: new Date(),
+      date: addHours(new Date(), 1),
       server: "EU",
       author: user,
       bosses: [],
@@ -177,7 +177,7 @@ describe("JoinRequest Service: send tests", () => {
     const role = new Role({ name: "DPS", class: "Any" });
     role.id = 1;
     const post = new RaidPost({
-      date: new Date(),
+      date: addHours(new Date(), 1),
       server: "EU",
       author: user,
       bosses: [],
@@ -221,7 +221,7 @@ describe("JoinRequest Service: send tests", () => {
     });
     const role = new Role({ name: "DPS", class: "Any" });
     const post = new RaidPost({
-      date: new Date(),
+      date: addHours(new Date(), 1),
       server: "EU",
       author: user,
       bosses: [],
@@ -275,7 +275,7 @@ describe("JoinRequest Service: send tests", () => {
     });
     const role = new Role({ name: "DPS", class: "Any" });
     const post = new RaidPost({
-      date: new Date(),
+      date: addHours(new Date(), 1),
       server: "EU",
       author: user,
       bosses: [],

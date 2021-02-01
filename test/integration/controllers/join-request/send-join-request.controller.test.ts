@@ -10,13 +10,13 @@ import { GetItems } from "@root/services/gw2-api/items/get-items.fetcher";
 import { GW2ApiItem } from "@services/gw2-items/item.interface";
 import { SendJoinRequestService } from "@root/services/join-request/send-join-request.service";
 import { Action, createExpressServer, useContainer } from "routing-controllers";
-import { JoinRequestMemoryRepository } from "../../../helpers/repositories/join-request.memory-repository";
-import { RaidPostMemoryUnitOfWork } from "../../../helpers/uows/raid-post.memory-unit-of-work";
+import { JoinRequestMemoryRepository } from "../../../common/repositories/join-request.memory-repository";
+import { RaidPostMemoryUnitOfWork } from "../../../common/uows/raid-post.memory-unit-of-work";
 import { MyStorage } from "../../../unit/services/item-storage";
 import { seedDbWithOnePost } from "../raid-post/seed-db";
 import { CheckItemRequirementsService } from "@services/requirement/check-requirements.service";
 import { FindUserItemsService } from "@services/user/find-user-items.service";
-import { AUTH_HEADER, toBearerToken } from "../../../helpers/to-bearer-token";
+import { AUTH_HEADER, toBearerToken } from "../../../common/to-bearer-token";
 
 describe("SendRaidJoinRequestController integration tests", () => {
   const liId = items["Legendary Insight"];

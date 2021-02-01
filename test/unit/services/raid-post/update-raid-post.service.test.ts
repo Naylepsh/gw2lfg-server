@@ -1,12 +1,12 @@
 import { UpdateRaidPostService } from "@services/raid-post/update-raid-post.service";
 import { UpdateRaidPostDTO } from "@services/raid-post/dtos/update-raid-post.dto";
-import { createAndSaveItemRequirement } from "../../../helpers/item-requirement.helper";
-import { createAndSaveRaidBoss } from "../../../helpers/raid-boss.helper";
-import { createAndSaveRaidPost } from "../../../helpers/raid-post.helper";
-import { createAndSaveRole } from "../../../helpers/role.helper";
-import { RaidPostMemoryUnitOfWork } from "../../../helpers/uows/raid-post.memory-unit-of-work";
-import { createAndSaveUser } from "../../../helpers/user.helper";
-import { addHours, subtractHours } from "./hours.util";
+import { createAndSaveItemRequirement } from "../../../common/item-requirement.helper";
+import { createAndSaveRaidBoss } from "../../../common/raid-boss.helper";
+import { createAndSaveRaidPost } from "../../../common/raid-post.helper";
+import { createAndSaveRole } from "../../../common/role.helper";
+import { RaidPostMemoryUnitOfWork } from "../../../common/uows/raid-post.memory-unit-of-work";
+import { createAndSaveUser } from "../../../common/user.helper";
+import { addHours, subtractHours } from "../../../common/hours.util";
 
 describe("RaidPost Service: update tests", () => {
   const uow = RaidPostMemoryUnitOfWork.create();

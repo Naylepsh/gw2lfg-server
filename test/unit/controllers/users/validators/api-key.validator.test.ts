@@ -1,7 +1,7 @@
 import Container from "typedi";
 import { checkApiKeyValidityServiceType } from "@loaders/typedi.constants";
 import { IsValidApiKey } from "@api/controllers/users/validators/api-key.validator";
-import { FakeApiKeyChecker } from "../../../../helpers/fake-api-key-checker";
+import { FakeApiKeyChecker } from "../../../../common/fake-api-key-checker";
 import { validate } from "class-validator";
 
 class ObjectWithApiKey {

@@ -8,8 +8,8 @@ import { CreateJwtService } from "@api/services/token/create";
 import { User } from "@root/data/entities/user/user.entity";
 import { IUserRepository } from "@data/repositories/user/user.repository.interface";
 import { RegisterService } from "@root/services/user/register.service";
-import { UserMemoryRepository } from "../../../helpers/repositories/user.memory-repository";
-import { AUTH_HEADER, toBearerToken } from "../../../helpers/to-bearer-token";
+import { UserMemoryRepository } from "../../../common/repositories/user.memory-repository";
+import { AUTH_HEADER, toBearerToken } from "../../../common/to-bearer-token";
 
 describe("MeController integration tests", () => {
   const url = "/me";

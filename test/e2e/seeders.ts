@@ -8,9 +8,9 @@ import { IRaidPostUnitOfWork } from "@data/units-of-work/raid-post/raid-post.uni
 import { raidBossRepositoryType } from "@loaders/typedi.constants";
 import request from "supertest";
 import Container from "typedi";
-import { addHours } from "../unit/services/raid-post/hours.util";
-import { getGw2ApiKey } from "../helpers/get-gw2-api-key";
-import { AUTH_HEADER, toBearerToken } from "../helpers/to-bearer-token";
+import { addHours } from "../common/hours.util";
+import { getGw2ApiKey } from "../common/get-gw2-api-key";
+import { AUTH_HEADER, toBearerToken } from "../common/to-bearer-token";
 
 interface IUser {
   username: string;

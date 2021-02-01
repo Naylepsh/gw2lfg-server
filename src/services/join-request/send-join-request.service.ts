@@ -19,7 +19,10 @@ import { SendJoinRequestDTO } from "./dtos/send-join-request.dto";
 import { RequirementsNotSatisfiedError } from "./errors/requirements-not-satisfied.error";
 import { MultipleRequestsForTheSameSpotError } from "./errors/multiple-requests-for-the-same-spot.error";
 import { SpotIsTakenError } from "./errors/spot-is-taken.error";
-import { RaidPost } from "@data/entities/raid-post/raid-post.entitity";
+import { User } from "@data/entities/user/user.entity";
+import { Post } from "@data/entities/post/post.entity";
+import { Role } from "@data/entities/role/role.entity";
+import { SignUpsTimeEndedError } from "./errors/signs-ups-time-ended.error";
 
 /*
 Service for creation of join requests.
@@ -47,28 +50,40 @@ export class SendJoinRequestService {
     ]);
     const role = post?.getRole(roleId);
 
-    // if any of the given ids of related object points to no object - throw a corresponding NotFound error
-    if (!user) {
-      throw new UserNotFoundError();
-    }
-    if (!post) {
-      throw new PostNotFoundError();
-    }
-    if (!role) {
-      throw new RoleNotFoundError();
-    }
-    // user cannot request the same spot twice
-    if (requests.map((req) => req.user.id).includes(userId)) {
-      throw new MultipleRequestsForTheSameSpotError();
-    }
-    // user cannot request a spot that is already taken by someone
-    if (
-      requests.map((req) => req.status).some((status) => status === "ACCEPTED")
-    ) {
-      throw new SpotIsTakenError();
-    }
+    await this.ensureJoinRequestCanBeCreated(user, post, role, requests);
 
-    // user has to satisfy post's requirements to join
+    const joinRequest = new JoinRequest({
+      user: user!,
+      post: post!,
+      role: role!,
+    });
+    return this.joinRequestRepo.save(joinRequest);
+  }
+
+  private async ensureJoinRequestCanBeCreated(
+    user: User | undefined,
+    post: Post | undefined,
+    role: Role | undefined,
+    requests: JoinRequest[]
+  ) {
+    this.ensureAllEntitiesWereFound(user, post, role);
+    await this.ensureUserCanTakeTheSpot(requests, user!, post!);
+  }
+
+  private async ensureUserCanTakeTheSpot(
+    requests: JoinRequest[],
+    user: User,
+    post: Post
+  ) {
+    if (post.date < new Date()) {
+      throw new SignUpsTimeEndedError();
+    }
+    this.ensureUserHasNotTakenTheSameSpot(requests, user);
+    this.ensureTheSpotIsNotTaken(requests);
+    await this.ensureUserMeetsRequirements(post, user);
+  }
+
+  private async ensureUserMeetsRequirements(post: Post, user: User) {
     const [
       areSatisfied,
     ] = await this.checkRequirementsService.areRequirementsSatisfied(
@@ -78,8 +93,39 @@ export class SendJoinRequestService {
     if (!areSatisfied) {
       throw new RequirementsNotSatisfiedError();
     }
+  }
 
-    const joinRequest = new JoinRequest({ user, post, role });
-    return this.joinRequestRepo.save(joinRequest);
+  private ensureTheSpotIsNotTaken(requests: JoinRequest[]) {
+    if (
+      requests.map((req) => req.status).some((status) => status === "ACCEPTED")
+    ) {
+      throw new SpotIsTakenError();
+    }
+  }
+
+  private ensureUserHasNotTakenTheSameSpot(
+    requests: JoinRequest[],
+    user: User
+  ) {
+    if (requests.map((req) => req.user.id).includes(user.id)) {
+      throw new MultipleRequestsForTheSameSpotError();
+    }
+  }
+
+  // if any of the given ids of related object points to no object - throw a corresponding NotFound error
+  private ensureAllEntitiesWereFound(
+    user: User | undefined,
+    post: Post | undefined,
+    role: Role | undefined
+  ) {
+    if (!user) {
+      throw new UserNotFoundError();
+    }
+    if (!post) {
+      throw new PostNotFoundError();
+    }
+    if (!role) {
+      throw new RoleNotFoundError();
+    }
   }
 }

@@ -8,7 +8,7 @@ import { User } from "@root/data/entities/user/user.entity";
 import { IUserRepository } from "@data/repositories/user/user.repository.interface";
 import { LoginService } from "@root/services/user/login.service";
 import { RegisterService } from "@root/services/user/register.service";
-import { UserMemoryRepository } from "../../../helpers/repositories/user.memory-repository";
+import { UserMemoryRepository } from "../../../common/repositories/user.memory-repository";
 
 describe("LoginUserController integration tests", () => {
   const url = "/login";
