@@ -21,13 +21,30 @@ export class FindRaidPostsController {
   async findAll(
     @QueryParams() query: FindRaidPostsQueryParams
   ): Promise<FindRaidPostsResponse> {
-    const now = new Date();
+    const whereParams = this.turnQueryIntoWhereParams(query);
+
     const { posts, hasMore } = await this.findService.find({
       ...query,
-      // searching for raid posts scheduled to happen in the future
-      whereParams: { minDate: now },
+      whereParams,
     });
 
     return { data: posts.map(mapRaidPostToRaidPostResponse), hasMore };
+  }
+
+  private turnQueryIntoWhereParams(query: FindRaidPostsQueryParams) {
+    const minDate = query.minDate ?? new Date();
+    const bossesIds = query.bossesIds?.split(",").map((id) => parseInt(id));
+    const authorId = query.authorId;
+    const role =
+      query.roleClass || query.roleName
+        ? {
+            class: query.roleClass,
+            name: query.roleName,
+          }
+        : undefined;
+
+    const whereParams = { minDate, bossesIds, authorId, role };
+
+    return whereParams;
   }
 }

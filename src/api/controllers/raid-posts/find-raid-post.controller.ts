@@ -1,5 +1,4 @@
 import {
-  CurrentUser,
   Get,
   InternalServerError,
   JsonController,
@@ -7,16 +6,9 @@ import {
   Param,
 } from "routing-controllers";
 import { Inject } from "typedi";
-import {
-  findRaidPostServiceType,
-  requirementsCheckServiceType,
-} from "@loaders/typedi.constants";
-import { ICheckRequirementsService } from "@services/requirement/check-requirements.service.interface";
+import { findRaidPostServiceType } from "@loaders/typedi.constants";
 import { FindRaidPostService } from "@services/raid-post/find-raid-post.service";
-import { User } from "@root/data/entities/user/user.entity";
 import { mapRaidPostToRaidPostResponse } from "../../responses/entities/raid-post.entity.response";
-import { unsatisfyEachRequirement } from "./utils/unsatisfy-each-requirement";
-import { checkIfUserMeetsPostsRequirements } from "./utils/check-if-user-meets-posts-requirements";
 import { FindRaidPostResponse } from "./responses/find-raid-post.response";
 import { EntityNotFoundError } from "@services/common/errors/entity-not-found.error";
 

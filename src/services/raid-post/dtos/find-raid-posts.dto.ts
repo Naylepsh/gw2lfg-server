@@ -10,5 +10,9 @@ export interface FindRaidPostsWhereParams {
   minDate?: Date;
   authorId?: number;
   bossesIds?: number[];
-  role?: Role;
+  role?: FindRaidPostsWhereRoleParams;
 }
+
+export type FindRaidPostsWhereRoleParams = Partial<
+  Pick<Role, "name" | "class">
+>;

@@ -7,10 +7,11 @@ import {
 import {
   FindRaidPostsDTO,
   FindRaidPostsWhereParams,
+  FindRaidPostsWhereRoleParams,
 } from "./dtos/find-raid-posts.dto";
 import { MoreThan } from "typeorm";
-import { RaidPost } from "../../data/entities/raid-post/raid-post.entitity";
-import { Role } from "../../data/entities/role/role.entity";
+import { RaidPost } from "@data/entities/raid-post/raid-post.entitity";
+import { Role } from "@data/entities/role/role.entity";
 
 /*
 Service for finding raid posts.
@@ -74,7 +75,10 @@ export class FindRaidPostsService {
     return filteredPosts;
   }
 
-  private filterPostsContainingGivenRole(posts: RaidPost[], role: Role) {
+  private filterPostsContainingGivenRole(
+    posts: RaidPost[],
+    role: FindRaidPostsWhereRoleParams
+  ) {
     posts = posts.filter((post) =>
       post.roles.some((postRole) => {
         // params are optional, thus undefined is a correct value

@@ -1,4 +1,12 @@
-import { IsInt, IsOptional, IsPositive, Min } from "class-validator";
+import {
+  IsDateString,
+  IsInt,
+  IsOptional,
+  IsPositive,
+  IsString,
+  Min,
+} from "class-validator";
+import { IsIdArray } from "../validators/id-array.validator";
 
 export class FindRaidPostsQueryParams {
   @IsOptional()
@@ -10,4 +18,25 @@ export class FindRaidPostsQueryParams {
   @IsInt()
   @Min(0)
   skip: number = 0;
+
+  @IsOptional()
+  @IsString()
+  @IsIdArray()
+  bossesIds?: string;
+
+  @IsOptional()
+  @IsInt()
+  authorId?: number;
+
+  @IsOptional()
+  @IsString()
+  roleName?: string;
+
+  @IsOptional()
+  @IsString()
+  roleClass?: string;
+
+  @IsOptional()
+  @IsDateString()
+  minDate?: Date;
 }
