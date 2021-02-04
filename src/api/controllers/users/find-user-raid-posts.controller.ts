@@ -18,7 +18,6 @@ import { FindRaidPostsResponse } from "../raid-posts/responses/find-raid-posts.r
 import { FindRaidPostsQueryParams } from "../raid-posts/params/find-raid-posts.query-params";
 import { unsatisfyEachRequirement } from "../raid-posts/utils/unsatisfy-each-requirement";
 import { checkIfUserMeetsPostsRequirements } from "../raid-posts/utils/check-if-user-meets-posts-requirements";
-import { MoreThan } from "typeorm";
 
 /*
 Controller for GET /users/:id/raid-posts requests.
@@ -44,7 +43,7 @@ export class FindUserRaidPostsController {
     const { posts, hasMore } = await this.findService.find({
       ...query,
       // searching for raid posts of given author scheduled to happen in the future
-      where: { date: MoreThan(now), author: { id: userId } },
+      whereParams: { minDate: now, authorId: userId },
     });
 
     // if user is not authenticated we say that they fail to meet the requirements

@@ -48,6 +48,7 @@ const database: ConnectionOptions = {
   database: parseEnvString("DATABASE_NAME"),
   username: parseEnvString("DATABASE_USERNAME"),
   password: parseEnvString("DATABASE_PASSWORD"),
+  logging: is_test ? ['error'] : false,
   synchronize: is_test,
   entities: [
     // .js needed for dev environment where code has been compiled to js

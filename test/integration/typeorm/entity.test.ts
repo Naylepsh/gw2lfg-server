@@ -103,4 +103,47 @@ describe("whatever", () => {
     expect(postFound).toBeDefined();
     expect(postFound).toHaveProperty("id", post.id);
   });
+
+  /* 
+  This won't work due to TypeORM not handling advanced options on repositories correctly.
+  For example: fooRepository.find({ where: { someManyToManyRel: <any-condition-here> }}) won't work.
+  In fact, similar thing happens with one-to-many relations.
+  */
+  // it("should find by id in array in nested many-to-many relation", async () => {
+  //   const bossRepo = conn.getRepository(RaidBoss);
+  //   const boss = await bossRepo.save({ name: "b", isCm: false });
+
+  //   const userRepo = conn.getRepository(User);
+  //   const user = await userRepo.save(
+  //     new User({ username: "u", password: "p", apiKey: "a" })
+  //   );
+
+  //   const roleRepo = conn.getRepository(Role);
+  //   const role = new Role({ name: "dps", class: "Any" });
+  //   await roleRepo.save(role);
+
+  //   const postRepo = conn.getRepository(RaidPost);
+  //   const post = new RaidPost({
+  //     date: new Date(),
+  //     server: "s",
+  //     author: user,
+  //     roles: [role],
+  //     bosses: [boss],
+  //   });
+  //   await postRepo.save(post);
+
+  //   const postFound = await postRepo.findOne({
+  //     relations: ["bosses", "roles"],
+  //     // where: { bosses: { id: boss.id } },
+  //     where: { bosses: { id: In([boss.id]) } },
+  //     // where: {
+  //     //   bosses: In([{ id: boss.id, name: boss.name, isCm: boss.isCm }]),
+  //     // },
+  //   });
+
+  //   console.log(postFound);
+
+  //   expect(postFound).toBeDefined();
+  //   expect(postFound).toHaveProperty("id", post.id);
+  // });
 });

@@ -1,23 +1,10 @@
-import {
-  CurrentUser,
-  Get,
-  JsonController,
-  QueryParams,
-} from "routing-controllers";
+import { Get, JsonController, QueryParams } from "routing-controllers";
 import { Inject } from "typedi";
-import { User } from "@root/data/entities/user/user.entity";
-import {
-  findRaidPostsServiceType,
-  requirementsCheckServiceType,
-} from "@loaders/typedi.constants";
+import { findRaidPostsServiceType } from "@loaders/typedi.constants";
 import { FindRaidPostsService } from "@root/services/raid-post/find-raid-posts.service";
-import { ICheckRequirementsService } from "@services/requirement/check-requirements.service.interface";
 import { mapRaidPostToRaidPostResponse } from "../../responses/entities/raid-post.entity.response";
 import { FindRaidPostsResponse } from "./responses/find-raid-posts.response";
 import { FindRaidPostsQueryParams } from "./params/find-raid-posts.query-params";
-import { unsatisfyEachRequirement } from "./utils/unsatisfy-each-requirement";
-import { checkIfUserMeetsPostsRequirements } from "./utils/check-if-user-meets-posts-requirements";
-import { MoreThan } from "typeorm";
 
 /*
 Controller for GET /raid-posts requests.
@@ -38,7 +25,7 @@ export class FindRaidPostsController {
     const { posts, hasMore } = await this.findService.find({
       ...query,
       // searching for raid posts scheduled to happen in the future
-      where: { date: MoreThan(now) },
+      whereParams: { minDate: now },
     });
 
     return { data: posts.map(mapRaidPostToRaidPostResponse), hasMore };
