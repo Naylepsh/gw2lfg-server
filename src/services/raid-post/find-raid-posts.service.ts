@@ -94,9 +94,15 @@ export class FindRaidPostsService {
   ) {
     return posts.filter((post) =>
       post.roles.some((postRole) => {
+        const isAny = (x: string) => x.toLowerCase() === "any";
+        const isAnyRole = isAny(postRole.name);
+        const isAnyClass = isAny(postRole.class);
+
         // params are optional, thus undefined is a correct value
-        const isCorrectName = [undefined, postRole.name].includes(role.name);
-        const isCorrectClass = [undefined, postRole.class].includes(role.class);
+        const isCorrectName =
+          isAnyRole || [undefined, postRole.name].includes(role.name);
+        const isCorrectClass =
+          isAnyClass || [undefined, postRole.class].includes(role.class);
         return isCorrectName && isCorrectClass;
       })
     );
