@@ -8,7 +8,9 @@ export interface FindRaidPostsDTO {
 
 export interface FindRaidPostsWhereParams {
   minDate?: Date;
+  server?: string
   authorId?: number;
+  authorName?: string
   bossesIds?: number[];
   role?: FindRaidPostsWhereRoleParams;
 }

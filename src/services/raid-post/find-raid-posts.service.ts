@@ -9,9 +9,8 @@ import {
   FindRaidPostsWhereParams,
   FindRaidPostsWhereRoleParams,
 } from "./dtos/find-raid-posts.dto";
-import { MoreThan } from "typeorm";
+import { Like, MoreThan } from "typeorm";
 import { RaidPost } from "@data/entities/raid-post/raid-post.entitity";
-import { Role } from "@data/entities/role/role.entity";
 
 /*
 Service for finding raid posts.
@@ -56,6 +55,13 @@ export class FindRaidPostsService {
   ) {
     let filteredPosts = [...posts];
 
+    if (whereParams?.authorName) {
+      filteredPosts = this.filterPostsOfGivenAuthorName(
+        filteredPosts,
+        whereParams.authorName
+      );
+    }
+
     // leave only posts which contain given bosses ids
     if (whereParams?.bossesIds) {
       filteredPosts = this.filterPostsContainingGivenBosses(
@@ -66,7 +72,7 @@ export class FindRaidPostsService {
 
     // leave only posts which contain given role
     if (whereParams?.role) {
-      posts = this.filterPostsContainingGivenRole(
+      filteredPosts = this.filterPostsContainingGivenRole(
         filteredPosts,
         whereParams.role
       );
@@ -75,11 +81,18 @@ export class FindRaidPostsService {
     return filteredPosts;
   }
 
+  private filterPostsOfGivenAuthorName(posts: RaidPost[], authorName: string) {
+    const loweredAuthorName = authorName.toLowerCase();
+    return posts.filter((post) =>
+      post.author.username.toLowerCase().includes(loweredAuthorName)
+    );
+  }
+
   private filterPostsContainingGivenRole(
     posts: RaidPost[],
     role: FindRaidPostsWhereRoleParams
   ) {
-    posts = posts.filter((post) =>
+    return posts.filter((post) =>
       post.roles.some((postRole) => {
         // params are optional, thus undefined is a correct value
         const isCorrectName = [undefined, postRole.name].includes(role.name);
@@ -87,20 +100,16 @@ export class FindRaidPostsService {
         return isCorrectName && isCorrectClass;
       })
     );
-
-    return posts;
   }
 
   private filterPostsContainingGivenBosses(
     posts: RaidPost[],
     bossesIds: number[]
   ) {
-    posts = posts.filter((post) => {
+    return posts.filter((post) => {
       const postBossesIds = post.bosses.map((boss) => boss.id);
       return bossesIds?.every((id) => postBossesIds.includes(id));
     });
-
-    return posts;
   }
 
   private paginate(posts: RaidPost[], skip: number, take: number) {
@@ -113,10 +122,14 @@ export class FindRaidPostsService {
 
   private createWhereQuery(params: FindRaidPostsWhereParams) {
     let where: any = {};
-    const { minDate, authorId } = params;
+    const { minDate, server, authorId } = params;
 
     if (minDate) {
       where.date = MoreThan(minDate);
+    }
+
+    if (server) {
+      where.server = Like(server);
     }
 
     if (authorId) {

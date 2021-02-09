@@ -30,6 +30,10 @@ export class FindRaidPostsQueryParams {
 
   @IsOptional()
   @IsString()
+  authorName?: string;
+
+  @IsOptional()
+  @IsString()
   roleName?: string;
 
   @IsOptional()
@@ -39,4 +43,8 @@ export class FindRaidPostsQueryParams {
   @IsOptional()
   @IsDateString()
   minDate?: Date;
+
+  @IsOptional()
+  @IsString()
+  server?: string;
 }

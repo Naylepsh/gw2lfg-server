@@ -33,8 +33,10 @@ export class FindRaidPostsController {
 
   private turnQueryIntoWhereParams(query: FindRaidPostsQueryParams) {
     const minDate = query.minDate ?? new Date();
+    const server = query.server;
     const bossesIds = query.bossesIds?.split(",").map((id) => parseInt(id));
     const authorId = query.authorId;
+    const authorName = query.authorName;
     const role =
       query.roleClass || query.roleName
         ? {
@@ -43,7 +45,14 @@ export class FindRaidPostsController {
           }
         : undefined;
 
-    const whereParams = { minDate, bossesIds, authorId, role };
+    const whereParams = {
+      minDate,
+      server,
+      bossesIds,
+      authorId,
+      authorName,
+      role,
+    };
 
     return whereParams;
   }
