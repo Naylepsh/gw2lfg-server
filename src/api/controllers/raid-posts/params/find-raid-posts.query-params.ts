@@ -42,7 +42,7 @@ export class FindRaidPostsQueryParams {
 
   @IsOptional()
   @IsDateString()
-  minDate?: Date;
+  minDate?: string;
 
   @IsOptional()
   @IsString()

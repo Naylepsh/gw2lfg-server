@@ -39,7 +39,7 @@ export class FindUserRaidPostsController {
     @Param("id") userId: number,
     @CurrentUser() user?: User
   ): Promise<FindRaidPostsResponse> {
-    const now = new Date();
+    const now = new Date().toISOString();
     const { posts, hasMore } = await this.findService.find({
       ...query,
       // searching for raid posts of given author scheduled to happen in the future
