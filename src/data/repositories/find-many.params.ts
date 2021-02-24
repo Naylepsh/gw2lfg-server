@@ -1,5 +1,6 @@
 export interface FindManyParams<Entity> {
   where?: any;
+  join?: any;
   take?: number;
   skip?: number;
   order?: {
