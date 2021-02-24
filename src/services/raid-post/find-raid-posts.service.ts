@@ -7,17 +7,13 @@ import {
 import {
   FindRaidPostsDTO,
   FindRaidPostsWhereParams,
-  FindRaidPostsWhereRoleParams,
 } from "./dtos/find-raid-posts.dto";
 import { Like, MoreThan } from "typeorm";
-import { RaidPost } from "@data/entities/raid-post/raid-post.entitity";
 
-/*
-Service for finding raid posts.
-Returns paginated results.
-Requires pagination params.
-Where query is optional.
-*/
+/**
+ * Service for finding raid posts.
+ * Returns paginated results.
+ */
 @Service(findRaidPostsServiceType)
 export class FindRaidPostsService {
   constructor(
@@ -27,121 +23,99 @@ export class FindRaidPostsService {
 
   async find(dto: FindRaidPostsDTO) {
     const { skip, take, whereParams } = dto;
-    const where = whereParams ? this.createWhereQuery(whereParams) : undefined;
+    const join = this.createJoinParams();
+    const where = whereParams
+      ? this.createWhereQueryBuilder(whereParams)
+      : undefined;
 
-    // const posts = await this.repository.findMany({
-    //   order: { date: "ASC" },
-    //   skip,
-    //   take: take + 1,
-    //   where,
-    // });
-
-    let posts = await this.repository.findMany({
-      order: { date: "ASC" },
+    const posts = await this.repository.findMany({
+      join,
       where,
+      skip,
+      take: take + 1,
     });
 
-    if (whereParams) {
-      posts = this.filterByRelationProperties(whereParams, posts);
-    }
-
-    // due to TypeORM not handling advanced filtering on relationships, pagination has to be done after data retrieval
-    return this.paginate(posts, skip, take);
+    return { posts: posts.slice(0, take), hasMore: posts.length === take + 1 };
   }
 
-  private filterByRelationProperties(
+  /**
+   * Creates join attributes required for proper query builder functioning
+   */
+  private createJoinParams() {
+    return {
+      alias: "post",
+      innerJoin: {
+        roles: "post.roles",
+        bosses: "post.bosses",
+        author: "post.author",
+      },
+    };
+  }
+
+  private createWhereQueryBuilder(whereParams: FindRaidPostsWhereParams) {
+    return (qb: any) => {
+      this.addQueryOnRaidPostProps(whereParams, qb);
+      this.addQueryOnAuthorProps(whereParams, qb);
+      this.addQueryOnRoleProps(whereParams, qb);
+      this.addQueryOnBossProps(whereParams, qb);
+    };
+  }
+
+  private addQueryOnRaidPostProps(
     whereParams: FindRaidPostsWhereParams,
-    posts: RaidPost[]
+    qb: any
   ) {
-    let filteredPosts = [...posts];
-
-    if (whereParams?.authorName) {
-      filteredPosts = this.filterPostsOfGivenAuthorName(
-        filteredPosts,
-        whereParams.authorName
-      );
-    }
-
-    // leave only posts which contain given bosses ids
-    if (whereParams?.bossesIds) {
-      filteredPosts = this.filterPostsContainingGivenBosses(
-        filteredPosts,
-        whereParams.bossesIds
-      );
-    }
-
-    // leave only posts which contain given role
-    if (whereParams?.role) {
-      filteredPosts = this.filterPostsContainingGivenRole(
-        filteredPosts,
-        whereParams.role
-      );
-    }
-
-    return filteredPosts;
-  }
-
-  private filterPostsOfGivenAuthorName(posts: RaidPost[], authorName: string) {
-    const loweredAuthorName = authorName.toLowerCase();
-    return posts.filter((post) =>
-      post.author.username.toLowerCase().includes(loweredAuthorName)
-    );
-  }
-
-  private filterPostsContainingGivenRole(
-    posts: RaidPost[],
-    role: FindRaidPostsWhereRoleParams
-  ) {
-    return posts.filter((post) =>
-      post.roles.some((postRole) => {
-        const isAny = (x: string) => x.toLowerCase() === "any";
-        const isAnyRole = isAny(postRole.name);
-        const isAnyClass = isAny(postRole.class);
-
-        // params are optional, thus undefined is a correct value
-        const isCorrectName =
-          isAnyRole || [undefined, postRole.name].includes(role.name);
-        const isCorrectClass =
-          isAnyClass || [undefined, postRole.class].includes(role.class);
-        return isCorrectName && isCorrectClass;
-      })
-    );
-  }
-
-  private filterPostsContainingGivenBosses(
-    posts: RaidPost[],
-    bossesIds: number[]
-  ) {
-    return posts.filter((post) => {
-      const postBossesIds = post.bosses.map((boss) => boss.id);
-      return bossesIds?.every((id) => postBossesIds.includes(id));
-    });
-  }
-
-  private paginate(posts: RaidPost[], skip: number, take: number) {
-    posts = posts.slice(skip, skip + take + 1);
-
-    return posts.length === 0
-      ? { posts, hasMore: false }
-      : { posts: posts.slice(0, take), hasMore: posts.length === take + 1 };
-  }
-
-  private createWhereQuery(params: FindRaidPostsWhereParams) {
-    let where: any = {};
-    const { minDate, server, authorId } = params;
+    const { minDate, server } = whereParams;
 
     if (minDate) {
-      where.date = MoreThan(minDate);
+      qb.andWhere({ date: MoreThan(minDate) });
     }
 
     if (server) {
-      where.server = Like(server);
+      qb.andWhere({ server: Like(server) });
     }
+  }
+
+  private addQueryOnAuthorProps(
+    whereParams: FindRaidPostsWhereParams,
+    qb: any
+  ) {
+    const { authorId, authorName } = whereParams;
 
     if (authorId) {
-      where.author = { id: authorId };
+      qb.andWhere("author.id = :authorId", { authorId });
     }
 
-    return where;
+    if (authorName) {
+      qb.andWhere("author.username = :authorName", { authorName });
+    }
+  }
+
+  private addQueryOnRoleProps(whereParams: FindRaidPostsWhereParams, qb: any) {
+    const { role } = whereParams;
+
+    if (role?.name) {
+      qb.andWhere(
+        "LOWER(roles.name) = LOWER(:roleName) OR LOWER(roles.name) = 'any'",
+        { roleName: role.name }
+      );
+    }
+
+    if (role?.class) {
+      qb.andWhere(
+        "LOWER(roles.class) = LOWER(:roleClass) OR LOWER(roles.class) = 'any'",
+        { roleClass: role.class }
+      );
+    }
+  }
+
+  private addQueryOnBossProps(whereParams: FindRaidPostsWhereParams, qb: any) {
+    const { bossesIds } = whereParams;
+
+    if (bossesIds) {
+      for (const bossId of bossesIds) {
+        qb.andWhere("bosses.id = :bossId", { bossId });
+      }
+    }
   }
 }

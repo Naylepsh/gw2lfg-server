@@ -4,7 +4,6 @@ import { RaidPost } from "@root/data/entities/raid-post/raid-post.entitity";
 import { Role } from "@root/data/entities/role/role.entity";
 import { User } from "@root/data/entities/user/user.entity";
 import { loadTypeORM } from "@loaders/typeorm.loader";
-import { Post } from "@data/entities/post/post.entity";
 
 describe("whatever", () => {
   let conn: Connection;
@@ -128,7 +127,7 @@ describe("whatever", () => {
     });
     await postRepo.save(post);
 
-    const postFound = await conn.getRepository(RaidPost).findOne({
+    const postFound = await postRepo.findOne({
       relations: ["bosses", "roles"],
       join: {
         alias: "post",
