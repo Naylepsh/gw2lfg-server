@@ -105,11 +105,6 @@ describe("whatever", () => {
     expect(postFound).toHaveProperty("id", post.id);
   });
 
-  /* 
-  This won't work due to TypeORM not handling advanced options on repositories correctly.
-  For example: fooRepository.find({ where: { someManyToManyRel: <any-condition-here> }}) won't work.
-  In fact, similar thing happens with one-to-many relations.
-  */
   it("should find by id in array in nested many-to-many relation", async () => {
     const bossRepo = conn.getRepository(RaidBoss);
     const boss = await bossRepo.save({ name: "b", isCm: false });
