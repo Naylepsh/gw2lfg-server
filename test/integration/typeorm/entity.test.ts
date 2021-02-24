@@ -134,15 +134,14 @@ describe("whatever", () => {
     await postRepo.save(post);
 
     const postFound = await conn.getRepository(RaidPost).findOne({
-      // relations: ["bosses", "roles"],
-      relations: ["roles"],
+      relations: ["bosses", "roles"],
       join: {
         alias: "post",
-        innerJoin: { roles: "post.roles" },
+        innerJoin: { roles: "post.roles", bosses: "post.bosses" },
       },
       where: (qb: any) => {
-        qb.where({ server: "s" }).andWhere("roles.name = :roleName", {
-          roleName: "dps",
+        qb.where({ server: "s" }).andWhere("bosses.name = :bossName", {
+          bossName: "b",
         });
       },
       // where: { roles: { name: "dps" } },
