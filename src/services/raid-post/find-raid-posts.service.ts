@@ -45,7 +45,7 @@ export class FindRaidPostsService {
     const alias = "post";
     let leftJoin: Record<string, string> = {};
 
-    if (whereParams.authorId || whereParams.authorName) {
+    if (whereParams.author) {
       leftJoin.author = `${alias}.author`;
     }
 
@@ -88,7 +88,8 @@ export class FindRaidPostsService {
     whereParams: FindRaidPostsWhereParams,
     qb: any
   ) {
-    const { authorId, authorName } = whereParams;
+    const { author } = whereParams;
+    const { id: authorId, name: authorName } = author!;
 
     if (authorId) {
       qb.andWhere("author.id = :authorId", { authorId });

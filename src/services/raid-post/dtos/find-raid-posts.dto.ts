@@ -9,10 +9,14 @@ export interface FindRaidPostsDTO {
 export interface FindRaidPostsWhereParams {
   minDate?: string;
   server?: string;
-  authorId?: number;
-  authorName?: string;
   bossesIds?: number[];
+  author?: FindRaidPostsWhereAuthorParams;
   role?: FindRaidPostsWhereRoleParams;
+}
+
+export interface FindRaidPostsWhereAuthorParams {
+  id?: number;
+  name?: string;
 }
 
 export type FindRaidPostsWhereRoleParams = Partial<

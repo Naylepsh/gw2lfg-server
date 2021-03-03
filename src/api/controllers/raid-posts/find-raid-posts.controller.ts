@@ -5,6 +5,7 @@ import { FindRaidPostsService } from "@root/services/raid-post/find-raid-posts.s
 import { mapRaidPostToRaidPostResponse } from "../../responses/entities/raid-post.entity.response";
 import { FindRaidPostsResponse } from "./responses/find-raid-posts.response";
 import { FindRaidPostsQueryParams } from "./params/find-raid-posts.query-params";
+import { FindRaidPostsWhereParams } from "../../../services/raid-post/dtos/find-raid-posts.dto";
 
 /*
 Controller for GET /raid-posts requests.
@@ -32,11 +33,13 @@ export class FindRaidPostsController {
   }
 
   private turnQueryIntoWhereParams(query: FindRaidPostsQueryParams) {
-    const minDate = query.minDate ?? new Date().toISOString();
     const server = query.server;
+    const minDate = query.minDate ?? new Date().toISOString();
     const bossesIds = query.bossesIds?.split(",").map((id) => parseInt(id));
-    const authorId = query.authorId;
-    const authorName = query.authorName;
+    const author =
+      query.authorId || query.authorName
+        ? { id: query.authorId, name: query.authorName }
+        : undefined;
     const role =
       query.roleClass || query.roleName
         ? {
@@ -45,12 +48,11 @@ export class FindRaidPostsController {
           }
         : undefined;
 
-    const whereParams = {
+    const whereParams: FindRaidPostsWhereParams = {
       minDate,
       server,
       bossesIds,
-      authorId,
-      authorName,
+      author,
       role,
     };
 

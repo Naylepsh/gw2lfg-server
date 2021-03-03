@@ -43,7 +43,7 @@ export class FindUserRaidPostsController {
     const { posts, hasMore } = await this.findService.find({
       ...query,
       // searching for raid posts of given author scheduled to happen in the future
-      whereParams: { minDate: now, authorId: userId },
+      whereParams: { minDate: now, author: { id: userId } },
     });
 
     // if user is not authenticated we say that they fail to meet the requirements
