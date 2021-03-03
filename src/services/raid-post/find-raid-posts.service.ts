@@ -23,7 +23,7 @@ export class FindRaidPostsService {
 
   async find(dto: FindRaidPostsDTO) {
     const { skip, take, whereParams } = dto;
-    const join = this.createJoinParams();
+    const join = whereParams ? this.createJoinParams(whereParams) : undefined;
     const where = whereParams
       ? this.createWhereQueryBuilder(whereParams)
       : undefined;
@@ -41,15 +41,23 @@ export class FindRaidPostsService {
   /**
    * Creates join attributes required for proper query builder functioning
    */
-  private createJoinParams() {
-    return {
-      alias: "post",
-      innerJoin: {
-        roles: "post.roles",
-        bosses: "post.bosses",
-        author: "post.author",
-      },
-    };
+  private createJoinParams(whereParams: FindRaidPostsWhereParams) {
+    const alias = "post";
+    let leftJoin: Record<string, string> = {};
+
+    if (whereParams.authorId || whereParams.authorName) {
+      leftJoin.author = `${alias}.author`;
+    }
+
+    if (whereParams.role) {
+      leftJoin.roles = `${alias}.roles`;
+    }
+
+    if (whereParams.bossesIds) {
+      leftJoin.bosses = `${alias}.bosses`;
+    }
+
+    return { alias, leftJoin };
   }
 
   private createWhereQueryBuilder(whereParams: FindRaidPostsWhereParams) {
