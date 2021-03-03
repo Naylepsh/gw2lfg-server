@@ -138,15 +138,7 @@ describe("whatever", () => {
           bossName: "b",
         });
       },
-      // where: { roles: { name: "dps" } },
-      // where: { bosses: { id: boss.id } },
-      // where: { bosses: { id: In([boss.id]) } },
-      // where: {
-      //   bosses: In([{ id: boss.id, name: boss.name, isCm: boss.isCm }]),
-      // },
     });
-
-    console.log(postFound);
 
     expect(postFound).toBeDefined();
     expect(postFound).toHaveProperty("id", post.id);
