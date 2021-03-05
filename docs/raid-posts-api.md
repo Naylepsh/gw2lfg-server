@@ -26,6 +26,18 @@ Returns json data about multiple raid posts.
 
   `take:[positive-integer]`
 
+  `minDate:[date-string]`
+
+  `server:[string]`
+
+  `bossesIds:[array-of-positive-integers-separated-by-commas]`
+
+  `authorId:[positive-integer]`
+
+  `roleName:[string]`
+
+  `roleClass:[string]`
+
 - **Data Params**
 
   None
@@ -48,6 +60,16 @@ Returns json data about multiple raid posts.
             {
               id: 1,
               name: "Vale Guardian",
+              isCm: false,
+            },
+            {
+              id: 2,
+              name: "Gorseval",
+              isCm: false,
+            },
+            {
+              id: 3,
+              name: "Sabetha",
               isCm: false,
             },
           ],
@@ -125,7 +147,16 @@ Returns json data about multiple raid posts.
 - **Sample Call:**
 
   ```javascript
-  axios.get("/raid-posts?skip=1&take=1");
+  const queryParams = [
+    "skip=1",
+    "take=1",
+    "authorId=1",
+    "authorName=username1",
+    "bossesIds=1,2,3",
+    "roleName=dps",
+    "roleClass=scrapper",
+  ];
+  axios.get(`/raid-posts?${queryParams.join("&")}`);
   ```
 
 ## Create Raid Post
