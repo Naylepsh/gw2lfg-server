@@ -12,7 +12,6 @@ export class PostRepository
   private static relations = ["author", "requirements", "roles"];
 
   findById(id: number): Promise<Post | undefined> {
-    // find post with matching id and populate relations
     return super.findById(id, PostRepository.relations);
   }
 }

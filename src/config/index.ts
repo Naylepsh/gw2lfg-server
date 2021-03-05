@@ -8,28 +8,28 @@ const is_test = env === "test";
 const pathToConfigFile = path.join(__dirname, `../../.env.${env}`);
 dotenv.config({ path: pathToConfigFile });
 
-/*
-Finds the env variable of string type or throws if one could not be found
-*/
+/**
+ * Finds the env variable of string type or throws if one could not be found
+ */
 const parseEnvString = (name: string) => {
-  const env = process.env[name];
-  if (env === undefined) {
+  const envVar = process.env[name];
+  if (envVar === undefined) {
     throw new Error(`Missing environment variable for ${name}`);
   }
 
-  return env;
+  return envVar;
 };
 
-/*
-Finds the env variable of number type or throws if one could not be found
-*/
+/**
+ * Finds the env variable of number type or throws if one could not be found
+ */
 const parseEnvNumber = (name: string) => {
-  const env = parseInt(parseEnvString(name));
-  if (isNaN(env)) {
+  const envVar = parseInt(parseEnvString(name));
+  if (isNaN(envVar)) {
     throw new Error(`Bad environment variable for ${name}: Not a Number`);
   }
 
-  return env;
+  return envVar;
 };
 
 interface ConfigProperties {
@@ -38,9 +38,9 @@ interface ConfigProperties {
   port: number;
 }
 
-/*
-Connection options needed for TypeORM
-*/
+/**
+ * Connection options needed for TypeORM
+ */
 const database: ConnectionOptions = {
   type: "postgres",
   host: parseEnvString("DATABASE_HOST"),
@@ -48,7 +48,7 @@ const database: ConnectionOptions = {
   database: parseEnvString("DATABASE_NAME"),
   username: parseEnvString("DATABASE_USERNAME"),
   password: parseEnvString("DATABASE_PASSWORD"),
-  logging: is_test ? ['error'] : false,
+  logging: is_test ? ["error"] : false,
   synchronize: is_test,
   entities: [
     // .js needed for dev environment where code has been compiled to js
@@ -67,9 +67,9 @@ interface JwtOptions {
   };
 }
 
-/*
-JWT options for authentication
-*/
+/**
+ * JWT options for authentication
+ */
 const jwt: JwtOptions = {
   secret: parseEnvString("JWT_SECRET"),
   options: {
@@ -77,9 +77,9 @@ const jwt: JwtOptions = {
   },
 };
 
-/*
-Server port
-*/
+/**
+ * Server port
+ */
 const port = parseEnvNumber("PORT");
 
 export const config: ConfigProperties = {

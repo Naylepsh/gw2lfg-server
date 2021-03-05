@@ -13,7 +13,6 @@ export class RaidPostRepository
   private static relations = ["author", "requirements", "bosses", "roles"];
 
   findMany(params: FindManyParams<RaidPost>) {
-    // find raid posts matching params and populate relations
     return super.findMany({
       ...params,
       relations: RaidPostRepository.relations,
@@ -24,7 +23,6 @@ export class RaidPostRepository
     id: number,
     relations: string[] = RaidPostRepository.relations
   ): Promise<RaidPost | undefined> {
-    // find raid post with matching id and populate relations
     return super.findById(id, relations);
   }
 }

@@ -11,9 +11,9 @@ function isInteger(str: string) {
   return x !== Infinity && String(x) === str && x >= 0;
 }
 
-/*
-Custom validation constraint for checking whether given string is an array of ids
-*/
+/**
+ * Custom validation constraint for checking whether given string is an array of ids
+ */
 @ValidatorConstraint({ async: true })
 export class IsIdArrayConstraint implements ValidatorConstraintInterface {
   validate(str: string, _args: ValidationArguments) {
@@ -25,10 +25,10 @@ export class IsIdArrayConstraint implements ValidatorConstraintInterface {
   }
 }
 
-/*
-Custom validation decorator to be used with class-validator.
-Uses custom IsValidApiKeyConstraint to check whether given string is an array of ids
-*/
+/**
+ * Custom validation decorator to be used with class-validator.
+ * Uses custom IsValidApiKeyConstraint to check whether given string is an array of ids
+ */
 export function IsIdArray(validationOptions?: ValidationOptions) {
   return function (object: Object, propertyName: string) {
     registerDecorator({

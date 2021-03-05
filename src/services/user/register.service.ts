@@ -5,9 +5,9 @@ import { IUserRepository } from "@data/repositories/user/user.repository.interfa
 import { userRepositoryType } from "@loaders/typedi.constants";
 import { UsernameTakenError } from "./errors/username-taken.error";
 
-/*
-Service for creating new users.
-*/
+/**
+ * Service for creating new users.
+ */
 @Service()
 export class RegisterService {
   constructor(

@@ -16,12 +16,12 @@ import { SendJoinRequestResponse } from "./responses/send-join-request.response"
 import { UpdateJoinRequestDTO } from "./dtos/update-join-request.dto";
 import { mapJoinRequestToJoinRequestResponse } from "../../responses/entities/join-request.entity.response";
 
-/*
-Controller for PUT /join-requests/:id requests.
-Updates the status of a post with given id.
-Status can be changed only by the post's author that the request points to.
-User has to be authenticated to use this route.
-*/
+/**
+ * Controller for PUT /join-requests/:id requests.
+ * Updates the status of a post with given id.
+ * Status can be changed only by the post's author that the request points to.
+ * User has to be authenticated to use this route.
+ */
 @JsonController()
 export class UpdateJoinRequestController {
   constructor(

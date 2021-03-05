@@ -5,9 +5,9 @@ import { loadServer } from "./server.loader";
 import Container from "typedi";
 import { loadTasks } from "./task.loader";
 
-/*
-Loads orm, dependency injection service and the server
-*/
+/**
+ * Loads orm, dependency injection service and the server
+ */
 export async function loadDependencies() {
   await loadTypeORM();
 

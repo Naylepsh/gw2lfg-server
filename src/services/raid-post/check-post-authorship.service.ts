@@ -4,10 +4,10 @@ import { raidPostRepositoryType } from "@loaders/typedi.constants";
 import { EntityNotFoundError } from "../common/errors/entity-not-found.error";
 import { CheckPostAuthorshipDTO } from "./dtos/check-post-authorship.dto";
 
-/*
-Service for checking authorship of a post.
-Throws an error if the post could not be found.
-*/
+/**
+ * Service for checking authorship of a post.
+ * Throws an error if the post could not be found.
+ */
 @Service()
 export class CheckPostAuthorshipService {
   constructor(

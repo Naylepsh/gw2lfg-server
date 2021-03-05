@@ -7,9 +7,9 @@ import {
 } from "class-validator";
 import { JoinRequestStatus } from "@data/entities/join-request/join-request.status";
 
-/*
-Custom validation constraint for checking whether given GW2 API key is valid
-*/
+/**
+ * Custom validation constraint for checking whether given status is a valid join request status
+ */
 @ValidatorConstraint()
 export class IsValidJoinRequestStatusConstraint
   implements ValidatorConstraintInterface {
@@ -23,10 +23,10 @@ export class IsValidJoinRequestStatusConstraint
   }
 }
 
-/*
-Custom validation decorator to be used with class-validator.
-Uses custom IsValidJoinRequestStatus to check status validity.
-*/
+/**
+ * Custom validation decorator to be used with class-validator.
+ * Uses custom IsValidJoinRequestStatus to check status validity.
+ */
 export function IsValidJoinRequestStatus(
   validationOptions?: ValidationOptions
 ) {

@@ -12,10 +12,10 @@ import { mapRaidPostToRaidPostResponse } from "../../responses/entities/raid-pos
 import { FindRaidPostResponse } from "./responses/find-raid-post.response";
 import { EntityNotFoundError } from "@services/common/errors/entity-not-found.error";
 
-/*
-Controller for GET /raid-posts/:id requests.
-Returns a post with matching id or throws 404 if post could not be found.
-*/
+/**
+ * Controller for GET /raid-posts/:id requests.
+ * Returns a post with matching id or throws 404 if post could not be found.
+ */
 @JsonController()
 export class FindRaidPostController {
   constructor(

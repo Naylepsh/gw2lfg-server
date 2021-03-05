@@ -10,10 +10,10 @@ import { EntityNotFoundError } from "@services/common/errors/entity-not-found.er
 import { FindJoinRequestResponse } from "./responses/find-join-request.response";
 import { mapJoinRequestToJoinRequestResponse } from "../../responses/entities/join-request.entity.response";
 
-/*
-Controller for GET /join-request/:id requests.
-Returns a join request with matching id.
-*/
+/**
+ * Controller for GET /join-request/:id requests.
+ * Returns a join request with matching id.
+ */
 @JsonController()
 export class FindJoinRequestController {
   constructor(private readonly joinRequestService: FindJoinRequestService) {}

@@ -1,5 +1,5 @@
 import "reflect-metadata";
-import { Action, createExpressServer, useContainer } from "routing-controllers";
+import { createExpressServer, useContainer } from "routing-controllers";
 import request from "supertest";
 import Container from "typedi";
 import { RaidPostMemoryUnitOfWork } from "../../../common/uows/raid-post.memory-unit-of-work";

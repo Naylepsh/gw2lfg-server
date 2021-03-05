@@ -11,9 +11,9 @@ import { FindUserItemsService } from "../user/find-user-items.service";
 import { RaidPost } from "@data/entities/raid-post/raid-post.entitity";
 import { ItemRequirement } from "@data/entities/item-requirement/item.requirement.entity";
 
-/*
-Service for checking whether given requirements are satisfied by given user.
-*/
+/**
+ * Service for checking whether given requirements are satisfied by given user.
+ */
 @Service(requirementsCheckServiceType)
 export class CheckItemRequirementsService implements ICheckRequirementsService {
   constructor(
@@ -35,7 +35,6 @@ export class CheckItemRequirementsService implements ICheckRequirementsService {
   }
 
   areItemRequirementsSatisfied(requirements: Requirement[], userItems: Item[]) {
-    // get items requirements
     const requiredItems = requirements.filter(
       (req) => req instanceof ItemRequirement
     ) as ItemRequirement[];

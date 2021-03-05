@@ -4,9 +4,9 @@ import { joinRequestRepositoryType } from "@loaders/typedi.constants";
 import { EntityNotFoundError } from "../common/errors/entity-not-found.error";
 import { UpdateJoinRequestStatusDTO } from "./dtos/update-join-request-status.dto";
 
-/*
-Service for updating the status of join requests.
-*/
+/**
+ * Service for updating the status of join requests.
+ */
 @Service()
 export class UpdateJoinRequestStatusService {
   constructor(

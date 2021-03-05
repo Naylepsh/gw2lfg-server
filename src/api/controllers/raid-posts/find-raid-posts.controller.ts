@@ -7,10 +7,10 @@ import { FindRaidPostsResponse } from "./responses/find-raid-posts.response";
 import { FindRaidPostsQueryParams } from "./params/find-raid-posts.query-params";
 import { FindRaidPostsWhereParams } from "../../../services/raid-post/dtos/find-raid-posts.dto";
 
-/*
-Controller for GET /raid-posts requests.
-Returns paginated posts according to query params (skip and take) which are scheduled to happen in the future.
-*/
+/**
+ * Controller for GET /raid-posts requests.
+ * Returns paginated posts according to query params (skip and take) which are scheduled to happen in the future.
+ */
 @JsonController()
 export class FindRaidPostsController {
   constructor(

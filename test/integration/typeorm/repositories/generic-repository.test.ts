@@ -3,10 +3,10 @@ import { User } from "@root/data/entities/user/user.entity";
 import { loadTypeORM } from "@loaders/typeorm.loader";
 import { UserRepository } from "@data/repositories/user/user.repository";
 
-/*
-  It's not possible to call GenericRepository by itself, 
-  hence why testing on UserRepository which inherits from GenericRepository
-*/
+/**
+ * It's not possible to call GenericRepository by itself,
+ * hence why testing on UserRepository which inherits from GenericRepository
+ */
 describe("Generic Repository Tests", () => {
   let connection: Connection;
 

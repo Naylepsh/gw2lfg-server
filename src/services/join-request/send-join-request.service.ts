@@ -24,10 +24,10 @@ import { Post } from "@data/entities/post/post.entity";
 import { Role } from "@data/entities/role/role.entity";
 import { SignUpsTimeEndedError } from "./errors/signs-ups-time-ended.error";
 
-/*
-Service for creation of join requests.
-Checks whether given join request is valid and if so, stores it in database.
-*/
+/**
+ * Service for creation of join requests.
+ * Checks whether given join request is valid and if so, stores it in database.
+ */
 @Service()
 export class SendJoinRequestService {
   constructor(

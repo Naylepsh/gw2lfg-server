@@ -9,10 +9,10 @@ import { isDateInThePast } from "./utils/is-date-in-the-past";
 import { DateIsInThePastError } from "./errors/date-is-in-the-past.error";
 import { PublishRaidPostDTO } from "./dtos/publish-raid-post.dto";
 
-/*
-Service for raid post creation.
-Creates and saves a given raid post if it contains valid data.
-*/
+/**
+ * Service for raid post creation.
+ * Creates and saves a given raid post if it contains valid data.
+ */
 @Service()
 export class PublishRaidPostService {
   constructor(

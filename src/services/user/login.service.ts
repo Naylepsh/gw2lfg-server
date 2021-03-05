@@ -5,17 +5,19 @@ import { userRepositoryType } from "@loaders/typedi.constants";
 import { loginDTO } from "./dtos/login.dto";
 import { InvalidLoginDetailsError } from "./errors/invalid-login-details.error";
 
-/*
-Service for loging in user.
-*/
+/**
+ * Service for loging in user.
+ */
 @Service()
 export class LoginService {
   constructor(
     @Inject(userRepositoryType) private readonly userRepository: IUserRepository
   ) {}
 
-  // checks whether given username and password match with any database users
-  // returns the user on success
+  /**
+   * Checks whether given username and password match with any database users
+   * returns the user on success
+   */
   async login(loginDto: loginDTO) {
     const user = await this.userRepository.findByUsername(loginDto.username);
     if (!user) throw new InvalidLoginDetailsError();

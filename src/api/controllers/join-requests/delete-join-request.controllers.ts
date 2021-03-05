@@ -13,13 +13,13 @@ import { EntityNotFoundError } from "@services/common/errors/entity-not-found.er
 import { CheckJoinRequestDeletionPermissionService } from "@services/join-request/check-join-request-deletion-permission.service";
 import { DeleteJoinRequestService } from "@services/join-request/delete-raid-post.service";
 
-/*
-Controller for DELETE /join-requests/:id requests.
-Deletes a post with given id.
-Join request can be deleted by either it's author (cancelling the request)
-or by the author of the post that join request points to (rejecting the request).
-User has to be authenticated to use this route.
-*/
+/**
+ * Controller for DELETE /join-requests/:id requests.
+ * Deletes a post with given id.
+ * Join request can be deleted by either it's author (cancelling the request)
+ * or by the author of the post that join request points to (rejecting the request).
+ * User has to be authenticated to use this route.
+ */
 @JsonController()
 export class DeleteJoinRequestController {
   constructor(

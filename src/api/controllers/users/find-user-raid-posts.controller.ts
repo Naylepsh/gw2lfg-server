@@ -19,11 +19,11 @@ import { FindRaidPostsQueryParams } from "../raid-posts/params/find-raid-posts.q
 import { unsatisfyEachRequirement } from "../raid-posts/utils/unsatisfy-each-requirement";
 import { checkIfUserMeetsPostsRequirements } from "../raid-posts/utils/check-if-user-meets-posts-requirements";
 
-/*
-Controller for GET /users/:id/raid-posts requests.
-Returns paginated posts of given user according to query params (skip and take) which are scheduled to happen in the future.
-Providing user token will check whether that user meets the posts'requirements to join but it's not required.
-*/
+/**
+ * Controller for GET /users/:id/raid-posts requests.
+ * Returns paginated posts of given user according to query params (skip and take) which are scheduled to happen in the future.
+ * Providing user token will check whether that user meets the posts'requirements to join but it's not required.
+ */
 @JsonController()
 export class FindUserRaidPostsController {
   constructor(
@@ -46,8 +46,10 @@ export class FindUserRaidPostsController {
       whereParams: { minDate: now, author: { id: userId } },
     });
 
-    // if user is not authenticated we say that they fail to meet the requirements
-    // otherwise we properly check
+    /**
+     * If user is not authenticated we say that they fail to meet the requirements
+     * otherwise we properly check
+     */
     const _posts = user
       ? await checkIfUserMeetsPostsRequirements(
           posts,

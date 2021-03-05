@@ -12,9 +12,9 @@ const env = process.env.NODE_ENV || "dev";
 const pathToConfigFile = path.join(__dirname, `../../.env.${env}`);
 dotenv.config({ path: pathToConfigFile });
 
-/*
-Script that seeds the database with raid bosses
-*/
+/**
+ * Script that seeds the database with raid bosses
+ */
 const main = async () => {
   await loadTypeORM();
   const conn = getConnection();
@@ -30,9 +30,9 @@ const main = async () => {
   console.log(`Added ${missingBosses.length} bosses.`);
 };
 
-/*
-Checks which bosses are missing from the given array
-*/
+/**
+ * Checks which bosses are missing from the given array
+ */
 const addMissingBosses = (raidBossesInDb: RaidBoss[]) => {
   const encounters: RaidBoss[] = [];
 
@@ -41,8 +41,10 @@ const addMissingBosses = (raidBossesInDb: RaidBoss[]) => {
       const raidBoss = new RaidBoss({ name: encounter.name, isCm: false });
       addBossIfNeeded(raidBossesInDb, raidBoss, encounters);
 
-      // we treat raid boss with normal mode and the same raid boss but with challenge mode enabled
-      // as different entities
+      /**
+       * We treat raid boss with normal mode and the same raid boss but with challenge mode enabled
+       * as different entities
+       */
       if (encounter.hasCm) {
         const raidBoss = new RaidBoss({ name: encounter.name, isCm: true });
         addBossIfNeeded(raidBossesInDb, raidBoss, encounters);
@@ -53,9 +55,9 @@ const addMissingBosses = (raidBossesInDb: RaidBoss[]) => {
   return encounters;
 };
 
-/*
-If raidBossesInDb does not contain raidBoss, puts it in encounters
-*/
+/**
+ * If raidBossesInDb does not contain raidBoss, puts it in encounters
+ */
 const addBossIfNeeded = (
   raidBossesInDb: RaidBoss[],
   raidBoss: RaidBoss,

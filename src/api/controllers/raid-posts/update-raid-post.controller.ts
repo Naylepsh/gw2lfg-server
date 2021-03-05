@@ -16,13 +16,13 @@ import { SaveRaidPostDTO } from "./dtos/save-raid-post.dto";
 import { mapRaidPostToRaidPostResponse } from "../../responses/entities/raid-post.entity.response";
 import { UpdateRaidPostResponse } from "./responses/update-raid-post.response";
 
-/*
-Controller for PUT /raid-posts/:id requests.
-Takes post props and overrides the post that has the same id.
-Throws 404 if post was not found.
-Returns created resource.
-User has to be both authenticated and the post's author to use.
-*/
+/**
+ * Controller for PUT /raid-posts/:id requests.
+ * Takes post props and overrides the post that has the same id.
+ * Throws 404 if post was not found.
+ * Returns created resource.
+ * User has to be both authenticated and the post's author to use.
+ */
 @JsonController()
 export class UpdateRaidPostController {
   constructor(

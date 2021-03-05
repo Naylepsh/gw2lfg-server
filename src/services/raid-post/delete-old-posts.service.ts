@@ -3,9 +3,9 @@ import { IRaidPostUnitOfWork } from "@data/units-of-work/raid-post/raid-post.uni
 import { raidPostUnitOfWorkType } from "@loaders/typedi.constants";
 import { In, LessThanOrEqual } from "typeorm";
 
-/*
-Service for deletion of raid posts which scheduled date is in the past
-*/
+/**
+ * Service for deletion of raid posts which scheduled date is in the past
+ */
 @Service()
 export class DeleteOldPostsService {
   constructor(
