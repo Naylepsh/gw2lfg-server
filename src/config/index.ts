@@ -32,10 +32,14 @@ const parseEnvNumber = (name: string) => {
   return envVar;
 };
 
-interface ConfigProperties {
-  database: ConnectionOptions;
+interface ServerOptions {
   jwt: JwtOptions;
   port: number;
+}
+
+interface ConfigOptions {
+  database: ConnectionOptions;
+  server: ServerOptions;
 }
 
 /**
@@ -68,7 +72,7 @@ interface JwtOptions {
 }
 
 /**
- * JWT options for authentication
+ * JWT auth options
  */
 const jwt: JwtOptions = {
   secret: parseEnvString("JWT_SECRET"),
@@ -77,13 +81,11 @@ const jwt: JwtOptions = {
   },
 };
 
-/**
- * Server port
- */
 const port = parseEnvNumber("PORT");
 
-export const config: ConfigProperties = {
+const server = { jwt, port };
+
+export const config: ConfigOptions = {
   database,
-  jwt,
-  port,
+  server,
 };
