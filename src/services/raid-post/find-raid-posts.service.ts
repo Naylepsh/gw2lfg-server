@@ -89,14 +89,15 @@ export class FindRaidPostsService {
     qb: any
   ) {
     const { author } = whereParams;
-    const { id: authorId, name: authorName } = author!;
+    const id = author?.id;
+    const name = author?.name;
 
-    if (authorId) {
-      qb.andWhere("author.id = :authorId", { authorId });
+    if (id) {
+      qb.andWhere("author.id = :id", { id });
     }
 
-    if (authorName) {
-      qb.andWhere("author.username = :authorName", { authorName });
+    if (name) {
+      qb.andWhere("author.username = :name", { name });
     }
   }
 
