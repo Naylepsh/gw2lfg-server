@@ -32,12 +32,25 @@ export const loadTypeDI = () => {
  * TypeDI knows what implementation to use when encountered an interface
  */
 const loadDataLayerDependencies = () => {
-  const { repositories: repos, unitsOfWork: uows } = data;
-
   const conn = getConnection();
+
   Container.set(Connection, conn);
 
-  // Load all the repositories
+  loadRepositories(conn);
+  loadUnitOfWork(conn);
+};
+
+function loadUnitOfWork(conn: Connection) {
+  const { unitsOfWork: uows } = data;
+
+  const genericUow = new uows.GenericUnitOfWork(conn);
+  const raidPostUow = new uows.RaidPostUnitOfWork(genericUow);
+  Container.set(raidPostUnitOfWorkType, raidPostUow);
+}
+
+function loadRepositories(conn: Connection) {
+  const { repositories: repos } = data;
+
   const userRepo = conn.getCustomRepository(repos.UserRepository);
   Container.set(userRepositoryType, userRepo);
 
@@ -63,12 +76,7 @@ const loadDataLayerDependencies = () => {
 
   const joinRequestRepo = conn.getCustomRepository(repos.JoinRequestRepository);
   Container.set(joinRequestRepositoryType, joinRequestRepo);
-
-  // Load the unit of work
-  const genericUow = new uows.GenericUnitOfWork(conn);
-  const raidPostUow = new uows.RaidPostUnitOfWork(genericUow);
-  Container.set(raidPostUnitOfWorkType, raidPostUow);
-};
+}
 
 /**
  * Loads concrete classes from /service directory into TypeDI container, so that
