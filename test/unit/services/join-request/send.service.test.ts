@@ -5,7 +5,6 @@ import { ItemRequirement } from "@root/data/entities/item-requirement/item.requi
 import { IPostRepository } from "@data/repositories/post/post.repository.interface";
 import { IUserRepository } from "@data/repositories/user/user.repository.interface";
 import { GetItems } from "@root/services/gw2-api/items/get-items.fetcher";
-import { ItemsFetcher } from "@root/services/gw2-api/items/items-fetcher.interface";
 import { nameToId } from "@services/gw2-items/gw2-items.service";
 import { GW2ApiItem } from "@services/gw2-items/item.interface";
 import { SendJoinRequestService } from "@root/services/join-request/send-join-request.service";
@@ -18,58 +17,61 @@ import { CheckItemRequirementsService } from "@services/requirement/check-requir
 import { FindUserItemsService } from "@services/user/find-user-items.service";
 import { addHours } from "../../../common/hours.util";
 
+class JoinRequestServiceTestObject {
+  date: Date;
+  item: {
+    name: string;
+    quantity: number;
+  };
+  role: {
+    name: string;
+    class: string;
+  };
+  itemsInStorage: {
+    id: number;
+    count: number;
+  }[];
+
+  constructor() {
+    const validItemName = Object.keys(items)[0];
+    this.date = addHours(new Date(), 1);
+    this.item = { name: validItemName, quantity: 1 };
+    this.role = { name: "Any", class: "Any" };
+    this.itemsInStorage = [{ id: nameToId(validItemName), count: 1 }];
+  }
+}
+
 describe("JoinRequest Service: send tests", () => {
   let userRepo: IUserRepository;
   let postRepo: IPostRepository;
   let joinRequestRepo: JoinRequestMemoryRepository;
-  const validItemName = Object.keys(items)[0];
+
+  const apiKey = "api-key";
+  const user = new User({
+    username: "username",
+    password: "password",
+    apiKey,
+  });
+
+  let obj = new JoinRequestServiceTestObject();
 
   beforeEach(() => {
+    resetTestObject();
     userRepo = new UserMemoryRepository();
     postRepo = new RaidPostMemoryRepository();
     joinRequestRepo = new JoinRequestMemoryRepository();
   });
 
   it("should save the request if valid data was passed", async () => {
-    const apiKey = "api-key";
-    const user = await userRepo.save(
-      new User({
-        username: "username",
-        password: "password",
-        apiKey,
-      })
-    );
-    const itemRequirement = new ItemRequirement({
-      name: validItemName,
-      quantity: 1,
-    });
-    const role = new Role({ name: "DPS", class: "Any" });
-    const post = new RaidPost({
-      date: addHours(new Date(), 1),
-      server: "EU",
-      author: user,
-      bosses: [],
-      requirements: [itemRequirement],
-      roles: [role],
-    });
-    await postRepo.save(post);
-    const fetchItems = storage(
-      new Map<string, GW2ApiItem[]>([
-        [apiKey, [{ id: nameToId(itemRequirement.name), count: 10 }]],
-      ])
-    );
+    const { post, role, itemRequirement } = await seed();
+    setItemsInStorage([{ id: nameToId(itemRequirement.name), count: 10 }]);
+    const service = setupSendJoinRequestService();
 
-    const findUserItemsService = new FindUserItemsService(
-      userRepo,
-      new GetItems(fetchItems)
-    );
-
-    await new SendJoinRequestService(
-      userRepo,
-      postRepo,
-      joinRequestRepo,
-      new CheckItemRequirementsService(findUserItemsService)
-    ).sendJoinRequest({ userId: user.id, postId: post.id, roleId: role.id });
+    service.sendJoinRequest({
+      userId: user.id,
+      postId: post.id,
+      roleId: role.id,
+    });
 
     const request = await joinRequestRepo.findByKeys({
       userId: user.id,
@@ -80,170 +82,51 @@ describe("JoinRequest Service: send tests", () => {
   });
 
   it("should throw an error if user does not exists", async () => {
-    const userId = 1;
-    const postId = 2;
-    const roleId = 1;
-
-    const findUserItemsService = new FindUserItemsService(
-      userRepo,
-      new DummyItemFetcher()
-    );
+    const [userId, postId, roleId] = [-1, 2, 1];
+    const service = setupSendJoinRequestService();
 
     expect(
-      new SendJoinRequestService(
-        userRepo,
-        postRepo,
-        joinRequestRepo,
-        new CheckItemRequirementsService(findUserItemsService)
-      ).sendJoinRequest({ userId, postId, roleId })
+      service.sendJoinRequest({ userId, postId, roleId })
     ).rejects.toThrow();
   });
 
   it("should throw an error if post does not exists", async () => {
-    const user = await userRepo.save(
-      new User({
-        username: "username",
-        password: "password",
-        apiKey: "api-key",
-      })
-    );
-    const postId = 2;
-    const roleId = 3;
-
-    const findUserItemsService = new FindUserItemsService(
-      userRepo,
-      new DummyItemFetcher()
-    );
+    const [postId, roleId] = [-1, 1];
+    const service = setupSendJoinRequestService();
 
     expect(
-      new SendJoinRequestService(
-        userRepo,
-        postRepo,
-        joinRequestRepo,
-        new CheckItemRequirementsService(findUserItemsService)
-      ).sendJoinRequest({ userId: user.id, postId, roleId })
+      service.sendJoinRequest({ userId: user.id, postId, roleId })
     ).rejects.toThrow();
   });
 
   it("should throw an error if post does not contain the role", async () => {
-    const user = await userRepo.save(
-      new User({
-        username: "username",
-        password: "password",
-        apiKey: "api-key",
-      })
-    );
-    const itemRequirement = new ItemRequirement({
-      name: validItemName,
-      quantity: 2,
-    });
-    const post = new RaidPost({
-      date: addHours(new Date(), 1),
-      server: "EU",
-      author: user,
-      bosses: [],
-      requirements: [itemRequirement],
-    });
+    const { post } = await seed();
     const roleId = 3;
-
-    const findUserItemsService = new FindUserItemsService(
-      userRepo,
-      new DummyItemFetcher()
-    );
+    const service = setupSendJoinRequestService();
 
     expect(
-      new SendJoinRequestService(
-        userRepo,
-        postRepo,
-        joinRequestRepo,
-        new CheckItemRequirementsService(findUserItemsService)
-      ).sendJoinRequest({ userId: user.id, postId: post.id, roleId })
+      service.sendJoinRequest({ userId: user.id, postId: post.id, roleId })
     ).rejects.toThrow();
   });
 
   it("should throw an error if user does not meet the requirements", async () => {
-    const apiKey = "api-key";
-    const user = await userRepo.save(
-      new User({
-        username: "username",
-        password: "password",
-        apiKey,
-      })
-    );
-    const itemRequirement = new ItemRequirement({
-      name: validItemName,
-      quantity: 2,
-    });
-    const role = new Role({ name: "DPS", class: "Any" });
-    role.id = 1;
-    const post = new RaidPost({
-      date: addHours(new Date(), 1),
-      server: "EU",
-      author: user,
-      bosses: [],
-      requirements: [itemRequirement],
-      roles: [role],
-    });
-    await postRepo.save(post);
-    const fetchItems = storage(
-      new Map<string, GW2ApiItem[]>([
-        [apiKey, [{ id: nameToId(itemRequirement.name), count: 1 }]],
-      ])
-    );
-
-    const findUserItemsService = new FindUserItemsService(
-      userRepo,
-      new GetItems(fetchItems)
-    );
+    setItemRequirementQuantity(100);
+    const { post, role, itemRequirement } = await seed();
+    setItemsInStorage([{ id: nameToId(itemRequirement.name), count: 1 }]);
+    const service = setupSendJoinRequestService();
 
     expect(
-      new SendJoinRequestService(
-        userRepo,
-        postRepo,
-        joinRequestRepo,
-        new CheckItemRequirementsService(findUserItemsService)
-      ).sendJoinRequest({ userId: user.id, postId: post.id, roleId: role.id })
+      service.sendJoinRequest({
+        userId: user.id,
+        postId: post.id,
+        roleId: role.id,
+      })
     ).rejects.toThrow();
   });
 
   it("should throw an error if user attempts to join more than once", async () => {
-    const apiKey = "api-key";
-    const user = await userRepo.save(
-      new User({
-        username: "username",
-        password: "password",
-        apiKey,
-      })
-    );
-    const itemRequirement = new ItemRequirement({
-      name: validItemName,
-      quantity: 1,
-    });
-    const role = new Role({ name: "DPS", class: "Any" });
-    const post = new RaidPost({
-      date: addHours(new Date(), 1),
-      server: "EU",
-      author: user,
-      bosses: [],
-      requirements: [itemRequirement],
-      roles: [role],
-    });
-    await postRepo.save(post);
-    const fetchItems = storage(
-      new Map<string, GW2ApiItem[]>([
-        [apiKey, [{ id: nameToId(itemRequirement.name), count: 10 }]],
-      ])
-    );
-    const findUserItemsService = new FindUserItemsService(
-      userRepo,
-      new GetItems(fetchItems)
-    );
-    const service = new SendJoinRequestService(
-      userRepo,
-      postRepo,
-      joinRequestRepo,
-      new CheckItemRequirementsService(findUserItemsService)
-    );
+    const { post, role } = await seed();
+    const service = setupSendJoinRequestService();
 
     await service.sendJoinRequest({
       userId: user.id,
@@ -261,43 +144,9 @@ describe("JoinRequest Service: send tests", () => {
   });
 
   it("should throw an error if user attempts join a taken spot", async () => {
-    const apiKey = "api-key";
-    const user = await userRepo.save(
-      new User({
-        username: "username",
-        password: "password",
-        apiKey,
-      })
-    );
-    const itemRequirement = new ItemRequirement({
-      name: validItemName,
-      quantity: 1,
-    });
-    const role = new Role({ name: "DPS", class: "Any" });
-    const post = new RaidPost({
-      date: addHours(new Date(), 1),
-      server: "EU",
-      author: user,
-      bosses: [],
-      requirements: [itemRequirement],
-      roles: [role],
-    });
-    await postRepo.save(post);
-    const fetchItems = storage(
-      new Map<string, GW2ApiItem[]>([
-        [apiKey, [{ id: nameToId(itemRequirement.name), count: 10 }]],
-      ])
-    );
-    const findUserItemsService = new FindUserItemsService(
-      userRepo,
-      new GetItems(fetchItems)
-    );
-    const service = new SendJoinRequestService(
-      userRepo,
-      postRepo,
-      joinRequestRepo,
-      new CheckItemRequirementsService(findUserItemsService)
-    );
+    const { post, role } = await seed();
+    const service = setupSendJoinRequestService();
+
     await service.sendJoinRequest({
       userId: user.id,
       postId: post.id,
@@ -320,10 +169,56 @@ describe("JoinRequest Service: send tests", () => {
       })
     ).rejects.toThrow();
   });
-});
 
-class DummyItemFetcher implements ItemsFetcher {
-  fetch(_ids: number[], _apiKey: string): Promise<GW2ApiItem[]> {
-    return new Promise((resolve) => resolve([]));
+  function resetTestObject() {
+    obj = new JoinRequestServiceTestObject();
   }
-}
+  function setItemRequirementQuantity(quantity: number) {
+    obj.item.quantity = quantity;
+  }
+  function setItemsInStorage(items: { id: number; count: number }[]) {
+    obj.itemsInStorage = items;
+  }
+
+  async function seed() {
+    await userRepo.save(user);
+
+    const itemRequirement = new ItemRequirement(obj.item);
+    const role = new Role(obj.role);
+    const post = new RaidPost({
+      date: obj.date,
+      server: "EU",
+      author: user,
+      bosses: [],
+      requirements: [itemRequirement],
+      roles: [role],
+    });
+    await postRepo.save(post);
+
+    return { post, itemRequirement, role };
+  }
+
+  function setupItemFetcher() {
+    const allItemsFetcher = storage(
+      new Map<string, GW2ApiItem[]>([[apiKey, obj.itemsInStorage]])
+    );
+
+    return new GetItems(allItemsFetcher);
+  }
+
+  function setupFindUserItemsService() {
+    const itemFetcher = setupItemFetcher();
+    return new FindUserItemsService(userRepo, itemFetcher);
+  }
+
+  function setupSendJoinRequestService() {
+    const findUserItemsService = setupFindUserItemsService();
+
+    return new SendJoinRequestService(
+      userRepo,
+      postRepo,
+      joinRequestRepo,
+      new CheckItemRequirementsService(findUserItemsService)
+    );
+  }
+});
