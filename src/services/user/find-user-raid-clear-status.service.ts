@@ -10,9 +10,9 @@ import { FindUserDTO } from "./dtos/find-user.dto";
 import { raids } from "@data/entities/raid-boss/gw2-raids.json";
 import { IFindRaidClearStatusService } from "../gw2-api/raids/find-raid-clear-status.gw2-api.service";
 
-/*
-Service for finding a user with matching id and getting his item stats from GW2 API
-*/
+/**
+ * Service for finding a user with matching id and getting his item stats from GW2 API
+ */
 @Service()
 export class FindUserRaidClearStatusService {
   constructor(

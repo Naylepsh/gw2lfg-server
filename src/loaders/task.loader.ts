@@ -1,11 +1,11 @@
 import Container from "typedi";
 import { DeleteOldPostsService } from "@services/raid-post/delete-old-posts.service";
 
-/*
-Loads scheduled tasks
-*/
+/**
+ * Loads scheduled tasks
+ */
 export const loadTasks = () => {
-  // delay has to be between 1 and 2147483647 or else it will be set to 1
+  // IMPORTANT!: delay has to be between 1 and 2147483647 or else it will be set to 1
 
   // run delete old posts every hour
   const everyHour = 1000 * 60 * 60;

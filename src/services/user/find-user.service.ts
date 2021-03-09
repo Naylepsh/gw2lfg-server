@@ -8,9 +8,9 @@ import { UserNotFoundError } from "../common/errors/entity-not-found.error";
 import { IFindAccountService } from "../gw2-api/account/find-account.gw2-api.service";
 import { FindUserDTO } from "./dtos/find-user.dto";
 
-/*
-Service for finding a user with matching id and attaching various data from GW2 account using their API key
-*/
+/**
+ * Service for finding a user with matching id and attaching various data from GW2 account using their API key
+ */
 @Service()
 export class FindUserService {
   constructor(

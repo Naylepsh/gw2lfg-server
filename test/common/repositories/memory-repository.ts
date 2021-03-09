@@ -58,7 +58,6 @@ export class MemoryRepository<Entity> implements IRepository<Entity> {
       });
     }
 
-    // simple where handling, won't work for nested clauses
     if (params?.where) {
       entities = entities.filter((entity) =>
         this.handleWhere(entity, params.where)

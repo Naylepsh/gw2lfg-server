@@ -9,10 +9,10 @@ import { isDateInThePast } from "./utils/is-date-in-the-past";
 import { DateIsInThePastError } from "./errors/date-is-in-the-past.error";
 import { UpdateRaidPostDTO } from "./dtos/update-raid-post.dto";
 
-/*
-Service for updating raid posts.
-IMPORTANT! Update will remove all join requests pointing to the post!
-*/
+/**
+ * Service for updating raid posts.
+ * IMPORTANT! Update will remove all join requests pointing to the post!
+ */
 @Service()
 export class UpdateRaidPostService {
   constructor(

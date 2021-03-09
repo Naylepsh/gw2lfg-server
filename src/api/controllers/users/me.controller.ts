@@ -3,11 +3,11 @@ import { User } from "@root/data/entities/user/user.entity";
 import { mapUserToUserResponse } from "../../responses/entities/user.entity.response";
 import { MeResponse } from "./responses/me.response";
 
-/*
-Controller for GET /me
-Returns an user associated with sent jwt.
-User has to be authenticated to use.
-*/
+/**
+ * Controller for GET /me
+ * Returns an user associated with sent jwt.
+ * User has to be authenticated to use.
+ */
 @JsonController()
 export class MeController {
   // user is provided by auth middlewere

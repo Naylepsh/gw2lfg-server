@@ -7,10 +7,10 @@ type UserDTO = DTO<User>;
 // User without methods and without confidential user data
 export type UserResponse = Omit<UserDTO, "password" | "apiKey">;
 
-/*
-Strips methods from user leaving only fields.
-Removes confidential user information.
-*/
+/**
+ * Strips methods from user leaving only fields.
+ * Removes confidential user information.
+ */
 export const mapUserToUserResponse = <U extends UserDTO>(
   user: U
 ): UserResponse => {

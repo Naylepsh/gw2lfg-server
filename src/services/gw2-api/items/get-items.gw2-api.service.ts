@@ -21,9 +21,9 @@ export const getItemsFromCharacter = (characterName: string) => {
   );
 };
 
-/*
-Fetches all items with given ids from the account associated with given API key
-*/
+/**
+ * Fetches all items with given ids from the account associated with given API key
+ */
 Service(getItemsFromEntireAccountFetcherType);
 export class GetItemsFromEntireAccount implements ItemsFetcher {
   constructor() {}

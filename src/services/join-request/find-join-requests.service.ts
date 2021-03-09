@@ -3,9 +3,9 @@ import { joinRequestRepositoryType } from "@loaders/typedi.constants";
 import { JoinRequestRelationKeys } from "@data/repositories/join-request/join-request-relation-keys";
 import { IJoinRequestRepository } from "@data/repositories/join-request/join-request.repository.interface";
 
-/*
-Service for finding join requests by relations keys from the database
-*/
+/**
+ * Service for finding join requests by relations keys from the database
+ */
 @Service()
 export class FindJoinRequestsService {
   constructor(

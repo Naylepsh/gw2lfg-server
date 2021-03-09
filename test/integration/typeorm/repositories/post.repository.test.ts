@@ -34,41 +34,6 @@ describe("TypeORM posting repository tests", () => {
 
   let obj = new PostRepositoryTestObject();
 
-  function resetTestObject() {
-    obj = new PostRepositoryTestObject();
-  }
-  function setUsername(username: string) {
-    obj.user.username = username;
-  }
-  function setRoleName(roleName: string) {
-    obj.role.name = roleName;
-  }
-  function setRoleClass(roleClass: string) {
-    obj.role.class = roleClass;
-  }
-
-  async function seedDb() {
-    const [author, role, requirement] = await Promise.all([
-      createAndSaveUser(userRepository, {
-        username: obj.user.username,
-      }),
-      createAndSaveRole(roleRepository, {
-        ...obj.role,
-      }),
-      createAndSaveItemRequirement(requirementRepository, {
-        ...obj.requirement,
-      }),
-    ]);
-
-    const post = await createAndSavePosting(postRepository, {
-      author,
-      roles: [role],
-      requirements: [requirement],
-    });
-
-    return { author, role, post };
-  }
-
   beforeAll(async () => {
     connection = await loadTypeORM();
 
@@ -188,4 +153,39 @@ describe("TypeORM posting repository tests", () => {
       expect(postFound).toBeUndefined();
     });
   });
+
+  function resetTestObject() {
+    obj = new PostRepositoryTestObject();
+  }
+  function setUsername(username: string) {
+    obj.user.username = username;
+  }
+  function setRoleName(roleName: string) {
+    obj.role.name = roleName;
+  }
+  function setRoleClass(roleClass: string) {
+    obj.role.class = roleClass;
+  }
+
+  async function seedDb() {
+    const [author, role, requirement] = await Promise.all([
+      createAndSaveUser(userRepository, {
+        username: obj.user.username,
+      }),
+      createAndSaveRole(roleRepository, {
+        ...obj.role,
+      }),
+      createAndSaveItemRequirement(requirementRepository, {
+        ...obj.requirement,
+      }),
+    ]);
+
+    const post = await createAndSavePosting(postRepository, {
+      author,
+      roles: [role],
+      requirements: [requirement],
+    });
+
+    return { author, role, post };
+  }
 });

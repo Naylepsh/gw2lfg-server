@@ -4,9 +4,9 @@ import { IJoinRequestRepository } from "@data/repositories/join-request/join-req
 import { FindJoinRequestDTO } from "./dtos/find-join-request.dto";
 import { EntityNotFoundError } from "../common/errors/entity-not-found.error";
 
-/*
-Service for finding join request with matching id.
-*/
+/**
+ * Service for finding join request with matching id.
+ */
 @Service()
 export class FindJoinRequestService {
   constructor(

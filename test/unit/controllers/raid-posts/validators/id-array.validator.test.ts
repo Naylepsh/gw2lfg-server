@@ -4,15 +4,18 @@ import { IsIdArray } from "@api/controllers/raid-posts/validators/id-array.valid
 class ObjectWithIdArray {
   @IsIdArray()
   ids: string;
+
+  constructor(ids: string) {
+    this.ids = ids;
+  }
 }
 
 describe("ApiKeyValidator tests", () => {
   it("should throw an error if string-turned-array contains objects other than id", async () => {
-    const invalidIdArray = "1,2,a";
-    const objectWithIdArray = new ObjectWithIdArray();
-    objectWithIdArray.ids = invalidIdArray;
+    const invalidIds = "1,2,a";
+    const objectWithInvalidIdArray = new ObjectWithIdArray(invalidIds);
 
-    const errors = await validate(objectWithIdArray);
+    const errors = await validate(objectWithInvalidIdArray);
 
     expect(errors.length).toBeGreaterThan(0);
     const apiKeyError = errors[0];
@@ -23,11 +26,10 @@ describe("ApiKeyValidator tests", () => {
   });
 
   it("should pass the check if string-turned-array contains ids only", async () => {
-    const validIdArray = "1,2,3";
-    const objectWithApiKey = new ObjectWithIdArray();
-    objectWithApiKey.ids = validIdArray;
+    const validIds = "1,2,3";
+    const objectWithValidApiKey = new ObjectWithIdArray(validIds);
 
-    const errors = await validate(objectWithApiKey);
+    const errors = await validate(objectWithValidApiKey);
 
     expect(errors.length).toBe(0);
   });

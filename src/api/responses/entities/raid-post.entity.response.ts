@@ -6,8 +6,10 @@ import { mapUserToUserResponse, UserResponse } from "./user.entity.response";
 // Raid Post without methods
 type RaidPostDTO = DTO<RaidPost>;
 
-// Raid Post without methods and without confidential user data
-// but with categorized requirements
+/**
+ * Raid Post without methods and without confidential user data
+ * but with categorized requirements
+ */
 export type RaidPostResponse = Omit<RaidPostDTO, "author" | "requirements"> & {
   author: UserResponse;
   requirements: {
@@ -15,11 +17,11 @@ export type RaidPostResponse = Omit<RaidPostDTO, "author" | "requirements"> & {
   };
 };
 
-/*
-Strips methods from raid post leaving only fields.
-Removes confidential user information.
-Categorizes requirements.
-*/
+/**
+ * Strips methods from raid post leaving only fields.
+ * Removes confidential user information.
+ * Categorizes requirements.
+ */
 export const mapRaidPostToRaidPostResponse = <R extends RaidPostDTO>(
   raidPost: R
 ) => {

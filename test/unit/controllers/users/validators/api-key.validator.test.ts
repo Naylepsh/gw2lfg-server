@@ -6,18 +6,13 @@ import { validate } from "class-validator";
 
 class ObjectWithApiKey {
   @IsValidApiKey()
-  apiKey: string;
+  apiKey: string = "123-456";
 }
 
 describe("ApiKeyValidator tests", () => {
   it("should throw an error if api key is not valid", async () => {
-    const areAllKeysValid = false;
-    const fakeChecker = new FakeApiKeyChecker(areAllKeysValid);
-    Container.set(checkApiKeyValidityServiceType, fakeChecker);
-
-    const invalidApiKey = "-1";
+    setAreAllKeysValid(false);
     const objectWithApiKey = new ObjectWithApiKey();
-    objectWithApiKey.apiKey = invalidApiKey;
 
     const errors = await validate(objectWithApiKey);
 
@@ -30,16 +25,16 @@ describe("ApiKeyValidator tests", () => {
   });
 
   it("should pass the check if api key is valid", async () => {
-    const areAllKeysValid = true;
-    const fakeChecker = new FakeApiKeyChecker(areAllKeysValid);
-    Container.set(checkApiKeyValidityServiceType, fakeChecker);
-
-    const validApiKey = "1";
+    setAreAllKeysValid(true);
     const objectWithApiKey = new ObjectWithApiKey();
-    objectWithApiKey.apiKey = validApiKey;
 
     const errors = await validate(objectWithApiKey);
 
     expect(errors.length).toBe(0);
   });
+
+  function setAreAllKeysValid(areAllKeysValid: boolean) {
+    const fakeChecker = new FakeApiKeyChecker(areAllKeysValid);
+    Container.set(checkApiKeyValidityServiceType, fakeChecker);
+  }
 });

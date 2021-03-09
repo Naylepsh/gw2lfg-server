@@ -8,7 +8,6 @@ import {
 } from "@loaders/typedi.constants";
 import { addHours } from "../common/hours.util";
 import { IRaidPostUnitOfWork } from "@data/units-of-work/raid-post/raid-post.unit-of-work.interface";
-import { CurrentUserJWTMiddleware } from "@api/middleware/current-user.middleware";
 import { IRaidPostRepository } from "@data/repositories/raid-post/raid-post.repository.interface";
 import { seedRaidBoss, clean, seedUser } from "./seeders";
 import { AUTH_HEADER, toBearerToken } from "../common/to-bearer-token";

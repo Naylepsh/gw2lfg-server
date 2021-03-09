@@ -3,10 +3,10 @@ import { IJoinRequestRepository } from "@data/repositories/join-request/join-req
 import { joinRequestRepositoryType } from "@loaders/typedi.constants";
 import { CanUserDeleteJoinRequestDTO } from "./dtos/can-user-delete-join-request.dto";
 
-/*
-Service for checking whether a user of given id can delete a join request of given id.
-Join request can be deleted by either it's author (cancelling the request)
-or by the author of the post that join request points to (rejecting the request).
+/**
+ * Service for checking whether a user of given id can delete a join request of given id.
+ * Join request can be deleted by either it's author (cancelling the request)
+ * or by the author of the post that join request points to (rejecting the request).
 */
 @Service()
 export class CheckJoinRequestDeletionPermissionService {

@@ -5,9 +5,9 @@ import { controllers } from "../api/controllers";
 import { CurrentUserJWTMiddleware } from "../api/middleware/current-user.middleware";
 import { userRepositoryType } from "./typedi.constants";
 
-/*
-Loads Express.js server
-*/
+/**
+ * Loads Express.js server
+ */
 export const loadServer = () => {
   const currentUserMiddleware = new CurrentUserJWTMiddleware(
     Container.get(userRepositoryType)

@@ -34,5 +34,6 @@ export async function seedDbWithOnePost(uow: RaidPostMemoryUnitOfWork) {
     authorId: savedUser.id,
   };
   const post = await publishService.publish(dto);
+
   return { token, bossesIds, post, user: savedUser };
 }

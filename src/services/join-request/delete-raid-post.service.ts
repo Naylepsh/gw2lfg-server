@@ -3,9 +3,9 @@ import { joinRequestRepositoryType } from "@loaders/typedi.constants";
 import { IJoinRequestRepository } from "@data/repositories/join-request/join-request.repository.interface";
 import { DeleteJoinRequestDTO } from "./dtos/delete-join-request.dto";
 
-/*
-Service for deleting join request with matching id.
-*/
+/**
+ * Service for deleting join request with matching id.
+ */
 @Service()
 export class DeleteJoinRequestService {
   constructor(

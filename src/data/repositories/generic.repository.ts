@@ -1,13 +1,11 @@
 import { AbstractRepository, EntityRepository } from "typeorm";
-import {
-  IRepository,
-} from "./repository.interface";
+import { IRepository } from "./repository.interface";
 import { FindManyParams } from "./find-many.params";
 import { FindOneParams } from "./find-one.params";
 
-/*
-Generic repository over TypeORM repository containing common CRUD operations.
-*/
+/**
+ * Generic repository over TypeORM repository containing common CRUD operations.
+ */
 @EntityRepository()
 export class GenericRepository<Entity>
   extends AbstractRepository<Entity>

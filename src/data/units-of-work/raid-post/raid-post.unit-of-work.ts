@@ -10,11 +10,11 @@ import { Inject, Service } from "typedi";
 import { raidPostUnitOfWorkType } from "../../../loaders/typedi.constants";
 import { JoinRequestRepository } from "../../repositories/join-request/join-request.repository";
 
-/*
-Extension over GenericUoW for raid-post-oriented operations.
-Allows retrieval of raid post and raid post's relations related repositiories
-and operations on them within transaction.
-*/
+/**
+ * Extension over GenericUoW for raid-post-oriented operations.
+ * Allows retrieval of raid post and raid post's relations related repositiories
+ * and operations on them within transaction.
+ */
 @Service(raidPostUnitOfWorkType)
 export class RaidPostUnitOfWork implements IRaidPostUnitOfWork {
   public constructor(

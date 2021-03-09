@@ -8,9 +8,9 @@ import {
 import { FindUserItemsService } from "@services/user/find-user-items.service";
 import { EntityNotFoundError } from "@services/common/errors/entity-not-found.error";
 
-/*
-Controller for GET /users/:id/items requests.
-Returns items of an user with matching id.
+/**
+ * Controller for GET /users/:id/items requests.
+ * Returns items of an user with matching id.
 */
 @JsonController()
 export class FindUserItemsController {

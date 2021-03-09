@@ -5,7 +5,7 @@ import { Role } from "@root/data/entities/role/role.entity";
 import { User } from "@root/data/entities/user/user.entity";
 import { loadTypeORM } from "@loaders/typeorm.loader";
 
-describe("whatever", () => {
+describe("misc. tests on TypeORM", () => {
   let conn: Connection;
 
   beforeAll(async () => {
@@ -33,34 +33,6 @@ describe("whatever", () => {
 
   afterAll(async () => {
     await conn.close();
-  });
-
-  it("should work", async () => {
-    const bossRepo = conn.getRepository(RaidBoss);
-    const boss = await bossRepo.save({ name: "b", isCm: false });
-
-    const userRepo = conn.getRepository(User);
-    const user = await userRepo.save(
-      new User({ username: "u", password: "p", apiKey: "a" })
-    );
-
-    const roleRepo = conn.getRepository(Role);
-    const role = new Role({ name: "dps", class: "Any" });
-    await roleRepo.save(role);
-
-    const postRepo = conn.getRepository(RaidPost);
-    const post = new RaidPost({
-      date: new Date(),
-      server: "s",
-      author: user,
-      roles: [role],
-      bosses: [boss],
-    });
-    await postRepo.save(post);
-
-    const roles = await roleRepo.find({});
-
-    expect(roles.length).toBe(1);
   });
 
   it("should find by id in array", async () => {
