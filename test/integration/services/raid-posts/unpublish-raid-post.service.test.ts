@@ -70,8 +70,10 @@ describe("UnpublishRaidPostService integration tests", () => {
         new RaidPostUnitOfWork(new GenericUnitOfWork(conn))
       );
 
-      // unpublish uses uow.withTransaction which kills the uow,
-      // thus subsequent db calls have to come form repositories outside of uow
+      /**
+       * Unpublish uses uow.withTransaction which kills the uow,
+       * thus subsequent db calls have to come form repositories outside of uow
+       */
       await unpublishService.unpublish({ id: raidPost.id });
 
       const joinRequestsRepo = conn.getCustomRepository(JoinRequestRepository);
