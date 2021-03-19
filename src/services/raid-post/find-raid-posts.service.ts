@@ -50,7 +50,14 @@ export class FindRaidPostsService {
     }
 
     if (whereParams.role) {
-      leftJoin.roles = `${alias}.roles`;
+      const isAnyRoleName =
+        whereParams.role.name && !isAny(whereParams.role.name);
+      const isAnyRoleClass =
+        whereParams.role.class && !isAny(whereParams.role.class);
+      const requiresJoin = isAnyRoleName || isAnyRoleClass;
+      if (requiresJoin) {
+        leftJoin.roles = `${alias}.roles`;
+      }
     }
 
     if (whereParams.bossesIds) {
@@ -104,14 +111,14 @@ export class FindRaidPostsService {
   private addQueryOnRoleProps(whereParams: FindRaidPostsWhereParams, qb: any) {
     const { role } = whereParams;
 
-    if (role?.name) {
+    if (role?.name && !isAny(role.name)) {
       qb.andWhere(
         "LOWER(roles.name) = LOWER(:roleName) OR LOWER(roles.name) = 'any'",
         { roleName: role.name }
       );
     }
 
-    if (role?.class) {
+    if (role?.class && !isAny(role.class)) {
       qb.andWhere(
         "LOWER(roles.class) = LOWER(:roleClass) OR LOWER(roles.class) = 'any'",
         { roleClass: role.class }
@@ -128,4 +135,8 @@ export class FindRaidPostsService {
       }
     }
   }
+}
+
+function isAny(value: string) {
+  return value.toLowerCase() === "any";
 }

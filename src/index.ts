@@ -10,7 +10,7 @@ import { config } from "./config";
 const main = async () => {
   const { app } = await loadDependencies();
 
-  const port = config.port;
+  const port = config.server.port;
   await app.listen(port);
   console.log(`server listening at port ${port}`);
 };
