@@ -111,16 +111,21 @@ export class FindRaidPostsService {
   private addQueryOnRoleProps(whereParams: FindRaidPostsWhereParams, qb: any) {
     const { role } = whereParams;
 
+    /**
+     * IMPORTANT!
+     * Conditions that use 'OR' have to be inside parenthesis.
+     * Otherwise we get (c1 AND c2) OR (c3 AND c4) instead of c1 AND (c2 OR c3) AND c4
+     */
     if (role?.name && !isAny(role.name)) {
       qb.andWhere(
-        "LOWER(roles.name) = LOWER(:roleName) OR LOWER(roles.name) = 'any'",
+        "(LOWER(roles.name) = LOWER(:roleName) OR LOWER(roles.name) = 'any')",
         { roleName: role.name }
       );
     }
 
     if (role?.class && !isAny(role.class)) {
       qb.andWhere(
-        "LOWER(roles.class) = LOWER(:roleClass) OR LOWER(roles.class) = 'any'",
+        "(LOWER(roles.class) = LOWER(:roleClass) OR LOWER(roles.class) = 'any')",
         { roleClass: role.class }
       );
     }
