@@ -25,27 +25,18 @@ export class DeleteOldPostsService {
     });
   }
 
-  // find all posts such that their date < now
-  private async getOldPosts() {
-    return await this.uow.raidPosts.findMany({
+  // finds all posts such that their date < now
+  private getOldPosts() {
+    return this.uow.raidPosts.findMany({
       where: { date: LessThanOrEqual(new Date()) },
       relations: ["requirements", "roles"],
     });
   }
 
-  // TODO: refactor (just delete in one step instead of finding first)
   private async removeJoinRequestsToPosts(posts: RaidPost[]) {
     if (posts.length > 0) {
       const postsIds = posts.map((post) => post.id);
-      const joinRequests = await this.uow.joinRequests.findMany({
-        where: { post: { id: In(postsIds) } },
-        relations: ["post"],
-      });
-
-      const joinRequestsIds = joinRequests.map((request) => request.id);
-      if (joinRequestsIds.length > 0) {
-        await this.uow.joinRequests.delete(joinRequestsIds);
-      }
+      await this.uow.joinRequests.delete({ post: { id: In(postsIds) } });
     }
   }
 
