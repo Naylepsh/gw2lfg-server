@@ -13,7 +13,7 @@
     "test:integr": "jest -i test/integration",
     "test:integr:controllers": "jest --detectOpenHandles -i test/integration/controllers",
     "test:integr:typeorm": "jest --detectOpenHandles -i test/integration/typeorm",
-    "test:integr:services": "jest --detectOpenHandles -i test/integration/services/raid-posts",
+    "test:integr:services": "jest --detectOpenHandles -i test/integration/services",
     "test:e2e": "jest --detectOpenHandles -i test/e2e",
     "migration:generate": "npx typeorm migration:generate -n",
     "migration:run": "npx typeorm migration:run"
