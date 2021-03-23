@@ -8,7 +8,7 @@ import { userRepositoryType } from "@loaders/typedi.constants";
 import { seedUser } from "./seeders";
 
 describe("Login e2e tests", () => {
-  const loginUrl = "/login";
+  const url = "/login";
   let app: any;
   let userRepo: IUserRepository;
 
@@ -26,7 +26,7 @@ describe("Login e2e tests", () => {
     const { user } = await seedUser(app);
 
     const response = await request(app)
-      .post(loginUrl)
+      .post(url)
       .send({ username: user.username, password: user.password });
     const token = response.body.data.token;
     const decoded = jwt.decode(token);

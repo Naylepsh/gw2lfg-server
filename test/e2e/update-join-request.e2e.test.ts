@@ -14,7 +14,7 @@ import { JoinRequestStatus } from "../data/entities/join-request/join-request.st
 import { AUTH_HEADER, toBearerToken } from "../common/to-bearer-token";
 
 describe("Update join request e2e tests", () => {
-  const joinRequestsUrl = "/join-requests";
+  const url = "/join-requests";
   const timelimit = 60000;
   let app: any;
   let uow: IRaidPostUnitOfWork;
@@ -42,19 +42,19 @@ describe("Update join request e2e tests", () => {
     async () => {
       const roleId = post.roles[0].id;
       const createRequestResponse = await request(app)
-        .post(joinRequestsUrl)
+        .post(url)
         .set(AUTH_HEADER, toBearerToken(token))
         .send({ roleId, postId: post.id });
       const requestId = createRequestResponse.body.data.id;
 
       const newStatus: JoinRequestStatus = "ACCEPTED";
       await request(app)
-        .put(`${joinRequestsUrl}/${requestId}`)
+        .put(`${url}/${requestId}`)
         .set(AUTH_HEADER, toBearerToken(token))
         .send({ status: newStatus });
 
       const { body } = await request(app).get(
-        `${joinRequestsUrl}/${requestId}`
+        `${url}/${requestId}`
       );
       const joinRequest = body.data;
 

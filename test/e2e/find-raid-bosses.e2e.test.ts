@@ -7,7 +7,7 @@ import { IRaidBossRepository } from "@data/repositories/raid-boss/raid-boss.repo
 import { seedRaidBoss } from "./seeders";
 
 describe("Find raid posts e2e tests", () => {
-  const findUrl = "/raid-bosses";
+  const url = "/raid-bosses";
   let app: any;
   let raidBossRepo: IRaidBossRepository;
   let bossId: number;
@@ -25,7 +25,7 @@ describe("Find raid posts e2e tests", () => {
   });
 
   it("should find a seeded post", async () => {
-    const { body } = await request(app).get(findUrl);
+    const { body } = await request(app).get(url);
 
     const bosses = body.data;
     expect(bosses.length).toBe(1);

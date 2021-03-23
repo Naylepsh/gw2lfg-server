@@ -10,7 +10,7 @@ import { SaveRaidPostDTO } from "@root/api/controllers/raid-posts/dtos/save-raid
 import { AUTH_HEADER, toBearerToken } from "../common/to-bearer-token";
 
 describe("Update raid post e2e tests", () => {
-  const raidPostsUrl = "/raid-posts";
+  const url = "/raid-posts";
   let app: any;
   let uow: IRaidPostUnitOfWork;
   let token: string;
@@ -43,12 +43,12 @@ describe("Update raid post e2e tests", () => {
       .put(toUrl(post.id))
       .send(postDto)
       .set(AUTH_HEADER, toBearerToken(token));
-    const { body } = await request(app).get(raidPostsUrl);
+    const { body } = await request(app).get(url);
 
     const posts = body.data;
     expect(posts.length).toBe(1);
     expect(posts[0]).toHaveProperty("description", postDto.description);
   });
 
-  const toUrl = (id: number) => `${raidPostsUrl}/${id}`;
+  const toUrl = (id: number) => `${url}/${id}`;
 });

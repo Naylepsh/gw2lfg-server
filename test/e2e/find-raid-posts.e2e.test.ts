@@ -8,7 +8,7 @@ import { seedRaidBoss, seedRaidPost, clean, seedUser } from "./seeders";
 
 describe("Find raid posts e2e tests", () => {
   const timelimit = 60000;
-  const findUrl = "/raid-posts";
+  const url = "/raid-posts";
   let app: any;
   let uow: IRaidPostUnitOfWork;
   let postId: number;
@@ -30,7 +30,7 @@ describe("Find raid posts e2e tests", () => {
   it(
     "should find a seeded post",
     async () => {
-      const { body } = await request(app).get(findUrl);
+      const { body } = await request(app).get(url);
 
       const posts = body.data;
       expect(posts.length).toBe(1);
