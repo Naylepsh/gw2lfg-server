@@ -2,19 +2,19 @@ import "reflect-metadata";
 import { Action, createExpressServer, useContainer } from "routing-controllers";
 import request from "supertest";
 import Container from "typedi";
-import { UnpublishRaidPostController } from "@root/api/controllers/raid-posts/unpublish.controller";
+import { DeleteRaidPostController } from "@root/api/controllers/raid-posts/delete-raid-post.controller";
 import { CurrentUserJWTMiddleware } from "@api/middleware/current-user.middleware";
 import { CreateJwtService } from "@api/services/token/create";
 import { RaidPost } from "@root/data/entities/raid-post/raid-post.entitity";
 import { User } from "@root/data/entities/user/user.entity";
 import { CheckPostAuthorshipService } from "@root/services/raid-post/check-post-authorship.service";
-import { UnpublishRaidPostService } from "@root/services/raid-post/unpublish-raid-post.service";
+import { DeleteRaidPostService } from "@root/services/raid-post/delete-raid-post.service";
 import { RegisterService } from "@root/services/user/register.service";
 import { RaidPostMemoryUnitOfWork } from "../../../common/uows/raid-post.memory-unit-of-work";
 import { seedDbWithOnePost } from "./seed-db";
 import { AUTH_HEADER, toBearerToken } from "../../../common/to-bearer-token";
 
-describe("UnpublishRaidPostController integration tests", () => {
+describe("DeleteRaidPostController integration tests", () => {
   let url = "/raid-posts";
   let post: RaidPost;
   let uow: RaidPostMemoryUnitOfWork;
@@ -29,20 +29,20 @@ describe("UnpublishRaidPostController integration tests", () => {
 
     registerService = new RegisterService(uow.users);
 
-    const unpublishService = new UnpublishRaidPostService(uow);
+    const unpublishService = new DeleteRaidPostService(uow);
     const authorshipService = new CheckPostAuthorshipService(uow.raidPosts);
-    const controller = new UnpublishRaidPostController(
+    const controller = new DeleteRaidPostController(
       unpublishService,
       authorshipService
     );
 
-    Container.set(UnpublishRaidPostController, controller);
+    Container.set(DeleteRaidPostController, controller);
     useContainer(Container);
 
     const currentUserMiddleware = new CurrentUserJWTMiddleware(uow.users);
 
     app = createExpressServer({
-      controllers: [UnpublishRaidPostController],
+      controllers: [DeleteRaidPostController],
       currentUserChecker: async (action: Action) =>
         await currentUserMiddleware.getCurrentUser(action),
     });

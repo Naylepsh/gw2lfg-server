@@ -1,7 +1,7 @@
 import { RolePropsDTO } from "./role-props.dto";
 import { RequirementsPropsDTO } from "./requirements-props.dto";
 
-export interface PublishRaidPostDTO {
+export interface CreateRaidPostDTO {
   date: Date;
   server: string;
   description?: string;

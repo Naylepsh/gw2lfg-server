@@ -7,20 +7,20 @@ import { User } from "@data/entities/user/user.entity";
 import { GenericUnitOfWork } from "@data/units-of-work/generic.unit-of-work";
 import { RaidPostUnitOfWork } from "@data/units-of-work/raid-post/raid-post.unit-of-work";
 import { loadTypeORM } from "@loaders/typeorm.loader";
-import { UnpublishRaidPostService } from "@services/raid-post/unpublish-raid-post.service";
+import { DeleteRaidPostService } from "@root/services/raid-post/delete-raid-post.service";
 import { JoinRequestRepository } from "@data/repositories/join-request/join-request.repository";
 
-describe("UnpublishRaidPostService integration tests", () => {
+describe("DeleteRaidPostService integration tests", () => {
   let conn: Connection;
   let uow: RaidPostUnitOfWork;
-  let unpublishService: UnpublishRaidPostService;
+  let unpublishService: DeleteRaidPostService;
 
   beforeAll(async () => {
     conn = await loadTypeORM();
 
     const genericUow = new GenericUnitOfWork(conn);
     uow = new RaidPostUnitOfWork(genericUow);
-    unpublishService = new UnpublishRaidPostService(uow);
+    unpublishService = new DeleteRaidPostService(uow);
   });
 
   afterEach(async () => {
@@ -72,7 +72,7 @@ describe("UnpublishRaidPostService integration tests", () => {
   it("should remove all related join requests on post deletion", async () => {
     const { raidPost, joinRequest } = await seedDb();
 
-    await unpublishService.unpublish({ id: raidPost.id });
+    await unpublishService.delete({ id: raidPost.id });
 
     await uow.withTransaction(async () => {
       const joinRequestsRepo = conn.getCustomRepository(JoinRequestRepository);

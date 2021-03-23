@@ -12,7 +12,7 @@ import { IRaidPostRepository } from "@data/repositories/raid-post/raid-post.repo
 import { seedRaidBoss, clean, seedUser } from "./seeders";
 import { AUTH_HEADER, toBearerToken } from "../common/to-bearer-token";
 
-describe("Publish raid post e2e tests", () => {
+describe("Create raid post e2e tests", () => {
   const publishUrl = "/raid-posts";
   const timeLimit = 15000;
   let app: any;

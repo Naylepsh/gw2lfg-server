@@ -3,14 +3,14 @@ import request from "supertest";
 import { Action, createExpressServer, useContainer } from "routing-controllers";
 import Container from "typedi";
 import { CurrentUserJWTMiddleware } from "@api/middleware/current-user.middleware";
-import { PublishRaidPostController } from "@root/api/controllers/raid-posts/publish-raid-post.controller";
-import { PublishRaidPostService } from "@root/services/raid-post/publish-raid-post.service";
+import { CreateRaidPostController } from "@root/api/controllers/raid-posts/create-raid-post.controller";
+import { CreateRaidPostService } from "@root/services/raid-post/create-raid-post.service";
 import { RaidPostMemoryUnitOfWork } from "../../../common/uows/raid-post.memory-unit-of-work";
 import { addHours } from "../../../common/hours.util";
 import { seedDbWithOnePost } from "./seed-db";
 import { AUTH_HEADER, toBearerToken } from "../../../common/to-bearer-token";
 
-describe("PublishRaidPostController integration tests", () => {
+describe("CreateRaidPostController integration tests", () => {
   const url = "/raid-posts";
   let uow: RaidPostMemoryUnitOfWork;
   let app: any;
@@ -22,16 +22,16 @@ describe("PublishRaidPostController integration tests", () => {
 
     ({ token, bossesIds } = await seedDbWithOnePost(uow));
 
-    const publishService = new PublishRaidPostService(uow);
-    const controller = new PublishRaidPostController(publishService);
+    const publishService = new CreateRaidPostService(uow);
+    const controller = new CreateRaidPostController(publishService);
 
-    Container.set(PublishRaidPostController, controller);
+    Container.set(CreateRaidPostController, controller);
     useContainer(Container);
 
     const currentUserMiddleware = new CurrentUserJWTMiddleware(uow.users);
 
     app = createExpressServer({
-      controllers: [PublishRaidPostController],
+      controllers: [CreateRaidPostController],
       currentUserChecker: async (action: Action) =>
         await currentUserMiddleware.getCurrentUser(action),
     });

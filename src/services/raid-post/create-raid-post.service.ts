@@ -7,28 +7,25 @@ import { raidPostUnitOfWorkType } from "@loaders/typedi.constants";
 import { UserNotFoundError } from "../common/errors/entity-not-found.error";
 import { isDateInThePast } from "./utils/is-date-in-the-past";
 import { DateIsInThePastError } from "./errors/date-is-in-the-past.error";
-import { PublishRaidPostDTO } from "./dtos/publish-raid-post.dto";
+import { CreateRaidPostDTO } from "./dtos/create-raid-post.dto";
 
 /**
  * Service for raid post creation.
  * Creates and saves a given raid post if it contains valid data.
  */
 @Service()
-export class PublishRaidPostService {
+export class CreateRaidPostService {
   constructor(
     @Inject(raidPostUnitOfWorkType) private readonly uow: IRaidPostUnitOfWork
   ) {}
 
-  async publish(publishDto: PublishRaidPostDTO) {
-    if (isDateInThePast(publishDto.date))
-      throw new DateIsInThePastError("date");
+  async create(dto: CreateRaidPostDTO) {
+    if (isDateInThePast(dto.date)) throw new DateIsInThePastError("date");
 
-    return await this.uow.withTransaction(() =>
-      this.createAndSavePost(publishDto)
-    );
+    return await this.uow.withTransaction(() => this.createAndSavePost(dto));
   }
 
-  private async createAndSavePost(publishDto: PublishRaidPostDTO) {
+  private async createAndSavePost(publishDto: CreateRaidPostDTO) {
     const author = await this.uow.users.findById(publishDto.authorId);
     if (!author) throw new UserNotFoundError();
 
@@ -50,7 +47,7 @@ export class PublishRaidPostService {
     return this.uow.raidPosts.save(post);
   }
 
-  private async saveRoles(publishDto: PublishRaidPostDTO) {
+  private async saveRoles(publishDto: CreateRaidPostDTO) {
     const roles = publishDto.rolesProps.map((props) => new Role(props));
 
     await this.uow.roles.saveMany(roles);
@@ -58,7 +55,7 @@ export class PublishRaidPostService {
     return roles;
   }
 
-  private async saveRequirements(publishDto: PublishRaidPostDTO) {
+  private async saveRequirements(publishDto: CreateRaidPostDTO) {
     const itemRequirements = publishDto.requirementsProps.itemsProps.map(
       (props) => new ItemRequirement(props)
     );

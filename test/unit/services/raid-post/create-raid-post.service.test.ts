@@ -1,13 +1,13 @@
-import { PublishRaidPostService } from "@root/services/raid-post/publish-raid-post.service";
-import { PublishRaidPostDTO } from "@root/services/raid-post/dtos/publish-raid-post.dto";
+import { CreateRaidPostService } from "@root/services/raid-post/create-raid-post.service";
+import { CreateRaidPostDTO } from "@root/services/raid-post/dtos/create-raid-post.dto";
 import { createAndSaveRaidBoss } from "../../../common/raid-boss.helper";
 import { RaidPostMemoryUnitOfWork } from "../../../common/uows/raid-post.memory-unit-of-work";
 import { createAndSaveUser } from "../../../common/user.helper";
 import { addHours, subtractHours } from "../../../common/hours.util";
 
-describe("RaidPost service: publish tests", () => {
+describe("CreateRaidPost service tests", () => {
   const uow = RaidPostMemoryUnitOfWork.create();
-  const publishService = new PublishRaidPostService(uow);
+  const publishService = new CreateRaidPostService(uow);
 
   afterEach(async () => {
     await uow.deleteAll();
@@ -22,8 +22,8 @@ describe("RaidPost service: publish tests", () => {
       isCm: false,
     });
     const date = addHours(new Date(), 1);
-    const dto = createPublishDto(userId, [bossId], { date });
-    const { id: postId } = await publishService.publish(dto);
+    const dto = createDto(userId, [bossId], { date });
+    const { id: postId } = await publishService.create(dto);
 
     const hasBeenSaved = !!(await uow.raidPosts.findById(postId));
 
@@ -35,13 +35,13 @@ describe("RaidPost service: publish tests", () => {
       username: "username",
     });
     const date = addHours(new Date(), 1);
-    const dto = createPublishDto(userId, [], {
+    const dto = createDto(userId, [], {
       date,
       requirementsProps: { itemsProps: [{ name: "Some Item", quantity: 10 }] },
     });
     const reqsInDbBefore = uow.itemRequirements.entities.length;
 
-    await publishService.publish(dto);
+    await publishService.create(dto);
 
     const reqsInDbAfter = uow.itemRequirements.entities.length;
     expect(reqsInDbAfter - reqsInDbBefore > 0).toBe(true);
@@ -52,13 +52,13 @@ describe("RaidPost service: publish tests", () => {
       username: "username",
     });
     const date = addHours(new Date(), 1);
-    const dto = createPublishDto(userId, [], {
+    const dto = createDto(userId, [], {
       date,
       rolesProps: [{ name: "DPS", class: "Any" }],
     });
     const rolesInDbBefore = uow.roles.entities.length;
 
-    await publishService.publish(dto);
+    await publishService.create(dto);
 
     const rolesInDbAfter = uow.roles.entities.length;
     expect(rolesInDbAfter - rolesInDbBefore > 0).toBe(true);
@@ -69,12 +69,12 @@ describe("RaidPost service: publish tests", () => {
       username: "username",
     });
     const date = addHours(new Date(), 1);
-    const dto = createPublishDto(userId, [], {
+    const dto = createDto(userId, [], {
       date,
     });
     const usersInDbBefore = uow.users.entities.length;
 
-    await publishService.publish(dto);
+    await publishService.create(dto);
 
     const usersInDbAfter = uow.users.entities.length;
     expect(usersInDbAfter).toBe(usersInDbBefore);
@@ -89,12 +89,12 @@ describe("RaidPost service: publish tests", () => {
       isCm: false,
     });
     const date = addHours(new Date(), 1);
-    const dto = createPublishDto(userId, [bossId], {
+    const dto = createDto(userId, [bossId], {
       date,
     });
     const bossesInDbBefore = uow.raidBosses.entities.length;
 
-    await publishService.publish(dto);
+    await publishService.create(dto);
 
     const bossesInDbAfter = uow.raidBosses.entities.length;
     expect(bossesInDbAfter).toBe(bossesInDbBefore);
@@ -105,15 +105,15 @@ describe("RaidPost service: publish tests", () => {
       username: "username",
     });
     const date = subtractHours(new Date(), 1);
-    const dto = createPublishDto(userId, [], { date });
+    const dto = createDto(userId, [], { date });
 
-    expect(publishService.publish(dto)).rejects.toThrow();
+    expect(publishService.create(dto)).rejects.toThrow();
   });
 
-  function createPublishDto(
+  function createDto(
     authorId: number,
     bossesIds: number[],
-    dto: Partial<PublishRaidPostDTO>
+    dto: Partial<CreateRaidPostDTO>
   ) {
     return {
       date: dto.date ?? addHours(new Date(), 1),
