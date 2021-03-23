@@ -93,6 +93,7 @@ describe("DeleteOldPostsService integration tests", () => {
 
   it("should delete old posts", async () => {
     const { oldPost } = await seedDb();
+
     await deleteOldPostsService.deleteOldPosts();
 
     await uow.withTransaction(async () => {
@@ -101,8 +102,67 @@ describe("DeleteOldPostsService integration tests", () => {
     });
   });
 
-  // it("should NOT delete later posts");
-  // it("should delete related join requests");
-  // it("should delete related requirements");
-  // it("should delete related roles");
+  it("should NOT delete later posts", async () => {
+    const { laterPost } = await seedDb();
+
+    await deleteOldPostsService.deleteOldPosts();
+
+    await uow.withTransaction(async () => {
+      const laterPostInDb = await uow.raidPosts.findById(laterPost.id);
+      expect(laterPostInDb).toBeDefined();
+    });
+  });
+
+  it("should delete related join requests", async () => {
+    const { requestToOldPost } = await seedDb();
+
+    await deleteOldPostsService.deleteOldPosts();
+
+    await uow.withTransaction(async () => {
+      const requestToPostInDb = await uow.joinRequests.findById(
+        requestToOldPost.id
+      );
+      expect(requestToPostInDb).toBeUndefined();
+    });
+  });
+
+  it("should NOT delete non-related join requests", async () => {
+    const { requestToLaterPost } = await seedDb();
+
+    await deleteOldPostsService.deleteOldPosts();
+
+    await uow.withTransaction(async () => {
+      const requestToPostInDb = await uow.joinRequests.findById(
+        requestToLaterPost.id
+      );
+      expect(requestToPostInDb).toBeDefined();
+    });
+  });
+
+  it("should delete related roles", async () => {
+    const { oldPost } = await seedDb();
+
+    await deleteOldPostsService.deleteOldPosts();
+
+    await uow.withTransaction(async () => {
+      expect(oldPost.roles.length).toBeGreaterThanOrEqual(1);
+      const role = oldPost.roles[0];
+      const roleOfOlderPostInDb = await uow.roles.findById(role.id);
+      expect(roleOfOlderPostInDb).toBeUndefined();
+    });
+  });
+
+  it("should NOT delete non-related roles", async () => {
+    const { laterPost } = await seedDb();
+
+    await deleteOldPostsService.deleteOldPosts();
+
+    await uow.withTransaction(async () => {
+      expect(laterPost.roles.length).toBeGreaterThanOrEqual(1);
+      const role = laterPost.roles[0];
+      const x = await uow.roles.findMany({});
+      const roleOfLaterPostInDb = await uow.roles.findById(role.id);
+      expect(roleOfLaterPostInDb).toBeDefined();
+    });
+  });
 });
