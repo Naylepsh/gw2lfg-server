@@ -7,11 +7,6 @@ import { User } from "@data/entities/user/user.entity";
 import { GenericUnitOfWork } from "@data/units-of-work/generic.unit-of-work";
 import { RaidPostUnitOfWork } from "@data/units-of-work/raid-post/raid-post.unit-of-work";
 import { loadTypeORM } from "@loaders/typeorm.loader";
-import { JoinRequestRepository } from "@data/repositories/join-request/join-request.repository";
-import { UserRepository } from "@data/repositories/user/user.repository";
-import { RoleRepository } from "@data/repositories/role/role.repository";
-import { RaidBossRepository } from "@data/repositories/raid-boss/raid-boss.repository";
-import { RaidPostRepository } from "@data/repositories/raid-post/raid-post.repository";
 import { DeleteOldPostsService } from "@services/raid-post/delete-old-posts.service";
 import { addHours } from "../../../common/hours.util";
 
@@ -29,11 +24,13 @@ describe("DeleteOldPostsService integration tests", () => {
   });
 
   afterEach(async () => {
-    await conn.getCustomRepository(JoinRequestRepository).delete({});
-    await conn.getCustomRepository(RoleRepository).delete({});
-    await conn.getCustomRepository(RaidBossRepository).delete({});
-    await conn.getCustomRepository(RaidPostRepository).delete({});
-    await conn.getCustomRepository(UserRepository).delete({});
+    await uow.withTransaction(async () => {
+      await uow.joinRequests.delete({});
+      await uow.roles.delete({});
+      await uow.raidBosses.delete({});
+      await uow.raidPosts.delete({});
+      await uow.users.delete({});
+    });
   });
 
   afterAll(async () => {
