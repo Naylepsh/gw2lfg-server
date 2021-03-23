@@ -11,7 +11,7 @@ import {
 import { User } from "@root/data/entities/user/user.entity";
 import { CheckPostAuthorshipService } from "@root/services/raid-post/check-post-authorship.service";
 import { EntityNotFoundError } from "@root/services/common/errors/entity-not-found.error";
-import { UnpublishRaidPostService } from "@root/services/raid-post/unpublish-raid-post.service";
+import { DeleteRaidPostService } from "@root/services/raid-post/delete-raid-post.service";
 
 /**
  * Controller for DELETE /raid-posts/:id requests.
@@ -19,16 +19,16 @@ import { UnpublishRaidPostService } from "@root/services/raid-post/unpublish-rai
  * User has to be both authenticated and the post's author to use.
  */
 @JsonController()
-export class UnpublishRaidPostController {
+export class DeleteRaidPostController {
   constructor(
-    private readonly unpublishService: UnpublishRaidPostService,
+    private readonly deleteService: DeleteRaidPostService,
     private readonly authorshipService: CheckPostAuthorshipService
   ) {}
 
   @HttpCode(204)
   @OnUndefined(204)
   @Delete("/raid-posts/:id")
-  async unpublish(
+  async delete(
     @CurrentUser({ required: true }) user: User,
     @Param("id") postId: number
   ) {
@@ -40,7 +40,7 @@ export class UnpublishRaidPostController {
       });
       if (!isAuthor) throw new ForbiddenError();
 
-      return await this.unpublishService.unpublish({ id: postId });
+      return await this.deleteService.delete({ id: postId });
     } catch (e) {
       if (e instanceof EntityNotFoundError) {
         // Doesn't matter

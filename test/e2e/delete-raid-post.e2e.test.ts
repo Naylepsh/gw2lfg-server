@@ -7,8 +7,8 @@ import { IRaidPostUnitOfWork } from "@data/units-of-work/raid-post/raid-post.uni
 import { seedRaidBoss, seedRaidPost, clean, seedUser } from "./seeders";
 import { AUTH_HEADER, toBearerToken } from "../common/to-bearer-token";
 
-describe("Unpublish raid post e2e tests", () => {
-  const raidPostsUrl = "/raid-posts";
+describe("Delete raid post e2e tests", () => {
+  const url = "/raid-posts";
   let app: any;
   let uow: IRaidPostUnitOfWork;
   let token: string;
@@ -32,11 +32,11 @@ describe("Unpublish raid post e2e tests", () => {
     await request(app)
       .delete(toUrl(postId))
       .set(AUTH_HEADER, toBearerToken(token));
-    const { body } = await request(app).get(raidPostsUrl);
+    const { body } = await request(app).get(url);
     const posts = body.data;
 
     expect(posts.length).toBe(0);
   });
 
-  const toUrl = (id: number) => `${raidPostsUrl}/${id}`;
+  const toUrl = (id: number) => `${url}/${id}`;
 });

@@ -13,7 +13,7 @@ import { clean, seedRaidBoss, seedRaidPost, seedUser } from "./seeders";
 import { AUTH_HEADER, toBearerToken } from "../common/to-bearer-token";
 
 describe("Delete join request e2e tests", () => {
-  const joinRequestsUrl = "/join-requests";
+  const url = "/join-requests";
   const timelimit = 60000;
   let app: any;
   let uow: IRaidPostUnitOfWork;
@@ -41,16 +41,16 @@ describe("Delete join request e2e tests", () => {
     async () => {
       const roleId = post.roles[0].id;
       const createRequestResponse = await request(app)
-        .post(joinRequestsUrl)
+        .post(url)
         .set(AUTH_HEADER, toBearerToken(token))
         .send({ roleId, postId: post.id });
       const requestId = createRequestResponse.body.data.id;
 
       await request(app)
-        .delete(`${joinRequestsUrl}/${requestId}`)
+        .delete(`${url}/${requestId}`)
         .set(AUTH_HEADER, toBearerToken(token));
 
-      await request(app).get(`${joinRequestsUrl}/${requestId}`);
+      await request(app).get(`${url}/${requestId}`);
 
       const joinRequest = await joinRequestRepo.findById(requestId);
 

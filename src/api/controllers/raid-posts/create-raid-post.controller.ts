@@ -6,10 +6,10 @@ import {
   Post,
 } from "routing-controllers";
 import { User } from "@root/data/entities/user/user.entity";
-import { PublishRaidPostService } from "@root/services/raid-post/publish-raid-post.service";
+import { CreateRaidPostService } from "@root/services/raid-post/create-raid-post.service";
 import { mapRaidPostToRaidPostResponse } from "../../responses/entities/raid-post.entity.response";
 import { SaveRaidPostDTO } from "./dtos/save-raid-post.dto";
-import { PublishRaidPostResponse } from "./responses/publish-raid-post.response";
+import { PublishRaidPostResponse } from "./responses/create-raid-post.response";
 
 /**
  * Controller for POST /raid-posts requests.
@@ -18,8 +18,8 @@ import { PublishRaidPostResponse } from "./responses/publish-raid-post.response"
  * User has to be authenticated to use.
  */
 @JsonController()
-export class PublishRaidPostController {
-  constructor(private readonly publishService: PublishRaidPostService) {}
+export class CreateRaidPostController {
+  constructor(private readonly createService: CreateRaidPostService) {}
 
   @HttpCode(201)
   @Post("/raid-posts")
@@ -31,7 +31,7 @@ export class PublishRaidPostController {
      * If user passed authentication but somehow publish service could not find such a user
      * then something is unexpectedly wrong, thus implicitly throwing InternalServerError
      */
-    const post = await this.publishService.publish({
+    const post = await this.createService.create({
       ...dto,
       authorId: user.id,
     });

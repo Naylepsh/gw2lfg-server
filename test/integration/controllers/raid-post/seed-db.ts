@@ -2,7 +2,7 @@ import items from "@services/gw2-items/items.json";
 import { CreateJwtService } from "@api/services/token/create";
 import { RaidBoss } from "@root/data/entities/raid-boss/raid-boss.entity";
 import { User } from "@root/data/entities/user/user.entity";
-import { PublishRaidPostService } from "@root/services/raid-post/publish-raid-post.service";
+import { CreateRaidPostService } from "@root/services/raid-post/create-raid-post.service";
 import { RegisterService } from "@root/services/user/register.service";
 import { RaidPostMemoryUnitOfWork } from "../../../common/uows/raid-post.memory-unit-of-work";
 import { addHours } from "../../../common/hours.util";
@@ -22,7 +22,7 @@ export async function seedDbWithOnePost(uow: RaidPostMemoryUnitOfWork) {
   const bossesIds = [savedBoss.id];
 
   const item = Object.keys(items)[0];
-  const publishService = new PublishRaidPostService(uow);
+  const publishService = new CreateRaidPostService(uow);
   const dto = {
     server: "EU",
     date: addHours(new Date(), 12),
@@ -33,7 +33,7 @@ export async function seedDbWithOnePost(uow: RaidPostMemoryUnitOfWork) {
     requirementsProps: { itemsProps: [{ name: item, quantity: 10 }] },
     authorId: savedUser.id,
   };
-  const post = await publishService.publish(dto);
+  const post = await publishService.create(dto);
 
   return { token, bossesIds, post, user: savedUser };
 }
