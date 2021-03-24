@@ -1,6 +1,5 @@
 import { Inject, Service } from "typedi";
-import { Requirement } from "@root/data/entities/requirement/requirement.entity";
-import { User } from "@root/data/entities/user/user.entity";
+import { User } from "@data/entities/user/user.entity";
 import {
   findUserItemsServiceType,
   requirementsCheckServiceType,
@@ -27,38 +26,34 @@ export class CheckItemRequirementsService implements ICheckRequirementsService {
   ): Promise<boolean[]> {
     const userItems = await this.findUserItemsService.find({ id: user.id });
 
-    const areItemRequirementsSatisfied = posts.map((post) =>
-      this.areItemRequirementsSatisfied(post.requirements ?? [], userItems)
-    );
+    const areItemRequirementsSatisfied = posts.map((post) => {
+      const itemRequirements = (post.requirements ?? []).filter(
+        (req) => req instanceof ItemRequirement
+      ) as ItemRequirement[];
+      return this.areItemRequirementsSatisfied(itemRequirements, userItems);
+    });
 
     return areItemRequirementsSatisfied;
   }
 
-  areItemRequirementsSatisfied(requirements: Requirement[], userItems: Item[]) {
-    const requiredItems = requirements.filter(
-      (req) => req instanceof ItemRequirement
-    ) as ItemRequirement[];
+  areItemRequirementsSatisfied(
+    requirements: ItemRequirement[],
+    userItems: Item[]
+  ) {
+    return requirements.every((item) =>
+      this.inventoryContainsEnoughQuantityOfItem(userItems, item)
+    );
+  }
 
-    // check whether user has enough items to satisfy the requirements
-    let areAllRequirementsSatisfied = true;
-    for (const requiredItem of requiredItems) {
-      let isItemRequirementSatisfied = false;
-      // check whether user has enough quantity of required item
-      for (const userItem of userItems) {
-        const isRequiredItem = userItem.name === requiredItem.name;
-        const hasEnough = userItem.quantity >= requiredItem.quantity;
-        if (isRequiredItem && hasEnough) {
-          isItemRequirementSatisfied = true;
-          break;
-        }
-      }
-
-      if (!isItemRequirementSatisfied) {
-        areAllRequirementsSatisfied = false;
-        break;
+  private inventoryContainsEnoughQuantityOfItem(inventory: Item[], item: Item) {
+    for (const itemInInventory of inventory) {
+      const isRequiredItem = itemInInventory.name === item.name;
+      const hasEnough = itemInInventory.quantity >= item.quantity;
+      if (isRequiredItem && hasEnough) {
+        return true;
       }
     }
 
-    return areAllRequirementsSatisfied;
+    return false;
   }
 }
