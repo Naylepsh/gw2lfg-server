@@ -2,7 +2,7 @@ import "reflect-metadata";
 import request from "supertest";
 import Container from "typedi";
 import items from "@root/services/gw2-items/items.json";
-import { SendRaidJoinRequestController } from "@root/api/controllers/join-requests/send-join-request.controller";
+import { CreateRaidJoinRequestController } from "@root/api/controllers/join-requests/send-join-request.controller";
 import { CurrentUserJWTMiddleware } from "@api/middleware/current-user.middleware";
 import { RaidPost } from "@root/data/entities/raid-post/raid-post.entitity";
 import { User } from "@root/data/entities/user/user.entity";
@@ -14,7 +14,7 @@ import { JoinRequestMemoryRepository } from "../../../common/repositories/join-r
 import { RaidPostMemoryUnitOfWork } from "../../../common/uows/raid-post.memory-unit-of-work";
 import { MyStorage } from "../../../unit/services/item-storage";
 import { seedDbWithOnePost } from "../raid-post/seed-db";
-import { CheckItemRequirementsService } from "@services/requirement/check-requirements.service";
+import { CheckItemRequirementsService } from "@root/services/requirement/check-item-requirements.service";
 import { FindUserItemsService } from "@services/user/find-user-items.service";
 import { AUTH_HEADER, toBearerToken } from "../../../common/to-bearer-token";
 
@@ -50,17 +50,17 @@ describe("SendRaidJoinRequestController integration tests", () => {
       joinRequestRepo,
       requirementChecker
     );
-    const controller = new SendRaidJoinRequestController(
+    const controller = new CreateRaidJoinRequestController(
       sendJoinRequestService
     );
 
-    Container.set(SendRaidJoinRequestController, controller);
+    Container.set(CreateRaidJoinRequestController, controller);
     useContainer(Container);
 
     const currentUserMiddleware = new CurrentUserJWTMiddleware(uow.users);
 
     app = createExpressServer({
-      controllers: [SendRaidJoinRequestController],
+      controllers: [CreateRaidJoinRequestController],
       currentUserChecker: async (action: Action) =>
         await currentUserMiddleware.getCurrentUser(action),
     });

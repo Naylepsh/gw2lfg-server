@@ -1,5 +1,5 @@
 import items from "@services/gw2-items/items.json";
-import { CreateJwtService } from "@api/services/token/create";
+import { createToken } from "@root/api/utils/token/create";
 import { RaidBoss } from "@root/data/entities/raid-boss/raid-boss.entity";
 import { User } from "@root/data/entities/user/user.entity";
 import { CreateRaidPostService } from "@root/services/raid-post/create-raid-post.service";
@@ -15,7 +15,7 @@ export async function seedDbWithOnePost(uow: RaidPostMemoryUnitOfWork) {
     apiKey: "api-key",
   });
   const savedUser = await registerService.register(user);
-  const token = new CreateJwtService().createToken(savedUser.id);
+  const token = createToken(savedUser.id);
 
   const boss = new RaidBoss({ name: "boss", isCm: false });
   const savedBoss = await uow.raidBosses.save(boss);

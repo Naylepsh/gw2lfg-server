@@ -13,7 +13,7 @@ import { RaidPostMemoryRepository } from "../../../common/repositories/raid-post
 import { UserMemoryRepository } from "../../../common/repositories/user.memory-repository";
 import { storage } from "../item-storage";
 import items from "@services/gw2-items/items.json";
-import { CheckItemRequirementsService } from "@services/requirement/check-requirements.service";
+import { CheckItemRequirementsService } from "@root/services/requirement/check-item-requirements.service";
 import { FindUserItemsService } from "@services/user/find-user-items.service";
 import { addHours } from "../../../common/hours.util";
 

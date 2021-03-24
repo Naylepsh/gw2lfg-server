@@ -1,1 +1,5 @@
-export class InvalidApiKeyError extends Error {}
+export class InvalidApiKeyError extends Error {
+  constructor() {
+    super("Invalid API key.");
+  }
+}

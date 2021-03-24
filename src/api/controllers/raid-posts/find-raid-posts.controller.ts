@@ -19,7 +19,7 @@ export class FindRaidPostsController {
   ) {}
 
   @Get("/raid-posts")
-  async findAll(
+  async handleRequest(
     @QueryParams() query: FindRaidPostsQueryParams
   ): Promise<FindRaidPostsResponse> {
     const whereParams = this.turnQueryIntoWhereParams(query);

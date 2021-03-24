@@ -4,7 +4,7 @@ import request from "supertest";
 import Container from "typedi";
 import { UpdateRaidPostController } from "@root/api/controllers/raid-posts/update-raid-post.controller";
 import { CurrentUserJWTMiddleware } from "@api/middleware/current-user.middleware";
-import { CreateJwtService } from "@api/services/token/create";
+import { createToken } from "@root/api/utils/token/create";
 import { RaidPost } from "@root/data/entities/raid-post/raid-post.entitity";
 import { User } from "@root/data/entities/user/user.entity";
 import { CheckPostAuthorshipService } from "@root/services/raid-post/check-post-authorship.service";
@@ -78,7 +78,7 @@ describe("UpdateRaidPostController integration tests", () => {
       apiKey: "api-key",
     });
     const { id: otherUserId } = await registerService.register(otherUser);
-    const otherUserToken = new CreateJwtService().createToken(otherUserId);
+    const otherUserToken = createToken(otherUserId);
     const dto = {
       server: "EU",
       date: addHours(new Date(), 13),

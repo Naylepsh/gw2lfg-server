@@ -12,7 +12,7 @@ import { MeResponse } from "./responses/me.response";
 export class MeController {
   // user is provided by auth middlewere
   @Get("/me")
-  me(@CurrentUser({ required: true }) user: User): MeResponse {
+  handleRequest(@CurrentUser({ required: true }) user: User): MeResponse {
     return { data: mapUserToUserResponse(user) };
   }
 }

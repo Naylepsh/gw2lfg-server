@@ -86,7 +86,7 @@ export class SendJoinRequestService {
   private async ensureUserMeetsRequirements(post: Post, user: User) {
     const [
       areSatisfied,
-    ] = await this.checkRequirementsService.areRequirementsSatisfied(
+    ] = await this.checkRequirementsService.doesUserSatisfyPostsRequirements(
       [post],
       user
     );

@@ -13,7 +13,7 @@ export class FindJoinRequestsController {
   constructor(private readonly joinRequestService: FindJoinRequestsService) {}
 
   @Get("/join-requests")
-  async find(
+  async handleRequest(
     @QueryParams() params: FindJoinRequestsQueryParams
   ): Promise<FindJoinRequestsResponse> {
     const requests = await this.joinRequestService.find(params);

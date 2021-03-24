@@ -12,10 +12,11 @@ import { RegisterService } from "@services/user/register.service";
 import { UsernameTakenError } from "@services/user/errors/username-taken.error";
 import { InvalidApiKeyError } from "@services/user/errors/invalid-api-key.error";
 import { ConflictError } from "../../http-errors/conflict.error";
-import { CreateJwtService } from "../../services/token/create";
+import { createToken } from "../../utils/token/create";
 import { RegisterDTO } from "./dtos/register.dto";
 import { RegisterResponse } from "./responses/register.response";
 import { mapUserToUserResponse } from "../../responses/entities/user.entity.response";
+import { getErrorMessageOrCreateDefault } from "../../utils/error/get-message-or-create-default";
 
 /**
  * Controller for POST /register
@@ -24,27 +25,36 @@ import { mapUserToUserResponse } from "../../responses/entities/user.entity.resp
  */
 @JsonController()
 export class RegisterUserController {
-  authService = new CreateJwtService();
   constructor(private readonly registerService: RegisterService) {}
 
   @HttpCode(201)
   @OnUndefined(201)
   @Post("/register")
-  async register(@Body() dto: RegisterDTO): Promise<RegisterResponse> {
+  async handleRequest(@Body() dto: RegisterDTO): Promise<RegisterResponse> {
     try {
-      const user = new User(dto);
-      const registeredUser = await this.registerService.register(user);
-      const token = this.authService.createToken(registeredUser.id);
-
-      return { data: { token, user: mapUserToUserResponse(registeredUser) } };
+      return await this.register(dto);
     } catch (e) {
-      if (e instanceof UsernameTakenError) {
-        throw new ConflictError("Username already in use");
-      } else if (e instanceof InvalidApiKeyError) {
-        throw new BadRequestError("Invalid api key");
-      } else {
-        throw new InternalServerError(e.message);
-      }
+      throw this.mapError(e);
+    }
+  }
+
+  private async register(dto: RegisterDTO) {
+    const user = new User(dto);
+    const registeredUser = await this.registerService.register(user);
+    const token = createToken(registeredUser.id);
+
+    return { data: { token, user: mapUserToUserResponse(registeredUser) } };
+  }
+
+  private mapError(error: any) {
+    const message = getErrorMessageOrCreateDefault(error);
+
+    if (error instanceof UsernameTakenError) {
+      throw new ConflictError(message);
+    } else if (error instanceof InvalidApiKeyError) {
+      throw new BadRequestError(message);
+    } else {
+      throw new InternalServerError(message);
     }
   }
 }
