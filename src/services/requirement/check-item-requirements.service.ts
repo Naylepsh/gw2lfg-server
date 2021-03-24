@@ -7,8 +7,8 @@ import {
 import { ICheckRequirementsService } from "./check-requirements.service.interface";
 import { Item } from "./item";
 import { FindUserItemsService } from "../user/find-user-items.service";
-import { RaidPost } from "@data/entities/raid-post/raid-post.entitity";
 import { ItemRequirement } from "@data/entities/item-requirement/item.requirement.entity";
+import { Post } from "../../data/entities/post/post.entity";
 
 /**
  * Service for checking whether given requirements are satisfied by given user.
@@ -20,23 +20,19 @@ export class CheckItemRequirementsService implements ICheckRequirementsService {
     private readonly findUserItemsService: FindUserItemsService
   ) {}
 
-  async areRequirementsSatisfied(
-    posts: RaidPost[],
+  async doesUserSatisfyPostsRequirements(
+    posts: Post[],
     user: User
   ): Promise<boolean[]> {
     const userItems = await this.findUserItemsService.find({ id: user.id });
+    const postsItemRequirements = posts.map(getItemRequirementsOfPost);
 
-    const areItemRequirementsSatisfied = posts.map((post) => {
-      const itemRequirements = (post.requirements ?? []).filter(
-        (req) => req instanceof ItemRequirement
-      ) as ItemRequirement[];
-      return this.areItemRequirementsSatisfied(itemRequirements, userItems);
-    });
-
-    return areItemRequirementsSatisfied;
+    return postsItemRequirements.map((requirements) =>
+      this.areAllItemRequirementsSatisfied(requirements, userItems)
+    );
   }
 
-  areItemRequirementsSatisfied(
+  private areAllItemRequirementsSatisfied(
     requirements: ItemRequirement[],
     userItems: Item[]
   ) {
@@ -56,4 +52,10 @@ export class CheckItemRequirementsService implements ICheckRequirementsService {
 
     return false;
   }
+}
+
+function getItemRequirementsOfPost(post: Post) {
+  return (post.requirements ?? []).filter(
+    (req) => req instanceof ItemRequirement
+  ) as ItemRequirement[];
 }
