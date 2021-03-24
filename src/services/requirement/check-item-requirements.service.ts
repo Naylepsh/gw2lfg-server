@@ -8,7 +8,7 @@ import { ICheckRequirementsService } from "./check-requirements.service.interfac
 import { Item } from "./item";
 import { FindUserItemsService } from "../user/find-user-items.service";
 import { ItemRequirement } from "@data/entities/item-requirement/item.requirement.entity";
-import { Post } from "../../data/entities/post/post.entity";
+import { Post } from "@data/entities/post/post.entity";
 
 /**
  * Service for checking whether given requirements are satisfied by given user.
