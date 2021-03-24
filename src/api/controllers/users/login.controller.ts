@@ -7,9 +7,10 @@ import {
 } from "routing-controllers";
 import { LoginService } from "@root/services/user/login.service";
 import { InvalidLoginDetailsError } from "@root/services/user/errors/invalid-login-details.error";
-import { CreateJwtService } from "../../services/token/create";
+import { createToken } from "../../utils/token/create";
 import { LoginDTO } from "./dtos/login.dto";
 import { LoginResponse } from "./responses/login.response";
+import { getErrorMessageOrCreateDefault } from "../../utils/error/get-message-or-create-default";
 
 /**
  * Controller for POST /login
@@ -18,23 +19,31 @@ import { LoginResponse } from "./responses/login.response";
  */
 @JsonController()
 export class LoginUserController {
-  authService = new CreateJwtService();
-
   constructor(private readonly loginService: LoginService) {}
 
   @Post("/login")
-  async login(@Body() dto: LoginDTO): Promise<LoginResponse> {
+  async handleRequest(@Body() dto: LoginDTO): Promise<LoginResponse> {
     try {
-      const user = await this.loginService.login(dto);
-      const token = this.authService.createToken(user.id);
-
-      return { data: { token } };
+      return await this.login(dto);
     } catch (e) {
-      if (e instanceof InvalidLoginDetailsError) {
-        throw new UnauthorizedError(e.message);
-      } else {
-        throw new InternalServerError(e.message);
-      }
+      throw this.mapError(e);
+    }
+  }
+
+  private async login(dto: LoginDTO) {
+    const user = await this.loginService.login(dto);
+    const token = createToken(user.id);
+
+    return { data: { token } };
+  }
+
+  private mapError(error: any) {
+    const message = getErrorMessageOrCreateDefault(error);
+
+    if (error instanceof InvalidLoginDetailsError) {
+      throw new UnauthorizedError(message);
+    } else {
+      throw new InternalServerError(message);
     }
   }
 }

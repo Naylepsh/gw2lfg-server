@@ -15,6 +15,7 @@ import { UpdateRaidPostService } from "@root/services/raid-post/update-raid-post
 import { SaveRaidPostDTO } from "./dtos/save-raid-post.dto";
 import { mapRaidPostToRaidPostResponse } from "../../responses/entities/raid-post.entity.response";
 import { UpdateRaidPostResponse } from "./responses/update-raid-post.response";
+import { getErrorMessageOrCreateDefault } from "../../utils/error/get-message-or-create-default";
 
 /**
  * Controller for PUT /raid-posts/:id requests.
@@ -31,30 +32,44 @@ export class UpdateRaidPostController {
   ) {}
 
   @Put("/raid-posts/:id")
-  async update(
+  async handleRequest(
     @CurrentUser({ required: true }) user: User,
     @Param("id") postId: number,
     @Body() dto: SaveRaidPostDTO
   ): Promise<UpdateRaidPostResponse> {
     try {
-      // Only the author can update their posts
-      const isAuthor = await this.authorshipService.isPostAuthor({
-        userId: user.id,
-        postId,
-      });
-      if (!isAuthor) throw new ForbiddenError();
+      return await this.updateRaidPost(user, postId, dto);
+    } catch (error) {
+      throw this.mapError(error);
+    }
+  }
 
-      const post = await this.updateService.update({ ...dto, id: postId });
+  private async updateRaidPost(
+    user: User,
+    postId: number,
+    dto: SaveRaidPostDTO
+  ) {
+    // Only the author can update their posts
+    const isAuthor = await this.authorshipService.isPostAuthor({
+      userId: user.id,
+      postId,
+    });
+    if (!isAuthor) throw new ForbiddenError();
 
-      return { data: mapRaidPostToRaidPostResponse(post) };
-    } catch (e) {
-      if (e instanceof EntityNotFoundError) {
-        throw new NotFoundError();
-      } else if (e instanceof ForbiddenError) {
-        throw e;
-      } else {
-        throw new InternalServerError(e.message);
-      }
+    const post = await this.updateService.update({ ...dto, id: postId });
+
+    return { data: mapRaidPostToRaidPostResponse(post) };
+  }
+
+  private mapError(error: any) {
+    const message = getErrorMessageOrCreateDefault(error);
+
+    if (error instanceof EntityNotFoundError) {
+      throw new NotFoundError();
+    } else if (error instanceof ForbiddenError) {
+      throw error;
+    } else {
+      throw new InternalServerError(message);
     }
   }
 }

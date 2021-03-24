@@ -23,7 +23,7 @@ export class CreateRaidPostController {
 
   @HttpCode(201)
   @Post("/raid-posts")
-  async publish(
+  async handleRequest(
     @CurrentUser({ required: true }) user: User,
     @Body() dto: SaveRaidPostDTO
   ): Promise<PublishRaidPostResponse> {

@@ -4,7 +4,7 @@ import request from "supertest";
 import Container from "typedi";
 import { DeleteRaidPostController } from "@root/api/controllers/raid-posts/delete-raid-post.controller";
 import { CurrentUserJWTMiddleware } from "@api/middleware/current-user.middleware";
-import { CreateJwtService } from "@api/services/token/create";
+import { createToken } from "@root/api/utils/token/create";
 import { RaidPost } from "@root/data/entities/raid-post/raid-post.entitity";
 import { User } from "@root/data/entities/user/user.entity";
 import { CheckPostAuthorshipService } from "@root/services/raid-post/check-post-authorship.service";
@@ -61,7 +61,7 @@ describe("DeleteRaidPostController integration tests", () => {
       apiKey: "api-key",
     });
     const { id: otherUserId } = await registerService.register(otherUser);
-    const otherUserToken = new CreateJwtService().createToken(otherUserId);
+    const otherUserToken = createToken(otherUserId);
 
     const res = await request(app)
       .delete(toUrl(post.id))
@@ -74,7 +74,6 @@ describe("DeleteRaidPostController integration tests", () => {
     const res = await request(app)
       .delete(toUrl(post.id))
       .set(AUTH_HEADER, toBearerToken(token));
-
     expect(res.status).toBe(204);
   });
 

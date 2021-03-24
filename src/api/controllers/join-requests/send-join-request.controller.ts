@@ -19,6 +19,7 @@ import { ConflictError } from "../../http-errors/conflict.error";
 import { SendJoinRequestDTO } from "./dtos/send-join-request.dto";
 import { SendJoinRequestResponse } from "./responses/send-join-request.response";
 import { mapJoinRequestToJoinRequestResponse } from "../../responses/entities/join-request.entity.response";
+import { getErrorMessageOrCreateDefault } from "../../utils/error/get-message-or-create-default";
 
 /**
  * Controller for POST /join-requests requests.
@@ -26,35 +27,45 @@ import { mapJoinRequestToJoinRequestResponse } from "../../responses/entities/jo
  * User has to be authenticated to use this route.
  */
 @JsonController()
-export class SendRaidJoinRequestController {
+export class CreateRaidJoinRequestController {
   constructor(private readonly joinRequestService: SendJoinRequestService) {}
 
   @HttpCode(201)
   @Post("/join-requests")
-  async sendJoinRequest(
+  async handleRequest(
     @CurrentUser({ required: true }) user: User,
     @Body() dto: SendJoinRequestDTO
   ): Promise<SendJoinRequestResponse> {
     try {
-      const joinRequest = await this.joinRequestService.sendJoinRequest({
-        userId: user.id,
-        postId: dto.postId,
-        roleId: dto.roleId,
-      });
-
-      return { data: mapJoinRequestToJoinRequestResponse(joinRequest) };
+      return await this.createJoinRequest(user, dto);
     } catch (error) {
-      if (error instanceof EntityNotFoundError) {
-        throw new NotFoundError(error.message);
-      } else if (error instanceof EntityAlreadyExistsError) {
-        throw new ConflictError(error.message);
-      } else if (error instanceof RequirementsNotSatisfiedError) {
-        throw new ForbiddenError();
-      } else if (error instanceof SignUpsTimeEndedError) {
-        throw new BadRequestError("Sign-ups time ended.");
-      } else {
-        throw new InternalServerError(error.message);
-      }
+      throw this.mapError(error);
+    }
+  }
+
+  private async createJoinRequest(user: User, dto: SendJoinRequestDTO) {
+    const joinRequest = await this.joinRequestService.sendJoinRequest({
+      userId: user.id,
+      postId: dto.postId,
+      roleId: dto.roleId,
+    });
+
+    return { data: mapJoinRequestToJoinRequestResponse(joinRequest) };
+  }
+
+  private mapError(error: any) {
+    const message = getErrorMessageOrCreateDefault(error);
+
+    if (error instanceof EntityNotFoundError) {
+      throw new NotFoundError(message);
+    } else if (error instanceof EntityAlreadyExistsError) {
+      throw new ConflictError(message);
+    } else if (error instanceof RequirementsNotSatisfiedError) {
+      throw new ForbiddenError();
+    } else if (error instanceof SignUpsTimeEndedError) {
+      throw new BadRequestError(message);
+    } else {
+      throw new InternalServerError(message);
     }
   }
 }

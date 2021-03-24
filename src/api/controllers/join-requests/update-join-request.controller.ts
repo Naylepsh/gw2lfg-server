@@ -3,6 +3,7 @@ import {
   CurrentUser,
   ForbiddenError,
   HttpCode,
+  InternalServerError,
   JsonController,
   NotFoundError,
   Param,
@@ -15,6 +16,7 @@ import { CheckJoinRequestStatusChangePermissionService } from "@services/join-re
 import { SendJoinRequestResponse } from "./responses/send-join-request.response";
 import { UpdateJoinRequestDTO } from "./dtos/update-join-request.dto";
 import { mapJoinRequestToJoinRequestResponse } from "../../responses/entities/join-request.entity.response";
+import { getErrorMessageOrCreateDefault } from "../../utils/error/get-message-or-create-default";
 
 /**
  * Controller for PUT /join-requests/:id requests.
@@ -31,31 +33,45 @@ export class UpdateJoinRequestController {
 
   @HttpCode(201)
   @Put("/join-requests/:id")
-  async sendJoinRequest(
+  async handleRequest(
     @CurrentUser({ required: true }) user: User,
     @Param("id") id: number,
     @Body() dto: UpdateJoinRequestDTO
   ): Promise<SendJoinRequestResponse> {
     try {
-      const canChangeStatus = await this.joinRequestPermissionService.canUserChangeStatus(
-        { userId: user.id, joinRequestId: id }
-      );
-      if (!canChangeStatus) {
-        throw new ForbiddenError();
-      }
+      return await this.updateJoinRequest(user, id, dto);
+    } catch (error) {
+      throw this.mapError(error);
+    }
+  }
 
-      const joinRequest = await this.joinRequestService.updateStatus({
-        id,
-        newStatus: dto.status,
-      });
+  private async updateJoinRequest(
+    user: User,
+    id: number,
+    dto: UpdateJoinRequestDTO
+  ) {
+    const canChangeStatus = await this.joinRequestPermissionService.canUserChangeStatus(
+      { userId: user.id, joinRequestId: id }
+    );
+    if (!canChangeStatus) {
+      throw new ForbiddenError();
+    }
 
-      return { data: mapJoinRequestToJoinRequestResponse(joinRequest) };
-    } catch (e) {
-      if (e instanceof EntityNotFoundError) {
-        throw new NotFoundError(e.message);
-      } else {
-        throw e;
-      }
+    const joinRequest = await this.joinRequestService.updateStatus({
+      id,
+      newStatus: dto.status,
+    });
+
+    return { data: mapJoinRequestToJoinRequestResponse(joinRequest) };
+  }
+
+  private mapError(error: any) {
+    const message = getErrorMessageOrCreateDefault(error);
+
+    if (error instanceof EntityNotFoundError) {
+      throw new NotFoundError(message);
+    } else {
+      throw new InternalServerError(message);
     }
   }
 }

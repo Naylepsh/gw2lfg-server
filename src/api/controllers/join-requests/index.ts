@@ -1,6 +1,6 @@
 import { FindJoinRequestsController } from "./find-join-requests.controller";
 import { FindJoinRequestController } from "./find-join-request.controller";
-import { SendRaidJoinRequestController } from "./send-join-request.controller";
+import { CreateRaidJoinRequestController } from "./send-join-request.controller";
 import { UpdateJoinRequestController } from "./update-join-request.controller";
 import { DeleteJoinRequestController } from "./delete-join-request.controllers";
 
@@ -8,7 +8,7 @@ import { DeleteJoinRequestController } from "./delete-join-request.controllers";
 export const joinRequestsControllers = [
   FindJoinRequestsController,
   FindJoinRequestController,
-  SendRaidJoinRequestController,
+  CreateRaidJoinRequestController,
   UpdateJoinRequestController,
   DeleteJoinRequestController,
 ];

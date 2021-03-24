@@ -12,6 +12,7 @@ import { User } from "@root/data/entities/user/user.entity";
 import { CheckPostAuthorshipService } from "@root/services/raid-post/check-post-authorship.service";
 import { EntityNotFoundError } from "@root/services/common/errors/entity-not-found.error";
 import { DeleteRaidPostService } from "@root/services/raid-post/delete-raid-post.service";
+import { getErrorMessageOrCreateDefault } from "../../utils/error/get-message-or-create-default";
 
 /**
  * Controller for DELETE /raid-posts/:id requests.
@@ -28,10 +29,18 @@ export class DeleteRaidPostController {
   @HttpCode(204)
   @OnUndefined(204)
   @Delete("/raid-posts/:id")
-  async delete(
+  async handleRequest(
     @CurrentUser({ required: true }) user: User,
     @Param("id") postId: number
   ) {
+    try {
+      return await this.deleteRaidPost(user, postId);
+    } catch (e) {
+      throw this.mapError(e);
+    }
+  }
+
+  private async deleteRaidPost(user: User, postId: number) {
     try {
       // Only the author can delete their posts
       const isAuthor = await this.authorshipService.isPostAuthor({
@@ -41,14 +50,21 @@ export class DeleteRaidPostController {
       if (!isAuthor) throw new ForbiddenError();
 
       return await this.deleteService.delete({ id: postId });
-    } catch (e) {
-      if (e instanceof EntityNotFoundError) {
-        // Doesn't matter
-      } else if (e instanceof ForbiddenError) {
-        throw e;
-      } else {
-        throw new InternalServerError(e.message);
+    } catch (error) {
+      // trying to delete an entity that does not exists is fine
+      if (!(error instanceof EntityNotFoundError)) {
+        throw error;
       }
+    }
+  }
+
+  private mapError(error: any) {
+    const message = getErrorMessageOrCreateDefault(error);
+
+    if (error instanceof ForbiddenError) {
+      throw error;
+    } else {
+      throw new InternalServerError(message);
     }
   }
 }

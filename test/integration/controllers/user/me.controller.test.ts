@@ -4,7 +4,7 @@ import request from "supertest";
 import Container from "typedi";
 import { MeController } from "@root/api/controllers/users/me.controller";
 import { CurrentUserJWTMiddleware } from "@api/middleware/current-user.middleware";
-import { CreateJwtService } from "@api/services/token/create";
+import { createToken } from "@root/api/utils/token/create";
 import { User } from "@root/data/entities/user/user.entity";
 import { IUserRepository } from "@data/repositories/user/user.repository.interface";
 import { RegisterService } from "@root/services/user/register.service";
@@ -27,7 +27,7 @@ describe("MeController integration tests", () => {
     userRepo = new UserMemoryRepository();
     const registerService = new RegisterService(userRepo);
     user = await registerService.register(_user);
-    token = new CreateJwtService().createToken(user.id);
+    token = createToken(user.id);
 
     const controller = new MeController();
 

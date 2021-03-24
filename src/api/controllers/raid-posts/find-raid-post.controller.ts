@@ -11,6 +11,7 @@ import { FindRaidPostService } from "@services/raid-post/find-raid-post.service"
 import { mapRaidPostToRaidPostResponse } from "../../responses/entities/raid-post.entity.response";
 import { FindRaidPostResponse } from "./responses/find-raid-post.response";
 import { EntityNotFoundError } from "@services/common/errors/entity-not-found.error";
+import { getErrorMessageOrCreateDefault } from "../../utils/error/get-message-or-create-default";
 
 /**
  * Controller for GET /raid-posts/:id requests.
@@ -24,18 +25,28 @@ export class FindRaidPostController {
   ) {}
 
   @Get("/raid-posts/:id")
-  async find(@Param("id") id: number): Promise<FindRaidPostResponse> {
+  async handleRequest(@Param("id") id: number): Promise<FindRaidPostResponse> {
     try {
-      const post = await this.findService.find({ id });
-      return {
-        data: mapRaidPostToRaidPostResponse(post),
-      };
+      return await this.findRaidPost(id);
     } catch (error) {
-      if (error instanceof EntityNotFoundError) {
-        throw new NotFoundError();
-      } else {
-        throw new InternalServerError(error.message);
-      }
+      throw this.mapError(error);
+    }
+  }
+
+  private async findRaidPost(id: number) {
+    const post = await this.findService.find({ id });
+    return {
+      data: mapRaidPostToRaidPostResponse(post),
+    };
+  }
+
+  private mapError(error: any) {
+    const message = getErrorMessageOrCreateDefault(error);
+
+    if (error instanceof EntityNotFoundError) {
+      throw new NotFoundError();
+    } else {
+      throw new InternalServerError(message);
     }
   }
 }

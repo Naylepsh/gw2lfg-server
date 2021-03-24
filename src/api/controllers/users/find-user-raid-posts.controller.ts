@@ -18,7 +18,7 @@ export class FindUserRaidPostsController {
   ) {}
 
   @Get("/users/:id/raid-posts")
-  async findAll(
+  async handleRequest(
     @QueryParams() query: FindRaidPostsQueryParams,
     @Param("id") userId: number
   ): Promise<FindRaidPostsResponse> {
