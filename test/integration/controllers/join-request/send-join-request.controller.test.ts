@@ -14,7 +14,7 @@ import { JoinRequestMemoryRepository } from "../../../common/repositories/join-r
 import { RaidPostMemoryUnitOfWork } from "../../../common/uows/raid-post.memory-unit-of-work";
 import { MyStorage } from "../../../unit/services/item-storage";
 import { seedDbWithOnePost } from "../raid-post/seed-db";
-import { CheckItemRequirementsService } from "@services/requirement/check-requirements.service";
+import { CheckItemRequirementsService } from "@root/services/requirement/check-item-requirements.service";
 import { FindUserItemsService } from "@services/user/find-user-items.service";
 import { AUTH_HEADER, toBearerToken } from "../../../common/to-bearer-token";
 
