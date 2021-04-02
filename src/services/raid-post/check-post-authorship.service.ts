@@ -16,7 +16,9 @@ export class CheckPostAuthorshipService {
   ) {}
 
   async isPostAuthor(dto: CheckPostAuthorshipDTO) {
-    const post = await this.postRepository.findById(dto.postId);
+    const post = await this.postRepository.findOne({
+      where: { id: dto.postId },
+    });
 
     if (!post) {
       throw new EntityNotFoundError();

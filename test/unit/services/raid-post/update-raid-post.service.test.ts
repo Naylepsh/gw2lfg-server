@@ -25,7 +25,7 @@ describe("RaidPost Service: update tests", () => {
 
     await service.update(updateDto);
 
-    const post = await uow.raidPosts.findById(raidPost.id);
+    const post = await uow.raidPosts.findOne({ where: { id: raidPost.id } });
     expect(post).toBeDefined();
     expect(post).toHaveProperty("server", "NA");
   });
@@ -46,7 +46,7 @@ describe("RaidPost Service: update tests", () => {
 
     await service.update(updateDto);
 
-    const post = await uow.raidPosts.findById(raidPost.id);
+    const post = await uow.raidPosts.findOne({ where: { id: raidPost.id } });
     expect(post).toBeDefined();
     expect(post).toHaveProperty("requirements");
     expect(post!.requirements.length).toBe(1);
@@ -66,7 +66,7 @@ describe("RaidPost Service: update tests", () => {
 
     await service.update(updateDto);
 
-    const post = await uow.raidPosts.findById(raidPost.id);
+    const post = await uow.raidPosts.findOne({ where: { id: raidPost.id } });
     expect(post).toBeDefined();
     expect(post).toHaveProperty("requirements");
     expect(post!.roles.length).toBe(1);
@@ -97,7 +97,7 @@ describe("RaidPost Service: update tests", () => {
 
     await service.update(updateDto);
 
-    const post = await uow.raidPosts.findById(raidPost.id);
+    const post = await uow.raidPosts.findOne({ where: { id: raidPost.id } });
     expect(post).toBeDefined();
     expect(post).toHaveProperty("bosses");
     expect(post!.bosses.length).toBe(1);

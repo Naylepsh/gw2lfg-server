@@ -62,7 +62,7 @@ describe("TypeORM posting repository tests", () => {
     const { post } = await seedDb();
 
     const postingInDb = await postRepository.findOne({
-      whereParams: { id: post.id },
+      where: { id: post.id },
     });
 
     expect(postingInDb).not.toBeUndefined();
@@ -72,7 +72,7 @@ describe("TypeORM posting repository tests", () => {
     const { post, author } = await seedDb();
 
     const postingInDb = await postRepository.findOne({
-      whereParams: { id: post.id },
+      where: { id: post.id },
     });
 
     expect(postingInDb?.author.id).toBe(author.id);
@@ -82,7 +82,7 @@ describe("TypeORM posting repository tests", () => {
     const { post } = await seedDb();
 
     const postInDb = await postRepository.findOne({
-      whereParams: { id: post.id },
+      where: { id: post.id },
     });
 
     expect(postInDb?.requirements.length).toBe(1);
@@ -95,7 +95,7 @@ describe("TypeORM posting repository tests", () => {
       const { post } = await seedDb();
 
       const postFound = await postRepository.findOne({
-        whereParams: { role: { name: roleName } },
+        where: { role: { name: roleName } },
       });
 
       expect(postFound).toBeDefined();
@@ -107,7 +107,7 @@ describe("TypeORM posting repository tests", () => {
       const { post } = await seedDb();
 
       const postFound = await postRepository.findOne({
-        whereParams: { role: { eitherName: ["dps", "any"] } },
+        where: { role: { eitherName: ["dps", "any"] } },
       });
 
       expect(postFound).toBeDefined();
@@ -119,7 +119,7 @@ describe("TypeORM posting repository tests", () => {
       await seedDb();
 
       const postFound = await postRepository.findOne({
-        whereParams: { role: { name: "heal" } },
+        where: { role: { name: "heal" } },
       });
 
       expect(postFound).toBeUndefined();

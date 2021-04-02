@@ -1,5 +1,11 @@
 import { Service } from "typedi";
-import { AbstractRepository, EntityRepository, Like, MoreThan } from "typeorm";
+import {
+  AbstractRepository,
+  EntityRepository,
+  LessThan,
+  Like,
+  MoreThan,
+} from "typeorm";
 import { Post } from "../../entities/post/post.entity";
 import {
   IPostRepository,
@@ -46,7 +52,7 @@ export class PostRepository
 }
 
 export function parseFindPostQuery(queryParams: PostQueryParams) {
-  const { whereParams } = queryParams;
+  const { where: whereParams } = queryParams;
 
   const join = whereParams ? createJoinParams(whereParams) : undefined;
   const where = whereParams ? createWhereQueryBuilder(whereParams) : undefined;
@@ -82,7 +88,7 @@ function createWhereQueryBuilder(whereParams: PostWhereParams) {
 }
 
 function addQueryOnRaidPostProps(whereParams: PostWhereParams, qb: any) {
-  const { id, minDate, server } = whereParams;
+  const { id, minDate, maxDate, server } = whereParams;
 
   if (id) {
     qb.andWhere({ id });
@@ -90,6 +96,10 @@ function addQueryOnRaidPostProps(whereParams: PostWhereParams, qb: any) {
 
   if (minDate) {
     qb.andWhere({ date: MoreThan(minDate) });
+  }
+
+  if (maxDate) {
+    qb.andWhere({ date: LessThan(maxDate) });
   }
 
   if (server) {

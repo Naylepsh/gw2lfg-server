@@ -8,17 +8,21 @@ export interface IPostRepository {
 }
 
 export interface PostQueryParams {
-  whereParams?: PostWhereParams;
+  where?: PostWhereParams;
 }
 
 export interface PostsQueryParams extends PostQueryParams {
   skip?: number;
   take?: number;
+  order?: {
+    [P in keyof Post]?: "ASC" | "DESC";
+  };
 }
 
 export interface PostWhereParams {
   id?: number;
-  minDate?: string;
+  minDate?: Date;
+  maxDate?: Date;
   server?: string;
   author?: PostWhereAuthorParams;
   role?: PostWhereRoleParams;

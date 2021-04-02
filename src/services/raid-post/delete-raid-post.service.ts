@@ -14,7 +14,7 @@ export class DeleteRaidPostService {
 
   async delete(dto: UnpublishRaidPostDTO) {
     return this.uow.withTransaction(async () => {
-      const post = await this.uow.raidPosts.findById(dto.id);
+      const post = await this.uow.raidPosts.findOne({ where: { id: dto.id } });
       if (!post) return;
 
       await this.uow.joinRequests.delete({ post: { id: post.id } });

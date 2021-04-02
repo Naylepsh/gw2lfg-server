@@ -9,12 +9,15 @@ export interface IRaidPostRepository {
 }
 
 export interface RaidPostQueryParams {
-  whereParams?: RaidPostWhereParams;
+  where?: RaidPostWhereParams;
 }
 
 export interface RaidPostsQueryParams extends RaidPostQueryParams {
   skip?: number;
   take?: number;
+  order?: {
+    [P in keyof RaidPost]?: "ASC" | "DESC";
+  };
 }
 
 export interface RaidPostWhereParams extends PostWhereParams {

@@ -70,7 +70,7 @@ describe("TypeORM posting repository tests", () => {
     const { post } = await seedDb();
 
     const postingInDb = await postRepository.findOne({
-      whereParams: { id: post.id },
+      where: { id: post.id },
     });
 
     expect(postingInDb).not.toBeUndefined();
@@ -80,7 +80,7 @@ describe("TypeORM posting repository tests", () => {
     const { boss } = await seedDb();
 
     const postingInDb = await postRepository.findOne({
-      whereParams: { bossesIds: [boss.id] },
+      where: { bossesIds: [boss.id] },
     });
 
     expect(postingInDb).not.toBeUndefined();

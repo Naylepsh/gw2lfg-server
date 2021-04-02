@@ -47,7 +47,7 @@ export class RaidPostRepository
 }
 
 export function parseFindRaidPostQuery(queryParams: RaidPostQueryParams) {
-  const { whereParams } = queryParams;
+  const { where: whereParams } = queryParams;
 
   const { join: corePostJoin, where: corePostWhere } = parseFindPostQuery(
     queryParams
