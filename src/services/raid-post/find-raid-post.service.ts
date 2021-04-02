@@ -21,7 +21,7 @@ export class FindRaidPostService {
   async find(dto: FindRaidPostDTO) {
     const { id } = dto;
 
-    const post = await this.repository.findById(id);
+    const post = await this.repository.findOne({ where: { id } });
     if (!post) {
       throw new PostNotFoundError();
     }

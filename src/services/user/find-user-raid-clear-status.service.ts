@@ -2,7 +2,6 @@ import { Inject, Service } from "typedi";
 import { IUserRepository } from "@data/repositories/user/user.repository.interface";
 import {
   findRaidClearStatusServiceType,
-  getItemsFromEntireAccountFetcherType,
   userRepositoryType,
 } from "@loaders/typedi.constants";
 import { UserNotFoundError } from "../common/errors/entity-not-found.error";
@@ -23,7 +22,7 @@ export class FindUserRaidClearStatusService {
   ) {}
 
   async find(dto: FindUserDTO) {
-    const user = await this.userRepository.findById(dto.id);
+    const user = await this.userRepository.findOne({ where: { id: dto.id } });
     if (!user) {
       throw new UserNotFoundError();
     }

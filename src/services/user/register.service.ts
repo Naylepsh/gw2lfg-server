@@ -28,7 +28,7 @@ export class RegisterService {
   }
 
   private async isUsernameTaken(username: string) {
-    return !!(await this.userRepository.findByUsername(username));
+    return !!(await this.userRepository.findOne({ where: { username } }));
   }
 
   private async hashUserPassword(user: User) {

@@ -25,7 +25,9 @@ describe("CreateRaidPost service tests", () => {
     const dto = createDto(userId, [bossId], { date });
     const { id: postId } = await publishService.create(dto);
 
-    const hasBeenSaved = !!(await uow.raidPosts.findById(postId));
+    const hasBeenSaved = !!(await uow.raidPosts.findOne({
+      where: { id: postId },
+    }));
 
     expect(hasBeenSaved).toBe(true);
   });

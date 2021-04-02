@@ -1,7 +1,7 @@
 import { Inject, Service } from "typedi";
 import { IRaidPostUnitOfWork } from "@data/units-of-work/raid-post/raid-post.unit-of-work.interface";
 import { raidPostUnitOfWorkType } from "@loaders/typedi.constants";
-import { In, LessThanOrEqual } from "typeorm";
+import { In } from "typeorm";
 
 /**
  * Service for deletion of raid posts which scheduled date is in the past
@@ -27,9 +27,9 @@ export class DeleteOldPostsService {
 
   // finds all posts such that their date < now
   private getOldPosts() {
+    const now = new Date();
     return this.uow.raidPosts.findMany({
-      where: { date: LessThanOrEqual(new Date()) },
-      relations: ["requirements", "roles"],
+      where: { maxDate: now },
     });
   }
 

@@ -28,7 +28,9 @@ export class UpdateRaidPostService {
   }
 
   private async updatePost(dto: UpdateRaidPostDTO) {
-    const raidPost = await this.uow.raidPosts.findById(dto.id);
+    const raidPost = await this.uow.raidPosts.findOne({
+      where: { id: dto.id },
+    });
 
     if (!raidPost) {
       throw new EntityNotFoundError(`raid post with id ${dto.id} not found`);

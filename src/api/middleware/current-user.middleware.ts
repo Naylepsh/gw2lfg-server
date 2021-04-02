@@ -25,7 +25,7 @@ export class CurrentUserJWTMiddleware {
 
       const decoded = decodeToken(token as string);
       const id = parseInt(decoded.id);
-      const user = await this.userRepo.findById(id);
+      const user = await this.userRepo.findOne({ where: { id } });
 
       // middleware has to return null to trigger failure
       return user ?? null;

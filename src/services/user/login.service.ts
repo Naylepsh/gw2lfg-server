@@ -19,7 +19,9 @@ export class LoginService {
    * returns the user on success
    */
   async login(loginDto: loginDTO) {
-    const user = await this.userRepository.findByUsername(loginDto.username);
+    const user = await this.userRepository.findOne({
+      where: { username: loginDto.username },
+    });
     if (!user) throw new InvalidLoginDetailsError();
 
     const isPasswordValid = await compare(loginDto.password, user.password);

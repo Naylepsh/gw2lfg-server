@@ -12,7 +12,7 @@ import {
 import { User } from "@data/entities/user/user.entity";
 import { EntityNotFoundError } from "@services/common/errors/entity-not-found.error";
 import { CheckJoinRequestDeletionPermissionService } from "@services/join-request/check-join-request-deletion-permission.service";
-import { DeleteJoinRequestService } from "@services/join-request/delete-raid-post.service";
+import { DeleteJoinRequestService } from "@root/services/join-request/delete-join-request.service";
 import { getErrorMessageOrCreateDefault } from "../../utils/error/get-message-or-create-default";
 
 /**

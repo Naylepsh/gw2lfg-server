@@ -61,7 +61,9 @@ describe("TypeORM posting repository tests", () => {
   it("should save posting in database", async () => {
     const { post } = await seedDb();
 
-    const postingInDb = await postRepository.findById(post.id);
+    const postingInDb = await postRepository.findOne({
+      where: { id: post.id },
+    });
 
     expect(postingInDb).not.toBeUndefined();
   });
@@ -69,7 +71,9 @@ describe("TypeORM posting repository tests", () => {
   it("should save author relationship", async () => {
     const { post, author } = await seedDb();
 
-    const postingInDb = await postRepository.findById(post.id);
+    const postingInDb = await postRepository.findOne({
+      where: { id: post.id },
+    });
 
     expect(postingInDb?.author.id).toBe(author.id);
   });
@@ -77,77 +81,45 @@ describe("TypeORM posting repository tests", () => {
   it("should save requirements relationship", async () => {
     const { post } = await seedDb();
 
-    const postInDb = await postRepository.findById(post.id);
+    const postInDb = await postRepository.findOne({
+      where: { id: post.id },
+    });
 
     expect(postInDb?.requirements.length).toBe(1);
   });
 
   describe("relation properties", () => {
-    const relations = ["roles"];
-    const join = {
-      alias: "post",
-      innerJoin: { roles: "post.roles" },
-    };
-
-    const addRoleQuery = (qb: any, role: { name?: string; class?: string }) => {
-      if (role.name) {
-        qb.andWhere(
-          "LOWER(roles.name) = LOWER(:roleName) OR LOWER(roles.name) = 'any'",
-          { roleName: role.name }
-        );
-      }
-
-      if (role.class) {
-        qb.andWhere(
-          "LOWER(roles.class) = LOWER(:roleClass) OR LOWER(roles.class) = 'any'",
-          { roleClass: role.class }
-        );
-      }
-    };
-
     it("should find post by role name", async () => {
       const roleName = "dps";
       setRoleName(roleName);
       const { post } = await seedDb();
 
       const postFound = await postRepository.findOne({
-        relations,
-        join,
-        where: (qb: any) => {
-          addRoleQuery(qb, { name: roleName });
-        },
+        where: { role: { name: roleName } },
       });
 
       expect(postFound).toBeDefined();
       expect(postFound).toHaveProperty("id", post.id);
     });
 
-    it("should find post if its role name is any", async () => {
+    it("should find post if it contains either of the roles", async () => {
       setRoleName("any");
       const { post } = await seedDb();
 
       const postFound = await postRepository.findOne({
-        relations,
-        join,
-        where: (qb: any) => {
-          addRoleQuery(qb, { name: "dps" });
-        },
+        where: { role: { eitherName: ["dps", "any"] } },
       });
 
       expect(postFound).toBeDefined();
       expect(postFound).toHaveProperty("id", post.id);
     });
 
-    it("should not find post if role name differs (and is not any)", async () => {
+    it("should not find post if role name differs", async () => {
       setRoleName("dps");
       await seedDb();
 
       const postFound = await postRepository.findOne({
-        relations,
-        join,
-        where: (qb: any) => {
-          addRoleQuery(qb, { name: "heal" });
-        },
+        where: { role: { name: "heal" } },
       });
 
       expect(postFound).toBeUndefined();

@@ -51,7 +51,9 @@ describe("Create raid post e2e tests", () => {
       const raidPostRepo: IRaidPostRepository = Container.get(
         raidPostRepositoryType
       );
-      const postInDbAfer = await raidPostRepo.findById(body.data.id);
+      const postInDbAfer = await raidPostRepo.findOne({
+        where: { id: body.data.id },
+      });
       expect(postInDbAfer).toBeDefined();
       expect(postInDbAfer).toHaveProperty("server", post.server);
     },

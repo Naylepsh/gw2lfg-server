@@ -33,7 +33,7 @@ describe("TypeORM Unit of Work tests", () => {
     };
     await uow.withTransaction(work);
 
-    const _user = await repo.findByUsername("username");
+    const _user = await repo.findOne({ where: { username: "username" } });
     expect(_user).not.toBeUndefined();
 
     await repo.delete({});
@@ -56,7 +56,7 @@ describe("TypeORM Unit of Work tests", () => {
       await uow.withTransaction(work);
     } catch (error) {}
 
-    const user = await repo.findByUsername("username");
+    const user = await repo.findOne({ where: { username: "username" } });
     expect(user).toBeUndefined();
   });
 });

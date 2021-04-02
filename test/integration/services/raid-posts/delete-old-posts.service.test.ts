@@ -97,7 +97,9 @@ describe("DeleteOldPostsService integration tests", () => {
     await deleteOldPostsService.deleteOldPosts();
 
     await uow.withTransaction(async () => {
-      const oldPostInDb = await uow.raidPosts.findById(oldPost.id);
+      const oldPostInDb = await uow.raidPosts.findOne({
+        where: { id: oldPost.id },
+      });
       expect(oldPostInDb).toBeUndefined();
     });
   });
@@ -108,7 +110,9 @@ describe("DeleteOldPostsService integration tests", () => {
     await deleteOldPostsService.deleteOldPosts();
 
     await uow.withTransaction(async () => {
-      const laterPostInDb = await uow.raidPosts.findById(laterPost.id);
+      const laterPostInDb = await uow.raidPosts.findOne({
+        where: { id: laterPost.id },
+      });
       expect(laterPostInDb).toBeDefined();
     });
   });

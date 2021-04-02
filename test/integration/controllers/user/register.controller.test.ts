@@ -105,7 +105,9 @@ describe("RegisterUserController integration tests", () => {
 
     await request(app).post(url).send(validUserData);
 
-    const user = await userRepo.findByUsername(validUserData.username);
+    const user = await userRepo.findOne({
+      where: { username: validUserData.username },
+    });
     expect(user).toBeDefined();
   });
 });
