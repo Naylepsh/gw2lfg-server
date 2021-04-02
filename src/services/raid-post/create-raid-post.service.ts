@@ -1,13 +1,13 @@
-import { Inject, Service } from "typedi";
+import { IRaidPostUnitOfWork } from "@data/units-of-work/raid-post/raid-post.unit-of-work.interface";
+import { raidPostUnitOfWorkType } from "@loaders/typedi.constants";
+import { ItemRequirement } from "@root/data/entities/item-requirement/item.requirement.entity";
 import { RaidPost } from "@root/data/entities/raid-post/raid-post.entitity";
 import { Role } from "@root/data/entities/role/role.entity";
-import { IRaidPostUnitOfWork } from "@data/units-of-work/raid-post/raid-post.unit-of-work.interface";
-import { ItemRequirement } from "@root/data/entities/item-requirement/item.requirement.entity";
-import { raidPostUnitOfWorkType } from "@loaders/typedi.constants";
+import { Inject, Service } from "typedi";
 import { UserNotFoundError } from "../common/errors/entity-not-found.error";
-import { isDateInThePast } from "./utils/is-date-in-the-past";
-import { DateIsInThePastError } from "./errors/date-is-in-the-past.error";
 import { CreateRaidPostDTO } from "./dtos/create-raid-post.dto";
+import { DateIsInThePastError } from "./errors/date-is-in-the-past.error";
+import { isDateInThePast } from "./utils/is-date-in-the-past";
 
 /**
  * Service for raid post creation.
@@ -26,7 +26,9 @@ export class CreateRaidPostService {
   }
 
   private async createAndSavePost(publishDto: CreateRaidPostDTO) {
-    const author = await this.uow.users.findById(publishDto.authorId);
+    const author = await this.uow.users.findOne({
+      where: { id: publishDto.authorId },
+    });
     if (!author) throw new UserNotFoundError();
 
     // prepare related entities
