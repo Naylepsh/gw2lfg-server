@@ -25,7 +25,7 @@ export class FindUserItemsService {
   ) {}
 
   async find(dto: FindUserDTO) {
-    const user = await this.userRepository.findById(dto.id);
+    const user = await this.userRepository.findOne({ where: { id: dto.id } });
     if (!user) {
       throw new UserNotFoundError();
     }

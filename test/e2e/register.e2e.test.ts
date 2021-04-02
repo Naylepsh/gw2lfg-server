@@ -27,11 +27,15 @@ describe("Register e2e tests", () => {
       password: "password",
       apiKey: getGw2ApiKey(),
     };
-    const userInDbBefore = await userRepo.findByUsername(user.username);
+    const userInDbBefore = await userRepo.findOne({
+      where: { username: user.username },
+    });
 
     await request(app).post(url).send(user);
 
-    const userInDbAfter = await userRepo.findByUsername(user.username);
+    const userInDbAfter = await userRepo.findOne({
+      where: { username: user.username },
+    });
     expect(userInDbBefore).toBeUndefined();
     expect(userInDbAfter).toBeDefined();
   });

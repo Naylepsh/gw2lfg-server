@@ -1,16 +1,22 @@
 import { User } from "../../entities/user/user.entity";
-import { IdentifiableEntityRepository } from "../generic-identifiable-entity.repository";
-import { EntityRepository } from "typeorm";
-import { IUserRepository } from "./user.repository.interface";
+import { AbstractRepository, EntityRepository } from "typeorm";
+import { IUserRepository, UserQueryParams } from "./user.repository.interface";
 import { Service } from "typedi";
 
 @Service()
 @EntityRepository(User)
 export class UserRepository
-  extends IdentifiableEntityRepository<User>
+  extends AbstractRepository<User>
   implements IUserRepository {
-  findByUsername(username: string): Promise<User | undefined> {
-    // find an user with matching username (since username is unique there should be at most 1 result)
-    return this.repository.findOne({ where: { username } });
+  save(user: User): Promise<User> {
+    return this.repository.save(user);
+  }
+
+  findOne(params: UserQueryParams): Promise<User | undefined> {
+    return this.repository.findOne(params);
+  }
+
+  async delete(criteria: any = {}): Promise<void> {
+    await this.repository.delete(criteria);
   }
 }
