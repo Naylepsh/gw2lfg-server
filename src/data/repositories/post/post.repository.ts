@@ -18,7 +18,7 @@ export class PostRepository
   }
 
   findOne(params: PostQueryParams): Promise<Post | undefined> {
-    const { join, where } = parseFindPostsQuery(params);
+    const { join, where } = parseFindPostQuery(params);
     return this.repository.findOne({
       join,
       where,
@@ -28,7 +28,7 @@ export class PostRepository
 
   findMany(params: PostsQueryParams): Promise<Post[]> {
     const { skip, take } = params;
-    const { join, where } = parseFindPostsQuery(params);
+    const { join, where } = parseFindPostQuery(params);
     return this.repository.find({
       skip,
       take,
@@ -45,7 +45,7 @@ export class PostRepository
   public static relations = ["author", "requirements", "roles"];
 }
 
-export function parseFindPostsQuery(queryParams: PostQueryParams) {
+export function parseFindPostQuery(queryParams: PostQueryParams) {
   const { whereParams } = queryParams;
 
   const join = whereParams ? createJoinParams(whereParams) : undefined;
