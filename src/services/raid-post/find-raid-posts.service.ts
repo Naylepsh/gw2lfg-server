@@ -48,22 +48,25 @@ export class FindRaidPostsService {
 
   createWhereQuery(whereParams: FindRaidPostsWhereParams) {
     let where: RaidPostWhereParams = {};
+
     where.server = whereParams.server;
     where.minDate = whereParams.minDate
       ? new Date(whereParams.minDate)
       : undefined;
     where.author = whereParams.author;
     where.bossesIds = whereParams.bossesIds;
+
     if (whereParams.role) {
       const { name, class: roleClass } = whereParams.role;
       where.role = {};
       if (name && !isAny(name)) {
-        where.role.eitherName = [name, "any"];
+        where.role.name = [name, "any"];
       }
       if (roleClass && !isAny(roleClass)) {
-        where.role.eitherClass = [roleClass, "any"];
+        where.role.class = [roleClass, "any"];
       }
     }
+
     return where;
   }
 }

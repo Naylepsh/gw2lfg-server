@@ -123,36 +123,20 @@ function addQueryOnAuthorProps(whereParams: PostWhereParams, qb: any) {
 
 function addQueryOnRoleProps(whereParams: PostWhereParams, qb: any) {
   const { role } = whereParams;
+  const name = role?.name;
+  const roleClass = role?.class;
 
-  if (role?.name) {
-    qb.andWhere("LOWER(roles.name) = LOWER(:roleName)", {
-      roleName: role.name,
-    });
+  if (name) {
+    const sql = Array.isArray(name)
+      ? "LOWER(roles.name) IN (:...name)"
+      : "LOWER(roles.name) = :name";
+    qb.andWhere(sql, { name });
   }
 
-  if (role?.class) {
-    qb.andWhere("LOWER(roles.class) = LOWER(:roleClass)", {
-      roleClass: role.class,
-    });
-  }
-
-  /**
-   * IMPORTANT!
-   * Conditions that use 'OR' have to be inside parenthesis.
-   * Otherwise we get (c1 AND c2) OR (c3 AND c4) instead of c1 AND (c2 OR c3) AND c4
-   */
-  if (role?.eitherName) {
-    const [role1, role2] = role.eitherName;
-    qb.andWhere(
-      "(LOWER(roles.name) = LOWER(:role1) OR LOWER(roles.name) = LOWER(:role2))",
-      { role1, role2 }
-    );
-  }
-
-  if (role?.class) {
-    qb.andWhere(
-      "(LOWER(roles.class) = LOWER(:roleClass) OR LOWER(roles.class) = 'any')",
-      { roleClass: role.class }
-    );
+  if (roleClass) {
+    const sql = Array.isArray(roleClass)
+      ? "LOWER(roles.class) IN (:...class)"
+      : "LOWER(roles.class) = :class";
+    qb.andWhere(sql, { class: roleClass });
   }
 }

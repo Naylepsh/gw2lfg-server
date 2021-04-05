@@ -34,8 +34,6 @@ export interface PostWhereAuthorParams {
 }
 
 export interface PostWhereRoleParams {
-  name?: string;
-  eitherName?: [string, string];
-  class?: string;
-  eitherClass?: [string, string];
+  name?: string | string[];
+  class?: string | string[];
 }
