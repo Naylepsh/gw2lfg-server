@@ -107,7 +107,7 @@ describe("TypeORM posting repository tests", () => {
       const { post } = await seedDb();
 
       const postFound = await postRepository.findOne({
-        where: { role: { eitherName: ["dps", "any"] } },
+        where: { role: { name: ["dps", "any"] } },
       });
 
       expect(postFound).toBeDefined();
