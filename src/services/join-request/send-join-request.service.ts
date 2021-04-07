@@ -44,7 +44,6 @@ export class SendJoinRequestService {
       this.userRepo.findOne({ where: { id: userId } }),
       this.postRepo.findOne({
         where: { id: postId },
-        relations: ["roles", "requirements"],
       }),
       this.joinRequestRepo.findByKeys({ postId, roleId }),
     ]);

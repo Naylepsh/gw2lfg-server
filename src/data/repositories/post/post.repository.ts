@@ -24,9 +24,8 @@ export class PostRepository
   }
 
   findOne(params: PostQueryParams): Promise<Post | undefined> {
-    const { join, where } = parseFindPostQuery(params);
+    const { where } = parseFindPostQuery(params, PostRepository.tableName);
     return this.repository.findOne({
-      join,
       where,
       relations: PostRepository.relations,
     });
@@ -34,11 +33,10 @@ export class PostRepository
 
   findMany(params: PostsQueryParams): Promise<Post[]> {
     const { skip, take } = params;
-    const { join, where } = parseFindPostQuery(params);
+    const { where } = parseFindPostQuery(params, PostRepository.tableName);
     return this.repository.find({
       skip,
       take,
-      join,
       where,
       relations: PostRepository.relations,
     });
@@ -48,46 +46,39 @@ export class PostRepository
     await this.repository.delete(criteria);
   }
 
-  public static relations = ["author", "requirements", "roles"];
+  private static relations = ["author", "requirements", "roles"];
+  /**
+   * Normally to check conditions on objects in relation in TypeORM one has to manually create join property in query builder.
+   * However, using property relations already uses LEFT JOIN under the hood.
+   * Adding that manual join on top of that would create up to twice as many joins.
+   * To avoid that, in queryBuilder.where a table prefix is used, for example: Post__author
+   */
+  private static tableName = "Post";
 }
 
-export function parseFindPostQuery(queryParams: PostQueryParams) {
-  const { where: whereParams } = queryParams;
+export function parseFindPostQuery(
+  queryParams: PostQueryParams,
+  entityPrefix: string
+) {
+  const where = queryParams.where
+    ? createWhereQueryBuilder(queryParams.where, entityPrefix)
+    : undefined;
 
-  const join = whereParams ? createJoinParams(whereParams) : undefined;
-  const where = whereParams ? createWhereQueryBuilder(whereParams) : undefined;
-
-  return { join, where };
+  return { where };
 }
 
-/**
- * Creates join attributes required for proper query builder functioning
- */
-function createJoinParams(whereParams: PostWhereParams) {
-  const { author, role } = whereParams;
-  const alias = "post";
-  let join: Record<string, string> = {};
-
-  if (author) {
-    join.author = `${alias}.author`;
-  }
-
-  if (role) {
-    join.roles = `${alias}.roles`;
-  }
-
-  return { alias, innerJoin: join };
-}
-
-function createWhereQueryBuilder(whereParams: PostWhereParams) {
+function createWhereQueryBuilder(
+  whereParams: PostWhereParams,
+  entityPrefix: string
+) {
   return (qb: any) => {
-    addQueryOnRaidPostProps(whereParams, qb);
-    addQueryOnAuthorProps(whereParams, qb);
-    addQueryOnRoleProps(whereParams, qb);
+    addQueryOnPostProps(whereParams, qb);
+    addQueryOnAuthorProps(whereParams, entityPrefix, qb);
+    addQueryOnRoleProps(whereParams, entityPrefix, qb);
   };
 }
 
-function addQueryOnRaidPostProps(whereParams: PostWhereParams, qb: any) {
+function addQueryOnPostProps(whereParams: PostWhereParams, qb: any) {
   const { id, minDate, maxDate, server } = whereParams;
 
   if (id) {
@@ -107,36 +98,47 @@ function addQueryOnRaidPostProps(whereParams: PostWhereParams, qb: any) {
   }
 }
 
-function addQueryOnAuthorProps(whereParams: PostWhereParams, qb: any) {
+function addQueryOnAuthorProps(
+  whereParams: PostWhereParams,
+  entityPrefix: string,
+  qb: any
+) {
   const { author } = whereParams;
   const id = author?.id;
   const name = author?.name;
 
+  const authorEntity = `${entityPrefix}__author`;
+
   if (id) {
-    qb.andWhere("author.id = :id", { id });
+    qb.andWhere(`${authorEntity}.id = :id`, { id });
   }
 
   if (name) {
-    qb.andWhere("author.username = :name", { name });
+    qb.andWhere(`${authorEntity}.username = :name`, { name });
   }
 }
 
-function addQueryOnRoleProps(whereParams: PostWhereParams, qb: any) {
+function addQueryOnRoleProps(
+  whereParams: PostWhereParams,
+  entityPrefix: string,
+  qb: any
+) {
   const { role } = whereParams;
   const name = role?.name;
   const roleClass = role?.class;
 
+  const rolesEntity = `${entityPrefix}__roles`;
   if (name) {
     const sql = Array.isArray(name)
-      ? "LOWER(roles.name) IN (:...name)"
-      : "LOWER(roles.name) = :name";
+      ? `LOWER(${rolesEntity}.name) IN (:...name)`
+      : `LOWER(${rolesEntity}.name) = :name`;
     qb.andWhere(sql, { name });
   }
 
   if (roleClass) {
     const sql = Array.isArray(roleClass)
-      ? "LOWER(roles.class) IN (:...class)"
-      : "LOWER(roles.class) = :class";
+      ? `LOWER(${rolesEntity}.class) IN (:...class)`
+      : `LOWER(${rolesEntity}.class) = :class`;
     qb.andWhere(sql, { class: roleClass });
   }
 }
