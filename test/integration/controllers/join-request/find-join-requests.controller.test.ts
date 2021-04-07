@@ -4,7 +4,7 @@ import Container from "typedi";
 import items from "@root/services/gw2-items/items.json";
 import { RaidPost } from "@root/data/entities/raid-post/raid-post.entitity";
 import { User } from "@root/data/entities/user/user.entity";
-import { SendJoinRequestService } from "@services/join-request/send-join-request.service";
+import { CreateJoinRequestService } from "@services/join-request/send-join-request.service";
 import { GetItems } from "@root/services/gw2-api/items/get-items.fetcher";
 import { GW2ApiItem } from "@services/gw2-items/item.interface";
 import { FindJoinRequestsService } from "@services/join-request/find-join-requests.service";
@@ -62,13 +62,13 @@ describe("FindJoinRequestsController: integration tests", () => {
     const requirementChecker = new CheckItemRequirementsService(
       findUserItemsService
     );
-    const sendJoinRequestService = new SendJoinRequestService(
+    const sendJoinRequestService = new CreateJoinRequestService(
       uow.users,
       uow.raidPosts,
       joinRequestRepo,
       requirementChecker
     );
-    await sendJoinRequestService.sendJoinRequest({
+    await sendJoinRequestService.create({
       userId: user.id,
       postId: post.id,
       roleId: post.roles[0].id,

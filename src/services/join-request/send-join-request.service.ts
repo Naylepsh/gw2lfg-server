@@ -15,7 +15,7 @@ import {
   UserNotFoundError,
 } from "../common/errors/entity-not-found.error";
 import { ICheckRequirementsService } from "../requirement/check-requirements.service.interface";
-import { SendJoinRequestDTO } from "./dtos/send-join-request.dto";
+import { CreateJoinRequestDTO } from "./dtos/create-join-request.dto";
 import { RequirementsNotSatisfiedError } from "./errors/requirements-not-satisfied.error";
 import { MultipleRequestsForTheSameSpotError } from "./errors/multiple-requests-for-the-same-spot.error";
 import { SpotIsTakenError } from "./errors/spot-is-taken.error";
@@ -29,7 +29,7 @@ import { SignUpsTimeEndedError } from "./errors/signs-ups-time-ended.error";
  * Checks whether given join request is valid and if so, stores it in database.
  */
 @Service()
-export class SendJoinRequestService {
+export class CreateJoinRequestService {
   constructor(
     @Inject(userRepositoryType) private readonly userRepo: IUserRepository,
     @Inject(postRepositoryType) private readonly postRepo: IPostRepository,
@@ -39,7 +39,7 @@ export class SendJoinRequestService {
     private readonly checkRequirementsService: ICheckRequirementsService
   ) {}
 
-  async sendJoinRequest({ userId, postId, roleId }: SendJoinRequestDTO) {
+  async create({ userId, postId, roleId }: CreateJoinRequestDTO) {
     const [user, post, requests] = await Promise.all([
       this.userRepo.findOne({ where: { id: userId } }),
       this.postRepo.findOne({

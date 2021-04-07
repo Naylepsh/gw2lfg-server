@@ -12,7 +12,7 @@ import {
 import { User } from "@data/entities/user/user.entity";
 import { EntityAlreadyExistsError } from "@services/common/errors/entity-already-exists.error";
 import { EntityNotFoundError } from "@services/common/errors/entity-not-found.error";
-import { SendJoinRequestService } from "@services/join-request/send-join-request.service";
+import { CreateJoinRequestService } from "@services/join-request/send-join-request.service";
 import { SignUpsTimeEndedError } from "@services/join-request/errors/signs-ups-time-ended.error";
 import { RequirementsNotSatisfiedError } from "@root/services/join-request/errors/requirements-not-satisfied.error";
 import { ConflictError } from "../../http-errors/conflict.error";
@@ -28,7 +28,7 @@ import { getErrorMessageOrCreateDefault } from "../../utils/error/get-message-or
  */
 @JsonController()
 export class CreateRaidJoinRequestController {
-  constructor(private readonly joinRequestService: SendJoinRequestService) {}
+  constructor(private readonly joinRequestService: CreateJoinRequestService) {}
 
   @HttpCode(201)
   @Post("/join-requests")
@@ -44,7 +44,7 @@ export class CreateRaidJoinRequestController {
   }
 
   private async createJoinRequest(user: User, dto: SendJoinRequestDTO) {
-    const joinRequest = await this.joinRequestService.sendJoinRequest({
+    const joinRequest = await this.joinRequestService.create({
       userId: user.id,
       postId: dto.postId,
       roleId: dto.roleId,

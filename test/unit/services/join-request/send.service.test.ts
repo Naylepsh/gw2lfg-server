@@ -7,7 +7,7 @@ import { IUserRepository } from "@data/repositories/user/user.repository.interfa
 import { GetItems } from "@root/services/gw2-api/items/get-items.fetcher";
 import { nameToId } from "@services/gw2-items/gw2-items.service";
 import { GW2ApiItem } from "@services/gw2-items/item.interface";
-import { SendJoinRequestService } from "@root/services/join-request/send-join-request.service";
+import { CreateJoinRequestService } from "@root/services/join-request/send-join-request.service";
 import { JoinRequestMemoryRepository } from "../../../common/repositories/join-request.memory-repository";
 import { RaidPostMemoryRepository } from "../../../common/repositories/raid-post.memory-repository";
 import { UserMemoryRepository } from "../../../common/repositories/user.memory-repository";
@@ -67,7 +67,7 @@ describe("JoinRequest Service: send tests", () => {
     setItemsInStorage([{ id: nameToId(itemRequirement.name), count: 10 }]);
     const service = setupSendJoinRequestService();
 
-    service.sendJoinRequest({
+    service.create({
       userId: user.id,
       postId: post.id,
       roleId: role.id,
@@ -86,7 +86,7 @@ describe("JoinRequest Service: send tests", () => {
     const service = setupSendJoinRequestService();
 
     expect(
-      service.sendJoinRequest({ userId, postId, roleId })
+      service.create({ userId, postId, roleId })
     ).rejects.toThrow();
   });
 
@@ -95,7 +95,7 @@ describe("JoinRequest Service: send tests", () => {
     const service = setupSendJoinRequestService();
 
     expect(
-      service.sendJoinRequest({ userId: user.id, postId, roleId })
+      service.create({ userId: user.id, postId, roleId })
     ).rejects.toThrow();
   });
 
@@ -105,7 +105,7 @@ describe("JoinRequest Service: send tests", () => {
     const service = setupSendJoinRequestService();
 
     expect(
-      service.sendJoinRequest({ userId: user.id, postId: post.id, roleId })
+      service.create({ userId: user.id, postId: post.id, roleId })
     ).rejects.toThrow();
   });
 
@@ -116,7 +116,7 @@ describe("JoinRequest Service: send tests", () => {
     const service = setupSendJoinRequestService();
 
     expect(
-      service.sendJoinRequest({
+      service.create({
         userId: user.id,
         postId: post.id,
         roleId: role.id,
@@ -128,14 +128,14 @@ describe("JoinRequest Service: send tests", () => {
     const { post, role } = await seed();
     const service = setupSendJoinRequestService();
 
-    await service.sendJoinRequest({
+    await service.create({
       userId: user.id,
       postId: post.id,
       roleId: role.id,
     });
 
     expect(
-      service.sendJoinRequest({
+      service.create({
         userId: user.id,
         postId: post.id,
         roleId: role.id,
@@ -147,7 +147,7 @@ describe("JoinRequest Service: send tests", () => {
     const { post, role } = await seed();
     const service = setupSendJoinRequestService();
 
-    await service.sendJoinRequest({
+    await service.create({
       userId: user.id,
       postId: post.id,
       roleId: role.id,
@@ -162,7 +162,7 @@ describe("JoinRequest Service: send tests", () => {
     );
 
     expect(
-      service.sendJoinRequest({
+      service.create({
         userId: differentUser.id,
         postId: post.id,
         roleId: role.id,
@@ -214,7 +214,7 @@ describe("JoinRequest Service: send tests", () => {
   function setupSendJoinRequestService() {
     const findUserItemsService = setupFindUserItemsService();
 
-    return new SendJoinRequestService(
+    return new CreateJoinRequestService(
       userRepo,
       postRepo,
       joinRequestRepo,

@@ -8,7 +8,7 @@ import { RaidPost } from "@root/data/entities/raid-post/raid-post.entitity";
 import { User } from "@root/data/entities/user/user.entity";
 import { GetItems } from "@root/services/gw2-api/items/get-items.fetcher";
 import { GW2ApiItem } from "@services/gw2-items/item.interface";
-import { SendJoinRequestService } from "@root/services/join-request/send-join-request.service";
+import { CreateJoinRequestService } from "@root/services/join-request/send-join-request.service";
 import { Action, createExpressServer, useContainer } from "routing-controllers";
 import { JoinRequestMemoryRepository } from "../../../common/repositories/join-request.memory-repository";
 import { RaidPostMemoryUnitOfWork } from "../../../common/uows/raid-post.memory-unit-of-work";
@@ -44,7 +44,7 @@ describe("SendRaidJoinRequestController integration tests", () => {
       findUserItemsService
     );
     joinRequestRepo = new JoinRequestMemoryRepository();
-    const sendJoinRequestService = new SendJoinRequestService(
+    const sendJoinRequestService = new CreateJoinRequestService(
       uow.users,
       uow.raidPosts,
       joinRequestRepo,
