@@ -19,9 +19,11 @@ export class RaidPostRepository
   }
 
   findOne(params: RaidPostQueryParams): Promise<RaidPost | undefined> {
-    const { join, where } = parseFindRaidPostQuery(params);
+    const { where } = parseFindRaidPostQuery(
+      params,
+      RaidPostRepository.tableName
+    );
     return this.repository.findOne({
-      join,
       where,
       relations: RaidPostRepository.relations,
     });
@@ -29,11 +31,13 @@ export class RaidPostRepository
 
   findMany(params: RaidPostsQueryParams): Promise<RaidPost[]> {
     const { skip, take } = params;
-    const { join, where } = parseFindRaidPostQuery(params);
+    const { where } = parseFindRaidPostQuery(
+      params,
+      RaidPostRepository.tableName
+    );
     return this.repository.find({
       skip,
       take,
-      join,
       where,
       relations: RaidPostRepository.relations,
     });
@@ -44,69 +48,54 @@ export class RaidPostRepository
   }
 
   private static relations = ["author", "requirements", "bosses", "roles"];
+  /**
+   * Normally to check conditions on objects in relation in TypeORM one has to manually create join property in query builder.
+   * However, using property relations already uses LEFT JOIN under the hood.
+   * Adding that manual join on top of that would create up to twice as many joins.
+   * To avoid that, in queryBuilder.where a table prefix is used, for example: RaidPost__bosses
+   */
+  private static tableName = "RaidPost";
 }
 
-export function parseFindRaidPostQuery(queryParams: RaidPostQueryParams) {
-  const { where: whereParams } = queryParams;
-
-  const { join: corePostJoin, where: corePostWhere } = parseFindPostQuery(
-    queryParams
+export function parseFindRaidPostQuery(
+  queryParams: RaidPostQueryParams,
+  entityPrefix: string
+) {
+  const { where: corePostWhere } = parseFindPostQuery(
+    queryParams,
+    entityPrefix
   );
-  const raidPostJoin = whereParams ? createJoinParams(whereParams) : undefined;
-  const raidPostWhere = whereParams
-    ? createWhereQueryBuilder(whereParams)
+  const raidPostWhere = queryParams.where
+    ? createWhereQueryBuilder(queryParams.where, entityPrefix)
     : undefined;
 
-  const join = mergeJoins(corePostJoin, raidPostJoin);
   const where = mergeWhere(corePostWhere, raidPostWhere);
 
-  return { join, where };
+  return { where };
 }
 
-/**
- * Creates join attributes required for proper query builder functioning
- */
-function createJoinParams(whereParams: RaidPostWhereParams) {
-  const { bossesIds } = whereParams;
-  const alias = "post";
-  let join: Record<string, string> = {};
-
-  if (bossesIds) {
-    join.bosses = `${alias}.bosses`;
-  }
-
-  return { alias, innerJoin: join };
-}
-
-function createWhereQueryBuilder(whereParams: RaidPostWhereParams) {
+function createWhereQueryBuilder(
+  whereParams: RaidPostWhereParams,
+  entityPrefix: string
+) {
   return (qb: any) => {
-    addQueryOnBossProps(whereParams, qb);
+    addQueryOnBossProps(whereParams, entityPrefix, qb);
   };
 }
 
-function addQueryOnBossProps(whereParams: RaidPostWhereParams, qb: any) {
+function addQueryOnBossProps(
+  whereParams: RaidPostWhereParams,
+  entityPrefix: string,
+  qb: any
+) {
   const { bossesIds } = whereParams;
 
+  const bossEntity = `${entityPrefix}__bosses`;
   if (bossesIds) {
     for (const bossId of bossesIds) {
-      qb.andWhere("bosses.id = :bossId", { bossId });
+      qb.andWhere(`${bossEntity}.id = :bossId`, { bossId });
     }
   }
-}
-
-interface Join {
-  alias: string;
-  innerJoin: Record<string, string>;
-}
-
-function mergeJoins(join1: Join | undefined, join2: Join | undefined) {
-  if (join1 && join2) {
-    return {
-      alias: join1.alias,
-      innerJoin: { ...join1.innerJoin, ...join2.innerJoin },
-    };
-  }
-  return join1 ?? join2;
 }
 
 type Where = (qb: any) => void;

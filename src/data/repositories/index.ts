@@ -7,7 +7,7 @@ import { RaidPostRepository } from "./raid-post/raid-post.repository";
 import { RequirementRepository } from "./requirement/requirement.repository";
 import { ItemRequirementRepository } from "./item-requirement/item-requirement.repository";
 import { RoleRepository } from "./role/role.repository";
-import UserRepository from "./user/user.repository";
+import { UserRepository } from "./user/user.repository";
 
 // All available repositories
 export const repositories = {
