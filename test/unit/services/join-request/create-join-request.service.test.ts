@@ -41,7 +41,7 @@ class JoinRequestServiceTestObject {
   }
 }
 
-describe("JoinRequest Service: send tests", () => {
+describe("CreateJoinRequest service tests", () => {
   let userRepo: IUserRepository;
   let postRepo: IPostRepository;
   let joinRequestRepo: JoinRequestMemoryRepository;
@@ -85,9 +85,7 @@ describe("JoinRequest Service: send tests", () => {
     const [userId, postId, roleId] = [-1, 2, 1];
     const service = setupSendJoinRequestService();
 
-    expect(
-      service.create({ userId, postId, roleId })
-    ).rejects.toThrow();
+    expect(service.create({ userId, postId, roleId })).rejects.toThrow();
   });
 
   it("should throw an error if post does not exists", async () => {

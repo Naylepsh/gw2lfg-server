@@ -10,7 +10,7 @@ import { DeleteJoinRequestService } from "./delete-join-request.service";
 export default {
   FindJoinRequestService,
   FindJoinRequestsService,
-  CreateJoinRequestService: SendJoinRequestService,
+  CreateJoinRequestService,
   UpdateJoinRequestStatusService,
   CheckJoinRequestStatusChangePermissionService,
   CheckJoinRequestDeletionPermissionService,
