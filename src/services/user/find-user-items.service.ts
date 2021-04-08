@@ -1,5 +1,6 @@
 import { Inject, Service } from "typedi";
 import { IUserRepository } from "@data/repositories/user/user.repository.interface";
+import { Item } from "@data/entities/item-requirement/item.requirement.entity";
 import {
   findUserItemsServiceType,
   getItemsFromEntireAccountFetcherType,
@@ -10,7 +11,6 @@ import { FindUserDTO } from "./dtos/find-user.dto";
 import { ItemsFetcher } from "../gw2-api/items/items-fetcher.interface";
 import items from "../gw2-items/items.json";
 import { idToName } from "../gw2-items/gw2-items.service";
-import { Item } from "../requirement/item";
 
 /**
  * Service for finding a user with matching id and getting his item stats from GW2 API

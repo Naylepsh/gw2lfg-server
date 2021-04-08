@@ -12,6 +12,10 @@ import { PostProps } from "./post.props";
 import { Requirement } from "../requirement/requirement.entity";
 import { Role } from "../role/role.entity";
 import { User } from "../user/user.entity";
+import {
+  Item,
+  ItemRequirement,
+} from "../item-requirement/item.requirement.entity";
 
 @Entity()
 @TableInheritance({ column: { type: "varchar", name: "type" } })
@@ -54,14 +58,10 @@ export class Post {
     }
   }
 
-  hasRequirements() {
-    return !this.isManyRelationEmpty(this.requirements);
-  }
-
-  hasRole(roleId: number) {
-    return (
-      this.hasRoles() &&
-      this.roles.filter((role) => role.id === roleId).length === 1
+  hasItemRequirementsSatisfiedBy(items: Item[]) {
+    const itemRequirements = this.getItemRequirements();
+    return itemRequirements.every((r) =>
+      items.some((item) => r.isSatifiedBy(item))
     );
   }
 
@@ -79,5 +79,15 @@ export class Post {
 
   private isManyRelationEmpty(relation?: any[]) {
     return relation === undefined || relation.length == 0;
+  }
+
+  hasRequirements() {
+    return !this.isManyRelationEmpty(this.requirements);
+  }
+
+  getItemRequirements() {
+    return (this.requirements ?? []).filter(
+      (req) => req instanceof ItemRequirement
+    ) as ItemRequirement[];
   }
 }
