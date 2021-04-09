@@ -4,7 +4,7 @@ import request from "supertest";
 import Container from "typedi";
 import { FindRaidPostsController } from "@root/api/controllers/raid-posts/find-raid-posts.controller";
 import { FindRaidPostsService } from "@root/services/raid-post/find-raid-posts.service";
-import { RaidPostMemoryUnitOfWork } from "../../../common/uows/raid-post.memory-unit-of-work";
+import { RaidPostMemoryUnitOfWork } from "../../../../common/uows/raid-post.memory-unit-of-work";
 import { seedDbWithOnePost } from "./seed-db";
 
 describe("FindRaidPostsController integration tests", () => {

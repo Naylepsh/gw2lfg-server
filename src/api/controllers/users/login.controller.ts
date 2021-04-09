@@ -7,7 +7,7 @@ import {
 } from "routing-controllers";
 import { LoginService } from "@root/services/user/login.service";
 import { InvalidLoginDetailsError } from "@root/services/user/errors/invalid-login-details.error";
-import { createToken } from "../../utils/token/create";
+import { createToken } from "../../utils/token/jwt";
 import { LoginDTO } from "./dtos/login.dto";
 import { LoginResponse } from "./responses/login.response";
 import { getErrorMessageOrCreateDefault } from "../../utils/error/get-message-or-create-default";

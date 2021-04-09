@@ -5,10 +5,10 @@ import Container from "typedi";
 import { CurrentUserJWTMiddleware } from "@api/middleware/current-user.middleware";
 import { CreateRaidPostController } from "@root/api/controllers/raid-posts/create-raid-post.controller";
 import { CreateRaidPostService } from "@root/services/raid-post/create-raid-post.service";
-import { RaidPostMemoryUnitOfWork } from "../../../common/uows/raid-post.memory-unit-of-work";
-import { addHours } from "../../../common/hours.util";
+import { RaidPostMemoryUnitOfWork } from "../../../../common/uows/raid-post.memory-unit-of-work";
+import { addHours } from "../../../../common/hours.util";
 import { seedDbWithOnePost } from "./seed-db";
-import { AUTH_HEADER, toBearerToken } from "../../../common/to-bearer-token";
+import { AUTH_HEADER, toBearerToken } from "../../../../common/to-bearer-token";
 
 describe("CreateRaidPostController integration tests", () => {
   const url = "/raid-posts";

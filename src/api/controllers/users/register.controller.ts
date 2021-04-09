@@ -12,7 +12,7 @@ import { RegisterService } from "@services/user/register.service";
 import { UsernameTakenError } from "@services/user/errors/username-taken.error";
 import { InvalidApiKeyError } from "@services/user/errors/invalid-api-key.error";
 import { ConflictError } from "../../http-errors/conflict.error";
-import { createToken } from "../../utils/token/create";
+import { createToken } from "../../utils/token/jwt";
 import { RegisterDTO } from "./dtos/register.dto";
 import { RegisterResponse } from "./responses/register.response";
 import { mapUserToUserResponse } from "../../responses/entities/user.entity.response";
