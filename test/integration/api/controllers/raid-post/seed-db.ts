@@ -1,11 +1,11 @@
 import items from "@services/gw2-items/items.json";
-import { createToken } from "@root/api/utils/token/create";
+import { createToken } from "@root/api/utils/token/jwt";
 import { RaidBoss } from "@root/data/entities/raid-boss/raid-boss.entity";
 import { User } from "@root/data/entities/user/user.entity";
 import { CreateRaidPostService } from "@root/services/raid-post/create-raid-post.service";
 import { RegisterService } from "@root/services/user/register.service";
-import { RaidPostMemoryUnitOfWork } from "../../../common/uows/raid-post.memory-unit-of-work";
-import { addHours } from "../../../common/hours.util";
+import { RaidPostMemoryUnitOfWork } from "../../../../common/uows/raid-post.memory-unit-of-work";
+import { addHours } from "../../../../common/hours.util";
 
 export async function seedDbWithOnePost(uow: RaidPostMemoryUnitOfWork) {
   const registerService = new RegisterService(uow.users);
