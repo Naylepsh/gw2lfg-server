@@ -10,14 +10,12 @@ import { FindRaidPostController } from "@api/controllers/raid-posts/find-raid-po
 describe("FindRaidPostController integration tests", () => {
   let app: any;
   let postId: number;
-  let token: string;
 
   beforeEach(async () => {
     const uow = RaidPostMemoryUnitOfWork.create();
 
-    const { post, token: jwt } = await seedDbWithOnePost(uow);
+    const { post } = await seedDbWithOnePost(uow);
     postId = post.id;
-    token = jwt;
 
     const findRaidPostsService = new FindRaidPostService(uow.raidPosts);
     const controller = new FindRaidPostController(findRaidPostsService);

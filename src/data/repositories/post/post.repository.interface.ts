@@ -20,7 +20,7 @@ export interface PostsQueryParams extends PostQueryParams {
 }
 
 export interface PostWhereParams {
-  id?: number;
+  id?: number | number[];
   minDate?: Date;
   maxDate?: Date;
   server?: string;

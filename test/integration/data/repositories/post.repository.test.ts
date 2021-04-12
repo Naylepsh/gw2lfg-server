@@ -58,7 +58,7 @@ describe("TypeORM posting repository tests", () => {
     await connection.close();
   });
 
-  it("should save posting in database", async () => {
+  it("should save post in database", async () => {
     const { post } = await seedDb();
 
     const postingInDb = await postRepository.findOne({
@@ -68,24 +68,21 @@ describe("TypeORM posting repository tests", () => {
     expect(postingInDb).not.toBeUndefined();
   });
 
-  it("should save author relationship", async () => {
-    const { post, author } = await seedDb();
+  it("should find by ids", async () => {
+    const { post: post1 } = await seedDb();
+    setUsername("username2");
+    const { post: post2 } = await seedDb();
+    setUsername("username3");
+    const { post: post3 } = await seedDb();
 
-    const postingInDb = await postRepository.findOne({
-      where: { id: post.id },
+    const posts = await postRepository.findMany({
+      where: { id: [post1.id, post2.id] },
     });
+    const ids = posts.map((post) => post.id);
 
-    expect(postingInDb?.author.id).toBe(author.id);
-  });
-
-  it("should save requirements relationship", async () => {
-    const { post } = await seedDb();
-
-    const postInDb = await postRepository.findOne({
-      where: { id: post.id },
-    });
-
-    expect(postInDb?.requirements.length).toBe(1);
+    expect(ids).toContain(post1.id);
+    expect(ids).toContain(post2.id);
+    expect(ids).not.toContain(post3.id);
   });
 
   describe("relation properties", () => {
@@ -134,9 +131,6 @@ describe("TypeORM posting repository tests", () => {
   }
   function setRoleName(roleName: string) {
     obj.role.name = roleName;
-  }
-  function setRoleClass(roleClass: string) {
-    obj.role.class = roleClass;
   }
 
   async function seedDb() {

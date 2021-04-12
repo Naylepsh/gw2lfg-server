@@ -2,13 +2,9 @@ import "reflect-metadata";
 import request from "supertest";
 import Container from "typedi";
 import { RaidPost } from "@root/data/entities/raid-post/raid-post.entitity";
-import { IJoinRequestRepository } from "@data/repositories/join-request/join-request.repository.interface";
 import { IRaidPostUnitOfWork } from "@data/units-of-work/raid-post/raid-post.unit-of-work.interface";
 import { loadDependencies } from "@loaders/index";
-import {
-  joinRequestRepositoryType,
-  raidPostUnitOfWorkType,
-} from "@loaders/typedi.constants";
+import { raidPostUnitOfWorkType } from "@loaders/typedi.constants";
 import { clean, seedRaidBoss, seedRaidPost, seedUser } from "./seeders";
 import { JoinRequestStatus } from "../data/entities/join-request/join-request.status";
 import { AUTH_HEADER, toBearerToken } from "../common/to-bearer-token";
@@ -18,7 +14,6 @@ describe("Update join request e2e tests", () => {
   const timelimit = 60000;
   let app: any;
   let uow: IRaidPostUnitOfWork;
-  let joinRequestRepo: IJoinRequestRepository;
   let token: string;
   let post: RaidPost;
 
@@ -26,7 +21,6 @@ describe("Update join request e2e tests", () => {
     ({ app } = await loadDependencies());
 
     uow = Container.get(raidPostUnitOfWorkType);
-    joinRequestRepo = Container.get(joinRequestRepositoryType);
 
     ({ token } = await seedUser(app));
     const bossesIds = [await seedRaidBoss(Container)];
@@ -53,9 +47,7 @@ describe("Update join request e2e tests", () => {
         .set(AUTH_HEADER, toBearerToken(token))
         .send({ status: newStatus });
 
-      const { body } = await request(app).get(
-        `${url}/${requestId}`
-      );
+      const { body } = await request(app).get(`${url}/${requestId}`);
       const joinRequest = body.data;
 
       expect(joinRequest).toHaveProperty("status", newStatus);

@@ -2,6 +2,7 @@ import { Service } from "typedi";
 import {
   AbstractRepository,
   EntityRepository,
+  In,
   LessThan,
   Like,
   MoreThan,
@@ -82,7 +83,8 @@ function addQueryOnPostProps(whereParams: PostWhereParams, qb: any) {
   const { id, minDate, maxDate, server } = whereParams;
 
   if (id) {
-    qb.andWhere({ id });
+    const idVal = Array.isArray(id) ? In(id) : id;
+    qb.andWhere({ id: idVal });
   }
 
   if (minDate) {

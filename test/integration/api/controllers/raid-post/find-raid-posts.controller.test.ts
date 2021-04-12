@@ -10,13 +10,11 @@ import { seedDbWithOnePost } from "./seed-db";
 describe("FindRaidPostsController integration tests", () => {
   const url = "/raid-posts";
   let app: any;
-  let token: string;
 
   beforeEach(async () => {
     const uow = RaidPostMemoryUnitOfWork.create();
 
-    const { token: jwt } = await seedDbWithOnePost(uow);
-    token = jwt;
+    await seedDbWithOnePost(uow);
 
     const findRaidPostsService = new FindRaidPostsService(uow.raidPosts);
     const controller = new FindRaidPostsController(findRaidPostsService);

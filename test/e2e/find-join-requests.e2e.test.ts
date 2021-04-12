@@ -2,13 +2,9 @@ import "reflect-metadata";
 import request from "supertest";
 import Container from "typedi";
 import { RaidPost } from "@root/data/entities/raid-post/raid-post.entitity";
-import { IJoinRequestRepository } from "@data/repositories/join-request/join-request.repository.interface";
 import { IRaidPostUnitOfWork } from "@data/units-of-work/raid-post/raid-post.unit-of-work.interface";
 import { loadDependencies } from "@loaders/index";
-import {
-  joinRequestRepositoryType,
-  raidPostUnitOfWorkType,
-} from "@loaders/typedi.constants";
+import { raidPostUnitOfWorkType } from "@loaders/typedi.constants";
 import { clean, seedRaidBoss, seedRaidPost, seedUser } from "./seeders";
 import { AUTH_HEADER, toBearerToken } from "../common/to-bearer-token";
 
@@ -17,7 +13,6 @@ describe("Find raid post join request e2e tests", () => {
   const timelimit = 60000;
   let app: any;
   let uow: IRaidPostUnitOfWork;
-  let joinRequestRepo: IJoinRequestRepository;
   let post: RaidPost;
   let token: string;
 
@@ -25,7 +20,6 @@ describe("Find raid post join request e2e tests", () => {
     ({ app } = await loadDependencies());
 
     uow = Container.get(raidPostUnitOfWorkType);
-    joinRequestRepo = Container.get(joinRequestRepositoryType);
 
     ({ token } = await seedUser(app));
     const bossesIds = [await seedRaidBoss(Container)];

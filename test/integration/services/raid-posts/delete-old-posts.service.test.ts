@@ -164,7 +164,6 @@ describe("DeleteOldPostsService integration tests", () => {
     await uow.withTransaction(async () => {
       expect(laterPost.roles.length).toBeGreaterThanOrEqual(1);
       const role = laterPost.roles[0];
-      const x = await uow.roles.findMany({});
       const roleOfLaterPostInDb = await uow.roles.findById(role.id);
       expect(roleOfLaterPostInDb).toBeDefined();
     });
