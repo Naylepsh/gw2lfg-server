@@ -38,7 +38,7 @@ export class CurrentUserJWTMiddleware {
   }
 
   private getTokenStringFromHeaders(action: Action) {
-    const authToken = action.request.headers["authorization"] as string;
+    const authToken = action.request?.headers?.authorization as string;
     const tokenType = "Bearer ";
     if (!authToken || !authToken.startsWith(tokenType)) {
       throw new Error("No token found");
