@@ -1,5 +1,3 @@
-import { Role } from "@data/entities/role/role.entity";
-
 export interface FindRaidPostsDTO {
   skip: number;
   take: number;
@@ -12,6 +10,7 @@ export interface FindRaidPostsWhereParams {
   bossesIds?: number[];
   author?: FindRaidPostsWhereAuthorParams;
   role?: FindRaidPostsWhereRoleParams;
+  joinRequest?: FindRaidPostsWhereJoinRequestParams;
 }
 
 export interface FindRaidPostsWhereAuthorParams {
@@ -19,6 +18,12 @@ export interface FindRaidPostsWhereAuthorParams {
   name?: string;
 }
 
-export type FindRaidPostsWhereRoleParams = Partial<
-  Pick<Role, "name" | "class">
->;
+export interface FindRaidPostsWhereRoleParams {
+  name?: string;
+  class?: string;
+}
+
+export interface FindRaidPostsWhereJoinRequestParams {
+  status?: string;
+  authorId?: number;
+}

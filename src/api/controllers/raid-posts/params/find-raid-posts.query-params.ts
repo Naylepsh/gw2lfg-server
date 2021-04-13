@@ -47,4 +47,12 @@ export class FindRaidPostsQueryParams {
   @IsOptional()
   @IsString()
   server?: string;
+
+  @IsOptional()
+  @IsString()
+  joinRequestStatus?: string;
+
+  @IsOptional()
+  @IsInt()
+  joinRequestAuthorId?: number;
 }

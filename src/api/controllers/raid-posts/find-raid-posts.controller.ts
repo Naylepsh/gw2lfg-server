@@ -36,17 +36,15 @@ export class FindRaidPostsController {
     const server = query.server;
     const minDate = query.minDate ?? new Date().toISOString();
     const bossesIds = query.bossesIds?.split(",").map((id) => parseInt(id));
-    const author =
-      query.authorId || query.authorName
-        ? { id: query.authorId, name: query.authorName }
-        : undefined;
-    const role =
-      query.roleClass || query.roleName
-        ? {
-            class: query.roleClass,
-            name: query.roleName,
-          }
-        : undefined;
+    const author = { id: query.authorId, name: query.authorName };
+    const role = {
+      class: query.roleClass,
+      name: query.roleName,
+    };
+    const joinRequest = {
+      status: query.joinRequestStatus,
+      authorId: query.joinRequestAuthorId,
+    };
 
     const whereParams: FindRaidPostsWhereParams = {
       minDate,
@@ -54,6 +52,7 @@ export class FindRaidPostsController {
       bossesIds,
       author,
       role,
+      joinRequest,
     };
 
     return whereParams;

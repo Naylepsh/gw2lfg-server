@@ -1,4 +1,3 @@
-import { JoinRequestStatus } from "../../entities/join-request/join-request.status";
 import { Post } from "../../entities/post/post.entity";
 
 export interface IPostRepository {
@@ -41,6 +40,6 @@ export interface PostWhereRoleParams {
 }
 
 export interface PostWhereJoinRequestParams {
-  status?: JoinRequestStatus;
+  status?: string;
   authorId?: number;
 }

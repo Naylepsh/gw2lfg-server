@@ -67,6 +67,12 @@ export class FindRaidPostsService {
       }
     }
 
+    if (whereParams.joinRequest) {
+      where.joinRequest = {};
+      where.joinRequest.authorId = whereParams.joinRequest.authorId;
+      where.joinRequest.status = whereParams.joinRequest.status;
+    }
+
     return where;
   }
 }
