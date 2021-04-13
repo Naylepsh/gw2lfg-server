@@ -47,7 +47,12 @@ export class PostRepository
     await this.repository.delete(criteria);
   }
 
-  private static relations = ["author", "requirements", "roles"];
+  private static relations = [
+    "author",
+    "requirements",
+    "roles",
+    "joinRequests",
+  ];
   /**
    * Normally to check conditions on objects in relation in TypeORM one has to manually create join property in query builder.
    * However, using property relations already uses LEFT JOIN under the hood.
@@ -76,6 +81,7 @@ function createWhereQueryBuilder(
     addQueryOnPostProps(whereParams, qb);
     addQueryOnAuthorProps(whereParams, entityPrefix, qb);
     addQueryOnRoleProps(whereParams, entityPrefix, qb);
+    addQueryOnJoinRequestProps(whereParams, entityPrefix, qb);
   };
 }
 
@@ -128,8 +134,8 @@ function addQueryOnRoleProps(
   const { role } = whereParams;
   const name = role?.name;
   const roleClass = role?.class;
-
   const rolesEntity = `${entityPrefix}__roles`;
+
   if (name) {
     const sql = Array.isArray(name)
       ? `LOWER(${rolesEntity}.name) IN (:...name)`
@@ -142,5 +148,25 @@ function addQueryOnRoleProps(
       ? `LOWER(${rolesEntity}.class) IN (:...class)`
       : `LOWER(${rolesEntity}.class) = :class`;
     qb.andWhere(sql, { class: roleClass });
+  }
+}
+
+function addQueryOnJoinRequestProps(
+  whereParams: PostWhereParams,
+  entityPrefix: string,
+  qb: any
+) {
+  const { joinRequest } = whereParams;
+  const status = joinRequest?.status;
+  const authorId = joinRequest?.authorId;
+  const joinRequestEntity = `${entityPrefix}__joinRequests`;
+
+  if (status) {
+    qb.andWhere(`${joinRequestEntity}.status = :status`, { status });
+  }
+
+  if (authorId) {
+    // typeorm requires this exact format I guess (enclosing it within single "" doesnt work)
+    qb.andWhere(`"${joinRequestEntity}"."userId" = :id`, { id: authorId });
   }
 }

@@ -12,6 +12,9 @@ import { createAndSaveItemRequirement } from "../../../common/item-requirement.h
 import { createAndSavePosting } from "../../../common/post.helper";
 import { createAndSaveUser } from "../../../common/user.helper";
 import { createAndSaveRole } from "../../../common/role.helper";
+import { IJoinRequestRepository } from "@data/repositories/join-request/join-request.repository.interface";
+import { JoinRequestRepository } from "@data/repositories/join-request/join-request.repository";
+import { JoinRequest } from "@data/entities/join-request/join-request.entity";
 
 class PostRepositoryTestObject {
   user: { username: string };
@@ -31,6 +34,7 @@ describe("TypeORM posting repository tests", () => {
   let userRepository: IUserRepository;
   let roleRepository: IRoleRepository;
   let requirementRepository: IRequirementRepository;
+  let joinRequestRepository: IJoinRequestRepository;
 
   let obj = new PostRepositoryTestObject();
 
@@ -43,9 +47,13 @@ describe("TypeORM posting repository tests", () => {
       RequirementRepository
     );
     roleRepository = connection.getCustomRepository(RoleRepository);
+    joinRequestRepository = connection.getCustomRepository(
+      JoinRequestRepository
+    );
   });
 
   afterEach(async () => {
+    await joinRequestRepository.delete();
     await requirementRepository.delete();
     await roleRepository.delete();
     await postRepository.delete();
@@ -120,6 +128,41 @@ describe("TypeORM posting repository tests", () => {
       });
 
       expect(postFound).toBeUndefined();
+    });
+
+    it("should find post by join request status", async () => {
+      const { post, role, author } = await seedDb();
+      const request = new JoinRequest({ post, role, user: author });
+      request.status = "ACCEPTED";
+      await joinRequestRepository.save(request);
+
+      const postFound = await postRepository.findOne({
+        where: { joinRequest: { status: "ACCEPTED" } },
+      });
+
+      expect(postFound).toBeDefined();
+    });
+
+    it("should not find any posts by join request status not attached to any posts", async () => {
+      await seedDb();
+
+      const postFound = await postRepository.findOne({
+        where: { joinRequest: { status: "ACCEPTED" } },
+      });
+
+      expect(postFound).toBeUndefined();
+    });
+
+    it("should find post by join request author", async () => {
+      const { post, role, author } = await seedDb();
+      const request = new JoinRequest({ post, role, user: author });
+      await joinRequestRepository.save(request);
+
+      const postFound = await postRepository.findOne({
+        where: { joinRequest: { authorId: request.user.id } },
+      });
+
+      expect(postFound).toBeDefined();
     });
   });
 

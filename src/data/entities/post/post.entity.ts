@@ -16,6 +16,7 @@ import {
   Item,
   ItemRequirement,
 } from "../item-requirement/item.requirement.entity";
+import { JoinRequest } from "../join-request/join-request.entity";
 
 @Entity()
 @TableInheritance({ column: { type: "varchar", name: "type" } })
@@ -40,6 +41,9 @@ export class Post {
 
   @OneToMany(() => Role, (role) => role.post)
   roles: Role[];
+
+  @OneToMany(() => JoinRequest, (request) => request.post)
+  joinRequests: JoinRequest[];
 
   @CreateDateColumn()
   createdAt: Date;
