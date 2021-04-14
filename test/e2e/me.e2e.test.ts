@@ -6,22 +6,28 @@ import { loadDependencies } from "@loaders/index";
 import { userRepositoryType } from "@loaders/typedi.constants";
 import { seedUser } from "./seeders";
 import { AUTH_HEADER, toBearerToken } from "../common/to-bearer-token";
+import { Connection } from "typeorm";
 
 describe("Me e2e tests", () => {
   const loginUrl = "/login";
   const meUrl = "/me";
   const timeLimit = 15000;
   let app: any;
+  let conn: Connection;
   let userRepo: IUserRepository;
 
-  beforeEach(async () => {
-    ({ app } = await loadDependencies());
+  beforeAll(async () => {
+    ({ app, conn } = await loadDependencies({ loadTasks: false }));
 
     userRepo = Container.get(userRepositoryType);
   });
 
   afterEach(async () => {
     await userRepo.delete({});
+  });
+
+  afterAll(async () => {
+    await conn.close();
   });
 
   it(

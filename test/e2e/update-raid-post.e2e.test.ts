@@ -8,19 +8,23 @@ import { seedRaidBoss, seedRaidPost, clean, seedUser } from "./seeders";
 import { RaidPost } from "@root/data/entities/raid-post/raid-post.entitity";
 import { SaveRaidPostDTO } from "@root/api/controllers/raid-posts/dtos/save-raid-post.dto";
 import { AUTH_HEADER, toBearerToken } from "../common/to-bearer-token";
+import { Connection } from "typeorm";
 
 describe("Update raid post e2e tests", () => {
   const url = "/raid-posts";
   let app: any;
+  let conn: Connection;
   let uow: IRaidPostUnitOfWork;
   let token: string;
   let post: RaidPost;
 
-  beforeEach(async () => {
-    ({ app } = await loadDependencies());
+  beforeAll(async () => {
+    ({ app, conn } = await loadDependencies({ loadTasks: false }));
 
     uow = Container.get(raidPostUnitOfWorkType);
+  });
 
+  beforeEach(async () => {
     ({ token } = await seedUser(app));
     const bossesIds = [await seedRaidBoss(Container)];
     post = await seedRaidPost(app, bossesIds, token);
@@ -28,6 +32,10 @@ describe("Update raid post e2e tests", () => {
 
   afterEach(async () => {
     await clean(uow);
+  });
+
+  afterAll(async () => {
+    await conn.close();
   });
 
   it("should update a raid post", async () => {

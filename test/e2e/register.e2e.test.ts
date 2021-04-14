@@ -5,20 +5,26 @@ import { IUserRepository } from "@data/repositories/user/user.repository.interfa
 import { loadDependencies } from "@loaders/index";
 import { userRepositoryType } from "@loaders/typedi.constants";
 import { getGw2ApiKey } from "../common/get-gw2-api-key";
+import { Connection } from "typeorm";
 
 describe("Register e2e tests", () => {
   const url = "/register";
   let app: any;
+  let conn: Connection;
   let userRepo: IUserRepository;
 
-  beforeEach(async () => {
-    ({ app } = await loadDependencies());
+  beforeAll(async () => {
+    ({ app, conn } = await loadDependencies({ loadTasks: false }));
 
     userRepo = Container.get(userRepositoryType);
   });
 
   afterEach(async () => {
     await userRepo.delete({});
+  });
+
+  afterAll(async () => {
+    await conn.close();
   });
 
   it("should create a user", async () => {

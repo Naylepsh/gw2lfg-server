@@ -11,26 +11,34 @@ import { IRaidPostUnitOfWork } from "@data/units-of-work/raid-post/raid-post.uni
 import { IRaidPostRepository } from "@data/repositories/raid-post/raid-post.repository.interface";
 import { seedRaidBoss, clean, seedUser } from "./seeders";
 import { AUTH_HEADER, toBearerToken } from "../common/to-bearer-token";
+import { Connection } from "typeorm";
 
 describe("Create raid post e2e tests", () => {
   const url = "/raid-posts";
   const timeLimit = 15000;
   let app: any;
+  let conn: Connection;
   let uow: IRaidPostUnitOfWork;
   let token: string;
   let bossesIds: number[];
 
-  beforeEach(async () => {
-    ({ app } = await loadDependencies());
+  beforeAll(async () => {
+    ({ app, conn } = await loadDependencies({ loadTasks: false }));
 
     uow = Container.get(raidPostUnitOfWorkType);
+  });
 
+  beforeEach(async () => {
     ({ token } = await seedUser(app));
     bossesIds = [await seedRaidBoss(Container)];
   }, timeLimit);
 
   afterEach(async () => {
     await clean(uow);
+  });
+
+  afterAll(async () => {
+    await conn.close();
   });
 
   it(

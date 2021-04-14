@@ -8,20 +8,24 @@ import { raidPostUnitOfWorkType } from "@loaders/typedi.constants";
 import { clean, seedRaidBoss, seedRaidPost, seedUser } from "./seeders";
 import { JoinRequestStatus } from "../data/entities/join-request/join-request.status";
 import { AUTH_HEADER, toBearerToken } from "../common/to-bearer-token";
+import { Connection } from "typeorm";
 
 describe("Update join request e2e tests", () => {
   const url = "/join-requests";
   const timelimit = 60000;
   let app: any;
+  let conn: Connection;
   let uow: IRaidPostUnitOfWork;
   let token: string;
   let post: RaidPost;
 
-  beforeEach(async () => {
-    ({ app } = await loadDependencies());
+  beforeAll(async () => {
+    ({ app, conn } = await loadDependencies({ loadTasks: false }));
 
     uow = Container.get(raidPostUnitOfWorkType);
+  });
 
+  beforeEach(async () => {
     ({ token } = await seedUser(app));
     const bossesIds = [await seedRaidBoss(Container)];
     post = await seedRaidPost(app, bossesIds, token);
@@ -29,6 +33,10 @@ describe("Update join request e2e tests", () => {
 
   afterEach(async () => {
     await clean(uow);
+  });
+
+  afterAll(async () => {
+    await conn.close();
   });
 
   it(
