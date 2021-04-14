@@ -8,6 +8,7 @@ import { EntityNotFoundError } from "../common/errors/entity-not-found.error";
 import { isDateInThePast } from "./utils/is-date-in-the-past";
 import { DateIsInThePastError } from "./errors/date-is-in-the-past.error";
 import { UpdateRaidPostDTO } from "./dtos/update-raid-post.dto";
+import { In } from "typeorm";
 
 /**
  * Service for updating raid posts.
@@ -20,7 +21,8 @@ export class UpdateRaidPostService {
   ) {}
 
   async update(dto: UpdateRaidPostDTO) {
-    if (isDateInThePast(dto.date)) throw new DateIsInThePastError("date");
+    if (dto.date && isDateInThePast(dto.date))
+      throw new DateIsInThePastError("date");
 
     return this.uow.withTransaction(() => {
       return this.updatePost(dto);
@@ -36,13 +38,11 @@ export class UpdateRaidPostService {
       throw new EntityNotFoundError(`raid post with id ${dto.id} not found`);
     }
 
-    await this.uow.joinRequests.delete({ post: { id: raidPost.id } });
-
     // prepare related entities
     const author = raidPost.author;
     const [bosses, roles, requirements] = await Promise.all([
       this.uow.raidBosses.findByIds(dto.bossesIds),
-      this.overrideRoles(raidPost, dto),
+      this.updateRoles(raidPost, dto),
       this.overrideRequirements(raidPost, dto),
     ]);
 
@@ -77,14 +77,28 @@ export class UpdateRaidPostService {
   }
 
   // removes previous roles and saves new ones
-  private async overrideRoles(raidPost: RaidPost, dto: UpdateRaidPostDTO) {
-    if (raidPost.hasRoles()) {
-      await this.uow.roles.delete(raidPost.roles);
-    }
+  private async updateRoles(raidPost: RaidPost, dto: UpdateRaidPostDTO) {
+    const newRoles = dto.rolesProps.map((props) => {
+      const role = new Role(props);
+      if (props.id) {
+        role.id = props.id;
+      }
+      return role;
+    });
+    const idsOfNewRoles = newRoles.map((r) => r.id);
+    const idsOfOutdatedRoles = (raidPost.roles ?? [])
+      .map((r) => r.id)
+      .filter((id) => !idsOfNewRoles.includes(id));
 
-    const roles = await this.uow.roles.saveMany(
-      dto.rolesProps.map((props) => new Role(props))
-    );
+    await this.uow.joinRequests.delete({
+      post: { id: raidPost.id },
+      role: { id: In(idsOfOutdatedRoles) },
+    });
+
+    const [, roles] = await Promise.all([
+      this.uow.roles.delete(idsOfOutdatedRoles),
+      this.uow.roles.saveMany(newRoles),
+    ]);
 
     return roles;
   }

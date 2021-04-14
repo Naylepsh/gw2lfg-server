@@ -9,7 +9,7 @@ import { loadTasks } from "./task.loader";
  * Loads orm, dependency injection service and the server
  */
 export async function loadDependencies() {
-  await loadTypeORM();
+  const conn = await loadTypeORM();
 
   loadTypeDI();
 
@@ -19,5 +19,5 @@ export async function loadDependencies() {
   loadTasks();
 
   const app = loadServer();
-  return { app };
+  return { app, conn };
 }

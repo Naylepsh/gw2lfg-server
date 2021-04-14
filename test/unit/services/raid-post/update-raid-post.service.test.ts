@@ -3,7 +3,6 @@ import { UpdateRaidPostDTO } from "@services/raid-post/dtos/update-raid-post.dto
 import { createAndSaveItemRequirement } from "../../../common/item-requirement.helper";
 import { createAndSaveRaidBoss } from "../../../common/raid-boss.helper";
 import { createAndSaveRaidPost } from "../../../common/raid-post.helper";
-import { createAndSaveRole } from "../../../common/role.helper";
 import { RaidPostMemoryUnitOfWork } from "../../../common/uows/raid-post.memory-unit-of-work";
 import { createAndSaveUser } from "../../../common/user.helper";
 import { addHours, subtractHours } from "../../../common/hours.util";
@@ -51,26 +50,6 @@ describe("RaidPost Service: update tests", () => {
     expect(post).toHaveProperty("requirements");
     expect(post!.requirements.length).toBe(1);
     expect(post!.requirements[0]).toHaveProperty("quantity", 2);
-  });
-
-  it("should change roles when they differ from in-database ones", async () => {
-    const user = await createAndSaveUser(uow.users, { username: "username" });
-    const role = await createAndSaveRole(uow.roles, { name: "DPS" });
-    const raidPost = await createAndSaveRaidPost(uow.raidPosts, user, {
-      date: addHours(new Date(), 1),
-      roles: [role],
-    });
-    const updateDto = createUpdateDto(raidPost.id, {
-      rolesProps: [{ name: "Healer", class: "Druid" }],
-    });
-
-    await service.update(updateDto);
-
-    const post = await uow.raidPosts.findOne({ where: { id: raidPost.id } });
-    expect(post).toBeDefined();
-    expect(post).toHaveProperty("requirements");
-    expect(post!.roles.length).toBe(1);
-    expect(post!.roles[0]).toHaveProperty("name", "Healer");
   });
 
   it("should change bosses when boss list differs from in-database one", async () => {
