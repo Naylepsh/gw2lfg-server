@@ -1,5 +1,3 @@
-import { GenericRepository } from "./generic.repository";
-import { IdentifiableEntityRepository } from "./generic-identifiable-entity.repository";
 import { JoinRequestRepository } from "./join-request/join-request.repository";
 import { PostRepository } from "./post/post.repository";
 import { RaidBossRepository } from "./raid-boss/raid-boss.repository";
@@ -11,8 +9,6 @@ import { UserRepository } from "./user/user.repository";
 
 // All available repositories
 export const repositories = {
-  GenericRepository,
-  IdentifiableEntityRepository,
   JoinRequestRepository,
   PostRepository,
   RaidBossRepository,

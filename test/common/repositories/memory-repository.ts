@@ -1,5 +1,19 @@
-import { FindManyParams } from "@data/repositories/find-many.params";
-import { FindOneParams } from "@data/repositories/find-one.params";
+export interface FindManyParams<Entity> {
+  where?: any;
+  join?: any;
+  take?: number;
+  skip?: number;
+  order?: {
+    [P in keyof Entity]?: "ASC" | "DESC";
+  };
+  relations?: string[];
+}
+
+export interface FindOneParams<_Entity> {
+  where?: any;
+  join?: any;
+  relations?: string[];
+}
 
 export abstract class MemoryRepository<Entity> {
   entities: Entity[] = [];
