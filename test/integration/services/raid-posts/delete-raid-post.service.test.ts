@@ -76,7 +76,9 @@ describe("DeleteRaidPostService integration tests", () => {
 
     await uow.withTransaction(async () => {
       const joinRequestsRepo = conn.getCustomRepository(JoinRequestRepository);
-      const joinRequestInDb = await joinRequestsRepo.findById(joinRequest.id);
+      const joinRequestInDb = await joinRequestsRepo.findOne({
+        where: { id: joinRequest.id },
+      });
       expect(joinRequestInDb).toBeUndefined();
     });
   });

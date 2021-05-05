@@ -1,26 +1,40 @@
 import { Service } from "typedi";
-import { EntityRepository } from "typeorm";
+import { AbstractRepository, EntityRepository } from "typeorm";
 import { JoinRequest } from "../../entities/join-request/join-request.entity";
-import { IdentifiableEntityRepository } from "../generic-identifiable-entity.repository";
 import { JoinRequestRelationKeys } from "./join-request-relation-keys";
-import { IJoinRequestRepository } from "./join-request.repository.interface";
+import {
+  IJoinRequestRepository,
+  JoinRequestQueryParams,
+} from "./join-request.repository.interface";
 
 @Service()
 @EntityRepository(JoinRequest)
 export class JoinRequestRepository
-  extends IdentifiableEntityRepository<JoinRequest>
+  extends AbstractRepository<JoinRequest>
   implements IJoinRequestRepository {
   private static relations = ["user", "post", "role"];
 
-  findById(id: number, relations: string[] = JoinRequestRepository.relations) {
-    return super.findById(id, relations);
+  save(joinRequest: JoinRequest): Promise<JoinRequest> {
+    return this.repository.save(joinRequest);
+  }
+
+  findOne(params: JoinRequestQueryParams): Promise<JoinRequest | undefined> {
+    const relations = params.relations ?? JoinRequestRepository.relations;
+    return this.repository.findOne({ ...params, relations });
+  }
+
+  async delete(criteria: any = {}): Promise<void> {
+    await this.repository.delete(criteria);
   }
 
   async findByKeys(keys: JoinRequestRelationKeys): Promise<JoinRequest[]> {
     const where = this.createWhereQuery(keys);
 
     // find join requests matching where query and populate relations
-    return this.findMany({ where, relations: JoinRequestRepository.relations });
+    return this.repository.find({
+      where,
+      relations: JoinRequestRepository.relations,
+    });
   }
 
   // turns optional relations keys into where-query

@@ -40,7 +40,7 @@ export class UpdateRaidPostService {
     // prepare related entities
     const author = raidPost.author;
     const [bosses, roles, requirements] = await Promise.all([
-      this.uow.raidBosses.findByIds(dto.bossesIds),
+      this.uow.raidBosses.findMany({ where: { id: dto.bossesIds } }),
       this.updateRoles(raidPost, dto),
       this.overrideRequirements(raidPost, dto),
     ]);
@@ -66,7 +66,7 @@ export class UpdateRaidPostService {
       await this.uow.requirements.delete(raidPost.requirements);
     }
 
-    const itemRequirements = await this.uow.itemRequirements.saveMany(
+    const itemRequirements = await this.uow.itemRequirements.save(
       dto.requirementsProps.itemsProps.map(
         (props) => new ItemRequirement(props)
       )
@@ -87,7 +87,7 @@ export class UpdateRaidPostService {
 
     const [, roles] = await Promise.all([
       this.deleteOutdatedRoles(OutdatedRolesIds),
-      this.uow.roles.saveMany(newRoles),
+      this.uow.roles.save(newRoles),
     ]);
 
     return roles;

@@ -1,5 +1,14 @@
 import { Requirement } from "../../entities/requirement/requirement.entity";
-import { IIdentifiableEntityRepository } from "../identifiable-entity.repository.interface";
 
-export interface IRequirementRepository
-  extends IIdentifiableEntityRepository<Requirement> {}
+export interface IRequirementRepository {
+  save(requirement: Requirement): Promise<Requirement>;
+  save(requirement: Requirement[]): Promise<Requirement[]>;
+  findOne(params: RequirementQueryParams): Promise<Requirement | undefined>;
+  delete(criteria?: any): Promise<void>;
+}
+
+export interface RequirementQueryParams {
+  where?: {
+    id?: number;
+  };
+}

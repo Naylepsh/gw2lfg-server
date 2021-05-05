@@ -33,7 +33,7 @@ export class CreateRaidPostService {
 
     // prepare related entities
     const [bosses, requirements, roles] = await Promise.all([
-      this.uow.raidBosses.findByIds(publishDto.bossesIds),
+      this.uow.raidBosses.findMany({ where: { id: publishDto.bossesIds } }),
       this.saveRequirements(publishDto),
       this.saveRoles(publishDto),
     ]);
@@ -52,7 +52,7 @@ export class CreateRaidPostService {
   private async saveRoles(publishDto: CreateRaidPostDTO) {
     const roles = publishDto.rolesProps.map((props) => new Role(props));
 
-    await this.uow.roles.saveMany(roles);
+    await this.uow.roles.save(roles);
 
     return roles;
   }
@@ -62,7 +62,7 @@ export class CreateRaidPostService {
       (props) => new ItemRequirement(props)
     );
 
-    await this.uow.itemRequirements.saveMany(itemRequirements);
+    await this.uow.itemRequirements.save(itemRequirements);
 
     return itemRequirements;
   }

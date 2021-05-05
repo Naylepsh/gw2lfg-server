@@ -7,7 +7,7 @@ export interface IUserRepository {
 }
 
 export interface UserQueryParams {
-  where: {
+  where?: {
     id?: number;
     username?: string;
     apiKey?: string;

@@ -1,30 +1,33 @@
-import { IRepository } from "@data/repositories/repository.interface";
-import { IIdentifiableEntityRepository } from "@data/repositories/identifiable-entity.repository.interface";
 import { FindManyParams } from "@data/repositories/find-many.params";
 import { FindOneParams } from "@data/repositories/find-one.params";
 
-export abstract class MemoryRepository<Entity> implements IRepository<Entity> {
+export abstract class MemoryRepository<Entity> {
   entities: Entity[] = [];
 
   constructor(entities: Entity[] = []) {
     this.entities.push(...entities);
   }
 
-  async save(entity: Entity): Promise<Entity> {
-    const entities = this.entities.filter(
+  save(entity: Entity): Promise<Entity>;
+  save(entities: Entity[]): Promise<Entity[]>;
+  async save(entities: Entity | Entity[]): Promise<Entity | Entity[]> {
+    if (Array.isArray(entities)) {
+      return Promise.all(entities.map((entity) => this.saveOne(entity)));
+    } else {
+      return this.saveOne(entities);
+    }
+  }
+
+  async saveOne(entity: Entity) {
+    this.entities = this.entities.filter(
       (e) => !this.areEntitiesEqual(e, entity)
     );
-    entities.push(entity);
-    this.entities = entities;
+    this.entities.push(entity);
 
     return entity;
   }
 
   abstract areEntitiesEqual(_entity: Entity, _otherEntity: Entity): boolean;
-
-  saveMany(entities: Entity[]): Promise<Entity[]> {
-    return Promise.all(entities.map((entity) => this.save(entity)));
-  }
 
   async findOne(params: FindOneParams<Entity>): Promise<Entity | undefined> {
     const all = await this.findMany(params);
@@ -76,7 +79,10 @@ export abstract class MemoryRepository<Entity> implements IRepository<Entity> {
       if (value === undefined) {
         continue;
       }
-      if (typeof value === "object") {
+      if (Array.isArray(value)) {
+        const res = value.includes(entity[key]);
+        if (!res) return false;
+      } else if (typeof value === "object") {
         const res = this.handleWhere(entity[key], value);
         if (!res) return false;
       } else if ((entity as any)[key] !== value) {
@@ -95,9 +101,9 @@ interface Identifiable {
   id: number;
 }
 
-export class IdentifiableMemoryRepository<Entity extends Identifiable>
-  extends MemoryRepository<Entity>
-  implements IIdentifiableEntityRepository<Entity> {
+export class IdentifiableMemoryRepository<
+  Entity extends Identifiable
+> extends MemoryRepository<Entity> {
   nextId = 1;
 
   constructor(entities: Entity[] = []) {
@@ -117,7 +123,17 @@ export class IdentifiableMemoryRepository<Entity extends Identifiable>
     return this.entities.filter((e) => ids.includes(e.id));
   }
 
-  async save(entity: Entity): Promise<Entity> {
+  save(entity: Entity): Promise<Entity>;
+  save(entities: Entity[]): Promise<Entity[]>;
+  async save(entities: Entity | Entity[]): Promise<Entity | Entity[]> {
+    if (Array.isArray(entities)) {
+      return Promise.all(entities.map((entity) => this.saveOneWithId(entity)));
+    } else {
+      return this.saveOneWithId(entities);
+    }
+  }
+
+  async saveOneWithId(entity: Entity) {
     if (!this.entities.map((e) => e.id).includes(entity.id)) {
       entity.id = this.nextId;
       this.nextId++;
@@ -126,20 +142,6 @@ export class IdentifiableMemoryRepository<Entity extends Identifiable>
     await super.save(entity);
 
     return entity;
-  }
-
-  async saveMany(entities: Entity[]): Promise<Entity[]> {
-    const usedIds = this.entities.map((e) => e.id);
-    for (const entity of entities) {
-      if (!usedIds.includes(entity.id)) {
-        entity.id = this.nextId;
-        this.nextId++;
-      }
-    }
-
-    await super.saveMany(entities);
-
-    return entities;
   }
 
   async delete(_criteria?: any): Promise<void> {

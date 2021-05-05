@@ -123,9 +123,9 @@ describe("DeleteOldPostsService integration tests", () => {
     await deleteOldPostsService.deleteOldPosts();
 
     await uow.withTransaction(async () => {
-      const requestToPostInDb = await uow.joinRequests.findById(
-        requestToOldPost.id
-      );
+      const requestToPostInDb = await uow.joinRequests.findOne({
+        where: { id: requestToOldPost.id },
+      });
       expect(requestToPostInDb).toBeUndefined();
     });
   });
@@ -136,9 +136,9 @@ describe("DeleteOldPostsService integration tests", () => {
     await deleteOldPostsService.deleteOldPosts();
 
     await uow.withTransaction(async () => {
-      const requestToPostInDb = await uow.joinRequests.findById(
-        requestToLaterPost.id
-      );
+      const requestToPostInDb = await uow.joinRequests.findOne({
+        where: { id: requestToLaterPost.id },
+      });
       expect(requestToPostInDb).toBeDefined();
     });
   });
@@ -151,7 +151,9 @@ describe("DeleteOldPostsService integration tests", () => {
     await uow.withTransaction(async () => {
       expect(oldPost.roles.length).toBeGreaterThanOrEqual(1);
       const role = oldPost.roles[0];
-      const roleOfOlderPostInDb = await uow.roles.findById(role.id);
+      const roleOfOlderPostInDb = await uow.roles.findOne({
+        where: { id: role.id },
+      });
       expect(roleOfOlderPostInDb).toBeUndefined();
     });
   });
@@ -164,7 +166,9 @@ describe("DeleteOldPostsService integration tests", () => {
     await uow.withTransaction(async () => {
       expect(laterPost.roles.length).toBeGreaterThanOrEqual(1);
       const role = laterPost.roles[0];
-      const roleOfLaterPostInDb = await uow.roles.findById(role.id);
+      const roleOfLaterPostInDb = await uow.roles.findOne({
+        where: { id: role.id },
+      });
       expect(roleOfLaterPostInDb).toBeDefined();
     });
   });

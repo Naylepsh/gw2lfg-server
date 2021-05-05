@@ -73,11 +73,9 @@ describe("UpdateRaidPostService Integration Tests", () => {
       requirementsProps: { itemsProps: [] },
     });
 
-    await uow.withTransaction(async () => {
-      const rolesInDb = await uow.roles.findMany({});
-      expect(rolesInDb.length).toBe(1);
-      expect(rolesInDb[0]).toHaveProperty("id", roleToUpdate.id);
-    });
+    const rolesInDb = await conn.getRepository(Role).find({});
+    expect(rolesInDb.length).toBe(1);
+    expect(rolesInDb[0]).toHaveProperty("id", roleToUpdate.id);
   });
 
   it("should remove join requests to removed roles", async () => {
@@ -95,10 +93,8 @@ describe("UpdateRaidPostService Integration Tests", () => {
       requirementsProps: { itemsProps: [] },
     });
 
-    await uow.withTransaction(async () => {
-      const joinRequestsInDb = await uow.joinRequests.findMany({});
-      expect(joinRequestsInDb.length).toBe(0);
-    });
+    const joinRequestsInDb = await conn.getRepository(JoinRequest).find({});
+    expect(joinRequestsInDb.length).toBe(0);
   });
 
   it("should update roles that were previously in database", async () => {
@@ -161,10 +157,8 @@ describe("UpdateRaidPostService Integration Tests", () => {
       requirementsProps: { itemsProps: [] },
     });
 
-    await uow.withTransaction(async () => {
-      const joinRequests = await uow.joinRequests.findMany({});
-      expect(joinRequests.length).toBe(1);
-    });
+    const joinRequestsInDb = await conn.getRepository(JoinRequest).find({});
+    expect(joinRequestsInDb.length).toBe(1);
   });
 
   it("should NOT throw an error if no roles were changed", async () => {

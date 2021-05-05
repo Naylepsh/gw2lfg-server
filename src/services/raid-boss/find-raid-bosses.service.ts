@@ -14,9 +14,7 @@ export class FindRaidBossesService {
   ) {}
 
   async find() {
-    const bosses = await this.repository.findMany({
-      order: { id: "ASC" },
-    });
+    const bosses = await this.repository.findMany({});
 
     return bosses;
   }

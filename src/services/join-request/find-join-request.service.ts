@@ -15,7 +15,9 @@ export class FindJoinRequestService {
   ) {}
 
   async find(dto: FindJoinRequestDTO) {
-    const request = await this.joinRequestRepo.findById(dto.id);
+    const request = await this.joinRequestRepo.findOne({
+      where: { id: dto.id },
+    });
 
     if (!request) {
       throw new EntityNotFoundError(

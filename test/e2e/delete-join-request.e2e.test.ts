@@ -60,7 +60,9 @@ describe("Delete join request e2e tests", () => {
 
       await request(app).get(`${url}/${requestId}`);
 
-      const joinRequest = await joinRequestRepo.findById(requestId);
+      const joinRequest = await joinRequestRepo.findOne({
+        where: { id: requestId },
+      });
 
       expect(joinRequest).toBeUndefined();
     },
