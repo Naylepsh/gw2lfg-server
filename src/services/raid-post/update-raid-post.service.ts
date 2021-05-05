@@ -79,14 +79,14 @@ export class UpdateRaidPostService {
   private async updateRoles(raidPost: RaidPost, dto: UpdateRaidPostDTO) {
     const newRoles = dto.rolesProps.map((props) => new Role(props));
     const idsOfNewRoles = newRoles.map((r) => r.id);
-    const idsOfOutdatedRoles = (raidPost.roles ?? [])
+    const OutdatedRolesIds = (raidPost.roles ?? [])
       .map((r) => r.id)
       .filter((id) => !idsOfNewRoles.includes(id));
 
-    await this.deleteOutdatedJoinRequests(raidPost.id, idsOfOutdatedRoles);
+    await this.deleteOutdatedJoinRequests(raidPost.id, OutdatedRolesIds);
 
     const [, roles] = await Promise.all([
-      this.deleteOutdatedRoles(idsOfOutdatedRoles),
+      this.deleteOutdatedRoles(OutdatedRolesIds),
       this.uow.roles.saveMany(newRoles),
     ]);
 
@@ -105,9 +105,9 @@ export class UpdateRaidPostService {
     return this.uow.joinRequests.delete(deleteParams);
   }
 
-  private deleteOutdatedRoles(outdatedRoleIds: number[]) {
-    if (outdatedRoleIds.length > 0) {
-      return this.uow.roles.delete({ id: In(outdatedRoleIds) });
+  private deleteOutdatedRoles(outdatedRolesIds: number[]) {
+    if (outdatedRolesIds.length > 0) {
+      return this.uow.roles.delete({ id: In(outdatedRolesIds) });
     }
   }
 }
