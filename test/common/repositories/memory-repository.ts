@@ -1,9 +1,9 @@
 import { IRepository } from "@data/repositories/repository.interface";
-import { IIdentifiableEntityRepository } from "@root/data/repositories/identifiable-entity.repository.interface";
-import { FindManyParams } from "@root/data/repositories/find-many.params";
-import { FindOneParams } from "@root/data/repositories/find-one.params";
+import { IIdentifiableEntityRepository } from "@data/repositories/identifiable-entity.repository.interface";
+import { FindManyParams } from "@data/repositories/find-many.params";
+import { FindOneParams } from "@data/repositories/find-one.params";
 
-export class MemoryRepository<Entity> implements IRepository<Entity> {
+export abstract class MemoryRepository<Entity> implements IRepository<Entity> {
   entities: Entity[] = [];
 
   constructor(entities: Entity[] = []) {
@@ -11,20 +11,16 @@ export class MemoryRepository<Entity> implements IRepository<Entity> {
   }
 
   async save(entity: Entity): Promise<Entity> {
-    return new Promise((resolve) => {
-      const entities = this.entities.filter(
-        (e) => !this.areEntitiesEqual(e, entity)
-      );
-      entities.push(entity);
-      this.entities = entities;
+    const entities = this.entities.filter(
+      (e) => !this.areEntitiesEqual(e, entity)
+    );
+    entities.push(entity);
+    this.entities = entities;
 
-      return resolve(entity);
-    });
+    return entity;
   }
 
-  protected areEntitiesEqual(_entity: Entity, _otherEntity: Entity): boolean {
-    throw new Error("not implemented");
-  }
+  abstract areEntitiesEqual(_entity: Entity, _otherEntity: Entity): boolean;
 
   saveMany(entities: Entity[]): Promise<Entity[]> {
     return Promise.all(entities.map((entity) => this.save(entity)));
@@ -35,7 +31,7 @@ export class MemoryRepository<Entity> implements IRepository<Entity> {
     return all.length > 0 ? all[0] : undefined;
   }
 
-  findMany(params?: FindManyParams<Entity>): Promise<Entity[]> {
+  async findMany(params?: FindManyParams<Entity>): Promise<Entity[]> {
     let entities = Array.from(this.entities.values());
 
     if (params?.order) {
@@ -72,7 +68,7 @@ export class MemoryRepository<Entity> implements IRepository<Entity> {
       entities = entities.slice(0, params.take);
     }
 
-    return new Promise((resolve) => resolve(entities));
+    return entities;
   }
 
   handleWhere(entity: any, where: any) {
@@ -112,17 +108,13 @@ export class IdentifiableMemoryRepository<Entity extends Identifiable>
     }
   }
 
-  findById(id: number): Promise<Entity | undefined> {
-    return new Promise((resolve) => {
-      const entities = this.entities.filter((e) => e.id === id);
-      resolve(entities.length === 1 ? entities[0] : undefined);
-    });
+  async findById(id: number): Promise<Entity | undefined> {
+    const entities = this.entities.filter((e) => e.id === id);
+    return entities.length === 1 ? entities[0] : undefined;
   }
 
-  findByIds(ids: number[]): Promise<Entity[]> {
-    return new Promise((resolve) => {
-      resolve(this.entities.filter((e) => ids.includes(e.id)));
-    });
+  async findByIds(ids: number[]): Promise<Entity[]> {
+    return this.entities.filter((e) => ids.includes(e.id));
   }
 
   async save(entity: Entity): Promise<Entity> {
@@ -150,19 +142,16 @@ export class IdentifiableMemoryRepository<Entity extends Identifiable>
     return entities;
   }
 
-  delete(_criteria?: any): Promise<void> {
-    return new Promise((resolve) => {
-      if (this.isArrayOfIds(_criteria)) {
-        const ids = _criteria as number[];
-        this.entities = this.entities.filter((e) => !ids.includes(e.id));
-      } else {
-        this.entities = [];
-      }
-      resolve();
-    });
+  async delete(_criteria?: any): Promise<void> {
+    if (this.isArrayOfIds(_criteria)) {
+      const ids = _criteria as number[];
+      this.entities = this.entities.filter((e) => !ids.includes(e.id));
+    } else {
+      this.entities = [];
+    }
   }
 
-  protected areEntitiesEqual(entity: Entity, otherEntity: Entity): boolean {
+  areEntitiesEqual(entity: Entity, otherEntity: Entity): boolean {
     return entity.id === otherEntity.id;
   }
 
