@@ -166,4 +166,21 @@ describe("UpdateRaidPostService Integration Tests", () => {
       expect(joinRequests.length).toBe(1);
     });
   });
+
+  it("should NOT throw an error if no roles were changed", async () => {
+    let threwAnError = false;
+
+    try {
+      await service.update({
+        ...post,
+        bossesIds: post.bosses.map((b) => b.id),
+        rolesProps: post.roles,
+        requirementsProps: { itemsProps: [] },
+      });
+    } catch (_error) {
+      threwAnError = true;
+    }
+
+    expect(threwAnError).toBe(false);
+  });
 });
