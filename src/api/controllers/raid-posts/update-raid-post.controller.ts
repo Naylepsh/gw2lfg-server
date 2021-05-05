@@ -40,6 +40,7 @@ export class UpdateRaidPostController {
     try {
       return await this.updateRaidPost(user, postId, dto);
     } catch (error) {
+      console.log(error.message);
       throw this.mapError(error);
     }
   }

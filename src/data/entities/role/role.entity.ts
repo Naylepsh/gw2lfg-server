@@ -34,6 +34,7 @@ export class Role {
 
   constructor(props?: RoleProps) {
     if (props) {
+      if (props.id) this.id = props.id;
       this.name = props.name;
       this.description = props.description;
       this.class = props.class;

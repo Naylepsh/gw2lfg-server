@@ -1,7 +1,7 @@
 import { Inject, Service } from "typedi";
-import { RaidPost } from "@root/data/entities/raid-post/raid-post.entitity";
-import { Role } from "@root/data/entities/role/role.entity";
-import { ItemRequirement } from "@root/data/entities/item-requirement/item.requirement.entity";
+import { RaidPost } from "@data/entities/raid-post/raid-post.entitity";
+import { Role } from "@data/entities/role/role.entity";
+import { ItemRequirement } from "@data/entities/item-requirement/item.requirement.entity";
 import { IRaidPostUnitOfWork } from "@data/units-of-work/raid-post/raid-post.unit-of-work.interface";
 import { raidPostUnitOfWorkType } from "@loaders/typedi.constants";
 import { EntityNotFoundError } from "../common/errors/entity-not-found.error";
@@ -12,7 +12,6 @@ import { In } from "typeorm";
 
 /**
  * Service for updating raid posts.
- * IMPORTANT! Update will remove all join requests pointing to the post!
  */
 @Service()
 export class UpdateRaidPostService {
@@ -78,28 +77,37 @@ export class UpdateRaidPostService {
 
   // removes previous roles and saves new ones
   private async updateRoles(raidPost: RaidPost, dto: UpdateRaidPostDTO) {
-    const newRoles = dto.rolesProps.map((props) => {
-      const role = new Role(props);
-      if (props.id) {
-        role.id = props.id;
-      }
-      return role;
-    });
+    const newRoles = dto.rolesProps.map((props) => new Role(props));
     const idsOfNewRoles = newRoles.map((r) => r.id);
     const idsOfOutdatedRoles = (raidPost.roles ?? [])
       .map((r) => r.id)
       .filter((id) => !idsOfNewRoles.includes(id));
 
-    await this.uow.joinRequests.delete({
-      post: { id: raidPost.id },
-      role: { id: In(idsOfOutdatedRoles) },
-    });
+    await this.deleteOutdatedJoinRequests(raidPost.id, idsOfOutdatedRoles);
 
     const [, roles] = await Promise.all([
-      this.uow.roles.delete(idsOfOutdatedRoles),
+      this.deleteOutdatedRoles(idsOfOutdatedRoles),
       this.uow.roles.saveMany(newRoles),
     ]);
 
     return roles;
+  }
+
+  private deleteOutdatedJoinRequests(
+    postId: number,
+    outdatedRoleIds: number[]
+  ) {
+    const deleteParams: Record<string, any> = { post: { id: postId } };
+    if (outdatedRoleIds.length > 0) {
+      deleteParams.role = { id: In(outdatedRoleIds) };
+    }
+
+    return this.uow.joinRequests.delete(deleteParams);
+  }
+
+  private deleteOutdatedRoles(outdatedRoleIds: number[]) {
+    if (outdatedRoleIds.length > 0) {
+      return this.uow.roles.delete({ id: In(outdatedRoleIds) });
+    }
   }
 }
