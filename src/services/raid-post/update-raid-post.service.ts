@@ -63,9 +63,8 @@ export class UpdateRaidPostService {
     dto: UpdateRaidPostDTO
   ) {
     if (raidPost.hasRequirements()) {
-      await this.uow.requirements.delete(
-        byIds(raidPost.requirements.map((req) => req.id))
-      );
+      const ids = raidPost.requirements.map((req) => req.id);
+      await this.uow.requirements.delete(byIds(ids));
     }
 
     const itemRequirements = await this.uow.itemRequirements.save(
@@ -99,12 +98,12 @@ export class UpdateRaidPostService {
     postId: number,
     outdatedRoleIds: number[]
   ) {
-    const deleteParams: Record<string, any> = { post: { id: postId } };
+    const where: Record<string, any> = { post: { id: postId } };
     if (outdatedRoleIds.length > 0) {
-      deleteParams.role = { id: In(outdatedRoleIds) };
+      where.role = { id: In(outdatedRoleIds) };
     }
 
-    return this.uow.joinRequests.delete(deleteParams);
+    return this.uow.joinRequests.delete({ where });
   }
 
   private deleteOutdatedRoles(outdatedRolesIds: number[]) {
