@@ -24,7 +24,7 @@ const main = async () => {
 
   const missingBosses = addMissingBosses(raidBossesInDb);
 
-  await raidBossRepo.saveMany(missingBosses);
+  await raidBossRepo.save(missingBosses);
 
   console.log(`Found ${raidBossesInDb.length} bosses in database.`);
   console.log(`Added ${missingBosses.length} bosses.`);
