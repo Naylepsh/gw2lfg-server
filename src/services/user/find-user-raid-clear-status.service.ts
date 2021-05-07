@@ -36,10 +36,10 @@ export class FindUserRaidClearStatusService {
       user.apiKey
     );
 
-    const clearedBossesOfThisServer = bosses.filter((boss) => {
+    const clearedBosses = bosses.filter((boss) => {
       return clearedRaids.includes(boss.toLowerCase().replace(" ", "_"));
     });
 
-    return clearedBossesOfThisServer;
+    return clearedBosses;
   }
 }

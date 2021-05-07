@@ -4,6 +4,7 @@ import { User } from "@root/data/entities/user/user.entity";
 import { IUserRepository } from "@data/repositories/user/user.repository.interface";
 import { userRepositoryType } from "@loaders/typedi.constants";
 import { UsernameTakenError } from "./errors/username-taken.error";
+import { byUsername } from "@data/queries/user/by-username.query";
 
 /**
  * Service for creating new users.
@@ -28,7 +29,7 @@ export class RegisterService {
   }
 
   private async isUsernameTaken(username: string) {
-    return !!(await this.userRepository.findOne({ where: { username } }));
+    return !!(await this.userRepository.findOne(byUsername(username)));
   }
 
   private async hashUserPassword(user: User) {
