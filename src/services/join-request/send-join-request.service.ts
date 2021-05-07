@@ -24,6 +24,7 @@ import { Post } from "@data/entities/post/post.entity";
 import { Role } from "@data/entities/role/role.entity";
 import { SignUpsTimeEndedError } from "./errors/signs-ups-time-ended.error";
 import { byId } from "@data/queries/common/by-id.query";
+import { byJoinRequestRelations } from "@data/queries/join-request/by-join-request-relations.query";
 
 /**
  * Service for creation of join requests.
@@ -44,7 +45,7 @@ export class CreateJoinRequestService {
     const [user, post, requests] = await Promise.all([
       this.userRepo.findOne(byId(userId)),
       this.postRepo.findOne(byId(postId)),
-      this.joinRequestRepo.findByKeys({ postId, roleId }),
+      this.joinRequestRepo.findMany(byJoinRequestRelations({ postId, roleId })),
     ]);
     const role = post?.getRole(roleId);
 

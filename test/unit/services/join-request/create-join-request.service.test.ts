@@ -16,6 +16,7 @@ import items from "@services/gw2-items/items.json";
 import { CheckItemRequirementsService } from "@root/services/requirement/check-item-requirements.service";
 import { FindUserItemsService } from "@services/user/find-user-items.service";
 import { addHours } from "../../../common/hours.util";
+import { byJoinRequestRelations } from "@data/queries/join-request/by-join-request-relations.query";
 
 class JoinRequestServiceTestObject {
   date: Date;
@@ -67,17 +68,19 @@ describe("CreateJoinRequest service tests", () => {
     setItemsInStorage([{ id: nameToId(itemRequirement.name), count: 10 }]);
     const service = setupSendJoinRequestService();
 
-    service.create({
+    await service.create({
       userId: user.id,
       postId: post.id,
       roleId: role.id,
     });
 
-    const request = await joinRequestRepo.findByKeys({
-      userId: user.id,
-      postId: post.id,
-      roleId: role.id,
-    });
+    const request = await joinRequestRepo.findOne(
+      byJoinRequestRelations({
+        userId: user.id,
+        postId: post.id,
+        roleId: role.id,
+      })
+    );
     expect(request).toBeDefined();
   });
 

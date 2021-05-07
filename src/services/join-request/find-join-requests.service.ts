@@ -1,7 +1,10 @@
 import { Inject, Service } from "typedi";
 import { joinRequestRepositoryType } from "@loaders/typedi.constants";
-import { JoinRequestRelationKeys } from "@data/repositories/join-request/join-request-relation-keys";
 import { IJoinRequestRepository } from "@data/repositories/join-request/join-request.repository.interface";
+import {
+  byJoinRequestRelations,
+  JoinRequestRelationParams,
+} from "@data/queries/join-request/by-join-request-relations.query";
 
 /**
  * Service for finding join requests by relations keys from the database
@@ -13,7 +16,7 @@ export class FindJoinRequestsService {
     private readonly joinRequestRepo: IJoinRequestRepository
   ) {}
 
-  find(keys: JoinRequestRelationKeys) {
-    return this.joinRequestRepo.findByKeys(keys);
+  find(keys: JoinRequestRelationParams) {
+    return this.joinRequestRepo.findMany(byJoinRequestRelations(keys));
   }
 }

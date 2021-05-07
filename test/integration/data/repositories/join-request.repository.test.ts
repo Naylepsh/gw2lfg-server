@@ -6,6 +6,7 @@ import { User } from "@root/data/entities/user/user.entity";
 import { JoinRequestRepository } from "@data/repositories/join-request/join-request.repository";
 import { JoinRequest } from "@root/data/entities/join-request/join-request.entity";
 import { loadTypeORM } from "@loaders/typeorm.loader";
+import { byJoinRequestRelations } from "@data/queries/join-request/by-join-request-relations.query";
 
 describe("whatever", () => {
   let conn: Connection;
@@ -55,11 +56,13 @@ describe("whatever", () => {
     const joinRequestRepo = conn.getCustomRepository(JoinRequestRepository);
     await joinRequestRepo.save(new JoinRequest({ user, post, role }));
 
-    const foundJoinRequests = await joinRequestRepo.findByKeys({
-      userId: user.id,
-      postId: post.id,
-      roleId: role.id,
-    });
+    const foundJoinRequests = await joinRequestRepo.findMany(
+      byJoinRequestRelations({
+        userId: user.id,
+        postId: post.id,
+        roleId: role.id,
+      })
+    );
     expect(foundJoinRequests.length).toBeGreaterThan(0);
     expect(foundJoinRequests[0]).toBeDefined();
   });
@@ -72,11 +75,13 @@ describe("whatever", () => {
     const joinRequestRepo = conn.getCustomRepository(JoinRequestRepository);
     await joinRequestRepo.save(new JoinRequest({ user, post, role }));
 
-    const foundJoinRequests = await joinRequestRepo.findByKeys({
-      userId: user.id,
-      postId: post.id,
-      roleId: role.id,
-    });
+    const foundJoinRequests = await joinRequestRepo.findMany(
+      byJoinRequestRelations({
+        userId: user.id,
+        postId: post.id,
+        roleId: role.id,
+      })
+    );
 
     expect(foundJoinRequests.length).toBeGreaterThan(0);
     const joinRequest = foundJoinRequests[0];
