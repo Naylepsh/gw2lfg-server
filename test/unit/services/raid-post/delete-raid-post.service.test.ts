@@ -5,6 +5,7 @@ import { createAndSaveRaidPost } from "../../../common/raid-post.helper";
 import { createAndSaveRole } from "../../../common/role.helper";
 import { RaidPostMemoryUnitOfWork } from "../../../common/uows/raid-post.memory-unit-of-work";
 import { createAndSaveUser } from "../../../common/user.helper";
+import { byId } from "@data/queries/common/by-id.query";
 
 describe("DeleteRaidPost Service tests", () => {
   const uow = RaidPostMemoryUnitOfWork.create();
@@ -38,12 +39,12 @@ describe("DeleteRaidPost Service tests", () => {
     it("should remove a post from database", async () => {
       await unpublishService.delete({ id });
 
-      const postInDb = await uow.raidPosts.findOne({ where: { id } });
+      const postInDb = await uow.raidPosts.findOne(byId(id));
       expect(postInDb).toBeUndefined();
     });
 
     it("should remove posts's requirements", async () => {
-      const post = await uow.raidPosts.findOne({ where: { id } });
+      const post = await uow.raidPosts.findOne(byId(id));
       const reqsIds = post!.requirements.map((r) => r.id);
 
       await unpublishService.delete({ id });
@@ -53,7 +54,7 @@ describe("DeleteRaidPost Service tests", () => {
     });
 
     it("should remove post's roles", async () => {
-      const post = await uow.raidPosts.findOne({ where: { id } });
+      const post = await uow.raidPosts.findOne(byId(id));
       const rolesIds = post!.roles.map((r) => r.id);
 
       await unpublishService.delete({ id });
@@ -63,7 +64,7 @@ describe("DeleteRaidPost Service tests", () => {
     });
 
     it("should NOT remove post's author", async () => {
-      const post = await uow.raidPosts.findOne({ where: { id } });
+      const post = await uow.raidPosts.findOne(byId(id));
       const authorId = post!.author.id;
 
       await unpublishService.delete({ id });
@@ -73,7 +74,7 @@ describe("DeleteRaidPost Service tests", () => {
     });
 
     it("should NOT remove post's bosses", async () => {
-      const post = await uow.raidPosts.findOne({ where: { id } });
+      const post = await uow.raidPosts.findOne(byId(id));
       const bossesIds = post!.bosses.map((b) => b.id);
 
       await unpublishService.delete({ id });
@@ -84,12 +85,12 @@ describe("DeleteRaidPost Service tests", () => {
   });
 
   it("should not change the database state if no post with given id exists", async () => {
-    const post = await uow.raidPosts.findOne({ where: { id } });
+    const post = await uow.raidPosts.findOne(byId(id));
     const idNotInDb = id + 1;
 
     await unpublishService.delete({ id: idNotInDb });
 
-    const _post = await uow.raidPosts.findOne({ where: { id: post!.id } });
+    const _post = await uow.raidPosts.findOne(byId(post!.id));
     expect(_post).toBeDefined();
   });
 });

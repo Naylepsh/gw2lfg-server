@@ -6,6 +6,7 @@ import { createAndSaveRaidPost } from "../../../common/raid-post.helper";
 import { RaidPostMemoryUnitOfWork } from "../../../common/uows/raid-post.memory-unit-of-work";
 import { createAndSaveUser } from "../../../common/user.helper";
 import { addHours, subtractHours } from "../../../common/hours.util";
+import { byId } from "@data/queries/common/by-id.query";
 
 describe("RaidPost Service: update tests", () => {
   const uow = RaidPostMemoryUnitOfWork.create();
@@ -76,7 +77,7 @@ describe("RaidPost Service: update tests", () => {
 
     await service.update(updateDto);
 
-    const post = await uow.raidPosts.findOne({ where: { id: raidPost.id } });
+    const post = await uow.raidPosts.findOne(byId(raidPost.id));
     expect(post).toBeDefined();
     expect(post).toHaveProperty("bosses");
     expect(post!.bosses.length).toBe(1);
