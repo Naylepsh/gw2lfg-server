@@ -23,6 +23,7 @@ import { User } from "@data/entities/user/user.entity";
 import { Post } from "@data/entities/post/post.entity";
 import { Role } from "@data/entities/role/role.entity";
 import { SignUpsTimeEndedError } from "./errors/signs-ups-time-ended.error";
+import { byId } from "@data/queries/common/by-id.query";
 
 /**
  * Service for creation of join requests.
@@ -41,10 +42,8 @@ export class CreateJoinRequestService {
 
   async create({ userId, postId, roleId }: CreateJoinRequestDTO) {
     const [user, post, requests] = await Promise.all([
-      this.userRepo.findOne({ where: { id: userId } }),
-      this.postRepo.findOne({
-        where: { id: postId },
-      }),
+      this.userRepo.findOne(byId(userId)),
+      this.postRepo.findOne(byId(postId)),
       this.joinRequestRepo.findByKeys({ postId, roleId }),
     ]);
     const role = post?.getRole(roleId);

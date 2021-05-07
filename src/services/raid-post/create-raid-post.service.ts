@@ -4,6 +4,8 @@ import { ItemRequirement } from "@root/data/entities/item-requirement/item.requi
 import { RaidPost } from "@root/data/entities/raid-post/raid-post.entitity";
 import { Role } from "@root/data/entities/role/role.entity";
 import { Inject, Service } from "typedi";
+import { byId } from "@data/queries/common/by-id.query";
+import { byIds } from "@data/queries/common/by-ids.query";
 import { UserNotFoundError } from "../common/errors/entity-not-found.error";
 import { CreateRaidPostDTO } from "./dtos/create-raid-post.dto";
 import { DateIsInThePastError } from "./errors/date-is-in-the-past.error";
@@ -25,21 +27,19 @@ export class CreateRaidPostService {
     return await this.uow.withTransaction(() => this.createAndSavePost(dto));
   }
 
-  private async createAndSavePost(publishDto: CreateRaidPostDTO) {
-    const author = await this.uow.users.findOne({
-      where: { id: publishDto.authorId },
-    });
+  private async createAndSavePost(dto: CreateRaidPostDTO) {
+    const author = await this.uow.users.findOne(byId(dto.authorId));
     if (!author) throw new UserNotFoundError();
 
     // prepare related entities
     const [bosses, requirements, roles] = await Promise.all([
-      this.uow.raidBosses.findMany({ where: { id: publishDto.bossesIds } }),
-      this.saveRequirements(publishDto),
-      this.saveRoles(publishDto),
+      this.uow.raidBosses.findMany(byIds(dto.bossesIds)),
+      this.saveRequirements(dto),
+      this.saveRoles(dto),
     ]);
 
     const post = new RaidPost({
-      ...publishDto,
+      ...dto,
       author,
       requirements,
       roles,

@@ -2,6 +2,7 @@ import { Inject, Service } from "typedi";
 import { IRaidPostUnitOfWork } from "@data/units-of-work/raid-post/raid-post.unit-of-work.interface";
 import { raidPostUnitOfWorkType } from "@loaders/typedi.constants";
 import { In } from "typeorm";
+import { byIds } from "@data/queries/common/by-ids.query";
 
 /**
  * Service for deletion of raid posts which scheduled date is in the past
@@ -53,7 +54,7 @@ export class DeleteOldPostsService {
 
   private async removePosts(postsIds: number[]) {
     if (postsIds.length > 0) {
-      await this.uow.raidPosts.delete(postsIds);
+      await this.uow.raidPosts.delete(byIds(postsIds));
     }
   }
 }

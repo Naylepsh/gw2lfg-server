@@ -27,6 +27,6 @@ export class RequirementRepository
   }
 
   async delete(criteria: any = {}): Promise<void> {
-    await this.repository.delete(criteria);
+    await this.repository.delete(criteria.where ?? criteria);
   }
 }

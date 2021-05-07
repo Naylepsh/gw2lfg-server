@@ -1,3 +1,4 @@
+import { FindOperator } from "typeorm";
 import { RaidBoss } from "../../entities/raid-boss/raid-boss.entity";
 
 export interface IRaidBossRepository {
@@ -10,7 +11,7 @@ export interface IRaidBossRepository {
 
 export interface RaidBossQueryParams {
   where?: {
-    id?: number | number[];
+    id?: number | FindOperator<number>;
     name?: string;
     isCm?: boolean;
   };

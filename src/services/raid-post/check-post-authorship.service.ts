@@ -3,6 +3,7 @@ import { IRaidPostRepository } from "@data/repositories/raid-post/raid-post.repo
 import { raidPostRepositoryType } from "@loaders/typedi.constants";
 import { EntityNotFoundError } from "../common/errors/entity-not-found.error";
 import { CheckPostAuthorshipDTO } from "./dtos/check-post-authorship.dto";
+import { byId } from "@data/queries/common/by-id.query";
 
 /**
  * Service for checking authorship of a post.
@@ -16,9 +17,7 @@ export class CheckPostAuthorshipService {
   ) {}
 
   async isPostAuthor(dto: CheckPostAuthorshipDTO) {
-    const post = await this.postRepository.findOne({
-      where: { id: dto.postId },
-    });
+    const post = await this.postRepository.findOne(byId(dto.postId));
 
     if (!post) {
       throw new EntityNotFoundError();

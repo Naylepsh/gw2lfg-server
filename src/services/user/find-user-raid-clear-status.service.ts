@@ -8,6 +8,7 @@ import { UserNotFoundError } from "../common/errors/entity-not-found.error";
 import { FindUserDTO } from "./dtos/find-user.dto";
 import { raids } from "@data/entities/raid-boss/gw2-raids.json";
 import { IFindRaidClearStatusService } from "../gw2-api/raids/find-raid-clear-status.gw2-api.service";
+import { byId } from "@data/queries/common/by-id.query";
 
 /**
  * Service for finding a user with matching id and getting his item stats from GW2 API
@@ -22,7 +23,7 @@ export class FindUserRaidClearStatusService {
   ) {}
 
   async find(dto: FindUserDTO) {
-    const user = await this.userRepository.findOne({ where: { id: dto.id } });
+    const user = await this.userRepository.findOne(byId(dto.id));
     if (!user) {
       throw new UserNotFoundError();
     }

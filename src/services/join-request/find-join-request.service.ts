@@ -3,6 +3,7 @@ import { joinRequestRepositoryType } from "@loaders/typedi.constants";
 import { IJoinRequestRepository } from "@data/repositories/join-request/join-request.repository.interface";
 import { FindJoinRequestDTO } from "./dtos/find-join-request.dto";
 import { EntityNotFoundError } from "../common/errors/entity-not-found.error";
+import { byId } from "@data/queries/common/by-id.query";
 
 /**
  * Service for finding join request with matching id.
@@ -15,9 +16,7 @@ export class FindJoinRequestService {
   ) {}
 
   async find(dto: FindJoinRequestDTO) {
-    const request = await this.joinRequestRepo.findOne({
-      where: { id: dto.id },
-    });
+    const request = await this.joinRequestRepo.findOne(byId(dto.id));
 
     if (!request) {
       throw new EntityNotFoundError(

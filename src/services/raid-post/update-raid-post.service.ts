@@ -9,6 +9,8 @@ import { isDateInThePast } from "./utils/is-date-in-the-past";
 import { DateIsInThePastError } from "./errors/date-is-in-the-past.error";
 import { UpdateRaidPostDTO } from "./dtos/update-raid-post.dto";
 import { In } from "typeorm";
+import { byId } from "@data/queries/common/by-id.query";
+import { byIds } from "@data/queries/common/by-ids.query";
 
 /**
  * Service for updating raid posts.
@@ -29,9 +31,7 @@ export class UpdateRaidPostService {
   }
 
   private async updatePost(dto: UpdateRaidPostDTO) {
-    const raidPost = await this.uow.raidPosts.findOne({
-      where: { id: dto.id },
-    });
+    const raidPost = await this.uow.raidPosts.findOne(byId(dto.id));
 
     if (!raidPost) {
       throw new EntityNotFoundError(`raid post with id ${dto.id} not found`);
@@ -40,7 +40,7 @@ export class UpdateRaidPostService {
     // prepare related entities
     const author = raidPost.author;
     const [bosses, roles, requirements] = await Promise.all([
-      this.uow.raidBosses.findMany({ where: { id: dto.bossesIds } }),
+      this.uow.raidBosses.findMany(byIds(dto.bossesIds)),
       this.updateRoles(raidPost, dto),
       this.overrideRequirements(raidPost, dto),
     ]);
@@ -63,7 +63,9 @@ export class UpdateRaidPostService {
     dto: UpdateRaidPostDTO
   ) {
     if (raidPost.hasRequirements()) {
-      await this.uow.requirements.delete(raidPost.requirements);
+      await this.uow.requirements.delete(
+        byIds(raidPost.requirements.map((req) => req.id))
+      );
     }
 
     const itemRequirements = await this.uow.itemRequirements.save(
@@ -107,7 +109,7 @@ export class UpdateRaidPostService {
 
   private deleteOutdatedRoles(outdatedRolesIds: number[]) {
     if (outdatedRolesIds.length > 0) {
-      return this.uow.roles.delete({ id: In(outdatedRolesIds) });
+      return this.uow.roles.delete(byIds(outdatedRolesIds));
     }
   }
 }

@@ -1,3 +1,5 @@
+import { FindOperator } from "typeorm";
+
 export interface FindManyParams<Entity> {
   where?: any;
   join?: any;
@@ -93,7 +95,10 @@ export abstract class MemoryRepository<Entity> {
       if (value === undefined) {
         continue;
       }
-      if (Array.isArray(value)) {
+      if (value instanceof FindOperator && value.type === "in") {
+        const res = value.value.includes(entity[key]);
+        if (!res) return false;
+      } else if (Array.isArray(value)) {
         const res = value.includes(entity[key]);
         if (!res) return false;
       } else if (typeof value === "object") {
@@ -158,12 +163,17 @@ export class IdentifiableMemoryRepository<
     return entity;
   }
 
-  async delete(_criteria?: any): Promise<void> {
-    if (this.isArrayOfIds(_criteria)) {
-      const ids = _criteria as number[];
+  async delete(criteria?: any): Promise<void> {
+    const params = criteria.where ?? criteria;
+    if (!criteria) {
+      this.entities = [];
+    } else if (this.isArrayOfIds(params)) {
+      const ids = params as number[];
       this.entities = this.entities.filter((e) => !ids.includes(e.id));
     } else {
-      this.entities = [];
+      this.entities = this.entities.filter(
+        (entity) => !this.handleWhere(entity, params)
+      );
     }
   }
 

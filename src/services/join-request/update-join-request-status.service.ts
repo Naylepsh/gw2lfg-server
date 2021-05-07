@@ -3,6 +3,7 @@ import { IJoinRequestRepository } from "@data/repositories/join-request/join-req
 import { joinRequestRepositoryType } from "@loaders/typedi.constants";
 import { EntityNotFoundError } from "../common/errors/entity-not-found.error";
 import { UpdateJoinRequestStatusDTO } from "./dtos/update-join-request-status.dto";
+import { byId } from "../../data/queries/common/by-id.query";
 
 /**
  * Service for updating the status of join requests.
@@ -18,7 +19,7 @@ export class UpdateJoinRequestStatusService {
     const { id, newStatus } = dto;
 
     const request = await this.joinRequestRepo.findOne({
-      where: { id },
+      ...byId(id),
       relations: ["user", "post", "role"],
     });
 

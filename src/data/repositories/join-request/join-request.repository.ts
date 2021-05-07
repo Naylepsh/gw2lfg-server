@@ -24,7 +24,7 @@ export class JoinRequestRepository
   }
 
   async delete(criteria: any = {}): Promise<void> {
-    await this.repository.delete(criteria);
+    await this.repository.delete(criteria.where ?? criteria);
   }
 
   async findByKeys(keys: JoinRequestRelationKeys): Promise<JoinRequest[]> {

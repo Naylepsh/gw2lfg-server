@@ -44,7 +44,7 @@ export class RaidPostRepository
   }
 
   async delete(criteria: any = {}): Promise<void> {
-    await this.repository.delete(criteria);
+    await this.repository.delete(criteria.where ?? criteria);
   }
 
   private static relations = ["author", "requirements", "bosses", "roles"];

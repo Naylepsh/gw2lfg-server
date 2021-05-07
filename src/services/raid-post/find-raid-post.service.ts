@@ -6,6 +6,7 @@ import {
 } from "@loaders/typedi.constants";
 import { PostNotFoundError } from "../common/errors/entity-not-found.error";
 import { FindRaidPostDTO } from "./dtos/find-raid-post.dto";
+import { byId } from "@data/queries/common/by-id.query";
 
 /**
  * Service for finding a raid post with matching id.
@@ -19,9 +20,7 @@ export class FindRaidPostService {
   ) {}
 
   async find(dto: FindRaidPostDTO) {
-    const { id } = dto;
-
-    const post = await this.repository.findOne({ where: { id } });
+    const post = await this.repository.findOne(byId(dto.id));
     if (!post) {
       throw new PostNotFoundError();
     }
