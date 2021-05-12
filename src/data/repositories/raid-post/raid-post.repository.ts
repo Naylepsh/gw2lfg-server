@@ -13,7 +13,8 @@ import { parseFindPostQuery } from "../post/post.repository";
 @EntityRepository(RaidPost)
 export class RaidPostRepository
   extends AbstractRepository<RaidPost>
-  implements IRaidPostRepository {
+  implements IRaidPostRepository
+{
   save(post: RaidPost): Promise<RaidPost> {
     return this.repository.save(post);
   }
@@ -47,7 +48,13 @@ export class RaidPostRepository
     await this.repository.delete(criteria.where ?? criteria);
   }
 
-  private static relations = ["author", "requirements", "bosses", "roles"];
+  private static relations = [
+    "author",
+    "requirements",
+    "bosses",
+    "roles",
+    "joinRequests",
+  ];
   /**
    * Normally to check conditions on objects in relation in TypeORM one has to manually create join property in query builder.
    * However, using property relations already uses LEFT JOIN under the hood.
