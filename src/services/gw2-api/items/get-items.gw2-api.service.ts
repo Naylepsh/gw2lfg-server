@@ -9,18 +9,6 @@ import { GetItemsFromMultipleSources } from "./get-items-from-multiple-sources.f
 import { GetItems } from "./get-items.fetcher";
 import { ItemsFetcher } from "./items-fetcher.interface";
 
-export const getItemsFromBank = new GetItems(fetchItemsFromBank);
-
-export const getItemsFromSharedInventory = new GetItems(
-  fetchItemsFromSharedInventory
-);
-
-export const getItemsFromCharacter = (characterName: string) => {
-  return new GetItems((apiKey: string) =>
-    fetchItemsFromCharacter(characterName, apiKey)
-  );
-};
-
 /**
  * Fetches all items with given ids from the account associated with given API key
  */
@@ -32,16 +20,28 @@ export class GetItemsFromEntireAccount implements ItemsFetcher {
     try {
       const characters = await fetchCharacters(apiKey);
       const characterItemFetchers = await Promise.all(
-        characters.map((character) => getItemsFromCharacter(character))
+        characters.map((character) => this.getItemsFromCharacter(character))
       );
 
       return new GetItemsFromMultipleSources([
         ...characterItemFetchers,
-        getItemsFromBank,
-        getItemsFromSharedInventory,
+        this.getItemsFromBank,
+        this.getItemsFromSharedInventory,
       ]).fetch(ids, apiKey);
     } catch (error) {
       return [];
     }
   }
+
+  private readonly getItemsFromBank = new GetItems(fetchItemsFromBank);
+
+  private readonly getItemsFromSharedInventory = new GetItems(
+    fetchItemsFromSharedInventory
+  );
+
+  private readonly getItemsFromCharacter = (characterName: string) => {
+    return new GetItems((apiKey: string) =>
+      fetchItemsFromCharacter(characterName, apiKey)
+    );
+  };
 }
