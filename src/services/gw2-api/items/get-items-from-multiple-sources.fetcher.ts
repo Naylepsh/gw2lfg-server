@@ -4,7 +4,7 @@ import { ItemsFetcher } from "./items-fetcher.interface";
 
 /**
  * Takes an array of item fetchers and merges their results
-*/
+ */
 export class GetItemsFromMultipleSources implements ItemsFetcher {
   constructor(private readonly fetchers: ItemsFetcher[]) {}
 
@@ -13,26 +13,23 @@ export class GetItemsFromMultipleSources implements ItemsFetcher {
       this.fetchers.map((fetcher) => fetcher.fetch(ids, apiKey))
     );
 
-    const counts = new Map<number, number>();
-    for (const id of ids) {
-      counts.set(id, 0);
-    }
-
     /**
      * The same item can appear multiple times in inventory and have different quantity
      * that's why it's merged here
-    */
+     */
+    const counts = new Map<number, number>();
     for (const items of itemStacks) {
       for (const id of ids) {
+        const prevCount = counts.get(id) ?? 0;
         const count = countItemStacks(items, id);
-        counts.set(id, counts.get(id)! + count);
+        counts.set(id, prevCount + count);
       }
     }
 
-    // map a map into an array of items (id, count)
+    // map a Map into an array of items (id, count)
     return Array.from(counts.keys()).map((id) => ({
       id,
-      count: counts.get(id)!,
+      count: counts.get(id) ?? 0,
     }));
   }
 }
