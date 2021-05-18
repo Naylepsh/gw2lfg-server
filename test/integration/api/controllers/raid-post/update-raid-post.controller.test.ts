@@ -62,6 +62,7 @@ describe("UpdateRaidPostController integration tests", () => {
       server: "EU",
       date: addHours(new Date(), 13),
       bossesIds,
+      rolesProps: post.roles,
     };
     const res = await request(app)
       .put(toUrl(idOfNonExistingPost))
@@ -83,6 +84,7 @@ describe("UpdateRaidPostController integration tests", () => {
       server: "EU",
       date: addHours(new Date(), 13),
       bossesIds,
+      rolesProps: post.roles,
     };
 
     const res = await request(app)
@@ -98,6 +100,7 @@ describe("UpdateRaidPostController integration tests", () => {
       server: "EU",
       date: addHours(new Date(), 13),
       bossesIds,
+      rolesProps: post.roles,
     };
 
     const res = await request(app)
@@ -113,6 +116,7 @@ describe("UpdateRaidPostController integration tests", () => {
       server: "EU",
       date: addHours(new Date(), 13),
       bossesIds,
+      rolesProps: post.roles,
     };
 
     await request(app)

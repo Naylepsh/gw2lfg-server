@@ -59,6 +59,7 @@ describe("CreateRaidPostController integration tests", () => {
       server: "EU",
       date: addHours(new Date(), 12),
       bossesIds,
+      rolesProps: [{ name: "dps", class: "warrior" }],
     };
 
     const res = await request(app)
