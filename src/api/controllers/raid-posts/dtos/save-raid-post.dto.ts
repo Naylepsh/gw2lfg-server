@@ -43,9 +43,9 @@ export class SaveRaidPostDTO {
   @IsInt({ each: true })
   bossesIds: number[];
 
-  @ValidateNested()
   @ArrayNotEmpty()
-  rolesProps: RolePropsDTO[] = [];
+  @ValidateNested()
+  rolesProps: RolePropsDTO[];
 
   @IsOptional()
   requirementsProps: RequirementsProps = { itemsProps: [] };
