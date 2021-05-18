@@ -24,6 +24,7 @@ export class RaidPostRepository
       params,
       RaidPostRepository.tableName
     );
+
     return this.repository.findOne({
       where,
       relations: RaidPostRepository.relations,
@@ -31,14 +32,13 @@ export class RaidPostRepository
   }
 
   findMany(params: RaidPostsQueryParams): Promise<RaidPost[]> {
-    const { skip, take } = params;
     const { where } = parseFindRaidPostQuery(
       params,
       RaidPostRepository.tableName
     );
+
     return this.repository.find({
-      skip,
-      take,
+      ...params,
       where,
       relations: RaidPostRepository.relations,
     });
