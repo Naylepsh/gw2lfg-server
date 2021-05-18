@@ -44,7 +44,7 @@ describe("Update raid post e2e tests", () => {
       server: post.server,
       description: "a very different description",
       bossesIds: post.bosses.map((boss) => boss.id),
-      rolesProps: [],
+      rolesProps: [{ name: "dps", class: "warrior" }],
       requirementsProps: { itemsProps: [] },
     };
     await request(app)

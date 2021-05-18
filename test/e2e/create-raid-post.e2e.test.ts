@@ -49,6 +49,7 @@ describe("Create raid post e2e tests", () => {
         date: addHours(new Date(), 10),
         description: "bring potions and food",
         bossesIds,
+        rolesProps: [{ name: "dps", class: "warrior" }],
       };
 
       const { body } = await request(app)
