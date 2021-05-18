@@ -8,6 +8,10 @@ import { addHours, subtractHours } from "../../../common/hours.util";
 describe("CreateRaidPost service tests", () => {
   const uow = RaidPostMemoryUnitOfWork.create();
   const publishService = new CreateRaidPostService(uow);
+  const defaultProps = {
+    bossesIds: [1],
+    rolesProps: [{ name: "dps", class: "warrior" }],
+  };
 
   afterEach(async () => {
     await uow.deleteAll();
@@ -22,7 +26,11 @@ describe("CreateRaidPost service tests", () => {
       isCm: false,
     });
     const date = addHours(new Date(), 1);
-    const dto = createDto(userId, [bossId], { date });
+    const dto = createDto(userId, {
+      ...defaultProps,
+      bossesIds: [bossId],
+      date,
+    });
     const { id: postId } = await publishService.create(dto);
 
     const hasBeenSaved = !!(await uow.raidPosts.findOne({
@@ -37,7 +45,8 @@ describe("CreateRaidPost service tests", () => {
       username: "username",
     });
     const date = addHours(new Date(), 1);
-    const dto = createDto(userId, [], {
+    const dto = createDto(userId, {
+      ...defaultProps,
       date,
       requirementsProps: { itemsProps: [{ name: "Some Item", quantity: 10 }] },
     });
@@ -54,7 +63,8 @@ describe("CreateRaidPost service tests", () => {
       username: "username",
     });
     const date = addHours(new Date(), 1);
-    const dto = createDto(userId, [], {
+    const dto = createDto(userId, {
+      ...defaultProps,
       date,
       rolesProps: [{ name: "DPS", class: "Any" }],
     });
@@ -71,7 +81,8 @@ describe("CreateRaidPost service tests", () => {
       username: "username",
     });
     const date = addHours(new Date(), 1);
-    const dto = createDto(userId, [], {
+    const dto = createDto(userId, {
+      ...defaultProps,
       date,
     });
     const usersInDbBefore = uow.users.entities.length;
@@ -91,7 +102,9 @@ describe("CreateRaidPost service tests", () => {
       isCm: false,
     });
     const date = addHours(new Date(), 1);
-    const dto = createDto(userId, [bossId], {
+    const dto = createDto(userId, {
+      ...defaultProps,
+      bossesIds: [bossId],
       date,
     });
     const bossesInDbBefore = uow.raidBosses.entities.length;
@@ -107,21 +120,17 @@ describe("CreateRaidPost service tests", () => {
       username: "username",
     });
     const date = subtractHours(new Date(), 1);
-    const dto = createDto(userId, [], { date });
+    const dto = createDto(userId, { date });
 
     expect(publishService.create(dto)).rejects.toThrow();
   });
 
-  function createDto(
-    authorId: number,
-    bossesIds: number[],
-    dto: Partial<CreateRaidPostDTO>
-  ) {
+  function createDto(authorId: number, dto: Partial<CreateRaidPostDTO>) {
     return {
       date: dto.date ?? addHours(new Date(), 1),
       server: dto.server ?? "EU",
       authorId,
-      bossesIds,
+      bossesIds: dto.bossesIds ?? [],
       rolesProps: dto.rolesProps ?? [],
       requirementsProps: dto.requirementsProps ?? { itemsProps: [] },
     };

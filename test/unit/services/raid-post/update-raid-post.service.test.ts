@@ -11,6 +11,10 @@ import { byId } from "@data/queries/common/by-id.query";
 describe("RaidPost Service: update tests", () => {
   const uow = RaidPostMemoryUnitOfWork.create();
   const service = new UpdateRaidPostService(uow);
+  const defaultProps = {
+    bossesIds: [1],
+    rolesProps: [{ name: "dps", class: "warrior" }],
+  };
 
   afterEach(async () => {
     await uow.deleteAll();
@@ -21,7 +25,10 @@ describe("RaidPost Service: update tests", () => {
     const raidPost = await createAndSaveRaidPost(uow.raidPosts, user, {
       date: addHours(new Date(), 1),
     });
-    const updateDto = createUpdateDto(raidPost.id, { server: "NA" });
+    const updateDto = createUpdateDto(raidPost.id, {
+      ...defaultProps,
+      server: "NA",
+    });
 
     await service.update(updateDto);
 
@@ -41,6 +48,7 @@ describe("RaidPost Service: update tests", () => {
       requirements: [requirement],
     });
     const updateDto = createUpdateDto(raidPost.id, {
+      ...defaultProps,
       requirementsProps: { itemsProps: [{ name: "Some Item", quantity: 2 }] },
     });
 
@@ -72,6 +80,7 @@ describe("RaidPost Service: update tests", () => {
       bosses: [boss1, boss2],
     });
     const updateDto = createUpdateDto(raidPost.id, {
+      ...defaultProps,
       bossesIds: [boss3.id],
     });
 
@@ -89,6 +98,7 @@ describe("RaidPost Service: update tests", () => {
       date: addHours(new Date(), 1),
     });
     const updateDto = createUpdateDto(raidPost.id, {
+      ...defaultProps,
       date: subtractHours(new Date(), 1),
     });
 
