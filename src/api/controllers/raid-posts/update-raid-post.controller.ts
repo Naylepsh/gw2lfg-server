@@ -1,4 +1,5 @@
 import {
+  BadRequestError,
   Body,
   CurrentUser,
   ForbiddenError,
@@ -16,6 +17,7 @@ import { SaveRaidPostDTO } from "./dtos/save-raid-post.dto";
 import { mapRaidPostToRaidPostResponse } from "../../responses/entities/raid-post.entity.response";
 import { UpdateRaidPostResponse } from "./responses/update-raid-post.response";
 import { getErrorMessageOrCreateDefault } from "../../utils/error/get-message-or-create-default";
+import { InvalidPropertyError } from "../../../services/common/errors/invalid-property.error";
 
 /**
  * Controller for PUT /raid-posts/:id requests.
@@ -68,8 +70,10 @@ export class UpdateRaidPostController {
   private mapError(error: any) {
     const message = getErrorMessageOrCreateDefault(error);
 
-    if (error instanceof EntityNotFoundError) {
-      throw new NotFoundError();
+    if (error instanceof InvalidPropertyError) {
+      throw new BadRequestError(message);
+    } else if (error instanceof EntityNotFoundError) {
+      throw new NotFoundError(message);
     } else if (error instanceof ForbiddenError) {
       throw error;
     } else {

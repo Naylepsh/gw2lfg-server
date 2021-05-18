@@ -7,6 +7,7 @@ import {
   ValidateNested,
 } from "class-validator";
 import { ItemRequirementProps } from "@root/data/entities/item-requirement/Item.requirement.props";
+import { MinDateString } from "../validators/min-date-string.validatior";
 
 interface RequirementsProps {
   itemsProps: ItemRequirementProps[];
@@ -30,6 +31,7 @@ class RolePropsDTO {
 
 export class SaveRaidPostDTO {
   @IsDateString()
+  @MinDateString(() => new Date())
   date: string;
 
   @IsString()
