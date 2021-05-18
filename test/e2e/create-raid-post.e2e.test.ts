@@ -46,7 +46,7 @@ describe("Create raid post e2e tests", () => {
     async () => {
       const post = {
         server: "EU",
-        date: addHours(new Date(), 10),
+        date: addHours(new Date(), 10).toISOString(),
         description: "bring potions and food",
         bossesIds,
         rolesProps: [{ name: "dps", class: "warrior" }],

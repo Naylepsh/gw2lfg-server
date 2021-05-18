@@ -57,7 +57,7 @@ describe("CreateRaidPostController integration tests", () => {
   it("should return 201 if valid data was passed", async () => {
     const dto = {
       server: "EU",
-      date: addHours(new Date(), 12),
+      date: addHours(new Date(), 12).toISOString(),
       bossesIds,
       rolesProps: [{ name: "dps", class: "warrior" }],
     };
@@ -73,7 +73,7 @@ describe("CreateRaidPostController integration tests", () => {
   it("should create a raid post if valid data was passed", async () => {
     const dto = {
       server: "EU",
-      date: addHours(new Date(), 12),
+      date: addHours(new Date(), 12).toISOString(),
       bossesIds,
     };
 

@@ -11,6 +11,7 @@ import { UpdateRaidPostDTO } from "./dtos/update-raid-post.dto";
 import { In } from "typeorm";
 import { byId } from "@data/queries/common/by-id.query";
 import { byIds } from "@data/queries/common/by-ids.query";
+import { MissingEntityError } from "./errors/missing-entity.error";
 
 /**
  * Service for updating raid posts.
@@ -22,8 +23,9 @@ export class UpdateRaidPostService {
   ) {}
 
   async update(dto: UpdateRaidPostDTO) {
-    if (dto.date && isDateInThePast(dto.date))
-      throw new DateIsInThePastError("date");
+    if (isDateInThePast(dto.date)) throw new DateIsInThePastError("date");
+    if (dto.bossesIds.length === 0) throw new MissingEntityError("bossesIds");
+    if (dto.rolesProps.length === 0) throw new MissingEntityError("rolesProps");
 
     return this.uow.withTransaction(() => {
       return this.updatePost(dto);

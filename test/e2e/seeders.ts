@@ -32,7 +32,7 @@ export const seedRaidPost = async (
   const roleProps = { name: "DPS", class: "Any" };
   const post = {
     server: "EU",
-    date: addHours(new Date(), 10),
+    date: addHours(new Date(), 10).toISOString(),
     description: "bring potions and food",
     bossesIds,
     rolesProps: [roleProps],
@@ -43,7 +43,10 @@ export const seedRaidPost = async (
     .send(post)
     .set(AUTH_HEADER, toBearerToken(token));
 
-  const raidPost = new RaidPost(body.data);
+  const raidPost = new RaidPost({
+    ...body.data,
+    date: new Date(body.data.date),
+  });
   raidPost.id = body.data.id;
   return raidPost;
 };

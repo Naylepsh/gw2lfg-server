@@ -30,7 +30,7 @@ class RolePropsDTO {
 
 export class SaveRaidPostDTO {
   @IsDateString()
-  date: Date;
+  date: string;
 
   @IsString()
   server: string;

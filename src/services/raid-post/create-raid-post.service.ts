@@ -10,6 +10,7 @@ import { UserNotFoundError } from "../common/errors/entity-not-found.error";
 import { CreateRaidPostDTO } from "./dtos/create-raid-post.dto";
 import { DateIsInThePastError } from "./errors/date-is-in-the-past.error";
 import { isDateInThePast } from "./utils/is-date-in-the-past";
+import { MissingEntityError } from "./errors/missing-entity.error";
 
 /**
  * Service for raid post creation.
@@ -23,6 +24,8 @@ export class CreateRaidPostService {
 
   async create(dto: CreateRaidPostDTO) {
     if (isDateInThePast(dto.date)) throw new DateIsInThePastError("date");
+    if (dto.bossesIds.length === 0) throw new MissingEntityError("bossesIds");
+    if (dto.rolesProps.length === 0) throw new MissingEntityError("rolesProps");
 
     return await this.uow.withTransaction(() => this.createAndSavePost(dto));
   }

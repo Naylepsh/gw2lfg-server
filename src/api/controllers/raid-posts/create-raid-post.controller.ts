@@ -33,6 +33,7 @@ export class CreateRaidPostController {
      */
     const post = await this.createService.create({
       ...dto,
+      date: new Date(dto.date),
       authorId: user.id,
     });
 

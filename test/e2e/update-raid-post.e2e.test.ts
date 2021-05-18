@@ -40,7 +40,7 @@ describe("Update raid post e2e tests", () => {
 
   it("should update a raid post", async () => {
     const postDto: SaveRaidPostDTO = {
-      date: post.date,
+      date: post.date.toISOString(),
       server: post.server,
       description: "a very different description",
       bossesIds: post.bosses.map((boss) => boss.id),

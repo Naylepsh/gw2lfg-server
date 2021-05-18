@@ -80,6 +80,7 @@ describe("UpdateRaidPostService Integration Tests", () => {
 
   it("should remove join requests to removed roles", async () => {
     const roleToJoin = post.roles[0];
+    const otherRole = post.roles[1];
     await uow.withTransaction(async () => {
       return uow.joinRequests.save(
         new JoinRequest({ user: post.author, post, role: roleToJoin })
@@ -89,7 +90,7 @@ describe("UpdateRaidPostService Integration Tests", () => {
     await service.update({
       ...post,
       bossesIds: post.bosses.map((b) => b.id),
-      rolesProps: [],
+      rolesProps: [otherRole],
       requirementsProps: { itemsProps: [] },
     });
 

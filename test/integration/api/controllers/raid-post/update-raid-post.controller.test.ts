@@ -60,7 +60,7 @@ describe("UpdateRaidPostController integration tests", () => {
     const idOfNonExistingPost = 123;
     const dto = {
       server: "EU",
-      date: addHours(new Date(), 13),
+      date: addHours(new Date(), 13).toISOString(),
       bossesIds,
       rolesProps: post.roles,
     };
@@ -82,7 +82,7 @@ describe("UpdateRaidPostController integration tests", () => {
     const otherUserToken = createToken(otherUserId);
     const dto = {
       server: "EU",
-      date: addHours(new Date(), 13),
+      date: addHours(new Date(), 13).toISOString(),
       bossesIds,
       rolesProps: post.roles,
     };
@@ -98,7 +98,7 @@ describe("UpdateRaidPostController integration tests", () => {
   it("should return 200 if valid data was passed", async () => {
     const dto = {
       server: "EU",
-      date: addHours(new Date(), 13),
+      date: addHours(new Date(), 13).toISOString(),
       bossesIds,
       rolesProps: post.roles,
     };
@@ -114,7 +114,7 @@ describe("UpdateRaidPostController integration tests", () => {
   it("should save a post if valid data was passed", async () => {
     const dto = {
       server: "EU",
-      date: addHours(new Date(), 13),
+      date: addHours(new Date(), 13).toISOString(),
       bossesIds,
       rolesProps: post.roles,
     };

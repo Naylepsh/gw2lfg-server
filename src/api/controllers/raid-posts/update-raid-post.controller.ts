@@ -56,7 +56,11 @@ export class UpdateRaidPostController {
     });
     if (!isAuthor) throw new ForbiddenError();
 
-    const post = await this.updateService.update({ ...dto, id: postId });
+    const post = await this.updateService.update({
+      ...dto,
+      date: new Date(dto.date),
+      id: postId,
+    });
 
     return { data: mapRaidPostToRaidPostResponse(post) };
   }
