@@ -1,4 +1,5 @@
 import {
+  ArrayNotEmpty,
   IsDateString,
   IsInt,
   IsOptional,
@@ -38,10 +39,12 @@ export class SaveRaidPostDTO {
   @IsString()
   description?: string;
 
+  @ArrayNotEmpty()
   @IsInt({ each: true })
   bossesIds: number[];
 
   @ValidateNested()
+  @ArrayNotEmpty()
   rolesProps: RolePropsDTO[] = [];
 
   @IsOptional()
