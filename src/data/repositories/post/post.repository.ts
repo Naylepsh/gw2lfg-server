@@ -19,7 +19,8 @@ import {
 @EntityRepository(Post)
 export class PostRepository
   extends AbstractRepository<Post>
-  implements IPostRepository {
+  implements IPostRepository
+{
   save(post: Post): Promise<Post> {
     return this.repository.save(post);
   }
@@ -33,11 +34,9 @@ export class PostRepository
   }
 
   findMany(params: PostsQueryParams): Promise<Post[]> {
-    const { skip, take } = params;
     const { where } = parseFindPostQuery(params, PostRepository.tableName);
     return this.repository.find({
-      skip,
-      take,
+      ...params,
       where,
       relations: PostRepository.relations,
     });
