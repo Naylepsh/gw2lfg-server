@@ -31,17 +31,32 @@ export class RaidPostRepository
     });
   }
 
-  findMany(params: RaidPostsQueryParams): Promise<RaidPost[]> {
+  async findMany(params: RaidPostsQueryParams): Promise<RaidPost[]> {
     const { where } = parseFindRaidPostQuery(
       params,
       RaidPostRepository.tableName
     );
 
-    return this.repository.find({
+    const res = await this.repository.find({
       ...params,
       where,
       relations: RaidPostRepository.relations,
     });
+
+    /**
+     * Quering on bosses ids or roles will return posts with ONLY those bosses / roles that satisfy the condition.
+     * Thus, the entities in relation have to be queried again.
+     */
+    const usedParamsThatCanSkipEntities =
+      params.where?.bossesIds || params.where?.role;
+    if (usedParamsThatCanSkipEntities && res.length > 0) {
+      return this.repository.findByIds(
+        res.map((p) => p.id),
+        { relations: RaidPostRepository.relations }
+      );
+    } else {
+      return res;
+    }
   }
 
   async delete(criteria: any = {}): Promise<void> {
