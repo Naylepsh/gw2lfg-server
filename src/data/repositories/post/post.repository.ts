@@ -6,12 +6,14 @@ import {
   LessThan,
   Like,
   MoreThan,
-  Repository,
   SelectQueryBuilder,
 } from "typeorm";
 import { JoinRequest } from "../../entities/join-request/join-request.entity";
 import { Post } from "../../entities/post/post.entity";
 import { Role } from "../../entities/role/role.entity";
+import { findManyAndLoadRelations } from "../common/find-many-and-load-relations";
+import { findOneAndLoadRelations } from "../common/find-one-and-load-relations";
+import { paginate } from "../common/paginate";
 import {
   IPostRepository,
   PostQueryParams,
@@ -67,43 +69,6 @@ export class PostRepository
     "roles",
     "joinRequests",
   ];
-}
-
-interface Identifiable {
-  id: number;
-}
-
-export async function findOneAndLoadRelations<Entity extends Identifiable>(
-  qb: SelectQueryBuilder<Entity>,
-  repository: Repository<Entity>,
-  relations: string[]
-) {
-  const result = await qb.getOne();
-  if (result) {
-    return repository.findOne(result.id, {
-      relations,
-    });
-  } else {
-    return result;
-  }
-}
-
-export async function findManyAndLoadRelations<Entity extends Identifiable>(
-  qb: SelectQueryBuilder<Entity>,
-  repository: Repository<Entity>,
-  relations: string[]
-) {
-  const result = await qb.getMany();
-  if (result.length > 0) {
-    return repository.findByIds(
-      result.map((p) => p.id),
-      {
-        relations,
-      }
-    );
-  } else {
-    return result;
-  }
 }
 
 export function addPostQueriesOnPostQb<T extends Post>(
@@ -193,20 +158,5 @@ function addQueryOnJoinRequestProps(
   if (authorId) {
     // typeorm requires this exact format I guess (enclosing it within single "" doesnt work)
     qb.andWhere(`"${alias}"."userId" = :id`, { id: authorId });
-  }
-}
-
-export function paginate<Entity>(
-  qb: SelectQueryBuilder<Entity>,
-  params: { skip?: number; take?: number }
-) {
-  const { skip, take } = params;
-
-  if (skip) {
-    qb.skip(skip);
-  }
-
-  if (take) {
-    qb.take(take);
   }
 }
