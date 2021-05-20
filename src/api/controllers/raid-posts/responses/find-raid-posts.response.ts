@@ -2,8 +2,6 @@ import { RaidPostResponse } from "../../../responses/entities/raid-post.entity.r
 import { IRouteResponse } from "../../../responses/route.response.interface";
 
 export interface FindRaidPostsResponse
-  extends IRouteResponse<
-    RaidPostResponse[]
-  > {
+  extends IRouteResponse<RaidPostResponse[]> {
   hasMore: boolean;
 }
