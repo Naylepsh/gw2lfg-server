@@ -6,13 +6,19 @@ import {
   LessThan,
   Like,
   MoreThan,
+  SelectQueryBuilder,
 } from "typeorm";
+import { JoinRequest } from "../../entities/join-request/join-request.entity";
 import { Post } from "../../entities/post/post.entity";
+import { Role } from "../../entities/role/role.entity";
 import {
   IPostRepository,
   PostQueryParams,
   PostsQueryParams,
+  PostWhereAuthorParams,
+  PostWhereJoinRequestParams,
   PostWhereParams,
+  PostWhereRoleParams,
 } from "./post.repository.interface";
 
 @Service()
@@ -25,21 +31,38 @@ export class PostRepository
     return this.repository.save(post);
   }
 
-  findOne(params: PostQueryParams): Promise<Post | undefined> {
-    const { where } = parseFindPostQuery(params, PostRepository.tableName);
-    return this.repository.findOne({
-      where,
-      relations: PostRepository.relations,
-    });
+  async findOne(params: PostQueryParams): Promise<Post | undefined> {
+    const qb = this.repository.createQueryBuilder();
+
+    addPostQueriesOnPostQb(qb, params.where);
+
+    const result = await qb.getOne();
+    if (result) {
+      return this.repository.findOne(result.id, {
+        relations: PostRepository.relations,
+      });
+    } else {
+      return result;
+    }
   }
 
-  findMany(params: PostsQueryParams): Promise<Post[]> {
-    const { where } = parseFindPostQuery(params, PostRepository.tableName);
-    return this.repository.find({
-      ...params,
-      where,
-      relations: PostRepository.relations,
-    });
+  async findMany(params: PostsQueryParams): Promise<Post[]> {
+    const qb = this.repository.createQueryBuilder();
+
+    addPostQueriesOnPostQb(qb, params.where);
+    paginate(qb, params);
+
+    const result = await qb.getMany();
+    if (result.length > 0) {
+      return this.repository.findByIds(
+        result.map((p) => p.id),
+        {
+          relations: PostRepository.relations,
+        }
+      );
+    } else {
+      return result;
+    }
   }
 
   async delete(criteria: any = {}): Promise<void> {
@@ -52,36 +75,20 @@ export class PostRepository
     "roles",
     "joinRequests",
   ];
-  /**
-   * Normally to check conditions on objects in relation in TypeORM one has to manually create join property in query builder.
-   * However, using property relations already uses LEFT JOIN under the hood.
-   * Adding that manual join on top of that would create up to twice as many joins.
-   * To avoid that, in queryBuilder.where a table prefix is used, for example: Post__author
-   */
-  private static tableName = "Post";
 }
 
-export function parseFindPostQuery(
-  queryParams: PostQueryParams,
-  entityPrefix: string
+export function addPostQueriesOnPostQb<T extends Post>(
+  qb: SelectQueryBuilder<T>,
+  whereParams?: PostWhereParams
 ) {
-  const where = queryParams.where
-    ? createWhereQueryBuilder(queryParams.where, entityPrefix)
-    : undefined;
+  if (!whereParams) return;
 
-  return { where };
-}
+  const { author, role, joinRequest } = whereParams;
 
-function createWhereQueryBuilder(
-  whereParams: PostWhereParams,
-  entityPrefix: string
-) {
-  return (qb: any) => {
-    addQueryOnPostProps(whereParams, qb);
-    addQueryOnAuthorProps(whereParams, entityPrefix, qb);
-    addQueryOnRoleProps(whereParams, entityPrefix, qb);
-    addQueryOnJoinRequestProps(whereParams, entityPrefix, qb);
-  };
+  addQueryOnPostProps(whereParams, qb);
+  author && addQueryOnAuthorProps(author, qb);
+  role && addQueryOnRoleProps(role, qb);
+  joinRequest && addQueryOnJoinRequestProps(joinRequest, qb);
 }
 
 function addQueryOnPostProps(whereParams: PostWhereParams, qb: any) {
@@ -105,67 +112,71 @@ function addQueryOnPostProps(whereParams: PostWhereParams, qb: any) {
   }
 }
 
-function addQueryOnAuthorProps(
-  whereParams: PostWhereParams,
-  entityPrefix: string,
-  qb: any
-) {
-  const { author } = whereParams;
-  const id = author?.id;
-  const name = author?.name;
+function addQueryOnAuthorProps(author: PostWhereAuthorParams, qb: any) {
+  const { id, name } = author;
+  const alias = "author";
 
-  const authorEntity = `${entityPrefix}__author`;
+  qb.leftJoin("Post.author", "author");
 
   if (id) {
-    qb.andWhere(`${authorEntity}.id = :id`, { id });
+    qb.andWhere(`${alias}.id = :id`, { id });
   }
 
   if (name) {
-    qb.andWhere(`${authorEntity}.username = :name`, { name });
+    qb.andWhere(`${alias}.username = :name`, { name });
   }
 }
 
-function addQueryOnRoleProps(
-  whereParams: PostWhereParams,
-  entityPrefix: string,
-  qb: any
-) {
-  const { role } = whereParams;
-  const name = role?.name;
-  const roleClass = role?.class;
-  const rolesEntity = `${entityPrefix}__roles`;
+function addQueryOnRoleProps(role: PostWhereRoleParams, qb: any) {
+  const { name, class: roleClass } = role;
+  const alias = "role";
+
+  qb.leftJoin(Role, alias, `"${alias}"."postId" = "Post"."id"`);
 
   if (name) {
     const sql = Array.isArray(name)
-      ? `LOWER(${rolesEntity}.name) IN (:...name)`
-      : `LOWER(${rolesEntity}.name) = :name`;
+      ? `LOWER(${alias}.name) IN (:...name)`
+      : `LOWER(${alias}.name) = :name`;
     qb.andWhere(sql, { name });
   }
 
   if (roleClass) {
     const sql = Array.isArray(roleClass)
-      ? `LOWER(${rolesEntity}.class) IN (:...class)`
-      : `LOWER(${rolesEntity}.class) = :class`;
+      ? `LOWER(${alias}.class) IN (:...class)`
+      : `LOWER(${alias}.class) = :class`;
     qb.andWhere(sql, { class: roleClass });
   }
 }
 
 function addQueryOnJoinRequestProps(
-  whereParams: PostWhereParams,
-  entityPrefix: string,
+  joinRequest: PostWhereJoinRequestParams,
   qb: any
 ) {
-  const { joinRequest } = whereParams;
-  const status = joinRequest?.status;
-  const authorId = joinRequest?.authorId;
-  const joinRequestEntity = `${entityPrefix}__joinRequests`;
+  const { status, authorId } = joinRequest;
+  const alias = "joinRequest";
+
+  qb.leftJoin(JoinRequest, alias, `"${alias}"."postId" = "Post"."id"`);
 
   if (status) {
-    qb.andWhere(`${joinRequestEntity}.status = :status`, { status });
+    qb.andWhere(`${alias}.status = :status`, { status });
   }
 
   if (authorId) {
     // typeorm requires this exact format I guess (enclosing it within single "" doesnt work)
-    qb.andWhere(`"${joinRequestEntity}"."userId" = :id`, { id: authorId });
+    qb.andWhere(`"${alias}"."userId" = :id`, { id: authorId });
+  }
+}
+
+export function paginate<Entity>(
+  qb: SelectQueryBuilder<Entity>,
+  params: { skip?: number; take?: number }
+) {
+  const { skip, take } = params;
+  if (skip) {
+    qb.skip(skip);
+  }
+
+  if (take) {
+    qb.take(take);
   }
 }
