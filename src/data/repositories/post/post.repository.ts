@@ -87,6 +87,11 @@ export function addPostQueriesOnPostQb<T extends Post>(
   joinRequest && addQueryOnJoinRequestProps(joinRequest, qb);
 }
 
+/**
+ * qb here should stay as any type. Adding SelectQueryBuilder<Post> will make the compiler yell
+ * as ab.andWhere supposedly doesn't accept { key: value } arguments.
+ * Amusingly, without typings it works properly nonetheless.
+ */
 function addQueryOnPostProps(whereParams: PostWhereParams, qb: any) {
   const { id, minDate, maxDate, server } = whereParams;
 
@@ -108,7 +113,10 @@ function addQueryOnPostProps(whereParams: PostWhereParams, qb: any) {
   }
 }
 
-function addQueryOnAuthorProps(author: PostWhereAuthorParams, qb: any) {
+function addQueryOnAuthorProps<T extends Post>(
+  author: PostWhereAuthorParams,
+  qb: SelectQueryBuilder<T>
+) {
   const { id, name } = author;
   const alias = "author";
 
@@ -123,7 +131,10 @@ function addQueryOnAuthorProps(author: PostWhereAuthorParams, qb: any) {
   }
 }
 
-function addQueryOnRoleProps(role: PostWhereRoleParams, qb: any) {
+function addQueryOnRoleProps<T extends Post>(
+  role: PostWhereRoleParams,
+  qb: SelectQueryBuilder<T>
+) {
   const { name, class: roleClass } = role;
   const alias = "role";
 
