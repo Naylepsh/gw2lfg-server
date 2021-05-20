@@ -13,8 +13,10 @@ import {
 } from "./raid-post.repository.interface";
 import { addPostQueriesOnPostQb } from "../post/post.repository";
 import { paginate } from "../common/paginate";
-import { findManyAndLoadRelations } from "../common/find-many-and-load-relations";
-import { findOneAndLoadRelations } from "../common/find-one-and-load-relations";
+import {
+  findManyAndLoadRelations,
+  findOneAndLoadRelations,
+} from "../common/find-and-load-relations";
 
 @Service()
 @EntityRepository(RaidPost)

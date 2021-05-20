@@ -11,8 +11,10 @@ import {
 import { JoinRequest } from "../../entities/join-request/join-request.entity";
 import { Post } from "../../entities/post/post.entity";
 import { Role } from "../../entities/role/role.entity";
-import { findManyAndLoadRelations } from "../common/find-many-and-load-relations";
-import { findOneAndLoadRelations } from "../common/find-one-and-load-relations";
+import {
+  findManyAndLoadRelations,
+  findOneAndLoadRelations,
+} from "../common/find-and-load-relations";
 import { paginate } from "../common/paginate";
 import {
   IPostRepository,
