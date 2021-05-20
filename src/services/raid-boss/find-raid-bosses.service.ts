@@ -1,7 +1,7 @@
 import { Inject, Service } from "typedi";
 import { raidBossRepositoryType } from "@loaders/typedi.constants";
 import { IRaidBossRepository } from "@data/repositories/raid-boss/raid-boss.repository.interface";
-import { all } from "@data/queries/common/all.query";
+import { all } from "@root/data/queries/common.queries";
 
 /**
  * Service for finding all raid bosses.

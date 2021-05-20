@@ -6,7 +6,7 @@ import { createAndSaveRaidPost } from "../../../common/raid-post.helper";
 import { RaidPostMemoryUnitOfWork } from "../../../common/uows/raid-post.memory-unit-of-work";
 import { createAndSaveUser } from "../../../common/user.helper";
 import { addHours, subtractHours } from "../../../common/hours.util";
-import { byId } from "@data/queries/common/by-id.query";
+import { byId } from "@root/data/queries/common.queries";
 
 describe("RaidPost Service: update tests", () => {
   const uow = RaidPostMemoryUnitOfWork.create();

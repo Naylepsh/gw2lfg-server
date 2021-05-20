@@ -6,7 +6,7 @@ import { User } from "@root/data/entities/user/user.entity";
 import { JoinRequestRepository } from "@data/repositories/join-request/join-request.repository";
 import { JoinRequest } from "@root/data/entities/join-request/join-request.entity";
 import { loadTypeORM } from "@loaders/typeorm.loader";
-import { byJoinRequestRelations } from "@data/queries/join-request/by-join-request-relations.query";
+import { byJoinRequestRelations } from "@root/data/queries/join-request.queries";
 
 describe("whatever", () => {
   let conn: Connection;

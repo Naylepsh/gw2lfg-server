@@ -4,7 +4,7 @@ import { IJoinRequestRepository } from "@data/repositories/join-request/join-req
 import {
   byJoinRequestRelations,
   JoinRequestRelationParams,
-} from "@data/queries/join-request/by-join-request-relations.query";
+} from "@root/data/queries/join-request.queries";
 
 /**
  * Service for finding join requests by relations keys from the database

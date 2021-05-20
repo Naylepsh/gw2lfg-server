@@ -2,7 +2,7 @@ import { Inject, Service } from "typedi";
 import { IRaidPostUnitOfWork } from "@data/units-of-work/raid-post/raid-post.unit-of-work.interface";
 import { raidPostUnitOfWorkType } from "@loaders/typedi.constants";
 import { In } from "typeorm";
-import { byIds } from "@data/queries/common/by-ids.query";
+import { byIds } from "../../data/queries/common.queries";
 
 /**
  * Service for deletion of raid posts which scheduled date is in the past

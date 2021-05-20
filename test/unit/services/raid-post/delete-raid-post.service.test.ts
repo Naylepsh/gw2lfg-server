@@ -5,7 +5,7 @@ import { createAndSaveRaidPost } from "../../../common/raid-post.helper";
 import { createAndSaveRole } from "../../../common/role.helper";
 import { RaidPostMemoryUnitOfWork } from "../../../common/uows/raid-post.memory-unit-of-work";
 import { createAndSaveUser } from "../../../common/user.helper";
-import { byId } from "@data/queries/common/by-id.query";
+import { byId } from "@root/data/queries/common.queries";
 
 describe("DeleteRaidPost Service tests", () => {
   const uow = RaidPostMemoryUnitOfWork.create();

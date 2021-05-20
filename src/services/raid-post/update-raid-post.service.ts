@@ -9,8 +9,7 @@ import { isDateInThePast } from "./utils/is-date-in-the-past";
 import { DateIsInThePastError } from "./errors/date-is-in-the-past.error";
 import { UpdateRaidPostDTO } from "./dtos/update-raid-post.dto";
 import { In } from "typeorm";
-import { byId } from "@data/queries/common/by-id.query";
-import { byIds } from "@data/queries/common/by-ids.query";
+import { byId, byIds } from "@root/data/queries/common.queries";
 import { MissingEntityError } from "./errors/missing-entity.error";
 
 /**

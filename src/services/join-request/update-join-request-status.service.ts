@@ -3,7 +3,7 @@ import { IJoinRequestRepository } from "@data/repositories/join-request/join-req
 import { joinRequestRepositoryType } from "@loaders/typedi.constants";
 import { EntityNotFoundError } from "../common/errors/entity-not-found.error";
 import { UpdateJoinRequestStatusDTO } from "./dtos/update-join-request-status.dto";
-import { byId } from "../../data/queries/common/by-id.query";
+import { byId } from "../../data/queries/common.queries";
 
 /**
  * Service for updating the status of join requests.

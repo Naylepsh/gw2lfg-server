@@ -6,7 +6,7 @@ import {
 } from "@loaders/typedi.constants";
 import { PostNotFoundError } from "../common/errors/entity-not-found.error";
 import { FindRaidPostDTO } from "./dtos/find-raid-post.dto";
-import { byId } from "@data/queries/common/by-id.query";
+import { byId } from "@root/data/queries/common.queries";
 
 /**
  * Service for finding a raid post with matching id.

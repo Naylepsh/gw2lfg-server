@@ -4,8 +4,7 @@ import { ItemRequirement } from "@root/data/entities/item-requirement/item.requi
 import { RaidPost } from "@root/data/entities/raid-post/raid-post.entitity";
 import { Role } from "@root/data/entities/role/role.entity";
 import { Inject, Service } from "typedi";
-import { byId } from "@data/queries/common/by-id.query";
-import { byIds } from "@data/queries/common/by-ids.query";
+import { byId, byIds } from "@root/data/queries/common.queries";
 import { UserNotFoundError } from "../common/errors/entity-not-found.error";
 import { CreateRaidPostDTO } from "./dtos/create-raid-post.dto";
 import { DateIsInThePastError } from "./errors/date-is-in-the-past.error";

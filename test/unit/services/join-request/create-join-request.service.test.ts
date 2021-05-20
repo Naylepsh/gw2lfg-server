@@ -16,7 +16,7 @@ import items from "@services/gw2-items/items.json";
 import { CheckItemRequirementsService } from "@root/services/requirement/check-item-requirements.service";
 import { FindUserItemsService } from "@services/user/find-user-items.service";
 import { addHours } from "../../../common/hours.util";
-import { byJoinRequestRelations } from "@data/queries/join-request/by-join-request-relations.query";
+import { byJoinRequestRelations } from "@root/data/queries/join-request.queries";
 
 class JoinRequestServiceTestObject {
   date: Date;

@@ -3,7 +3,7 @@ import { joinRequestRepositoryType } from "@loaders/typedi.constants";
 import { IJoinRequestRepository } from "@data/repositories/join-request/join-request.repository.interface";
 import { FindJoinRequestDTO } from "./dtos/find-join-request.dto";
 import { EntityNotFoundError } from "../common/errors/entity-not-found.error";
-import { byId } from "@data/queries/common/by-id.query";
+import { byId } from "@root/data/queries/common.queries";
 
 /**
  * Service for finding join request with matching id.

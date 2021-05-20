@@ -4,7 +4,7 @@ import { User } from "@root/data/entities/user/user.entity";
 import { IUserRepository } from "@data/repositories/user/user.repository.interface";
 import { userRepositoryType } from "@loaders/typedi.constants";
 import { UsernameTakenError } from "./errors/username-taken.error";
-import { byUsername } from "@data/queries/user/by-username.query";
+import { byUsername } from "@root/data/queries/user.queries";
 
 /**
  * Service for creating new users.

@@ -4,7 +4,7 @@ import { IUserRepository } from "@data/repositories/user/user.repository.interfa
 import { userRepositoryType } from "@loaders/typedi.constants";
 import { loginDTO } from "./dtos/login.dto";
 import { InvalidLoginDetailsError } from "./errors/invalid-login-details.error";
-import { byUsername } from "@data/queries/user/by-username.query";
+import { byUsername } from "@root/data/queries/user.queries";
 
 /**
  * Service for loging in user.

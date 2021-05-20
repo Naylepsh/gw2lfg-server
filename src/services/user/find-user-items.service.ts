@@ -11,7 +11,7 @@ import { FindUserDTO } from "./dtos/find-user.dto";
 import { ItemsFetcher } from "../gw2-api/items/items-fetcher.interface";
 import items from "../gw2-items/items.json";
 import { idToName } from "../gw2-items/gw2-items.service";
-import { byId } from "@data/queries/common/by-id.query";
+import { byId } from "@root/data/queries/common.queries";
 
 /**
  * Service for finding a user with matching id and getting his item stats from GW2 API

@@ -3,7 +3,7 @@ import { IRaidPostRepository } from "@data/repositories/raid-post/raid-post.repo
 import { raidPostRepositoryType } from "@loaders/typedi.constants";
 import { EntityNotFoundError } from "../common/errors/entity-not-found.error";
 import { CheckPostAuthorshipDTO } from "./dtos/check-post-authorship.dto";
-import { byId } from "@data/queries/common/by-id.query";
+import { byId } from "@root/data/queries/common.queries";
 
 /**
  * Service for checking authorship of a post.

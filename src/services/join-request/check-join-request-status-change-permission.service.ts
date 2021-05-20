@@ -2,7 +2,7 @@ import { Inject, Service } from "typedi";
 import { IJoinRequestRepository } from "@data/repositories/join-request/join-request.repository.interface";
 import { joinRequestRepositoryType } from "@loaders/typedi.constants";
 import { CanUserChangeJoinRequestStatusDTO } from "./dtos/can-user-change-join-request-status.dto";
-import { byId } from "@data/queries/common/by-id.query";
+import { byId } from "@root/data/queries/common.queries";
 
 /**
  * Service for checking whether a user of given id can change the status of a post of given id.
