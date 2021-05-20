@@ -1,4 +1,3 @@
-import { GW2ApiItem } from "../../gw2-items/item.interface";
 import { CharacterInventory } from "../character-inventory";
 import { charactersUrl } from "../gw2-api.constants";
 import { removeEmptySlots } from "../utils/remove-empty-slots";
@@ -18,9 +17,9 @@ export const fetchItemsFromCharacter = async (
     const charInventory = data as CharacterInventory;
     const inventories = removeEmptySlots(
       charInventory.bags.filter((bag) => !!bag).map((bag) => bag.inventory)
-    ) as GW2ApiItem[][];
+    );
 
-    return removeEmptySlots(inventories.flat()) as GW2ApiItem[];
+    return removeEmptySlots(inventories.flat());
   } catch (error) {
     throw error;
   }
