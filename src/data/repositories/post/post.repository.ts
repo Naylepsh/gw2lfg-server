@@ -6,6 +6,7 @@ import {
   LessThan,
   Like,
   MoreThan,
+  Repository,
   SelectQueryBuilder,
 } from "typeorm";
 import { JoinRequest } from "../../entities/join-request/join-request.entity";
@@ -36,14 +37,11 @@ export class PostRepository
 
     addPostQueriesOnPostQb(qb, params.where);
 
-    const result = await qb.getOne();
-    if (result) {
-      return this.repository.findOne(result.id, {
-        relations: PostRepository.relations,
-      });
-    } else {
-      return result;
-    }
+    return findOneAndLoadRelations(
+      qb,
+      this.repository,
+      PostRepository.relations
+    );
   }
 
   async findMany(params: PostsQueryParams): Promise<Post[]> {
@@ -52,17 +50,11 @@ export class PostRepository
     addPostQueriesOnPostQb(qb, params.where);
     paginate(qb, params);
 
-    const result = await qb.getMany();
-    if (result.length > 0) {
-      return this.repository.findByIds(
-        result.map((p) => p.id),
-        {
-          relations: PostRepository.relations,
-        }
-      );
-    } else {
-      return result;
-    }
+    return findManyAndLoadRelations(
+      qb,
+      this.repository,
+      PostRepository.relations
+    );
   }
 
   async delete(criteria: any = {}): Promise<void> {
@@ -75,6 +67,43 @@ export class PostRepository
     "roles",
     "joinRequests",
   ];
+}
+
+interface Identifiable {
+  id: number;
+}
+
+export async function findOneAndLoadRelations<Entity extends Identifiable>(
+  qb: SelectQueryBuilder<Entity>,
+  repository: Repository<Entity>,
+  relations: string[]
+) {
+  const result = await qb.getOne();
+  if (result) {
+    return repository.findOne(result.id, {
+      relations,
+    });
+  } else {
+    return result;
+  }
+}
+
+export async function findManyAndLoadRelations<Entity extends Identifiable>(
+  qb: SelectQueryBuilder<Entity>,
+  repository: Repository<Entity>,
+  relations: string[]
+) {
+  const result = await qb.getMany();
+  if (result.length > 0) {
+    return repository.findByIds(
+      result.map((p) => p.id),
+      {
+        relations,
+      }
+    );
+  } else {
+    return result;
+  }
 }
 
 export function addPostQueriesOnPostQb<T extends Post>(
@@ -172,6 +201,7 @@ export function paginate<Entity>(
   params: { skip?: number; take?: number }
 ) {
   const { skip, take } = params;
+
   if (skip) {
     qb.skip(skip);
   }

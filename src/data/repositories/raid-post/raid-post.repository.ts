@@ -11,7 +11,12 @@ import {
   RaidPostsQueryParams,
   RaidPostWhereParams,
 } from "./raid-post.repository.interface";
-import { addPostQueriesOnPostQb, paginate } from "../post/post.repository";
+import {
+  addPostQueriesOnPostQb,
+  paginate,
+  findOneAndLoadRelations,
+  findManyAndLoadRelations,
+} from "../post/post.repository";
 
 @Service()
 @EntityRepository(RaidPost)
@@ -29,14 +34,11 @@ export class RaidPostRepository
     addPostQueriesOnPostQb(qb, params.where);
     addRaidPostQueriesOnRaidPostQb(qb, params.where);
 
-    const result = await qb.getOne();
-    if (result) {
-      return this.repository.findOne(result.id, {
-        relations: RaidPostRepository.relations,
-      });
-    } else {
-      return result;
-    }
+    return findOneAndLoadRelations(
+      qb,
+      this.repository,
+      RaidPostRepository.relations
+    );
   }
 
   async findMany(params: RaidPostsQueryParams): Promise<RaidPost[]> {
@@ -46,17 +48,11 @@ export class RaidPostRepository
     addRaidPostQueriesOnRaidPostQb(qb, params.where);
     paginate(qb, params);
 
-    const result = await qb.getMany();
-    if (result.length > 0) {
-      return this.repository.findByIds(
-        result.map((p) => p.id),
-        {
-          relations: RaidPostRepository.relations,
-        }
-      );
-    } else {
-      return result;
-    }
+    return findManyAndLoadRelations(
+      qb,
+      this.repository,
+      RaidPostRepository.relations
+    );
   }
 
   async delete(criteria: any = {}): Promise<void> {
