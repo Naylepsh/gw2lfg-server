@@ -12,11 +12,13 @@ export const fetchItemsFromCharacter = async (
 ) => {
   try {
     const url = `${charactersUrl}/${characterName}`;
-    const { data } = await sendGetRequestWithBearerToken(url, apiKey);
+    const { data } = await sendGetRequestWithBearerToken<CharacterInventory>(
+      url,
+      apiKey
+    );
 
-    const charInventory = data as CharacterInventory;
     const inventories = removeEmptySlots(
-      charInventory.bags.filter((bag) => !!bag).map((bag) => bag.inventory)
+      removeEmptySlots(data.bags).map((bag) => bag.inventory)
     );
 
     return removeEmptySlots(inventories.flat());

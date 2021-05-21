@@ -5,6 +5,9 @@ import { sendGetRequestWithBearerToken } from "../utils/send-request-with-bearer
  * Fetches characters associated with given API key from official GW2 API
  */
 export const fetchCharacters = async (apiKey: string) => {
-  const response = await sendGetRequestWithBearerToken(charactersUrl, apiKey);
-  return response.data as string[];
+  const response = await sendGetRequestWithBearerToken<string[]>(
+    charactersUrl,
+    apiKey
+  );
+  return response.data;
 };

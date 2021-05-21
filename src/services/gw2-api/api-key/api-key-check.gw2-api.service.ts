@@ -22,11 +22,12 @@ export class CheckApiKeyValidityService implements ICheckApiKeyValidityService {
         "progression",
       ];
 
-      const { data } = await sendGetRequestWithBearerToken(tokenInfoUrl, apiKey);
-      const permissions: string[] = data.permissions;
+      const { data } = await sendGetRequestWithBearerToken<{
+        permissions: string[];
+      }>(tokenInfoUrl, apiKey);
 
       return requiredPermissions.every((permission) =>
-        permissions.includes(permission)
+        data.permissions.includes(permission)
       );
     } catch (error) {
       return false;

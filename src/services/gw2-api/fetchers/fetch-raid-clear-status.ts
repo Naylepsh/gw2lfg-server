@@ -7,8 +7,11 @@ import { sendGetRequestWithBearerToken } from "../utils/send-request-with-bearer
 export const fetchRaidClearStatus = async (apiKey: string) => {
   const raidsUrl = `${accountUrl}/raids`;
   try {
-    const response = await sendGetRequestWithBearerToken(raidsUrl, apiKey);
-    return response.data as string[];
+    const { data } = await sendGetRequestWithBearerToken<string[]>(
+      raidsUrl,
+      apiKey
+    );
+    return data;
   } catch (error) {
     throw new Error("Couldn't access user's raid clears: " + error.message);
   }

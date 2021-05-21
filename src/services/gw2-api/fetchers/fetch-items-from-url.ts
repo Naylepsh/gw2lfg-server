@@ -6,7 +6,9 @@ import { sendGetRequestWithBearerToken } from "../utils/send-request-with-bearer
  * Fetches items from given url using given API key
  */
 export const fetchItemsFromUrl = async (url: string, apiKey: string) => {
-  const response = await sendGetRequestWithBearerToken(url, apiKey);
-  const slots = response.data as (GW2ApiItem | null)[];
-  return removeEmptySlots(slots);
+  const { data } = await sendGetRequestWithBearerToken<(GW2ApiItem | null)[]>(
+    url,
+    apiKey
+  );
+  return removeEmptySlots(data);
 };

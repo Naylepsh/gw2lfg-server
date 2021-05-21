@@ -6,8 +6,6 @@ export const removeEmptySlots = <T>(slots: (T | null)[]) => {
   return slots.filter(notEmpty);
 };
 
-const notEmpty = <TValue>(
-  value: TValue | null | undefined
-): value is TValue => {
+const notEmpty = <T>(value: T | null | undefined): value is T => {
   return value !== null && value !== undefined;
 };

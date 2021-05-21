@@ -10,8 +10,11 @@ export interface Gw2Account {
  */
 export const fetchAccount = async (apiKey: string) => {
   try {
-    const response = await sendGetRequestWithBearerToken(accountUrl, apiKey);
-    return response.data as Gw2Account;
+    const response = await sendGetRequestWithBearerToken<Gw2Account>(
+      accountUrl,
+      apiKey
+    );
+    return response.data;
   } catch (error) {
     throw new Error("Couldn't access user's account: " + error.message);
   }
