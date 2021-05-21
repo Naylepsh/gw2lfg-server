@@ -40,15 +40,15 @@ const loadDataLayerDependencies = () => {
   loadUnitOfWork(conn);
 };
 
-function loadUnitOfWork(conn: Connection) {
+const loadUnitOfWork = (conn: Connection) => {
   const { unitsOfWork: uows } = data;
 
   const genericUow = new uows.GenericUnitOfWork(conn);
   const raidPostUow = new uows.RaidPostUnitOfWork(genericUow);
   Container.set(raidPostUnitOfWorkType, raidPostUow);
-}
+};
 
-function loadRepositories(conn: Connection) {
+const loadRepositories = (conn: Connection) => {
   const { repositories: repos } = data;
 
   const userRepo = conn.getCustomRepository(repos.UserRepository);
@@ -76,12 +76,11 @@ function loadRepositories(conn: Connection) {
 
   const joinRequestRepo = conn.getCustomRepository(repos.JoinRequestRepository);
   Container.set(joinRequestRepositoryType, joinRequestRepo);
-}
+};
 
 /**
  * Loads concrete classes from /service directory into TypeDI container, so that
  * TypeDI knows what implementation to use when encountered an interface.
- * At the moment it's only CheckRequirementsService that needs a special loading care
  */
 const loadServiceLayerDependencies = () => {
   const { GetItemsFromEntireAccount } = services;

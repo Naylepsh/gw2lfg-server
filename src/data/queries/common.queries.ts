@@ -1,13 +1,13 @@
 import { In } from "typeorm";
 
-export function all() {
+export const all = () => {
   return {};
-}
+};
 
-export function byId(id: number) {
+export const byId = (id: number) => {
   return { where: { id } };
-}
+};
 
-export function byIds(ids: number[]) {
+export const byIds = (ids: number[]) => {
   return { where: { id: In(ids) } };
-}
+};

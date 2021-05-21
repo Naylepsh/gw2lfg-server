@@ -4,10 +4,10 @@ export interface JoinRequestRelationParams {
   roleId?: number;
 }
 
-export function byJoinRequestRelations(params: JoinRequestRelationParams) {
+export const byJoinRequestRelations = (params: JoinRequestRelationParams) => {
   const { userId, postId, roleId } = params;
-
   const where: Record<string, { id: number }> = {};
+
   if (userId) {
     where.user = { id: userId };
   }
@@ -19,4 +19,4 @@ export function byJoinRequestRelations(params: JoinRequestRelationParams) {
   }
 
   return { where };
-}
+};

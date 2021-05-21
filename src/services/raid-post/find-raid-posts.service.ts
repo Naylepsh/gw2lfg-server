@@ -77,6 +77,4 @@ export class FindRaidPostsService {
   }
 }
 
-function isAny(value: string) {
-  return value.toLowerCase() === "any";
-}
+const isAny = (value: string) => value.toLowerCase() === "any";

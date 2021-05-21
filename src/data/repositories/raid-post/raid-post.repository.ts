@@ -68,21 +68,21 @@ export class RaidPostRepository
   ];
 }
 
-function addRaidPostQueriesOnRaidPostQb(
-  qb: SelectQueryBuilder<RaidPost>,
+const addRaidPostQueriesOnRaidPostQb = <T extends RaidPost>(
+  qb: SelectQueryBuilder<T>,
   whereParams?: RaidPostWhereParams
-) {
+) => {
   if (!whereParams) return;
 
   const { bossesIds } = whereParams;
 
   bossesIds && addQueryOnBossProps(qb, bossesIds);
-}
+};
 
-function addQueryOnBossProps(
-  qb: SelectQueryBuilder<RaidPost>,
+const addQueryOnBossProps = <T extends RaidPost>(
+  qb: SelectQueryBuilder<T>,
   bossesIds: number[]
-) {
+) => {
   const alias = "bosses";
 
   qb.leftJoin("Post.bosses", "bosses");
@@ -91,4 +91,4 @@ function addQueryOnBossProps(
       qb.andWhere(`${alias}.id = :bossId`, { bossId });
     }
   }
-}
+};

@@ -4,11 +4,11 @@ interface Identifiable {
   id: number;
 }
 
-export async function findOneAndLoadRelations<Entity extends Identifiable>(
+export const findOneAndLoadRelations = async <Entity extends Identifiable>(
   qb: SelectQueryBuilder<Entity>,
   repository: Repository<Entity>,
   relations: string[]
-) {
+) => {
   const result = await qb.getOne();
   if (result) {
     return repository.findOne(result.id, {
@@ -17,22 +17,20 @@ export async function findOneAndLoadRelations<Entity extends Identifiable>(
   } else {
     return result;
   }
-}
+};
 
-export async function findManyAndLoadRelations<Entity extends Identifiable>(
+export const findManyAndLoadRelations = async <Entity extends Identifiable>(
   qb: SelectQueryBuilder<Entity>,
   repository: Repository<Entity>,
   relations: string[]
-) {
+) => {
   const result = await qb.getMany();
   if (result.length > 0) {
-    return repository.findByIds(
-      result.map((p) => p.id),
-      {
-        relations,
-      }
-    );
+    const ids = result.map((p) => p.id);
+    return repository.findByIds(ids, {
+      relations,
+    });
   } else {
     return result;
   }
-}
+};

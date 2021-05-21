@@ -73,10 +73,10 @@ export class PostRepository
   ];
 }
 
-export function addPostQueriesOnPostQb<T extends Post>(
+export const addPostQueriesOnPostQb = async <T extends Post>(
   qb: SelectQueryBuilder<T>,
   whereParams?: PostWhereParams
-) {
+) => {
   if (!whereParams) return;
 
   const { author, role, joinRequest } = whereParams;
@@ -85,14 +85,14 @@ export function addPostQueriesOnPostQb<T extends Post>(
   author && addQueryOnAuthorProps(author, qb);
   role && addQueryOnRoleProps(role, qb);
   joinRequest && addQueryOnJoinRequestProps(joinRequest, qb);
-}
+};
 
 /**
  * qb here should stay as any type. Adding SelectQueryBuilder<Post> will make the compiler yell
  * as ab.andWhere supposedly doesn't accept { key: value } arguments.
  * Amusingly, without typings it works properly nonetheless.
  */
-function addQueryOnPostProps(whereParams: PostWhereParams, qb: any) {
+const addQueryOnPostProps = (whereParams: PostWhereParams, qb: any) => {
   const { id, minDate, maxDate, server } = whereParams;
 
   if (id) {
@@ -111,12 +111,12 @@ function addQueryOnPostProps(whereParams: PostWhereParams, qb: any) {
   if (server) {
     qb.andWhere({ server: Like(server) });
   }
-}
+};
 
-function addQueryOnAuthorProps<T extends Post>(
+const addQueryOnAuthorProps = <T extends Post>(
   author: PostWhereAuthorParams,
   qb: SelectQueryBuilder<T>
-) {
+) => {
   const { id, name } = author;
   const alias = "author";
 
@@ -129,12 +129,12 @@ function addQueryOnAuthorProps<T extends Post>(
   if (name) {
     qb.andWhere(`${alias}.username = :name`, { name });
   }
-}
+};
 
-function addQueryOnRoleProps<T extends Post>(
+const addQueryOnRoleProps = <T extends Post>(
   role: PostWhereRoleParams,
   qb: SelectQueryBuilder<T>
-) {
+) => {
   const { name, class: roleClass } = role;
   const alias = "role";
 
@@ -153,12 +153,12 @@ function addQueryOnRoleProps<T extends Post>(
       : `LOWER(${alias}.class) = :class`;
     qb.andWhere(sql, { class: roleClass });
   }
-}
+};
 
-function addQueryOnJoinRequestProps(
+const addQueryOnJoinRequestProps = (
   joinRequest: PostWhereJoinRequestParams,
   qb: any
-) {
+) => {
   const { status, authorId } = joinRequest;
   const alias = "joinRequest";
 
@@ -172,4 +172,4 @@ function addQueryOnJoinRequestProps(
     // typeorm requires this exact format I guess (enclosing it within single "" doesnt work)
     qb.andWhere(`"${alias}"."userId" = :id`, { id: authorId });
   }
-}
+};

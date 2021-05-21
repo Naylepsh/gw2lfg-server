@@ -12,9 +12,9 @@ interface DependenciesConfig {
 /**
  * Loads orm, dependency injection service and the server
  */
-export async function loadDependencies(
+export const loadDependencies = async (
   config: DependenciesConfig = { loadTasks: true }
-) {
+) => {
   const conn = await loadTypeORM();
 
   loadTypeDI();
@@ -28,4 +28,4 @@ export async function loadDependencies(
 
   const app = loadServer();
   return { app, conn };
-}
+};

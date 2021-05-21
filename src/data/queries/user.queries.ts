@@ -1,3 +1,3 @@
-export function byUsername(username: string) {
+export const byUsername = (username: string) => {
   return { where: { username } };
 }
