@@ -30,13 +30,19 @@ Returns json data about multiple raid posts.
 
   `server:[string]`
 
-  `bossesIds:[array-of-positive-integers-separated-by-commas]`
+  `bossesIds:[string-of-integers-separated-by-commas]`
 
-  `authorId:[positive-integer]`
+  `authorId:[integer]`
+
+  `authorName:[string]`
 
   `roleName:[string]`
 
   `roleClass:[string]`
+
+  `joinRequestId:[integer]`
+
+  `joinRequestStatus:[string]`
 
 - **Data Params**
 
