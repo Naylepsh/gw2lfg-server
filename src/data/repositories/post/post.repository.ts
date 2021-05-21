@@ -37,9 +37,10 @@ export class PostRepository
   }
 
   async findOne(params: PostQueryParams): Promise<Post | undefined> {
-    const qb = this.repository.createQueryBuilder();
+    const alias = "Post";
+    const qb = this.repository.createQueryBuilder(alias);
 
-    addPostQueriesOnPostQb(qb, params.where);
+    addPostQueriesOnPostQb(qb, alias, params.where);
 
     return findOneAndLoadRelations(
       qb,
@@ -49,9 +50,10 @@ export class PostRepository
   }
 
   async findMany(params: PostsQueryParams): Promise<Post[]> {
-    const qb = this.repository.createQueryBuilder();
+    const alias = "Post";
+    const qb = this.repository.createQueryBuilder(alias);
 
-    addPostQueriesOnPostQb(qb, params.where);
+    addPostQueriesOnPostQb(qb, alias, params.where);
     paginate(qb, params);
 
     return findManyAndLoadRelations(
@@ -75,6 +77,7 @@ export class PostRepository
 
 export const addPostQueriesOnPostQb = async <T extends Post>(
   qb: SelectQueryBuilder<T>,
+  alias: string,
   whereParams?: PostWhereParams
 ) => {
   if (!whereParams) return;
@@ -82,9 +85,9 @@ export const addPostQueriesOnPostQb = async <T extends Post>(
   const { author, role, joinRequest } = whereParams;
 
   addQueryOnPostProps(whereParams, qb);
-  author && addQueryOnAuthorProps(author, qb);
-  role && addQueryOnRoleProps(role, qb);
-  joinRequest && addQueryOnJoinRequestProps(joinRequest, qb);
+  author && addQueryOnAuthorProps(author, alias, qb);
+  role && addQueryOnRoleProps(role, alias, qb);
+  joinRequest && addQueryOnJoinRequestProps(joinRequest, alias, qb);
 };
 
 /**
@@ -115,12 +118,13 @@ const addQueryOnPostProps = (whereParams: PostWhereParams, qb: any) => {
 
 const addQueryOnAuthorProps = <T extends Post>(
   author: PostWhereAuthorParams,
+  parentAlias: string,
   qb: SelectQueryBuilder<T>
 ) => {
   const { id, name } = author;
   const alias = "author";
 
-  qb.leftJoin("Post.author", "author");
+  qb.leftJoin(`${parentAlias}.${alias}`, alias);
 
   if (id) {
     qb.andWhere(`${alias}.id = :id`, { id });
@@ -133,12 +137,13 @@ const addQueryOnAuthorProps = <T extends Post>(
 
 const addQueryOnRoleProps = <T extends Post>(
   role: PostWhereRoleParams,
+  parentAlias: string,
   qb: SelectQueryBuilder<T>
 ) => {
   const { name, class: roleClass } = role;
   const alias = "role";
 
-  qb.leftJoin(Role, alias, `"${alias}"."postId" = "Post"."id"`);
+  qb.leftJoin(Role, alias, `"${alias}"."postId" = "${parentAlias}"."id"`);
 
   if (name) {
     const sql = Array.isArray(name)
@@ -155,14 +160,19 @@ const addQueryOnRoleProps = <T extends Post>(
   }
 };
 
-const addQueryOnJoinRequestProps = (
+const addQueryOnJoinRequestProps = <T extends Post>(
   joinRequest: PostWhereJoinRequestParams,
-  qb: any
+  parentAlias: string,
+  qb: SelectQueryBuilder<T>
 ) => {
   const { status, authorId } = joinRequest;
   const alias = "joinRequest";
 
-  qb.leftJoin(JoinRequest, alias, `"${alias}"."postId" = "Post"."id"`);
+  qb.leftJoin(
+    JoinRequest,
+    alias,
+    `"${alias}"."postId" = "${parentAlias}"."id"`
+  );
 
   if (status) {
     qb.andWhere(`${alias}.status = :status`, { status });

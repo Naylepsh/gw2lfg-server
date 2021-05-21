@@ -29,10 +29,11 @@ export class RaidPostRepository
   }
 
   async findOne(params: RaidPostQueryParams): Promise<RaidPost | undefined> {
-    const qb = this.repository.createQueryBuilder("Post");
+    const alias = "Post";
+    const qb = this.repository.createQueryBuilder(alias);
 
-    addPostQueriesOnPostQb(qb, params.where);
-    addRaidPostQueriesOnRaidPostQb(qb, params.where);
+    addPostQueriesOnPostQb(qb, alias, params.where);
+    addRaidPostQueriesOnRaidPostQb(qb, alias, params.where);
 
     return findOneAndLoadRelations(
       qb,
@@ -42,10 +43,11 @@ export class RaidPostRepository
   }
 
   async findMany(params: RaidPostsQueryParams): Promise<RaidPost[]> {
-    const qb = this.repository.createQueryBuilder("Post");
+    const alias = "Post";
+    const qb = this.repository.createQueryBuilder(alias);
 
-    addPostQueriesOnPostQb(qb, params.where);
-    addRaidPostQueriesOnRaidPostQb(qb, params.where);
+    addPostQueriesOnPostQb(qb, alias, params.where);
+    addRaidPostQueriesOnRaidPostQb(qb, alias, params.where);
     paginate(qb, params);
 
     return findManyAndLoadRelations(
@@ -70,22 +72,24 @@ export class RaidPostRepository
 
 const addRaidPostQueriesOnRaidPostQb = <T extends RaidPost>(
   qb: SelectQueryBuilder<T>,
+  alias: string,
   whereParams?: RaidPostWhereParams
 ) => {
   if (!whereParams) return;
 
   const { bossesIds } = whereParams;
 
-  bossesIds && addQueryOnBossProps(qb, bossesIds);
+  bossesIds && addQueryOnBossProps(qb, alias, bossesIds);
 };
 
 const addQueryOnBossProps = <T extends RaidPost>(
   qb: SelectQueryBuilder<T>,
+  parentAlias: string,
   bossesIds: number[]
 ) => {
   const alias = "bosses";
 
-  qb.leftJoin("Post.bosses", "bosses");
+  qb.leftJoin(`${parentAlias}.${alias}`, alias);
   if (bossesIds) {
     for (const bossId of bossesIds) {
       qb.andWhere(`${alias}.id = :bossId`, { bossId });
