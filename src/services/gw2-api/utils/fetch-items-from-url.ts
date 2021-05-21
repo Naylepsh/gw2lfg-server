@@ -1,6 +1,6 @@
 import { GW2ApiItem } from "../items/item.interface";
-import { removeEmptySlots } from "../utils/remove-empty-slots";
-import { sendGetRequestWithBearerToken } from "../utils/send-request-with-bearer-token";
+import { removeEmptySlots } from "./remove-empty-slots";
+import { sendGetRequestWithBearerToken } from "./send-request-with-bearer-token";
 
 /**
  * Fetches items from given url using given API key

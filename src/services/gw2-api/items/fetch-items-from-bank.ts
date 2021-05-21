@@ -1,5 +1,5 @@
 import { bankUrl } from "../gw2-api.constants";
-import { fetchItemsFromUrl } from "./fetch-items-from-url";
+import { fetchItemsFromUrl } from "../utils/fetch-items-from-url";
 
 /**
  * Fetches items from a bank associated with given API key from official GW2 API

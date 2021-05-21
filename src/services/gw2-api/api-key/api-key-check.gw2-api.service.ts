@@ -1,7 +1,6 @@
 import { Service } from "typedi";
 import { checkApiKeyValidityServiceType } from "../../../loaders/typedi.constants";
-import { tokenInfoUrl } from "../gw2-api.constants";
-import { sendGetRequestWithBearerToken } from "../utils/send-request-with-bearer-token";
+import { fetchPermissions } from "./fetch-permissions";
 
 export interface ICheckApiKeyValidityService {
   isValid(apiKey: string): Promise<boolean>;
@@ -22,12 +21,10 @@ export class CheckApiKeyValidityService implements ICheckApiKeyValidityService {
         "progression",
       ];
 
-      const { data } = await sendGetRequestWithBearerToken<{
-        permissions: string[];
-      }>(tokenInfoUrl, apiKey);
+      const apiKeyPermissions = await fetchPermissions(apiKey);
 
       return requiredPermissions.every((permission) =>
-        data.permissions.includes(permission)
+        apiKeyPermissions.includes(permission)
       );
     } catch (error) {
       return false;

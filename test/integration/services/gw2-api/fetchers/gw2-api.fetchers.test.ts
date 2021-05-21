@@ -1,9 +1,9 @@
 import assert from "assert";
 import "@root/config";
-import { fetchItemsFromCharacter } from "@services/gw2-api/fetchers/fetch-items-from-character";
-import { fetchCharacters } from "@services/gw2-api/fetchers/fetch-characters";
-import { fetchItemsFromBank } from "@services/gw2-api/fetchers/fetch-items-from-bank";
-import { fetchAccount } from "@services/gw2-api/fetchers/fetch-account";
+import { fetchItemsFromCharacter } from "@root/services/gw2-api/items/fetch-items-from-character";
+import { fetchCharacters } from "@root/services/gw2-api/characters/fetch-characters";
+import { fetchItemsFromBank } from "@root/services/gw2-api/items/fetch-items-from-bank";
+import { fetchAccount } from "@root/services/gw2-api/account/fetch-account";
 import { getGw2ApiKey } from "../../../../common/get-gw2-api-key";
 
 const getSomeCharacterName = async (apiKey: string) => {

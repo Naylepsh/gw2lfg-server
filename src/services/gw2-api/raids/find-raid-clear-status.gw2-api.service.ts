@@ -1,6 +1,6 @@
 import { Service } from "typedi";
 import { findRaidClearStatusServiceType } from "@loaders/typedi.constants";
-import { fetchRaidClearStatus } from "../fetchers/fetch-raid-clear-status";
+import { fetchRaidClearStatus } from "./fetch-raid-clear-status";
 
 export interface IFindRaidClearStatusService {
   findClearedRaids(apiKey: string): Promise<string[]>;

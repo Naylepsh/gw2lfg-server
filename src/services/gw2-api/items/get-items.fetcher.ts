@@ -1,7 +1,8 @@
 import { GW2ApiItem } from "./item.interface";
-import { AllItemsFetcher } from "./all-items-fetcher.type";
-import { countItemStacks } from "./count-item-stacks";
+import { countItemStacks } from "./item.utils";
 import { ItemsFetcher } from "./items-fetcher.interface";
+
+type AllItemsFetcher = (apiKey: string) => Promise<GW2ApiItem[]>;
 
 /**
  * Uses a fetcher to fetch all items, leaves only those with given ids and merges items occurring multple times

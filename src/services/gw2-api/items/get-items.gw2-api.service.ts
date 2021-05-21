@@ -1,8 +1,8 @@
 import { GW2ApiItem } from "./item.interface";
-import { fetchItemsFromCharacter } from "../fetchers/fetch-items-from-character";
-import { fetchCharacters } from "../fetchers/fetch-characters";
-import { fetchItemsFromSharedInventory } from "../fetchers/fetch-items-from-shared-inventory";
-import { fetchItemsFromBank } from "../fetchers/fetch-items-from-bank";
+import { fetchItemsFromCharacter } from "./fetch-items-from-character";
+import { fetchCharacters } from "../characters/fetch-characters";
+import { fetchItemsFromSharedInventory } from "./fetch-items-from-shared-inventory";
+import { fetchItemsFromBank } from "./fetch-items-from-bank";
 import { Service } from "typedi";
 import { getItemsFromEntireAccountFetcherType } from "@loaders/typedi.constants";
 import { GetItemsFromMultipleSources } from "./get-items-from-multiple-sources.fetcher";

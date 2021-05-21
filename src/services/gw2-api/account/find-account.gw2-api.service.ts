@@ -1,6 +1,6 @@
 import { Service } from "typedi";
 import { findAccountServiceType } from "@loaders/typedi.constants";
-import { fetchAccount, Gw2Account } from "../fetchers/fetch-account";
+import { fetchAccount, Gw2Account } from "./fetch-account";
 
 export interface IFindAccountService {
   findAccount(apiKey: string): Promise<Gw2Account>;
