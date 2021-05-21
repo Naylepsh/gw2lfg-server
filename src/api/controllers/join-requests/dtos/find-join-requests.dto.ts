@@ -1,6 +1,6 @@
 import { IsInt, IsOptional, IsPositive } from "class-validator";
 
-export class FindJoinRequestsQueryParams {
+export class FindJoinRequestsDTO {
   @IsOptional()
   @IsInt()
   @IsPositive()

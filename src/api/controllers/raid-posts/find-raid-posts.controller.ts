@@ -1,11 +1,11 @@
 import { Get, JsonController, QueryParams } from "routing-controllers";
 import { Inject } from "typedi";
 import { findRaidPostsServiceType } from "@loaders/typedi.constants";
-import { FindRaidPostsService } from "@root/services/raid-post/find-raid-posts.service";
+import { FindRaidPostsService } from "@services/raid-post/find-raid-posts.service";
 import { mapRaidPostToRaidPostResponse } from "../../responses/entities/raid-post.entity.response";
 import { FindRaidPostsResponse } from "./responses/find-raid-posts.response";
-import { FindRaidPostsQueryParams } from "./params/find-raid-posts.query-params";
-import { FindRaidPostsWhereParams } from "../../../services/raid-post/dtos/find-raid-posts.dto";
+import { FindRaidPostsDTO } from "./dtos/find-raid-posts.dto";
+import { FindRaidPostsWhereParams } from "@services/raid-post/dtos/find-raid-posts.dto";
 
 /**
  * Controller for GET /raid-posts requests.
@@ -20,7 +20,7 @@ export class FindRaidPostsController {
 
   @Get("/raid-posts")
   async handleRequest(
-    @QueryParams() query: FindRaidPostsQueryParams
+    @QueryParams() query: FindRaidPostsDTO
   ): Promise<FindRaidPostsResponse> {
     const whereParams = this.turnQueryIntoWhereParams(query);
 
@@ -32,7 +32,7 @@ export class FindRaidPostsController {
     return { data: posts.map(mapRaidPostToRaidPostResponse), hasMore };
   }
 
-  private turnQueryIntoWhereParams(query: FindRaidPostsQueryParams) {
+  private turnQueryIntoWhereParams(query: FindRaidPostsDTO) {
     const server = query.server;
     const minDate = query.minDate ?? new Date().toISOString();
     const bossesIds = query.bossesIds?.split(",").map((id) => parseInt(id));

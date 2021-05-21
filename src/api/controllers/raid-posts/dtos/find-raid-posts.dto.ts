@@ -8,7 +8,7 @@ import {
 } from "class-validator";
 import { IsIdArray } from "../validators/id-array.validator";
 
-export class FindRaidPostsQueryParams {
+export class FindRaidPostsDTO {
   @IsOptional()
   @IsInt()
   @IsPositive()
