@@ -6,10 +6,10 @@ import {
   ValidatorConstraintInterface,
 } from "class-validator";
 
-function isInteger(str: string) {
+const isInteger = (str: string) => {
   const x = Math.floor(Number(str));
-  return x !== Infinity && String(x) === str && x >= 0;
-}
+  return x !== Infinity && String(x) === str && Number.isInteger(x);
+};
 
 /**
  * Custom validation constraint for checking whether given string is an array of ids
