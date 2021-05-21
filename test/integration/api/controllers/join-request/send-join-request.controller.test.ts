@@ -1,13 +1,12 @@
 import "reflect-metadata";
 import request from "supertest";
 import Container from "typedi";
-import items from "@root/services/gw2-items/items.json";
+import items from "@services/gw2-api/items/items.json";
 import { CreateRaidJoinRequestController } from "@root/api/controllers/join-requests/send-join-request.controller";
 import { CurrentUserJWTMiddleware } from "@api/middleware/current-user.middleware";
 import { RaidPost } from "@root/data/entities/raid-post/raid-post.entitity";
 import { User } from "@root/data/entities/user/user.entity";
 import { GetItems } from "@root/services/gw2-api/items/get-items.fetcher";
-import { GW2ApiItem } from "@services/gw2-items/item.interface";
 import { CreateJoinRequestService } from "@root/services/join-request/send-join-request.service";
 import { Action, createExpressServer, useContainer } from "routing-controllers";
 import { JoinRequestMemoryRepository } from "../../../../common/repositories/join-request.memory-repository";
@@ -17,6 +16,7 @@ import { seedDbWithOnePost } from "../raid-post/seed-db";
 import { CheckItemRequirementsService } from "@root/services/requirement/check-item-requirements.service";
 import { FindUserItemsService } from "@services/user/find-user-items.service";
 import { AUTH_HEADER, toBearerToken } from "../../../../common/to-bearer-token";
+import { GW2ApiItem } from "../../../../services/gw2-api/items/item.interface";
 
 describe("SendRaidJoinRequestController integration tests", () => {
   const liId = items["Legendary Insight"];

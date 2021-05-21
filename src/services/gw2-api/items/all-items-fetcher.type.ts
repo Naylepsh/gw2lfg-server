@@ -1,3 +1,3 @@
-import { GW2ApiItem } from "../../gw2-items/item.interface";
+import { GW2ApiItem } from "./item.interface";
 
 export type AllItemsFetcher = (apiKey: string) => Promise<GW2ApiItem[]>;

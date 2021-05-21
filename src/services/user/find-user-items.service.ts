@@ -9,9 +9,9 @@ import {
 import { UserNotFoundError } from "../common/errors/entity-not-found.error";
 import { FindUserDTO } from "./dtos/find-user.dto";
 import { ItemsFetcher } from "../gw2-api/items/items-fetcher.interface";
-import items from "../gw2-items/items.json";
-import { idToName } from "../gw2-items/gw2-items.service";
+import items from "../gw2-api/items/items.json";
 import { byId } from "@root/data/queries/common.queries";
+import { idToName } from "../gw2-api/items/item.utils";
 
 /**
  * Service for finding a user with matching id and getting his item stats from GW2 API

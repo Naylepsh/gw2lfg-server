@@ -1,4 +1,4 @@
-import { CharacterInventory } from "../character-inventory";
+import { CharacterInventory } from "../items/character-inventory.interface";
 import { charactersUrl } from "../gw2-api.constants";
 import { removeEmptySlots } from "../utils/remove-empty-slots";
 import { sendGetRequestWithBearerToken } from "../utils/send-request-with-bearer-token";

@@ -1,4 +1,4 @@
-import { GW2ApiItem } from "../../gw2-items/item.interface";
+import { GW2ApiItem } from "./item.interface";
 import { countItemStacks } from "./count-item-stacks";
 import { ItemsFetcher } from "./items-fetcher.interface";
 

@@ -1,12 +1,11 @@
 import "reflect-metadata";
 import request from "supertest";
 import Container from "typedi";
-import items from "@root/services/gw2-items/items.json";
+import items from "@services/gw2-api/items/items.json";
 import { RaidPost } from "@root/data/entities/raid-post/raid-post.entitity";
 import { User } from "@root/data/entities/user/user.entity";
 import { CreateJoinRequestService } from "@services/join-request/send-join-request.service";
 import { GetItems } from "@root/services/gw2-api/items/get-items.fetcher";
-import { GW2ApiItem } from "@services/gw2-items/item.interface";
 import { FindJoinRequestsService } from "@services/join-request/find-join-requests.service";
 import { FindJoinRequestsController } from "@api/controllers/join-requests/find-join-requests.controller";
 import { createExpressServer, useContainer } from "routing-controllers";
@@ -16,6 +15,7 @@ import { MyStorage } from "../../../../unit/services/item-storage";
 import { seedDbWithOnePost } from "../raid-post/seed-db";
 import { CheckItemRequirementsService } from "@root/services/requirement/check-item-requirements.service";
 import { FindUserItemsService } from "@services/user/find-user-items.service";
+import { GW2ApiItem } from "@services/gw2-api/items/item.interface";
 
 describe("FindJoinRequestsController: integration tests", () => {
   const liId = items["Legendary Insight"];

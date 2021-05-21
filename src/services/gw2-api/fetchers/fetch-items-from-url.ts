@@ -1,4 +1,4 @@
-import { GW2ApiItem } from "../../gw2-items/item.interface";
+import { GW2ApiItem } from "../items/item.interface";
 import { removeEmptySlots } from "../utils/remove-empty-slots";
 import { sendGetRequestWithBearerToken } from "../utils/send-request-with-bearer-token";
 

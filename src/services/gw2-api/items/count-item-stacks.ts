@@ -1,4 +1,4 @@
-import { GW2ApiItem } from "../../gw2-items/item.interface";
+import { GW2ApiItem } from "./item.interface";
 
 /**
  * Counts the quantity of an item with given id in given items

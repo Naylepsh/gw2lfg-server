@@ -1,4 +1,4 @@
-import items from "@services/gw2-items/items.json";
+import items from "@services/gw2-api/items/items.json";
 import { createToken } from "@root/api/utils/token/jwt";
 import { RaidBoss } from "@root/data/entities/raid-boss/raid-boss.entity";
 import { User } from "@root/data/entities/user/user.entity";

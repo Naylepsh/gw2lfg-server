@@ -1,4 +1,4 @@
-import { GW2ApiItem } from "../../gw2-items/item.interface";
+import { GW2ApiItem } from "./item.interface";
 import { fetchItemsFromCharacter } from "../fetchers/fetch-items-from-character";
 import { fetchCharacters } from "../fetchers/fetch-characters";
 import { fetchItemsFromSharedInventory } from "../fetchers/fetch-items-from-shared-inventory";

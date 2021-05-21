@@ -5,18 +5,18 @@ import { ItemRequirement } from "@root/data/entities/item-requirement/item.requi
 import { IPostRepository } from "@data/repositories/post/post.repository.interface";
 import { IUserRepository } from "@data/repositories/user/user.repository.interface";
 import { GetItems } from "@root/services/gw2-api/items/get-items.fetcher";
-import { nameToId } from "@services/gw2-items/gw2-items.service";
-import { GW2ApiItem } from "@services/gw2-items/item.interface";
 import { CreateJoinRequestService } from "@root/services/join-request/send-join-request.service";
 import { JoinRequestMemoryRepository } from "../../../common/repositories/join-request.memory-repository";
 import { RaidPostMemoryRepository } from "../../../common/repositories/raid-post.memory-repository";
 import { UserMemoryRepository } from "../../../common/repositories/user.memory-repository";
 import { storage } from "../item-storage";
-import items from "@services/gw2-items/items.json";
+import items from "@services/gw2-api/items/items.json";
 import { CheckItemRequirementsService } from "@root/services/requirement/check-item-requirements.service";
 import { FindUserItemsService } from "@services/user/find-user-items.service";
 import { addHours } from "../../../common/hours.util";
 import { byJoinRequestRelations } from "@root/data/queries/join-request.queries";
+import { nameToId } from "@services/gw2-api/items/item.utils";
+import { GW2ApiItem } from "@services/gw2-api/items/item.interface";
 
 class JoinRequestServiceTestObject {
   date: Date;
