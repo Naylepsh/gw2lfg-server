@@ -4,7 +4,7 @@ import Container from "typedi";
 import items from "@services/gw2-api/items/items.json";
 import { RaidPost } from "@root/data/entities/raid-post/raid-post.entitity";
 import { User } from "@root/data/entities/user/user.entity";
-import { CreateJoinRequestService } from "@services/join-request/send-join-request.service";
+import { CreateJoinRequestService } from "@root/services/join-request/create-join-request.service";
 import { GetItems } from "@root/services/gw2-api/items/get-items.fetcher";
 import { FindJoinRequestsService } from "@services/join-request/find-join-requests.service";
 import { FindJoinRequestsController } from "@api/controllers/join-requests/find-join-requests.controller";

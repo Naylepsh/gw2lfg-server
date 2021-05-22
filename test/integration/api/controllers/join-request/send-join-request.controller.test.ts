@@ -7,7 +7,7 @@ import { CurrentUserJWTMiddleware } from "@api/middleware/current-user.middlewar
 import { RaidPost } from "@root/data/entities/raid-post/raid-post.entitity";
 import { User } from "@root/data/entities/user/user.entity";
 import { GetItems } from "@root/services/gw2-api/items/get-items.fetcher";
-import { CreateJoinRequestService } from "@root/services/join-request/send-join-request.service";
+import { CreateJoinRequestService } from "@root/services/join-request/create-join-request.service";
 import { Action, createExpressServer, useContainer } from "routing-controllers";
 import { JoinRequestMemoryRepository } from "../../../../common/repositories/join-request.memory-repository";
 import { RaidPostMemoryUnitOfWork } from "../../../../common/uows/raid-post.memory-unit-of-work";

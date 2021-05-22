@@ -45,7 +45,7 @@ export class CreateJoinRequestService {
     const [user, post, requests] = await Promise.all([
       this.userRepo.findOne(byId(userId)),
       this.postRepo.findOne(byId(postId)),
-      this.joinRequestRepo.findMany(byJoinRequestRelations({ postId, roleId })),
+      this.joinRequestRepo.findMany(byJoinRequestRelations({ postId })),
     ]);
     const role = post?.getRole(roleId);
 
@@ -66,29 +66,36 @@ export class CreateJoinRequestService {
     requests: JoinRequest[]
   ) {
     this.ensureAllEntitiesWereFound(user, post, role);
-    await this.ensureUserCanTakeTheSpot(requests, user!, post!);
+    this.ensureSignupsAreAvailable(post!);
+    await this.ensureUserCanTakeTheSpot(requests, user!, post!, role!.id);
   }
 
   private async ensureUserCanTakeTheSpot(
     requests: JoinRequest[],
     user: User,
-    post: Post
+    post: Post,
+    roleId: number
   ) {
+    const requestsForRole = requests.filter((r) => r.id === roleId);
+    this.ensureUserHasNotRequestedTheSameSpot(requestsForRole, user);
+    this.ensureTheSpotIsNotTaken(requests);
+    if (requests.length === 0) {
+      await this.ensureUserMeetsRequirements(post, user);
+    }
+  }
+
+  private ensureSignupsAreAvailable(post: Post) {
     if (post.date < new Date()) {
       throw new SignUpsTimeEndedError();
     }
-    this.ensureUserHasNotTakenTheSameSpot(requests, user);
-    this.ensureTheSpotIsNotTaken(requests);
-    await this.ensureUserMeetsRequirements(post, user);
   }
 
   private async ensureUserMeetsRequirements(post: Post, user: User) {
-    const [
-      areSatisfied,
-    ] = await this.checkRequirementsService.doesUserSatisfyPostsRequirements(
-      [post],
-      user
-    );
+    const [areSatisfied] =
+      await this.checkRequirementsService.doesUserSatisfyPostsRequirements(
+        [post],
+        user
+      );
     if (!areSatisfied) {
       throw new RequirementsNotSatisfiedError();
     }
@@ -102,7 +109,7 @@ export class CreateJoinRequestService {
     }
   }
 
-  private ensureUserHasNotTakenTheSameSpot(
+  private ensureUserHasNotRequestedTheSameSpot(
     requests: JoinRequest[],
     user: User
   ) {

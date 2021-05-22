@@ -1,22 +1,24 @@
-import { RaidPost } from "@root/data/entities/raid-post/raid-post.entitity";
-import { Role } from "@root/data/entities/role/role.entity";
-import { User } from "@root/data/entities/user/user.entity";
-import { ItemRequirement } from "@root/data/entities/item-requirement/item.requirement.entity";
+import { ItemRequirement } from "@data/entities/item-requirement/item.requirement.entity";
+import { RaidPost } from "@data/entities/raid-post/raid-post.entitity";
+import { Role } from "@data/entities/role/role.entity";
+import { User } from "@data/entities/user/user.entity";
+import { byJoinRequestRelations } from "@data/queries/join-request.queries";
 import { IPostRepository } from "@data/repositories/post/post.repository.interface";
+import { IRoleRepository } from "@data/repositories/role/role.repository.interface";
 import { IUserRepository } from "@data/repositories/user/user.repository.interface";
-import { GetItems } from "@root/services/gw2-api/items/get-items.fetcher";
-import { CreateJoinRequestService } from "@root/services/join-request/send-join-request.service";
-import { JoinRequestMemoryRepository } from "../../../common/repositories/join-request.memory-repository";
-import { RaidPostMemoryRepository } from "../../../common/repositories/raid-post.memory-repository";
-import { UserMemoryRepository } from "../../../common/repositories/user.memory-repository";
-import { storage } from "../item-storage";
+import { GetItems } from "@services/gw2-api/items/get-items.fetcher";
+import { GW2ApiItem } from "@services/gw2-api/items/item.interface";
+import { nameToId } from "@services/gw2-api/items/item.utils";
 import items from "@services/gw2-api/items/items.json";
-import { CheckItemRequirementsService } from "@root/services/requirement/check-item-requirements.service";
+import { CreateJoinRequestService } from "@services/join-request/create-join-request.service";
+import { CheckItemRequirementsService } from "@services/requirement/check-item-requirements.service";
 import { FindUserItemsService } from "@services/user/find-user-items.service";
 import { addHours } from "../../../common/hours.util";
-import { byJoinRequestRelations } from "@root/data/queries/join-request.queries";
-import { nameToId } from "@services/gw2-api/items/item.utils";
-import { GW2ApiItem } from "@services/gw2-api/items/item.interface";
+import { JoinRequestMemoryRepository } from "../../../common/repositories/join-request.memory-repository";
+import { RaidPostMemoryRepository } from "../../../common/repositories/raid-post.memory-repository";
+import { RoleMemoryRepository } from "../../../common/repositories/role.memory-repository";
+import { UserMemoryRepository } from "../../../common/repositories/user.memory-repository";
+import { storage } from "../item-storage";
 
 class JoinRequestServiceTestObject {
   date: Date;
@@ -44,6 +46,7 @@ class JoinRequestServiceTestObject {
 
 describe("CreateJoinRequest service tests", () => {
   let userRepo: IUserRepository;
+  let roleRepo: IRoleRepository;
   let postRepo: IPostRepository;
   let joinRequestRepo: JoinRequestMemoryRepository;
 
@@ -59,6 +62,7 @@ describe("CreateJoinRequest service tests", () => {
   beforeEach(() => {
     resetTestObject();
     userRepo = new UserMemoryRepository();
+    roleRepo = new RoleMemoryRepository();
     postRepo = new RaidPostMemoryRepository();
     joinRequestRepo = new JoinRequestMemoryRepository();
   });
@@ -185,7 +189,7 @@ describe("CreateJoinRequest service tests", () => {
     await userRepo.save(user);
 
     const itemRequirement = new ItemRequirement(obj.item);
-    const role = new Role(obj.role);
+    const role = await roleRepo.save(new Role(obj.role));
     const post = new RaidPost({
       date: obj.date,
       server: "EU",
