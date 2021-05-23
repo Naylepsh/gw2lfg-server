@@ -16,6 +16,7 @@ import {
   findOneAndLoadRelations,
 } from "../common/find-and-load-relations";
 import { paginate } from "../common/paginate";
+import { addOrder } from "../common/add-order";
 import {
   IPostRepository,
   PostQueryParams,
@@ -45,7 +46,7 @@ export class PostRepository
     return findOneAndLoadRelations(
       qb,
       this.repository,
-      PostRepository.relations
+      { relations: PostRepository.relations }
     );
   }
 
@@ -54,12 +55,13 @@ export class PostRepository
     const qb = this.repository.createQueryBuilder(alias);
 
     addPostQueriesOnPostQb(qb, alias, params.where);
+    addOrder(qb, alias, params.order);
     paginate(qb, params);
 
     return findManyAndLoadRelations(
       qb,
       this.repository,
-      PostRepository.relations
+      { relations: PostRepository.relations, order: params.order }
     );
   }
 

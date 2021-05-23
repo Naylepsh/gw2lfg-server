@@ -17,6 +17,7 @@ import {
   findManyAndLoadRelations,
   findOneAndLoadRelations,
 } from "../common/find-and-load-relations";
+import { addOrder } from "../common/add-order";
 
 @Service()
 @EntityRepository(RaidPost)
@@ -35,11 +36,9 @@ export class RaidPostRepository
     addPostQueriesOnPostQb(qb, alias, params.where);
     addRaidPostQueriesOnRaidPostQb(qb, alias, params.where);
 
-    return findOneAndLoadRelations(
-      qb,
-      this.repository,
-      RaidPostRepository.relations
-    );
+    return findOneAndLoadRelations(qb, this.repository, {
+      relations: RaidPostRepository.relations,
+    });
   }
 
   async findMany(params: RaidPostsQueryParams): Promise<RaidPost[]> {
@@ -48,13 +47,13 @@ export class RaidPostRepository
 
     addPostQueriesOnPostQb(qb, alias, params.where);
     addRaidPostQueriesOnRaidPostQb(qb, alias, params.where);
+    addOrder(qb, alias, params.order);
     paginate(qb, params);
 
-    return findManyAndLoadRelations(
-      qb,
-      this.repository,
-      RaidPostRepository.relations
-    );
+    return findManyAndLoadRelations(qb, this.repository, {
+      relations: RaidPostRepository.relations,
+      order: params.order,
+    });
   }
 
   async delete(criteria: any = {}): Promise<void> {
