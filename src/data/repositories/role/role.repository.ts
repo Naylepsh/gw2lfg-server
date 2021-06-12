@@ -7,14 +7,12 @@ import { IRoleRepository, RoleQueryParams } from "./role.repository.interface";
 @EntityRepository(Role)
 export class RoleRepository
   extends AbstractRepository<Role>
-  implements IRoleRepository {
+  implements IRoleRepository
+{
   save(role: Role): Promise<Role>;
   save(roles: Role[]): Promise<Role[]>;
-  save(data: Role | Role[]): Promise<Role | Role[]> {
-    if (Array.isArray(data)) {
-      return this.repository.save(data);
-    }
-    return this.repository.save(data);
+  save(roles: any): Promise<Role> | Promise<Role[]> {
+    return this.repository.save(roles);
   }
 
   findOne(params: RoleQueryParams): Promise<Role | undefined> {

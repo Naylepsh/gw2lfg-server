@@ -10,16 +10,14 @@ import {
 @EntityRepository(ItemRequirement)
 export class ItemRequirementRepository
   extends AbstractRepository<ItemRequirement>
-  implements IItemRequirementRepository {
+  implements IItemRequirementRepository
+{
   save(itemRequirement: ItemRequirement): Promise<ItemRequirement>;
   save(itemRequirements: ItemRequirement[]): Promise<ItemRequirement[]>;
   save(
-    data: ItemRequirement | ItemRequirement[]
-  ): Promise<ItemRequirement | ItemRequirement[]> {
-    if (Array.isArray(data)) {
-      return this.repository.save(data);
-    }
-    return this.repository.save(data);
+    itemRequirements: any
+  ): Promise<ItemRequirement> | Promise<ItemRequirement[]> {
+    return this.repository.save(itemRequirements);
   }
 
   findOne(
