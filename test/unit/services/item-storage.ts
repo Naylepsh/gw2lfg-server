@@ -1,5 +1,5 @@
 import { GetItems } from "@root/services/gw2-api/items/get-items.fetcher";
-import { GW2ApiItem } from "@services/gw2-items/item.interface";
+import { GW2ApiItem } from "../../services/gw2-api/items/item.interface";
 
 type ItemStorage = Map<string, GW2ApiItem[]>;
 
