@@ -6,7 +6,7 @@ import {
   ValidatorConstraintInterface,
 } from "class-validator";
 import Container from "typedi";
-import { checkApiKeyValidityServiceType } from "@loaders/typedi.constants";
+import { types } from "@loaders/typedi.constants";
 import { ICheckApiKeyValidityService } from "@services/gw2-api/api-key/api-key-check.gw2-api.service";
 
 /**
@@ -16,7 +16,7 @@ import { ICheckApiKeyValidityService } from "@services/gw2-api/api-key/api-key-c
 export class IsValidApiKeyConstraint implements ValidatorConstraintInterface {
   async validate(apiKey: string, _args: ValidationArguments) {
     const apiKeyValidatorService: ICheckApiKeyValidityService = Container.get(
-      checkApiKeyValidityServiceType
+      types.services.checkApiKeyValidity
     );
 
     const isValid = await apiKeyValidatorService.isValid(apiKey);

@@ -3,14 +3,14 @@ import cors from "cors";
 import Container from "typedi";
 import { controllers } from "../api/controllers";
 import { CurrentUserJWTMiddleware } from "../api/middleware/current-user.middleware";
-import { userRepositoryType } from "./typedi.constants";
+import { types } from "./typedi.constants";
 
 /**
  * Loads Express.js server
  */
 export const loadServer = () => {
   const currentUserMiddleware = new CurrentUserJWTMiddleware(
-    Container.get(userRepositoryType)
+    Container.get(types.repositories.user)
   );
 
   const app = createExpressServer({

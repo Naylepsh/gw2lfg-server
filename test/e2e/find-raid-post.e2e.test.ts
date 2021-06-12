@@ -1,11 +1,11 @@
 import "reflect-metadata";
+import { IRaidPostUnitOfWork } from "@data/units-of-work/raid-post/raid-post.unit-of-work.interface";
+import { loadDependencies } from "@loaders/index";
+import { types } from "@loaders/typedi.constants";
 import request from "supertest";
 import Container from "typedi";
-import { loadDependencies } from "@loaders/index";
-import { raidPostUnitOfWorkType } from "@loaders/typedi.constants";
-import { IRaidPostUnitOfWork } from "@data/units-of-work/raid-post/raid-post.unit-of-work.interface";
-import { seedRaidBoss, seedRaidPost, clean, seedUser } from "./seeders";
 import { Connection } from "typeorm";
+import { clean, seedRaidBoss, seedRaidPost, seedUser } from "./seeders";
 
 describe("Find raid post e2e tests", () => {
   const timelimit = 60000;
@@ -17,7 +17,7 @@ describe("Find raid post e2e tests", () => {
   beforeAll(async () => {
     ({ app, conn } = await loadDependencies({ loadTasks: false }));
 
-    uow = Container.get(raidPostUnitOfWorkType);
+    uow = Container.get(types.uows.raidPost);
   });
 
   beforeEach(async () => {

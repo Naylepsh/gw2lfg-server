@@ -2,10 +2,7 @@ import "reflect-metadata";
 import request from "supertest";
 import Container from "typedi";
 import { loadDependencies } from "@loaders/index";
-import {
-  raidPostRepositoryType,
-  raidPostUnitOfWorkType,
-} from "@loaders/typedi.constants";
+import { types } from "@loaders/typedi.constants";
 import { addHours } from "../common/hours.util";
 import { IRaidPostUnitOfWork } from "@data/units-of-work/raid-post/raid-post.unit-of-work.interface";
 import { IRaidPostRepository } from "@data/repositories/raid-post/raid-post.repository.interface";
@@ -25,7 +22,7 @@ describe("Create raid post e2e tests", () => {
   beforeAll(async () => {
     ({ app, conn } = await loadDependencies({ loadTasks: false }));
 
-    uow = Container.get(raidPostUnitOfWorkType);
+    uow = Container.get(types.uows.raidPost);
   });
 
   beforeEach(async () => {
@@ -58,7 +55,7 @@ describe("Create raid post e2e tests", () => {
         .set(AUTH_HEADER, toBearerToken(token));
 
       const raidPostRepo: IRaidPostRepository = Container.get(
-        raidPostRepositoryType
+        types.repositories.raidPost
       );
       const postInDbAfer = await raidPostRepo.findOne({
         where: { id: body.data.id },

@@ -7,7 +7,7 @@ import { ItemRequirementRepository } from "../../repositories/item-requirement/i
 import { IRaidPostUnitOfWork } from "./raid-post.unit-of-work.interface";
 import { GenericUnitOfWork } from "../generic.unit-of-work";
 import { Inject, Service } from "typedi";
-import { raidPostUnitOfWorkType } from "../../../loaders/typedi.constants";
+import { types } from "../../../loaders/typedi.constants";
 import { JoinRequestRepository } from "../../repositories/join-request/join-request.repository";
 
 /**
@@ -15,7 +15,7 @@ import { JoinRequestRepository } from "../../repositories/join-request/join-requ
  * Allows retrieval of raid post and raid post's relations related repositiories
  * and operations on them within transaction.
  */
-@Service(raidPostUnitOfWorkType)
+@Service(types.uows.raidPost)
 export class RaidPostUnitOfWork implements IRaidPostUnitOfWork {
   public constructor(
     @Inject() private readonly unitOfWork: GenericUnitOfWork

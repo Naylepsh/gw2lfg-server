@@ -1,6 +1,6 @@
 import { Inject, Service } from "typedi";
 import { IJoinRequestRepository } from "@data/repositories/join-request/join-request.repository.interface";
-import { joinRequestRepositoryType } from "@loaders/typedi.constants";
+import { types } from "@loaders/typedi.constants";
 import { EntityNotFoundError } from "../common/errors/entity-not-found.error";
 import { UpdateJoinRequestStatusDTO } from "./dtos/update-join-request-status.dto";
 import { byId } from "../../data/queries/common.queries";
@@ -11,7 +11,7 @@ import { byId } from "../../data/queries/common.queries";
 @Service()
 export class UpdateJoinRequestStatusService {
   constructor(
-    @Inject(joinRequestRepositoryType)
+    @Inject(types.repositories.joinRequest)
     private readonly joinRequestRepo: IJoinRequestRepository
   ) {}
 

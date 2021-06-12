@@ -2,7 +2,7 @@ import "reflect-metadata";
 import request from "supertest";
 import Container from "typedi";
 import { loadDependencies } from "@loaders/index";
-import { raidPostUnitOfWorkType } from "@loaders/typedi.constants";
+import { types } from "@loaders/typedi.constants";
 import { IRaidPostUnitOfWork } from "@data/units-of-work/raid-post/raid-post.unit-of-work.interface";
 import { seedRaidBoss, seedRaidPost, clean, seedUser } from "./seeders";
 import { Connection } from "typeorm";
@@ -18,7 +18,7 @@ describe("Find raid posts e2e tests", () => {
   beforeAll(async () => {
     ({ app, conn } = await loadDependencies({ loadTasks: false }));
 
-    uow = Container.get(raidPostUnitOfWorkType);
+    uow = Container.get(types.uows.raidPost);
   });
 
   beforeEach(async () => {

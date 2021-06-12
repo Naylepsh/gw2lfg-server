@@ -1,5 +1,5 @@
 import { Inject, Service } from "typedi";
-import { joinRequestRepositoryType } from "@loaders/typedi.constants";
+import { types } from "@loaders/typedi.constants";
 import { IJoinRequestRepository } from "@data/repositories/join-request/join-request.repository.interface";
 import {
   byJoinRequestRelations,
@@ -12,7 +12,7 @@ import {
 @Service()
 export class FindJoinRequestsService {
   constructor(
-    @Inject(joinRequestRepositoryType)
+    @Inject(types.repositories.joinRequest)
     private readonly joinRequestRepo: IJoinRequestRepository
   ) {}
 

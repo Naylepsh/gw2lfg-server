@@ -6,7 +6,7 @@ import { RegisterUserController } from "@root/api/controllers/users/register.con
 import { User } from "@root/data/entities/user/user.entity";
 import { IUserRepository } from "@data/repositories/user/user.repository.interface";
 import { RegisterService } from "@root/services/user/register.service";
-import { checkApiKeyValidityServiceType } from "@loaders/typedi.constants";
+import { types } from "@loaders/typedi.constants";
 import { UserMemoryRepository } from "../../../../common/repositories/user.memory-repository";
 import { createExpressServer, useContainer } from "routing-controllers";
 import { FakeApiKeyChecker } from "../../../../common/fake-api-key-checker";
@@ -29,7 +29,7 @@ describe("RegisterUserController integration tests", () => {
 
     const areAllApiKeysValid = true;
     const apiKeyValidityChecker = new FakeApiKeyChecker(areAllApiKeysValid);
-    Container.set(checkApiKeyValidityServiceType, apiKeyValidityChecker);
+    Container.set(types.services.checkApiKeyValidity, apiKeyValidityChecker);
 
     useContainer(Container);
 

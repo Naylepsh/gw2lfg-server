@@ -1,5 +1,5 @@
 import { Service } from "typedi";
-import { checkApiKeyValidityServiceType } from "../../../loaders/typedi.constants";
+import { types } from "@loaders/typedi.constants";
 import { fetchPermissions } from "./fetch-permissions";
 
 export interface ICheckApiKeyValidityService {
@@ -10,7 +10,7 @@ export interface ICheckApiKeyValidityService {
  * Concrete CheckApiKeyValidityService implementations that checks given apiKey against official GW2API.
  * Sends request to official GW2API /tokeninfo and checks if given API key is valid and has all the required permissions.
  */
-@Service(checkApiKeyValidityServiceType)
+@Service(types.services.checkApiKeyValidity)
 export class CheckApiKeyValidityService implements ICheckApiKeyValidityService {
   async isValid(apiKey: string): Promise<boolean> {
     try {

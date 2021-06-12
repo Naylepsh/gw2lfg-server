@@ -1,5 +1,5 @@
 import { IRaidPostUnitOfWork } from "@data/units-of-work/raid-post/raid-post.unit-of-work.interface";
-import { raidPostUnitOfWorkType } from "@loaders/typedi.constants";
+import { types } from "@loaders/typedi.constants";
 import { ItemRequirement } from "@root/data/entities/item-requirement/item.requirement.entity";
 import { RaidPost } from "@root/data/entities/raid-post/raid-post.entitity";
 import { Role } from "@root/data/entities/role/role.entity";
@@ -18,7 +18,7 @@ import { MissingEntityError } from "./errors/missing-entity.error";
 @Service()
 export class CreateRaidPostService {
   constructor(
-    @Inject(raidPostUnitOfWorkType) private readonly uow: IRaidPostUnitOfWork
+    @Inject(types.uows.raidPost) private readonly uow: IRaidPostUnitOfWork
   ) {}
 
   async create(dto: CreateRaidPostDTO) {

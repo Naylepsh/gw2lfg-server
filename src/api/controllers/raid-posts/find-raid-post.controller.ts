@@ -6,7 +6,7 @@ import {
   Param,
 } from "routing-controllers";
 import { Inject } from "typedi";
-import { findRaidPostServiceType } from "@loaders/typedi.constants";
+import { types } from "@loaders/typedi.constants";
 import { FindRaidPostService } from "@services/raid-post/find-raid-post.service";
 import { mapRaidPostToRaidPostResponse } from "../../responses/entities/raid-post.entity.response";
 import { FindRaidPostResponse } from "./responses/find-raid-post.response";
@@ -20,7 +20,7 @@ import { getErrorMessageOrCreateDefault } from "../../utils/error/get-message-or
 @JsonController()
 export class FindRaidPostController {
   constructor(
-    @Inject(findRaidPostServiceType)
+    @Inject(types.services.findRaidPost)
     private readonly findService: FindRaidPostService
   ) {}
 

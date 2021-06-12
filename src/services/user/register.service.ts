@@ -2,7 +2,7 @@ import { hash } from "bcrypt";
 import { Inject, Service } from "typedi";
 import { User } from "@root/data/entities/user/user.entity";
 import { IUserRepository } from "@data/repositories/user/user.repository.interface";
-import { userRepositoryType } from "@loaders/typedi.constants";
+import { types } from "@loaders/typedi.constants";
 import { UsernameTakenError } from "./errors/username-taken.error";
 import { byUsername } from "@root/data/queries/user.queries";
 
@@ -12,7 +12,7 @@ import { byUsername } from "@root/data/queries/user.queries";
 @Service()
 export class RegisterService {
   constructor(
-    @Inject(userRepositoryType)
+    @Inject(types.repositories.user)
     private readonly userRepository: IUserRepository
   ) {}
 

@@ -6,18 +6,7 @@ import { data } from "../data";
  * As long as it's not a interface, just importing it is enough for TypeDI.
  */
 import { services } from "../services";
-import {
-  getItemsFromEntireAccountFetcherType,
-  itemRequirementRepositoryType,
-  joinRequestRepositoryType,
-  postRepositoryType,
-  raidBossRepositoryType,
-  raidPostRepositoryType,
-  raidPostUnitOfWorkType,
-  requirementRepositoryType,
-  roleRepositoryType,
-  userRepositoryType,
-} from "./typedi.constants";
+import { types } from "./typedi.constants";
 
 /**
  * Loads interfaces that TypeDI cannot automatically resolve
@@ -45,37 +34,37 @@ const loadUnitOfWork = (conn: Connection) => {
 
   const genericUow = new uows.GenericUnitOfWork(conn);
   const raidPostUow = new uows.RaidPostUnitOfWork(genericUow);
-  Container.set(raidPostUnitOfWorkType, raidPostUow);
+  Container.set(types.uows.raidPost, raidPostUow);
 };
 
 const loadRepositories = (conn: Connection) => {
   const { repositories: repos } = data;
 
   const userRepo = conn.getCustomRepository(repos.UserRepository);
-  Container.set(userRepositoryType, userRepo);
+  Container.set(types.repositories.user, userRepo);
 
   const roleRepo = conn.getCustomRepository(repos.RoleRepository);
-  Container.set(roleRepositoryType, roleRepo);
+  Container.set(types.repositories.role, roleRepo);
 
   const requirementRepo = conn.getCustomRepository(repos.RequirementRepository);
-  Container.set(requirementRepositoryType, requirementRepo);
+  Container.set(types.repositories.requirement, requirementRepo);
 
   const itemRequirementRepo = conn.getCustomRepository(
     repos.ItemRequirementRepository
   );
-  Container.set(itemRequirementRepositoryType, itemRequirementRepo);
+  Container.set(types.repositories.itemRequirement, itemRequirementRepo);
 
   const postRepo = conn.getCustomRepository(repos.PostRepository);
-  Container.set(postRepositoryType, postRepo);
+  Container.set(types.repositories.post, postRepo);
 
   const raidPostRepo = conn.getCustomRepository(repos.RaidPostRepository);
-  Container.set(raidPostRepositoryType, raidPostRepo);
+  Container.set(types.repositories.raidPost, raidPostRepo);
 
   const raidBossRepo = conn.getCustomRepository(repos.RaidBossRepository);
-  Container.set(raidBossRepositoryType, raidBossRepo);
+  Container.set(types.repositories.raidBoss, raidBossRepo);
 
   const joinRequestRepo = conn.getCustomRepository(repos.JoinRequestRepository);
-  Container.set(joinRequestRepositoryType, joinRequestRepo);
+  Container.set(types.repositories.joinRequest, joinRequestRepo);
 };
 
 /**
@@ -87,5 +76,5 @@ const loadServiceLayerDependencies = () => {
 
   const itemFetcher = new GetItemsFromEntireAccount();
 
-  Container.set(getItemsFromEntireAccountFetcherType, itemFetcher);
+  Container.set(types.services.getItemsFromEntireAccountFetcher, itemFetcher);
 };

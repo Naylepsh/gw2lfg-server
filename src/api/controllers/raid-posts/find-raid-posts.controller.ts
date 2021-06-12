@@ -1,6 +1,6 @@
 import { Get, JsonController, QueryParams } from "routing-controllers";
 import { Inject } from "typedi";
-import { findRaidPostsServiceType } from "@loaders/typedi.constants";
+import { types } from "@loaders/typedi.constants";
 import { FindRaidPostsService } from "@services/raid-post/find-raid-posts.service";
 import { mapRaidPostToRaidPostResponse } from "../../responses/entities/raid-post.entity.response";
 import { FindRaidPostsResponse } from "./responses/find-raid-posts.response";
@@ -14,7 +14,7 @@ import { FindRaidPostsWhereParams } from "@services/raid-post/dtos/find-raid-pos
 @JsonController()
 export class FindRaidPostsController {
   constructor(
-    @Inject(findRaidPostsServiceType)
+    @Inject(types.services.findRaidPosts)
     private readonly findService: FindRaidPostsService
   ) {}
 

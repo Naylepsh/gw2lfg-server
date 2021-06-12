@@ -1,6 +1,6 @@
 import { Inject, Service } from "typedi";
 import { IJoinRequestRepository } from "@data/repositories/join-request/join-request.repository.interface";
-import { joinRequestRepositoryType } from "@loaders/typedi.constants";
+import { types } from "@loaders/typedi.constants";
 import { CanUserDeleteJoinRequestDTO } from "./dtos/can-user-delete-join-request.dto";
 import { byId } from "@root/data/queries/common.queries";
 
@@ -12,7 +12,7 @@ import { byId } from "@root/data/queries/common.queries";
 @Service()
 export class CheckJoinRequestDeletionPermissionService {
   constructor(
-    @Inject(joinRequestRepositoryType)
+    @Inject(types.repositories.joinRequest)
     private readonly joinRequestRepo: IJoinRequestRepository
   ) {}
 

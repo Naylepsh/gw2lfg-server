@@ -1,5 +1,5 @@
 import Container from "typedi";
-import { checkApiKeyValidityServiceType } from "@loaders/typedi.constants";
+import { types } from "@loaders/typedi.constants";
 import { IsValidApiKey } from "@api/controllers/users/validators/api-key.validator";
 import { FakeApiKeyChecker } from "../../../../../common/fake-api-key-checker";
 import { validate } from "class-validator";
@@ -35,6 +35,6 @@ describe("ApiKeyValidator tests", () => {
 
   function setAreAllKeysValid(areAllKeysValid: boolean) {
     const fakeChecker = new FakeApiKeyChecker(areAllKeysValid);
-    Container.set(checkApiKeyValidityServiceType, fakeChecker);
+    Container.set(types.services.checkApiKeyValidity, fakeChecker);
   }
 });
