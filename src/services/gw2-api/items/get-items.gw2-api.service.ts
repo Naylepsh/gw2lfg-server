@@ -4,7 +4,7 @@ import { fetchCharacters } from "../characters/fetch-characters";
 import { fetchItemsFromSharedInventory } from "./fetch-items-from-shared-inventory";
 import { fetchItemsFromBank } from "./fetch-items-from-bank";
 import { Service } from "typedi";
-import { getItemsFromEntireAccountFetcherType } from "@loaders/typedi.constants";
+import { types } from "@loaders/typedi.constants";
 import { GetItemsFromMultipleSources } from "./get-items-from-multiple-sources.fetcher";
 import { GetItems } from "./get-items.fetcher";
 import { ItemsFetcher } from "./items-fetcher.interface";
@@ -12,7 +12,7 @@ import { ItemsFetcher } from "./items-fetcher.interface";
 /**
  * Fetches all items with given ids from the account associated with given API key
  */
-Service(getItemsFromEntireAccountFetcherType);
+Service(types.services.getItemsFromEntireAccountFetcher);
 export class GetItemsFromEntireAccount implements ItemsFetcher {
   constructor() {}
 

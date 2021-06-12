@@ -6,10 +6,7 @@ import { data } from "../data";
  * As long as it's not a interface, just importing it is enough for TypeDI.
  */
 import { services } from "../services";
-import {
-  getItemsFromEntireAccountFetcherType,
-  types,
-} from "./typedi.constants";
+import { types } from "./typedi.constants";
 
 /**
  * Loads interfaces that TypeDI cannot automatically resolve
@@ -79,5 +76,5 @@ const loadServiceLayerDependencies = () => {
 
   const itemFetcher = new GetItemsFromEntireAccount();
 
-  Container.set(getItemsFromEntireAccountFetcherType, itemFetcher);
+  Container.set(types.services.getItemsFromEntireAccountFetcher, itemFetcher);
 };
