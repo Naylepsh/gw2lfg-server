@@ -3,12 +3,7 @@ import { JoinRequest } from "@data/entities/join-request/join-request.entity";
 import { IJoinRequestRepository } from "@data/repositories/join-request/join-request.repository.interface";
 import { IPostRepository } from "@data/repositories/post/post.repository.interface";
 import { IUserRepository } from "@data/repositories/user/user.repository.interface";
-import {
-  joinRequestRepositoryType,
-  postRepositoryType,
-  requirementsCheckServiceType,
-  userRepositoryType,
-} from "@loaders/typedi.constants";
+import { types } from "@loaders/typedi.constants";
 import {
   PostNotFoundError,
   RoleNotFoundError,
@@ -33,11 +28,11 @@ import { byJoinRequestRelations } from "@root/data/queries/join-request.queries"
 @Service()
 export class CreateJoinRequestService {
   constructor(
-    @Inject(userRepositoryType) private readonly userRepo: IUserRepository,
-    @Inject(postRepositoryType) private readonly postRepo: IPostRepository,
-    @Inject(joinRequestRepositoryType)
+    @Inject(types.repositories.user) private readonly userRepo: IUserRepository,
+    @Inject(types.repositories.post) private readonly postRepo: IPostRepository,
+    @Inject(types.repositories.joinRequest)
     private readonly joinRequestRepo: IJoinRequestRepository,
-    @Inject(requirementsCheckServiceType)
+    @Inject(types.services.requirementsCheck)
     private readonly checkRequirementsService: ICheckRequirementsService
   ) {}
 

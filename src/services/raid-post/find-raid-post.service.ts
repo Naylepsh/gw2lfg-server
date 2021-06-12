@@ -1,9 +1,6 @@
 import { Inject, Service } from "typedi";
 import { IRaidPostRepository } from "@data/repositories/raid-post/raid-post.repository.interface";
-import {
-  findRaidPostServiceType,
-  raidPostRepositoryType,
-} from "@loaders/typedi.constants";
+import { findRaidPostServiceType, types } from "@loaders/typedi.constants";
 import { PostNotFoundError } from "../common/errors/entity-not-found.error";
 import { FindRaidPostDTO } from "./dtos/find-raid-post.dto";
 import { byId } from "@root/data/queries/common.queries";
@@ -15,7 +12,7 @@ import { byId } from "@root/data/queries/common.queries";
 @Service(findRaidPostServiceType)
 export class FindRaidPostService {
   constructor(
-    @Inject(raidPostRepositoryType)
+    @Inject(types.repositories.raidPost)
     private readonly repository: IRaidPostRepository
   ) {}
 

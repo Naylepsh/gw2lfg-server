@@ -3,7 +3,7 @@ import request from "supertest";
 import Container from "typedi";
 import { IUserRepository } from "@data/repositories/user/user.repository.interface";
 import { loadDependencies } from "@loaders/index";
-import { userRepositoryType } from "@loaders/typedi.constants";
+import { types } from "@loaders/typedi.constants";
 import { seedUser } from "./seeders";
 import { AUTH_HEADER, toBearerToken } from "../common/to-bearer-token";
 import { Connection } from "typeorm";
@@ -19,7 +19,7 @@ describe("Me e2e tests", () => {
   beforeAll(async () => {
     ({ app, conn } = await loadDependencies({ loadTasks: false }));
 
-    userRepo = Container.get(userRepositoryType);
+    userRepo = Container.get(types.repositories.user);
   });
 
   afterEach(async () => {

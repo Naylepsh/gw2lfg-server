@@ -1,7 +1,7 @@
 import { Action } from "routing-controllers";
 import { Inject } from "typedi";
 import { IUserRepository } from "@data/repositories/user/user.repository.interface";
-import { userRepositoryType } from "@loaders/typedi.constants";
+import { types } from "@loaders/typedi.constants";
 import { Jwt } from "../utils/token/jwt";
 
 /**
@@ -10,7 +10,8 @@ import { Jwt } from "../utils/token/jwt";
  */
 export class CurrentUserJWTMiddleware {
   constructor(
-    @Inject(userRepositoryType) private readonly userRepo: IUserRepository
+    @Inject(types.repositories.user)
+    private readonly userRepo: IUserRepository
   ) {}
 
   async getCurrentUser(action: Action) {

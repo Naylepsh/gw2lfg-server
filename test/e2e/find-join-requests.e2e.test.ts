@@ -4,7 +4,7 @@ import Container from "typedi";
 import { RaidPost } from "@root/data/entities/raid-post/raid-post.entitity";
 import { IRaidPostUnitOfWork } from "@data/units-of-work/raid-post/raid-post.unit-of-work.interface";
 import { loadDependencies } from "@loaders/index";
-import { raidPostUnitOfWorkType } from "@loaders/typedi.constants";
+import { types } from "@loaders/typedi.constants";
 import { clean, seedRaidBoss, seedRaidPost, seedUser } from "./seeders";
 import { AUTH_HEADER, toBearerToken } from "../common/to-bearer-token";
 import { Connection } from "typeorm";
@@ -21,7 +21,7 @@ describe("Find raid post join request e2e tests", () => {
   beforeAll(async () => {
     ({ app, conn } = await loadDependencies({ loadTasks: false }));
 
-    uow = Container.get(raidPostUnitOfWorkType);
+    uow = Container.get(types.uows.raidPost);
   });
 
   beforeEach(async () => {

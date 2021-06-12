@@ -4,7 +4,7 @@ import * as jwt from "jsonwebtoken";
 import Container from "typedi";
 import { IUserRepository } from "@data/repositories/user/user.repository.interface";
 import { loadDependencies } from "@loaders/index";
-import { userRepositoryType } from "@loaders/typedi.constants";
+import { types } from "@loaders/typedi.constants";
 import { seedUser } from "./seeders";
 import { Connection } from "typeorm";
 
@@ -17,7 +17,7 @@ describe("Login e2e tests", () => {
   beforeAll(async () => {
     ({ app, conn } = await loadDependencies({ loadTasks: false }));
 
-    userRepo = Container.get(userRepositoryType);
+    userRepo = Container.get(types.repositories.user);
   });
 
   afterEach(async () => {

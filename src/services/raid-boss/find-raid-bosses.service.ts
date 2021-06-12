@@ -1,5 +1,5 @@
 import { Inject, Service } from "typedi";
-import { raidBossRepositoryType } from "@loaders/typedi.constants";
+import { types } from "@loaders/typedi.constants";
 import { IRaidBossRepository } from "@data/repositories/raid-boss/raid-boss.repository.interface";
 import { all } from "@root/data/queries/common.queries";
 
@@ -10,7 +10,7 @@ import { all } from "@root/data/queries/common.queries";
 @Service()
 export class FindRaidBossesService {
   constructor(
-    @Inject(raidBossRepositoryType)
+    @Inject(types.repositories.raidBoss)
     private readonly repository: IRaidBossRepository
   ) {}
 

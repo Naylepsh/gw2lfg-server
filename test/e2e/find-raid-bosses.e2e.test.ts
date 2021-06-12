@@ -2,7 +2,7 @@ import "reflect-metadata";
 import request from "supertest";
 import Container from "typedi";
 import { loadDependencies } from "@loaders/index";
-import { raidBossRepositoryType } from "@loaders/typedi.constants";
+import { types } from "@loaders/typedi.constants";
 import { IRaidBossRepository } from "@data/repositories/raid-boss/raid-boss.repository.interface";
 import { seedRaidBoss } from "./seeders";
 import { Connection } from "typeorm";
@@ -17,7 +17,7 @@ describe("Find raid posts e2e tests", () => {
   beforeAll(async () => {
     ({ app, conn } = await loadDependencies({ loadTasks: false }));
 
-    raidBossRepo = Container.get(raidBossRepositoryType);
+    raidBossRepo = Container.get(types.repositories.raidBoss);
   });
 
   beforeEach(async () => {

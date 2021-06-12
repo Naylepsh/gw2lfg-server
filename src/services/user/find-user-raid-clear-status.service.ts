@@ -1,9 +1,6 @@
 import { Inject, Service } from "typedi";
 import { IUserRepository } from "@data/repositories/user/user.repository.interface";
-import {
-  findRaidClearStatusServiceType,
-  userRepositoryType,
-} from "@loaders/typedi.constants";
+import { types } from "@loaders/typedi.constants";
 import { UserNotFoundError } from "../common/errors/entity-not-found.error";
 import { FindUserDTO } from "./dtos/find-user.dto";
 import { raids } from "@data/entities/raid-boss/gw2-raids.json";
@@ -16,9 +13,9 @@ import { byId } from "@root/data/queries/common.queries";
 @Service()
 export class FindUserRaidClearStatusService {
   constructor(
-    @Inject(userRepositoryType)
+    @Inject(types.repositories.user)
     private readonly userRepository: IUserRepository,
-    @Inject(findRaidClearStatusServiceType)
+    @Inject(types.services.findRaidClearStatus)
     private readonly findRaidClearStatusService: IFindRaidClearStatusService
   ) {}
 

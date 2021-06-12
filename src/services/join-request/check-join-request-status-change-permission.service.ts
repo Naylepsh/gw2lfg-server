@@ -1,6 +1,6 @@
 import { Inject, Service } from "typedi";
 import { IJoinRequestRepository } from "@data/repositories/join-request/join-request.repository.interface";
-import { joinRequestRepositoryType } from "@loaders/typedi.constants";
+import { types } from "@loaders/typedi.constants";
 import { CanUserChangeJoinRequestStatusDTO } from "./dtos/can-user-change-join-request-status.dto";
 import { byId } from "@root/data/queries/common.queries";
 
@@ -11,7 +11,7 @@ import { byId } from "@root/data/queries/common.queries";
 @Service()
 export class CheckJoinRequestStatusChangePermissionService {
   constructor(
-    @Inject(joinRequestRepositoryType)
+    @Inject(types.repositories.joinRequest)
     private readonly joinRequestRepo: IJoinRequestRepository
   ) {}
 

@@ -4,7 +4,7 @@ import { RaidPost } from "@root/data/entities/raid-post/raid-post.entitity";
 import { User } from "@data/entities/user/user.entity";
 import { IRaidBossRepository } from "@data/repositories/raid-boss/raid-boss.repository.interface";
 import { IRaidPostUnitOfWork } from "@data/units-of-work/raid-post/raid-post.unit-of-work.interface";
-import { raidBossRepositoryType } from "@loaders/typedi.constants";
+import { types } from "@loaders/typedi.constants";
 import request from "supertest";
 import Container from "typedi";
 import { addHours } from "../common/hours.util";
@@ -55,7 +55,7 @@ export const seedRaidBoss = async (container: typeof Container) => {
   const encounter = raids[0].encounters[0];
   const boss = new RaidBoss({ name: encounter.name, isCm: false });
   const raidBossRepo: IRaidBossRepository = container.get(
-    raidBossRepositoryType
+    types.repositories.raidBoss
   );
   const { id } = await raidBossRepo.save(boss);
 

@@ -5,10 +5,7 @@ import { RaidPost } from "@root/data/entities/raid-post/raid-post.entitity";
 import { IJoinRequestRepository } from "@data/repositories/join-request/join-request.repository.interface";
 import { IRaidPostUnitOfWork } from "@data/units-of-work/raid-post/raid-post.unit-of-work.interface";
 import { loadDependencies } from "@loaders/index";
-import {
-  joinRequestRepositoryType,
-  raidPostUnitOfWorkType,
-} from "@loaders/typedi.constants";
+import { types } from "@loaders/typedi.constants";
 import { clean, seedRaidBoss, seedRaidPost, seedUser } from "./seeders";
 import { AUTH_HEADER, toBearerToken } from "../common/to-bearer-token";
 import { Connection } from "typeorm";
@@ -26,8 +23,8 @@ describe("Delete join request e2e tests", () => {
   beforeAll(async () => {
     ({ app, conn } = await loadDependencies({ loadTasks: false }));
 
-    uow = Container.get(raidPostUnitOfWorkType);
-    joinRequestRepo = Container.get(joinRequestRepositoryType);
+    uow = Container.get(types.uows.raidPost);
+    joinRequestRepo = Container.get(types.repositories.joinRequest);
   });
 
   beforeEach(async () => {

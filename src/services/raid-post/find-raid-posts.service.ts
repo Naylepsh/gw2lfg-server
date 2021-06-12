@@ -3,10 +3,7 @@ import {
   IRaidPostRepository,
   RaidPostWhereParams,
 } from "@data/repositories/raid-post/raid-post.repository.interface";
-import {
-  findRaidPostsServiceType,
-  raidPostRepositoryType,
-} from "@loaders/typedi.constants";
+import { findRaidPostsServiceType, types } from "@loaders/typedi.constants";
 import {
   FindRaidPostsDTO,
   FindRaidPostsWhereParams,
@@ -19,7 +16,7 @@ import {
 @Service(findRaidPostsServiceType)
 export class FindRaidPostsService {
   constructor(
-    @Inject(raidPostRepositoryType)
+    @Inject(types.repositories.raidPost)
     private readonly repository: IRaidPostRepository
   ) {}
 

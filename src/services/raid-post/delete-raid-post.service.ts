@@ -1,6 +1,6 @@
 import { Inject, Service } from "typedi";
 import { IRaidPostUnitOfWork } from "@data/units-of-work/raid-post/raid-post.unit-of-work.interface";
-import { raidPostUnitOfWorkType } from "@loaders/typedi.constants";
+import { types } from "@loaders/typedi.constants";
 import { UnpublishRaidPostDTO } from "./dtos/delete-raid-post.dto";
 import { byId } from "@root/data/queries/common.queries";
 
@@ -10,7 +10,7 @@ import { byId } from "@root/data/queries/common.queries";
 @Service()
 export class DeleteRaidPostService {
   constructor(
-    @Inject(raidPostUnitOfWorkType) private readonly uow: IRaidPostUnitOfWork
+    @Inject(types.uows.raidPost) private readonly uow: IRaidPostUnitOfWork
   ) {}
 
   async delete(dto: UnpublishRaidPostDTO) {

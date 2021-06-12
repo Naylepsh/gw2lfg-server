@@ -1,11 +1,7 @@
 import { Inject, Service } from "typedi";
 import { IUserRepository } from "@data/repositories/user/user.repository.interface";
 import { Item } from "@data/entities/item-requirement/item.requirement.entity";
-import {
-  findUserItemsServiceType,
-  getItemsFromEntireAccountFetcherType,
-  userRepositoryType,
-} from "@loaders/typedi.constants";
+import { types } from "@loaders/typedi.constants";
 import { UserNotFoundError } from "../common/errors/entity-not-found.error";
 import { FindUserDTO } from "./dtos/find-user.dto";
 import { ItemsFetcher } from "../gw2-api/items/items-fetcher.interface";
@@ -16,12 +12,12 @@ import { idToName } from "../gw2-api/items/item.utils";
 /**
  * Service for finding a user with matching id and getting his item stats from GW2 API
  */
-@Service(findUserItemsServiceType)
+@Service(types.services.findUserItems)
 export class FindUserItemsService {
   constructor(
-    @Inject(userRepositoryType)
+    @Inject(types.repositories.user)
     private readonly userRepository: IUserRepository,
-    @Inject(getItemsFromEntireAccountFetcherType)
+    @Inject(types.services.getItemsFromEntireAccountFetcher)
     private readonly itemsFetcher: ItemsFetcher
   ) {}
 

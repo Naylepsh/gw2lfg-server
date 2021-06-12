@@ -3,7 +3,7 @@ import { RaidPost } from "@data/entities/raid-post/raid-post.entitity";
 import { Role } from "@data/entities/role/role.entity";
 import { ItemRequirement } from "@data/entities/item-requirement/item.requirement.entity";
 import { IRaidPostUnitOfWork } from "@data/units-of-work/raid-post/raid-post.unit-of-work.interface";
-import { raidPostUnitOfWorkType } from "@loaders/typedi.constants";
+import { types } from "@loaders/typedi.constants";
 import { EntityNotFoundError } from "../common/errors/entity-not-found.error";
 import { isDateInThePast } from "./utils/is-date-in-the-past";
 import { DateIsInThePastError } from "./errors/date-is-in-the-past.error";
@@ -18,7 +18,7 @@ import { MissingEntityError } from "./errors/missing-entity.error";
 @Service()
 export class UpdateRaidPostService {
   constructor(
-    @Inject(raidPostUnitOfWorkType) private readonly uow: IRaidPostUnitOfWork
+    @Inject(types.uows.raidPost) private readonly uow: IRaidPostUnitOfWork
   ) {}
 
   async update(dto: UpdateRaidPostDTO) {

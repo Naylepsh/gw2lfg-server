@@ -4,19 +4,31 @@
  * hency why these strings.
  * You can read more about it in TypeDI documentation.
  */
-
-// Repository interfaces constants
-export const userRepositoryType = "user.repository";
-export const roleRepositoryType = "role.repository";
-export const requirementRepositoryType = "requirement.repository";
-export const itemRequirementRepositoryType = "item-requirement.repository";
-export const postRepositoryType = "post.repository";
-export const raidPostRepositoryType = "raid-post.repository";
-export const raidBossRepositoryType = "raid-boss.repository";
-export const joinRequestRepositoryType = "join-request.repository";
-
-// Units of work constants
-export const raidPostUnitOfWorkType = "raid-post.unit-of-work";
+export const types = {
+  repositories: {
+    user: "user.repository",
+    role: "role.repository",
+    requirement: "requirement.repository",
+    itemRequirement: "item-requirement.repository",
+    post: "post.repository",
+    raidPost: "raid-post.repository",
+    raidBoss: "raid-boss.repository",
+    joinRequest: "join-request.repository",
+  },
+  uows: {
+    raidPost: "raid-post.unit-of-work",
+  },
+  services: {
+    requirementsCheck: "requirements-check.service",
+    findRaidPosts: "find-raid-posts.service",
+    findRaidPost: "find-raid-post.service",
+    findAccount: "find-account.service",
+    findRaidClearStatus: "find-raid-clear-status.service",
+    findUserItems: "find-user-items.service",
+    checkApiKeyValidity: "check-api-key.service",
+    getItemsFromEntireAccountFetcher: "get-items-from-entire-account.fetcher",
+  },
+};
 
 /**
  * Services constants
