@@ -17,6 +17,7 @@ export const types = {
     raidPost: "raid-post.repository",
     raidBoss: "raid-boss.repository",
     joinRequest: "join-request.repository",
+    notification: "notification.repository",
   },
   uows: {
     raidPost: "raid-post.unit-of-work",
