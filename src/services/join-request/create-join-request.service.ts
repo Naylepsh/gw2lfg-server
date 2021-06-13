@@ -22,7 +22,7 @@ import { byId } from "@root/data/queries/common.queries";
 import { byJoinRequestRelations } from "@root/data/queries/join-request.queries";
 import { CreateNotificationService } from "../notification/create-notification.service";
 import {
-  UserSentRequestNotification,
+  YouSentRequestNotification,
   UserWantsToJoinNotification,
 } from "@data/entities/notification/notification.entity";
 
@@ -68,7 +68,7 @@ export class CreateJoinRequestService {
   private async sendNotifications(joinRequest: JoinRequest, post: Post) {
     return Promise.all([
       this.createNotificationService.save(
-        new UserSentRequestNotification(joinRequest)
+        new YouSentRequestNotification(joinRequest)
       ),
       this.createNotificationService.save(
         new UserWantsToJoinNotification(joinRequest, post!.author)
