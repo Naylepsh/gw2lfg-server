@@ -11,6 +11,7 @@ export class FindNotificationsService {
 
   find(dto: FindNotificationsDTO) {
     const { skip, take, ...where } = dto;
+    console.log({ where });
     return this.repository.findMany({ where, skip, take });
   }
 }

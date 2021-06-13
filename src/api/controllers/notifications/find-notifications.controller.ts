@@ -1,40 +1,7 @@
 import { Get, JsonController, QueryParams } from "routing-controllers";
-import { FindNotificationsService } from "../../../services/notification/find-notifications.service";
-
-import {
-  IsBooleanString,
-  IsInt,
-  IsOptional,
-  IsPositive,
-  IsString,
-  Min,
-} from "class-validator";
-import { IsIdArray } from "../raid-posts/validators/id-array.validator";
-
-export class FindNotificationsDTO {
-  @IsOptional()
-  @IsInt()
-  @IsPositive()
-  take: number = 10;
-
-  @IsOptional()
-  @IsInt()
-  @Min(0)
-  skip: number = 0;
-
-  @IsOptional()
-  @IsString()
-  @IsIdArray()
-  ids?: string;
-
-  @IsOptional()
-  @IsString()
-  recipent?: string;
-
-  @IsOptional()
-  @IsBooleanString()
-  seen?: string;
-}
+import { FindNotificationsService } from "@services/notification/find-notifications.service";
+import { FindNotificationsDTO } from "./dtos/find-notifications.dto";
+import { parseNotificationDto } from "./utils/parse-notification-dto";
 
 /**
  * Controller for GET /notifications requests.
@@ -47,13 +14,10 @@ export class FindNotificationsController {
   // TODO: only allow users to show their own notifications
   @Get("/notifications")
   async find(@QueryParams() dto: FindNotificationsDTO) {
-    const notifications = await this.findService.find(this.parseDto(dto));
+    const notifications = await this.findService.find(
+      parseNotificationDto(dto)
+    );
 
     return { data: notifications };
-  }
-
-  private parseDto(dto: FindNotificationsDTO) {
-    const seen = dto.seen ? (JSON.parse(dto.seen!) as boolean) : undefined;
-    return { ...dto, seen };
   }
 }
