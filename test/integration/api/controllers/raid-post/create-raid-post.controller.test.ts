@@ -10,7 +10,6 @@ import { addHours } from "../../../../common/hours.util";
 import { seedDbWithOnePost } from "./seed-db";
 import { AUTH_HEADER, toBearerToken } from "../../../../common/to-bearer-token";
 import { IUserRepository } from "@data/repositories/user/user.repository.interface";
-import { UserMemoryRepository } from "../../../../common/repositories/user.memory-repository";
 
 describe("CreateRaidPostController integration tests", () => {
   const url = "/raid-posts";
@@ -22,7 +21,7 @@ describe("CreateRaidPostController integration tests", () => {
 
   beforeEach(async () => {
     uow = RaidPostMemoryUnitOfWork.create();
-    userRepo = new UserMemoryRepository();
+    userRepo = uow.users;
 
     ({ token, bossesIds } = await seedDbWithOnePost(uow));
 

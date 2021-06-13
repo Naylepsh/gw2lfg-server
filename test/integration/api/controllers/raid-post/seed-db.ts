@@ -22,7 +22,7 @@ export async function seedDbWithOnePost(uow: RaidPostMemoryUnitOfWork) {
   const bossesIds = [savedBoss.id];
 
   const item = Object.keys(items)[0];
-  const publishService = new CreateRaidPostService(uow);
+  const publishService = new CreateRaidPostService(uow, uow.users);
   const dto = {
     server: "EU",
     date: addHours(new Date(), 12),

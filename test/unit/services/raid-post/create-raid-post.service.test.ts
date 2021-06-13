@@ -4,10 +4,12 @@ import { createAndSaveRaidBoss } from "../../../common/raid-boss.helper";
 import { RaidPostMemoryUnitOfWork } from "../../../common/uows/raid-post.memory-unit-of-work";
 import { createAndSaveUser } from "../../../common/user.helper";
 import { addHours, subtractHours } from "../../../common/hours.util";
+import { UserMemoryRepository } from "../../../common/repositories/user.memory-repository";
 
 describe("CreateRaidPost service tests", () => {
   const uow = RaidPostMemoryUnitOfWork.create();
-  const publishService = new CreateRaidPostService(uow);
+  const userRepo = new UserMemoryRepository()
+  const publishService = new CreateRaidPostService(uow, userRepo);
   const defaultProps = {
     bossesIds: [1],
     rolesProps: [{ name: "dps", class: "warrior" }],
