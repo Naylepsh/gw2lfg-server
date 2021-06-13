@@ -12,7 +12,7 @@ import { getErrorMessageOrCreateDefault } from "../../utils/error/get-message-or
 import { NotificationNotFoundError } from "@services/common/errors/entity-not-found.error";
 import { CannotUnseeNotificationError } from "@services/notification/errors/cannot-unsee.error";
 import { parseNotificationDto } from "./utils/parse-notification-dto";
-import { UpdateNotificationsDTO } from "./update-notifications.dto";
+import { UpdateNotificationsDTO } from "./dtos/update-notification.dto";
 
 /**
  * Controller for PATCH /notifications/:id requests.

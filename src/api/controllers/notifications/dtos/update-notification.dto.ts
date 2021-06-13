@@ -1,6 +1,6 @@
 import { IsOptional, IsBooleanString } from "class-validator";
 
-export class UpdateNotificationsDTO {
+export class UpdateNotificationDTO {
   @IsOptional()
   @IsBooleanString()
   seen?: string;
