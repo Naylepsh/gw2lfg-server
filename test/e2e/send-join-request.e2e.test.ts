@@ -9,6 +9,7 @@ import { clean, seedRaidBoss, seedRaidPost, seedUser } from "./seeders";
 import { AUTH_HEADER, toBearerToken } from "../common/to-bearer-token";
 import { Connection } from "typeorm";
 import { JoinRequest } from "@data/entities/join-request/join-request.entity";
+import { UserRepository } from "@data/repositories/user/user.repository";
 
 describe("Send raid post join request e2e tests", () => {
   const url = "/join-requests";
@@ -32,7 +33,7 @@ describe("Send raid post join request e2e tests", () => {
   });
 
   afterEach(async () => {
-    await clean(uow);
+    await clean(uow, conn.getCustomRepository(UserRepository));
   });
 
   afterAll(async () => {

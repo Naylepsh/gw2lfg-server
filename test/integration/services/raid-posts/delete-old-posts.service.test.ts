@@ -9,10 +9,13 @@ import { RaidPostUnitOfWork } from "@data/units-of-work/raid-post/raid-post.unit
 import { loadTypeORM } from "@loaders/typeorm.loader";
 import { DeleteOldPostsService } from "@services/raid-post/delete-old-posts.service";
 import { addHours } from "../../../common/hours.util";
+import { IUserRepository } from "@data/repositories/user/user.repository.interface";
+import { UserRepository } from "@data/repositories/user/user.repository";
 
 describe("DeleteOldPostsService integration tests", () => {
   let conn: Connection;
   let uow: RaidPostUnitOfWork;
+  let userRepo: IUserRepository;
   let deleteOldPostsService: DeleteOldPostsService;
 
   beforeAll(async () => {
@@ -20,6 +23,7 @@ describe("DeleteOldPostsService integration tests", () => {
 
     const genericUow = new GenericUnitOfWork(conn);
     uow = new RaidPostUnitOfWork(genericUow);
+    userRepo = conn.getCustomRepository(UserRepository);
     deleteOldPostsService = new DeleteOldPostsService(uow);
   });
 
@@ -29,8 +33,8 @@ describe("DeleteOldPostsService integration tests", () => {
       await uow.roles.delete({});
       await uow.raidBosses.delete({});
       await uow.raidPosts.delete({});
-      await uow.users.delete({});
     });
+    await userRepo.delete({});
   });
 
   afterAll(async () => {
@@ -38,15 +42,15 @@ describe("DeleteOldPostsService integration tests", () => {
   });
 
   async function seedDb() {
+    const user = await userRepo.save(
+      new User({
+        username: "username",
+        password: "password",
+        apiKey: "api-key",
+      })
+    );
     return await uow.withTransaction(async () => {
-      const [user, boss, role1, role2] = await Promise.all([
-        uow.users.save(
-          new User({
-            username: "username",
-            password: "password",
-            apiKey: "api-key",
-          })
-        ),
+      const [boss, role1, role2] = await Promise.all([
         uow.raidBosses.save(new RaidBoss({ name: "boss", isCm: false })),
         uow.roles.save(new Role({ name: "any", class: "any" })),
         uow.roles.save(new Role({ name: "any", class: "any" })),

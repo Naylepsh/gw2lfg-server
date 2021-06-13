@@ -10,6 +10,8 @@ import { CreateRaidPostDTO } from "./dtos/create-raid-post.dto";
 import { DateIsInThePastError } from "./errors/date-is-in-the-past.error";
 import { isDateInThePast } from "./utils/is-date-in-the-past";
 import { MissingEntityError } from "./errors/missing-entity.error";
+import { IUserRepository } from "@data/repositories/user/user.repository.interface";
+import { User } from "@data/entities/user/user.entity";
 
 /**
  * Service for raid post creation.
@@ -18,7 +20,8 @@ import { MissingEntityError } from "./errors/missing-entity.error";
 @Service()
 export class CreateRaidPostService {
   constructor(
-    @Inject(types.uows.raidPost) private readonly uow: IRaidPostUnitOfWork
+    @Inject(types.uows.raidPost) private readonly uow: IRaidPostUnitOfWork,
+    @Inject(types.repositories.user) private readonly userRepo: IUserRepository
   ) {}
 
   async create(dto: CreateRaidPostDTO) {
@@ -26,13 +29,15 @@ export class CreateRaidPostService {
     if (dto.bossesIds.length === 0) throw new MissingEntityError("bossesIds");
     if (dto.rolesProps.length === 0) throw new MissingEntityError("rolesProps");
 
-    return await this.uow.withTransaction(() => this.createAndSavePost(dto));
-  }
-
-  private async createAndSavePost(dto: CreateRaidPostDTO) {
-    const author = await this.uow.users.findOne(byId(dto.authorId));
+    const author = await this.userRepo.findOne(byId(dto.authorId));
     if (!author) throw new UserNotFoundError();
 
+    return await this.uow.withTransaction(() =>
+      this.createAndSavePost(dto, author)
+    );
+  }
+
+  private async createAndSavePost(dto: CreateRaidPostDTO, author: User) {
     // prepare related entities
     const [bosses, requirements, roles] = await Promise.all([
       this.uow.raidBosses.findMany(byIds(dto.bossesIds)),

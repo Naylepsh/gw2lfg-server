@@ -9,32 +9,36 @@ import { loadTypeORM } from "@loaders/typeorm.loader";
 import { UpdateRaidPostService } from "@services/raid-post/update-raid-post.service";
 import { Connection } from "typeorm";
 import { JoinRequest } from "@data/entities/join-request/join-request.entity";
+import { IUserRepository } from "@data/repositories/user/user.repository.interface";
+import { UserRepository } from "@data/repositories/user/user.repository";
 
 describe("UpdateRaidPostService Integration Tests", () => {
   let conn: Connection;
   let service: UpdateRaidPostService;
   let uow: RaidPostUnitOfWork;
+  let userRepo: IUserRepository;
   let post: RaidPost;
 
   beforeAll(async () => {
     conn = await loadTypeORM();
     uow = new RaidPostUnitOfWork(new GenericUnitOfWork(conn));
+    userRepo = conn.getCustomRepository(UserRepository);
 
     service = new UpdateRaidPostService(uow);
   });
 
   beforeEach(async () => {
+    const author = await userRepo.save(
+      new User({
+        username: "username",
+        password: "password",
+        apiKey: "api-key",
+      })
+    );
     post = await uow.withTransaction(async () => {
-      const [dpsRole, healRole, author, boss] = await Promise.all([
+      const [dpsRole, healRole, boss] = await Promise.all([
         uow.roles.save(new Role({ name: "dps", class: "warrior" })),
         uow.roles.save(new Role({ name: "healer", class: "druid" })),
-        uow.users.save(
-          new User({
-            username: "username",
-            password: "password",
-            apiKey: "api-key",
-          })
-        ),
         uow.raidBosses.save(new RaidBoss({ name: "Gorseval", isCm: false })),
       ]);
 
@@ -55,8 +59,8 @@ describe("UpdateRaidPostService Integration Tests", () => {
       await uow.roles.delete({});
       await uow.raidBosses.delete({});
       await uow.raidPosts.delete({});
-      await uow.users.delete({});
     });
+    await userRepo.delete({});
   });
 
   afterAll(async () => {

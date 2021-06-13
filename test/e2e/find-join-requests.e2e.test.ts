@@ -8,6 +8,7 @@ import { types } from "@loaders/typedi.constants";
 import { clean, seedRaidBoss, seedRaidPost, seedUser } from "./seeders";
 import { AUTH_HEADER, toBearerToken } from "../common/to-bearer-token";
 import { Connection } from "typeorm";
+import { UserRepository } from "@data/repositories/user/user.repository";
 
 describe("Find raid post join request e2e tests", () => {
   const url = "/join-requests";
@@ -31,7 +32,7 @@ describe("Find raid post join request e2e tests", () => {
   }, timelimit);
 
   afterEach(async () => {
-    await clean(uow);
+    await clean(uow, conn.getCustomRepository(UserRepository));
   });
 
   afterAll(async () => {

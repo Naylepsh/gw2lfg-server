@@ -6,6 +6,7 @@ import { types } from "@loaders/typedi.constants";
 import { IRaidPostUnitOfWork } from "@data/units-of-work/raid-post/raid-post.unit-of-work.interface";
 import { seedRaidBoss, seedRaidPost, clean, seedUser } from "./seeders";
 import { Connection } from "typeorm";
+import { UserRepository } from "@data/repositories/user/user.repository";
 
 describe("Find raid posts e2e tests", () => {
   const timelimit = 60000;
@@ -28,7 +29,7 @@ describe("Find raid posts e2e tests", () => {
   }, timelimit);
 
   afterEach(async () => {
-    await clean(uow);
+    await clean(uow, conn.getCustomRepository(UserRepository));
   });
 
   afterAll(async () => {

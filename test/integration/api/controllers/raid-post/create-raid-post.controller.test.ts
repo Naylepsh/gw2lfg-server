@@ -9,20 +9,24 @@ import { RaidPostMemoryUnitOfWork } from "../../../../common/uows/raid-post.memo
 import { addHours } from "../../../../common/hours.util";
 import { seedDbWithOnePost } from "./seed-db";
 import { AUTH_HEADER, toBearerToken } from "../../../../common/to-bearer-token";
+import { IUserRepository } from "@data/repositories/user/user.repository.interface";
+import { UserMemoryRepository } from "../../../../common/repositories/user.memory-repository";
 
 describe("CreateRaidPostController integration tests", () => {
   const url = "/raid-posts";
   let uow: RaidPostMemoryUnitOfWork;
+  let userRepo: IUserRepository;
   let app: any;
   let token: string;
   let bossesIds: number[];
 
   beforeEach(async () => {
     uow = RaidPostMemoryUnitOfWork.create();
+    userRepo = new UserMemoryRepository();
 
     ({ token, bossesIds } = await seedDbWithOnePost(uow));
 
-    const publishService = new CreateRaidPostService(uow);
+    const publishService = new CreateRaidPostService(uow, userRepo);
     const controller = new CreateRaidPostController(publishService);
 
     Container.set(CreateRaidPostController, controller);
