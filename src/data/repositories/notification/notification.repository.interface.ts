@@ -18,4 +18,7 @@ export interface NotificationQueryParams {
 export interface NotificationsQueryParams extends NotificationQueryParams {
   skip?: number;
   take?: number;
+  order?: {
+    [P in keyof Notification]?: "ASC" | "DESC";
+  };
 }

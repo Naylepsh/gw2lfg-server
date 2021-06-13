@@ -34,10 +34,10 @@ export class FindNotificationsController {
       throw new ForbiddenError();
     }
 
-    const notifications = await this.findService.find(
+    const { notifications, hasMore } = await this.findService.find(
       parseDto({ ...dto, recipent: user.username })
     );
 
-    return { data: notifications };
+    return { data: notifications, hasMore };
   }
 }

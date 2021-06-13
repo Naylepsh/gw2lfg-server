@@ -9,8 +9,15 @@ export class FindNotificationsService {
     private readonly repository: INotificationRepository
   ) {}
 
-  find(dto: FindNotificationsDTO) {
+  async find(dto: FindNotificationsDTO) {
     const { skip, take, ...where } = dto;
-    return this.repository.findMany({ where, skip, take });
+    const notifications = await this.repository.findMany({
+      where,
+      skip,
+      take: take + 1,
+      order: { createdAt: "ASC" },
+    });
+
+    return { notifications: notifications.slice(0, take), hasMore: notifications.length === take + 1}
   }
 }

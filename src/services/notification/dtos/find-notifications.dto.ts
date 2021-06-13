@@ -3,5 +3,5 @@ export interface FindNotificationsDTO {
   recipent?: string;
   seen?: boolean;
   skip?: number;
-  take?: number;
+  take: number;
 }
