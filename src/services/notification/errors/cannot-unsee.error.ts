@@ -1,5 +1,5 @@
 export class CannotUnseeNotificationError extends Error {
-  constructor(message: string = "Cannot unsee notification") {
+  constructor(message: string = "Cannot unsee a notification") {
     super(message);
   }
 }

@@ -1,11 +1,11 @@
 import {
   BadRequestError,
+  Body,
   InternalServerError,
   JsonController,
   NotFoundError,
   Param,
   Patch,
-  QueryParams,
 } from "routing-controllers";
 import { UpdateNotificationService } from "@services/notification/update-notification.service";
 import { getErrorMessageOrCreateDefault } from "../../utils/error/get-message-or-create-default";
@@ -23,10 +23,10 @@ export class UpdateNotificationController {
   constructor(private readonly service: UpdateNotificationService) {}
 
   // TODO: only allow users to update their own notifications
-  @Patch("/notifications")
+  @Patch("/notifications/:id")
   async handleRequest(
     @Param("id") id: number,
-    @QueryParams() dto: UpdateNotificationDTO
+    @Body() dto: UpdateNotificationDTO
   ) {
     try {
       return this.update(dto, id);
