@@ -1,7 +1,15 @@
-import { Get, JsonController, QueryParams } from "routing-controllers";
+import {
+  CurrentUser,
+  ForbiddenError,
+  Get,
+  JsonController,
+  QueryParams,
+} from "routing-controllers";
 import { FindNotificationsService } from "@services/notification/find-notifications.service";
 import { FindNotificationsDTO } from "./dtos/find-notifications.dto";
-import { parseNotificationDto } from "./utils/parse-notification-dto";
+import { parseDto } from "./utils/parse-dto";
+import { User } from "@data/entities/user/user.entity";
+import { AccessNotificationService } from "@services/notification/access-notification.service";
 
 /**
  * Controller for GET /notifications requests.
@@ -9,13 +17,25 @@ import { parseNotificationDto } from "./utils/parse-notification-dto";
  */
 @JsonController()
 export class FindNotificationsController {
-  constructor(private readonly findService: FindNotificationsService) {}
+  constructor(
+    private readonly findService: FindNotificationsService,
+    private readonly accessService: AccessNotificationService
+  ) {}
 
-  // TODO: only allow users to show their own notifications
   @Get("/notifications")
-  async find(@QueryParams() dto: FindNotificationsDTO) {
+  async find(
+    @CurrentUser({ required: true }) user: User,
+    @QueryParams() dto: FindNotificationsDTO
+  ) {
+    const canAccess = dto.recipent
+      ? await this.accessService.canAccess(user, dto.recipent)
+      : true;
+    if (!canAccess) {
+      throw new ForbiddenError();
+    }
+
     const notifications = await this.findService.find(
-      parseNotificationDto(dto)
+      parseDto({ ...dto, recipent: user.username })
     );
 
     return { data: notifications };

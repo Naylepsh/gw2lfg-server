@@ -1,6 +1,8 @@
 import {
   BadRequestError,
   Body,
+  CurrentUser,
+  ForbiddenError,
   InternalServerError,
   JsonController,
   NotFoundError,
@@ -11,8 +13,10 @@ import { UpdateNotificationService } from "@services/notification/update-notific
 import { getErrorMessageOrCreateDefault } from "../../utils/error/get-message-or-create-default";
 import { NotificationNotFoundError } from "@services/common/errors/entity-not-found.error";
 import { CannotUnseeNotificationError } from "@services/notification/errors/cannot-unsee.error";
-import { parseNotificationDto } from "./utils/parse-notification-dto";
+import { parseDto } from "./utils/parse-dto";
 import { UpdateNotificationDTO } from "./dtos/update-notification.dto";
+import { User } from "@data/entities/user/user.entity";
+import { AccessNotificationService } from "@services/notification/access-notification.service";
 
 /**
  * Controller for PATCH /notifications/:id requests.
@@ -20,14 +24,22 @@ import { UpdateNotificationDTO } from "./dtos/update-notification.dto";
  */
 @JsonController()
 export class UpdateNotificationController {
-  constructor(private readonly service: UpdateNotificationService) {}
+  constructor(
+    private readonly notificationService: UpdateNotificationService,
+    private readonly accessService: AccessNotificationService
+  ) {}
 
-  // TODO: only allow users to update their own notifications
   @Patch("/notifications/:id")
   async handleRequest(
     @Param("id") id: number,
+    @CurrentUser({ required: true }) user: User,
     @Body() dto: UpdateNotificationDTO
   ) {
+    const canAccess = await this.accessService.canAccess(user, id);
+    if (!canAccess) {
+      throw new ForbiddenError();
+    }
+
     try {
       return this.update(dto, id);
     } catch (error) {
@@ -36,8 +48,8 @@ export class UpdateNotificationController {
   }
 
   private async update(dto: UpdateNotificationDTO, id: number) {
-    const notifications = await this.service.update({
-      ...parseNotificationDto(dto),
+    const notifications = await this.notificationService.update({
+      ...parseDto(dto),
       id,
     });
 
