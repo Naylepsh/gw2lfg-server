@@ -12,21 +12,21 @@ import { getErrorMessageOrCreateDefault } from "../../utils/error/get-message-or
 import { NotificationNotFoundError } from "@services/common/errors/entity-not-found.error";
 import { CannotUnseeNotificationError } from "@services/notification/errors/cannot-unsee.error";
 import { parseNotificationDto } from "./utils/parse-notification-dto";
-import { UpdateNotificationsDTO } from "./dtos/update-notification.dto";
+import { UpdateNotificationDTO } from "./dtos/update-notification.dto";
 
 /**
  * Controller for PATCH /notifications/:id requests.
  * Returns updated notification.
  */
 @JsonController()
-export class UpdateNotificationsController {
+export class UpdateNotificationController {
   constructor(private readonly service: UpdateNotificationService) {}
 
   // TODO: only allow users to update their own notifications
   @Patch("/notifications")
   async handleRequest(
     @Param("id") id: number,
-    @QueryParams() dto: UpdateNotificationsDTO
+    @QueryParams() dto: UpdateNotificationDTO
   ) {
     try {
       return this.update(dto, id);
@@ -35,7 +35,7 @@ export class UpdateNotificationsController {
     }
   }
 
-  private async update(dto: UpdateNotificationsDTO, id: number) {
+  private async update(dto: UpdateNotificationDTO, id: number) {
     const notifications = await this.service.update({
       ...parseNotificationDto(dto),
       id,
