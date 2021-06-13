@@ -13,7 +13,7 @@ export class Notification {
   id: number;
 
   @Column()
-  recipentId: string;
+  recipent: string;
 
   @Column()
   text: string;
@@ -30,7 +30,7 @@ export class Notification {
   constructor(props?: NotificationProps) {
     if (props) {
       if (props.id) this.id = props.id;
-      this.recipentId = props.recipentId;
+      this.recipent = props.recipent;
       this.text = props.text;
       this.seen = props.seen || false;
     }

@@ -1,6 +1,6 @@
 export interface NotificationProps {
   id?: number;
-  recipentId: string;
+  recipent: string;
   text: string;
   seen?: boolean;
 }

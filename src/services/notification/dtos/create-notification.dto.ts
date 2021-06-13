@@ -1,5 +1,5 @@
 export interface CreateNotificationDTO {
-  recipentId: string;
+  recipent: string;
   seen: boolean;
   text: string;
 }

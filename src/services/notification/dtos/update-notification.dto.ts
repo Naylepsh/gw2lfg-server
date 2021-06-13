@@ -1,6 +1,6 @@
 export interface UpdateNotificationDTO {
   id: number;
-  recipentId?: string;
+  recipent?: string;
   seen?: boolean;
   text?: string;
 }

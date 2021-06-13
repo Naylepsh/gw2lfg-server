@@ -1,5 +1,7 @@
 export interface FindNotificationsDTO {
   id?: number;
-  recipentId?: string;
+  recipent?: string;
   seen?: boolean;
+  skip?: number;
+  take?: number;
 }

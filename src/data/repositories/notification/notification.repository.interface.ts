@@ -10,7 +10,7 @@ export interface INotificationRepository {
 export interface NotificationQueryParams {
   where?: {
     id?: number;
-    recipentId?: string;
+    recipent?: string;
     seen?: boolean;
   };
 }
