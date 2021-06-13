@@ -4,7 +4,7 @@ import { Inject } from "typedi";
 import { types } from "../../loaders/typedi.constants";
 import { CreateNotificationDTO } from "./dtos/create-notification.dto";
 
-export class SaveNotificationService {
+export class CreateNotificationService {
   constructor(
     @Inject(types.repositories.notification)
     private readonly repository: INotificationRepository

@@ -17,6 +17,8 @@ import { CheckItemRequirementsService } from "@root/services/requirement/check-i
 import { FindUserItemsService } from "@services/user/find-user-items.service";
 import { AUTH_HEADER, toBearerToken } from "../../../../common/to-bearer-token";
 import { GW2ApiItem } from "../../../../services/gw2-api/items/item.interface";
+import { NotificationMemoryRepository } from "../../../../common/repositories/notification.memory-repository";
+import { CreateNotificationService } from "@services/notification/create-notification.service";
 
 describe("SendRaidJoinRequestController integration tests", () => {
   const liId = items["Legendary Insight"];
@@ -43,12 +45,15 @@ describe("SendRaidJoinRequestController integration tests", () => {
     const requirementChecker = new CheckItemRequirementsService(
       findUserItemsService
     );
+    const notificationRepo = new NotificationMemoryRepository();
+    const notificationService = new CreateNotificationService(notificationRepo);
     joinRequestRepo = new JoinRequestMemoryRepository();
     const sendJoinRequestService = new CreateJoinRequestService(
       uow.users,
       uow.raidPosts,
       joinRequestRepo,
-      requirementChecker
+      requirementChecker,
+      notificationService
     );
     const controller = new CreateRaidJoinRequestController(
       sendJoinRequestService

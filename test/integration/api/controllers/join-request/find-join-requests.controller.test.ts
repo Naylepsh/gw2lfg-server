@@ -16,6 +16,8 @@ import { seedDbWithOnePost } from "../raid-post/seed-db";
 import { CheckItemRequirementsService } from "@root/services/requirement/check-item-requirements.service";
 import { FindUserItemsService } from "@services/user/find-user-items.service";
 import { GW2ApiItem } from "@services/gw2-api/items/item.interface";
+import { NotificationMemoryRepository } from "../../../../common/repositories/notification.memory-repository";
+import { CreateNotificationService } from "@services/notification/create-notification.service";
 
 describe("FindJoinRequestsController: integration tests", () => {
   const liId = items["Legendary Insight"];
@@ -62,11 +64,14 @@ describe("FindJoinRequestsController: integration tests", () => {
     const requirementChecker = new CheckItemRequirementsService(
       findUserItemsService
     );
+    const notificationRepo = new NotificationMemoryRepository();
+    const notificationService = new CreateNotificationService(notificationRepo);
     const sendJoinRequestService = new CreateJoinRequestService(
       uow.users,
       uow.raidPosts,
       joinRequestRepo,
-      requirementChecker
+      requirementChecker,
+      notificationService
     );
     await sendJoinRequestService.create({
       userId: user.id,
