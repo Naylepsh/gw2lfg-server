@@ -13,7 +13,7 @@ import {
   YouDeclinedRequestNotification,
   YouKickedUserNotification,
   YouLeftTheEventNotification,
-} from "./notifications/join-request.notifications";
+} from "./notifications/delete-join-request.notifications";
 import { Notification } from "@data/entities/notification/notification.entity";
 
 /**

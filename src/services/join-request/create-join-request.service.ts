@@ -23,8 +23,8 @@ import { byJoinRequestRelations } from "@root/data/queries/join-request.queries"
 import { CreateNotificationService } from "../notification/create-notification.service";
 import {
   YouSentRequestNotification,
-  UserWantsToJoinNotification,
-} from "@data/entities/notification/notification.entity";
+  UserWantsToJoinNotification
+} from "@root/services/join-request/notifications/create-join-request.notifications";
 
 /**
  * Service for creation of join requests.
