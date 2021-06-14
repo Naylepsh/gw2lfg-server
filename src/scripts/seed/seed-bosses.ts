@@ -1,23 +1,17 @@
 import "module-alias/register"; // needed for usage of module aliases
-import dotenv from "dotenv";
-import path from "path";
-import { getConnection } from "typeorm";
 import { RaidBossRepository } from "@data/repositories/raid-boss/raid-boss.repository";
 import { loadTypeORM } from "@loaders/typeorm.loader";
 import { raids } from "@data/entities/raid-boss/gw2-raids.json";
 import { RaidBoss } from "@data/entities/raid-boss/raid-boss.entity";
-
-const env = process.env.NODE_ENV || "dev";
-
-const pathToConfigFile = path.join(__dirname, `../../.env.${env}`);
-dotenv.config({ path: pathToConfigFile });
+import { loadEnv } from "../common/load-env";
 
 /**
  * Script that seeds the database with raid bosses
  */
 const main = async () => {
-  await loadTypeORM();
-  const conn = getConnection();
+  loadEnv();
+  const conn = await loadTypeORM();
+
   const raidBossRepo = conn.getCustomRepository(RaidBossRepository);
 
   const raidBossesInDb = await raidBossRepo.findMany({});
