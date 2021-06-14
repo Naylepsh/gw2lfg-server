@@ -7,8 +7,8 @@ import { byId } from "@data/queries/common.queries";
 import { RevertStatusToPendingError } from "./errors/revert-to-pending.error";
 import {
   UserAcceptedRequestNotification,
-  YouAcceptedRequestNotification,
-} from "@data/entities/notification/notification.entity";
+  YouAcceptedRequestNotification
+} from "@root/services/join-request/notifications/update-join-request.notifications";
 import { CreateNotificationService } from "../notification/create-notification.service";
 
 /**
