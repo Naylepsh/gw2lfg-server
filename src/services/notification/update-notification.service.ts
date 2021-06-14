@@ -1,4 +1,4 @@
-import { Notification } from "@data/entities/notification/notification.entity";
+import { Notification } from "@root/data/entities/notification/notification.entity";
 import { INotificationRepository } from "@data/repositories/notification/notification.repository.interface";
 import { Inject } from "typedi";
 import { types } from "@loaders/typedi.constants";

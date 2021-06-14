@@ -14,7 +14,7 @@ import {
   YouKickedUserNotification,
   YouLeftTheEventNotification,
 } from "./notifications/delete-join-request.notifications";
-import { Notification } from "@data/entities/notification/notification.entity";
+import { Notification } from "@root/data/entities/notification/notification.entity";
 
 /**
  * Service for deleting join request with matching id.

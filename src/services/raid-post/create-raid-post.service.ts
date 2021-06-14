@@ -12,6 +12,8 @@ import { isDateInThePast } from "./utils/is-date-in-the-past";
 import { MissingEntityError } from "./errors/missing-entity.error";
 import { IUserRepository } from "@data/repositories/user/user.repository.interface";
 import { User } from "@data/entities/user/user.entity";
+import { CreateNotificationService } from "../notification/create-notification.service";
+import { YouCreatedRaidPostNotification } from "./notifications/create-raid-post.notifications";
 
 /**
  * Service for raid post creation.
@@ -21,7 +23,8 @@ import { User } from "@data/entities/user/user.entity";
 export class CreateRaidPostService {
   constructor(
     @Inject(types.uows.raidPost) private readonly uow: IRaidPostUnitOfWork,
-    @Inject(types.repositories.user) private readonly userRepo: IUserRepository
+    @Inject(types.repositories.user) private readonly userRepo: IUserRepository,
+    private readonly notificationService: CreateNotificationService
   ) {}
 
   async create(dto: CreateRaidPostDTO) {
@@ -32,9 +35,15 @@ export class CreateRaidPostService {
     const author = await this.userRepo.findOne(byId(dto.authorId));
     if (!author) throw new UserNotFoundError();
 
-    return await this.uow.withTransaction(() =>
+    const raidPost = await this.uow.withTransaction(() =>
       this.createAndSavePost(dto, author)
     );
+
+    await this.notificationService.save(
+      new YouCreatedRaidPostNotification(raidPost)
+    );
+
+    return raidPost;
   }
 
   private async createAndSavePost(dto: CreateRaidPostDTO, author: User) {

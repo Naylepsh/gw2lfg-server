@@ -4,10 +4,17 @@ import { createAndSaveRaidBoss } from "../../../common/raid-boss.helper";
 import { RaidPostMemoryUnitOfWork } from "../../../common/uows/raid-post.memory-unit-of-work";
 import { createAndSaveUser } from "../../../common/user.helper";
 import { addHours, subtractHours } from "../../../common/hours.util";
+import { NotificationMemoryRepository } from "../../../common/repositories/notification.memory-repository";
+import { CreateNotificationService } from "@services/notification/create-notification.service";
 
 describe("CreateRaidPost service tests", () => {
   const uow = RaidPostMemoryUnitOfWork.create();
-  const publishService = new CreateRaidPostService(uow, uow.users);
+  const notificationRepo = new NotificationMemoryRepository();
+  const publishService = new CreateRaidPostService(
+    uow,
+    uow.users,
+    new CreateNotificationService(notificationRepo)
+  );
   const defaultProps = {
     bossesIds: [1],
     rolesProps: [{ name: "dps", class: "warrior" }],
@@ -15,6 +22,7 @@ describe("CreateRaidPost service tests", () => {
 
   afterEach(async () => {
     await uow.deleteAll();
+    await notificationRepo.delete({});
   });
 
   it("should save a post when valid data was passed", async () => {

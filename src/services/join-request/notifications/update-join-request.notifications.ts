@@ -1,5 +1,5 @@
 import { JoinRequest } from "@data/entities/join-request/join-request.entity";
-import { Notification } from "@data/entities/notification/notification.entity";
+import { Notification } from "@root/data/entities/notification/notification.entity";
 
 /**
  * Notification to send to the recipent when an user accepts their join request to the user's group

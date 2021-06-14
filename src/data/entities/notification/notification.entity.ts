@@ -5,8 +5,6 @@ import {
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from "typeorm";
-import { Post } from "../post/post.entity";
-import { User } from "../user/user.entity";
 import { NotificationProps } from "./notification.props";
 
 @Entity()
@@ -36,15 +34,5 @@ export class Notification {
       this.text = props.text;
       this.seen = props.seen || false;
     }
-  }
-}
-
-/**
- * Notification to send to the recipent when they created a raid post
- */
-export class YouCreatedRaidPostNotification extends Notification {
-  constructor(post: Post, recipent: User) {
-    const text = `You've created the post#${post.id}`;
-    super({ text, recipent: recipent.username });
   }
 }

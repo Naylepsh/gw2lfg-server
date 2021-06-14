@@ -1,4 +1,4 @@
-import { Notification } from "@data/entities/notification/notification.entity";
+import { Notification } from "@root/data/entities/notification/notification.entity";
 import { JoinRequest } from "@data/entities/join-request/join-request.entity";
 
 /**
