@@ -22,6 +22,8 @@ const main = async () => {
 
   console.log(`Found ${raidBossesInDb.length} bosses in database.`);
   console.log(`Added ${missingBosses.length} bosses.`);
+
+  await conn.close();
 };
 
 /**

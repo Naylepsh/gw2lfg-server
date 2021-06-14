@@ -1,9 +1,9 @@
 import "module-alias/register"; // needed for usage of module aliases
-import { loadTypeDI } from "../../../loaders/typedi.loader";
-import { loadTypeORM } from "../../../loaders/typeorm.loader";
+import { loadTypeDI } from "../../loaders/typedi.loader";
+import { loadTypeORM } from "../../loaders/typeorm.loader";
 import Container from "typedi";
-import { DeleteRaidPostService } from "../../../services/raid-post/delete-raid-post.service";
-import { loadEnv } from "../../common/load-env";
+import { DeleteRaidPostService } from "../../services/raid-post/delete-raid-post.service";
+import { loadEnv } from "../common/load-env";
 
 const main = async () => {
   loadEnv();
