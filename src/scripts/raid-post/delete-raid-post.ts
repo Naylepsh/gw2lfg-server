@@ -3,7 +3,7 @@ import { loadTypeDI } from "../../loaders/typedi.loader";
 import { loadTypeORM } from "../../loaders/typeorm.loader";
 import Container from "typedi";
 import { DeleteRaidPostService } from "../../services/raid-post/delete-raid-post.service";
-import { loadEnv } from "../common/load-env";
+import { loadEnv } from "../../config/env.utils";
 
 const main = async () => {
   loadEnv();

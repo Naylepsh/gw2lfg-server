@@ -1,13 +1,8 @@
-import dotenv from "dotenv";
 import path from "path";
 import { ConnectionOptions } from "typeorm";
-import { parseEnvString, parseEnvNumber } from "./env.utils";
+import { parseEnvString, parseEnvNumber, loadEnv } from "./env.utils";
 
-const env = process.env.NODE_ENV || "dev";
-const is_test = env === "test";
-
-const pathToConfigFile = path.join(__dirname, `../../.env.${env}`);
-dotenv.config({ path: pathToConfigFile });
+loadEnv();
 
 /**
  * Connection options needed for TypeORM
@@ -20,7 +15,7 @@ const database: ConnectionOptions = {
   username: parseEnvString("DATABASE_USERNAME"),
   password: parseEnvString("DATABASE_PASSWORD"),
   logging: ["error"],
-  synchronize: is_test,
+  synchronize: process.env.NODE_ENV === "test",
   entities: [
     // .js needed for dev environment where code has been compiled to js
     path.join(__dirname, "../data/entities/**/*.js"),

@@ -3,7 +3,7 @@ import { RaidBossRepository } from "@data/repositories/raid-boss/raid-boss.repos
 import { loadTypeORM } from "@loaders/typeorm.loader";
 import { raids } from "@data/entities/raid-boss/gw2-raids.json";
 import { RaidBoss } from "@data/entities/raid-boss/raid-boss.entity";
-import { loadEnv } from "../common/load-env";
+import { loadEnv } from "../../config/env.utils";
 
 /**
  * Script that seeds the database with raid bosses
