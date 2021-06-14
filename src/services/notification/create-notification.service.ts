@@ -10,7 +10,7 @@ export class CreateNotificationService {
     private readonly repository: INotificationRepository
   ) {}
 
-  save(dto: CreateNotificationDTO) {
+  save(dto: CreateNotificationDTO): Promise<Notification> {
     return this.repository.save(new Notification(dto));
   }
 }
