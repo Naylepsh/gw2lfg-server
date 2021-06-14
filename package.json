@@ -8,7 +8,7 @@
     "watch": "tsc -w -p tsconfig.build.json",
     "dev": "nodemon dist/index.js",
     "start": "node dist/index.js",
-    "seed:bosses": "node dist/scripts/seed-bosses.js",
+    "seed:bosses": "node dist/scripts/seed/seed-bosses.js",
     "test:unit": "jest -i test/unit",
     "test:integr": "jest -i test/integration",
     "test:integr:controllers": "jest --detectOpenHandles -i test/integration/api/controllers",
