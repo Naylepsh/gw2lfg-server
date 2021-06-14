@@ -7,6 +7,7 @@ import Container from "typedi";
 import { Connection } from "typeorm";
 import { clean, seedRaidBoss, seedRaidPost, seedUser } from "./seeders";
 import { UserRepository } from "@data/repositories/user/user.repository";
+import { NotificationRepository } from "@data/repositories/notification/notification.repository";
 
 describe("Find raid post e2e tests", () => {
   const timelimit = 60000;
@@ -28,7 +29,11 @@ describe("Find raid post e2e tests", () => {
   }, timelimit);
 
   afterEach(async () => {
-    await clean(uow, conn.getCustomRepository(UserRepository));
+    await clean(
+      uow,
+      conn.getCustomRepository(UserRepository),
+      conn.getCustomRepository(NotificationRepository)
+    );
   });
 
   afterAll(async () => {

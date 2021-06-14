@@ -7,6 +7,7 @@ import { IRaidPostUnitOfWork } from "@data/units-of-work/raid-post/raid-post.uni
 import { seedRaidBoss, seedRaidPost, clean, seedUser } from "./seeders";
 import { Connection } from "typeorm";
 import { UserRepository } from "@data/repositories/user/user.repository";
+import { NotificationRepository } from "@data/repositories/notification/notification.repository";
 
 describe("Find raid posts e2e tests", () => {
   const timelimit = 60000;
@@ -29,7 +30,11 @@ describe("Find raid posts e2e tests", () => {
   }, timelimit);
 
   afterEach(async () => {
-    await clean(uow, conn.getCustomRepository(UserRepository));
+    await clean(
+      uow,
+      conn.getCustomRepository(UserRepository),
+      conn.getCustomRepository(NotificationRepository)
+    );
   });
 
   afterAll(async () => {

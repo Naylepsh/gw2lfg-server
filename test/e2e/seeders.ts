@@ -10,7 +10,8 @@ import Container from "typedi";
 import { addHours } from "../common/hours.util";
 import { getGw2ApiKey } from "../common/get-gw2-api-key";
 import { AUTH_HEADER, toBearerToken } from "../common/to-bearer-token";
-import { IUserRepository } from "../data/repositories/user/user.repository.interface";
+import { IUserRepository } from "@data/repositories/user/user.repository.interface";
+import { INotificationRepository } from "@data/repositories/notification/notification.repository.interface";
 
 interface IUser {
   username: string;
@@ -79,7 +80,8 @@ export const seedUser = async (app: any) => {
 
 export const clean = async (
   uow: IRaidPostUnitOfWork,
-  userRepo: IUserRepository
+  userRepo: IUserRepository,
+  notificationRepo: INotificationRepository
 ) => {
   await uow.withTransaction(async () => {
     await uow.joinRequests.delete({});
@@ -88,6 +90,7 @@ export const clean = async (
     await uow.raidBosses.delete({});
     await uow.requirements.delete({});
   });
+  await notificationRepo.delete({});
   await userRepo.delete({});
   return;
 };
