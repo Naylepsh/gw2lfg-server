@@ -61,26 +61,6 @@ export class YouSentRequestNotification extends Notification {
 }
 
 /**
- * Notification to send to the recipent when an user cancels their join request to recipent's group
- */
-export class UserCanceledRequestNotification extends Notification {
-  constructor(request: JoinRequest, recipent: User) {
-    const text = `User#${request.user.id} canceled their request to join your post#${request.post.id}`;
-    super({ text, recipent: recipent.username });
-  }
-}
-
-/**
- * Notification to send to the recipent when they cancel their join request
- */
-export class YouCanceledRequestNotification extends Notification {
-  constructor(request: JoinRequest) {
-    const text = `You've canceled your join request to the post#${request.post.id}`;
-    super({ text, recipent: request.user.username });
-  }
-}
-
-/**
  * Notification to send to the recipent when an user accepts their join request to the user's group
  */
 export class UserAcceptedRequestNotification extends Notification {

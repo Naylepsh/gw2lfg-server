@@ -265,6 +265,7 @@ describe("CreateJoinRequest service tests", () => {
 
     return { post, itemRequirement, role };
   }
+
   function setupSendJoinRequestService() {
     const findUserItemsService = setupFindUserItemsService();
     const notificationService = new CreateNotificationService(notificationRepo);
