@@ -41,7 +41,7 @@ export class DeleteOldPostsService {
 
   private async removeRequirementsOfPosts(postsIds: number[]) {
     if (postsIds.length > 0) {
-      await this.uow.requirements.delete({ post: { id: In(postsIds) } });
+      await this.uow.requirements.delete({ where: {post: { id: In(postsIds) } }});
     }
   }
 

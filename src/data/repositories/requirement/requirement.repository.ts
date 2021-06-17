@@ -22,7 +22,7 @@ export class RequirementRepository
     return this.repository.findOne(params);
   }
 
-  async delete(criteria: any = {}): Promise<void> {
-    await this.repository.delete(criteria.where ?? criteria);
+  async delete(params: RequirementQueryParams): Promise<void> {
+    await this.repository.delete(params.where ?? {});
   }
 }

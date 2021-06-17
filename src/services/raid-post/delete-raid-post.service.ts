@@ -21,7 +21,9 @@ export class DeleteRaidPostService {
       await this.uow.joinRequests.delete({ where: { post: { id: post.id } } });
 
       if (post.hasRequirements()) {
-        await this.uow.requirements.delete(post.requirements.map((r) => r.id));
+        await this.uow.requirements.delete({
+          where: { post: { id: post.id } },
+        });
       }
 
       if (post.hasRoles()) {
