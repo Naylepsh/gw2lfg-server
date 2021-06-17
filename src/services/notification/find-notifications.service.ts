@@ -15,9 +15,12 @@ export class FindNotificationsService {
       where,
       skip,
       take: take + 1,
-      order: { createdAt: "ASC" },
+      order: { createdAt: "DESC" },
     });
 
-    return { notifications: notifications.slice(0, take), hasMore: notifications.length === take + 1}
+    return {
+      notifications: notifications.slice(0, take),
+      hasMore: notifications.length === take + 1,
+    };
   }
 }

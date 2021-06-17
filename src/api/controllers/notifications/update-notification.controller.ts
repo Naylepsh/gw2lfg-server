@@ -13,7 +13,6 @@ import { UpdateNotificationService } from "@services/notification/update-notific
 import { getErrorMessageOrCreateDefault } from "../../utils/error/get-message-or-create-default";
 import { NotificationNotFoundError } from "@services/common/errors/entity-not-found.error";
 import { CannotUnseeNotificationError } from "@services/notification/errors/cannot-unsee.error";
-import { parseDto } from "./utils/parse-dto";
 import { UpdateNotificationDTO } from "./dtos/update-notification.dto";
 import { User } from "@data/entities/user/user.entity";
 import { AccessNotificationService } from "@services/notification/access-notification.service";
@@ -49,7 +48,7 @@ export class UpdateNotificationController {
 
   private async update(dto: UpdateNotificationDTO, id: number) {
     const notifications = await this.notificationService.update({
-      ...parseDto(dto),
+      ...dto,
       id,
     });
 
