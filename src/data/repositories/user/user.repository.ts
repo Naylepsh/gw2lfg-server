@@ -7,7 +7,8 @@ import { Service } from "typedi";
 @EntityRepository(User)
 export class UserRepository
   extends AbstractRepository<User>
-  implements IUserRepository {
+  implements IUserRepository
+{
   save(user: User): Promise<User> {
     return this.repository.save(user);
   }
@@ -16,7 +17,7 @@ export class UserRepository
     return this.repository.findOne(params);
   }
 
-  async delete(criteria: any = {}): Promise<void> {
-    await this.repository.delete(criteria.where ?? criteria);
+  async delete(params: UserQueryParams): Promise<void> {
+    await this.repository.delete(params.where ?? {});
   }
 }
