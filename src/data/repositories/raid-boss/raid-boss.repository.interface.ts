@@ -6,7 +6,7 @@ export interface IRaidBossRepository {
   save(raidBosses: RaidBoss[]): Promise<RaidBoss[]>;
   findOne(params: RaidBossQueryParams): Promise<RaidBoss | undefined>;
   findMany(params: RaidBossQueryParams): Promise<RaidBoss[]>;
-  delete(criteria?: any): Promise<void>;
+  delete(params: RaidBossQueryParams): Promise<void>;
 }
 
 export interface RaidBossQueryParams {

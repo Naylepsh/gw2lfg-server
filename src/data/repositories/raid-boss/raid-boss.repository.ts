@@ -10,13 +10,11 @@ import {
 @EntityRepository(RaidBoss)
 export class RaidBossRepository
   extends AbstractRepository<RaidBoss>
-  implements IRaidBossRepository {
+  implements IRaidBossRepository
+{
   save(raidBoss: RaidBoss): Promise<RaidBoss>;
   save(raidBosses: RaidBoss[]): Promise<RaidBoss[]>;
-  save(raidBosses: RaidBoss | RaidBoss[]) {
-    if (Array.isArray(raidBosses)) {
-      return this.repository.save(raidBosses);
-    }
+  save(raidBosses: any): Promise<RaidBoss> | Promise<RaidBoss[]> {
     return this.repository.save(raidBosses);
   }
 
@@ -28,7 +26,7 @@ export class RaidBossRepository
     return this.repository.find(params);
   }
 
-  async delete(criteria: any = {}): Promise<void> {
-    await this.repository.delete(criteria.where ?? criteria);
+  async delete(params: RaidBossQueryParams): Promise<void> {
+    await this.repository.delete(params.where ?? {});
   }
 }

@@ -10,7 +10,8 @@ import {
 @EntityRepository(JoinRequest)
 export class JoinRequestRepository
   extends AbstractRepository<JoinRequest>
-  implements IJoinRequestRepository {
+  implements IJoinRequestRepository
+{
   private static relations = ["user", "post", "role"];
 
   save(joinRequest: JoinRequest): Promise<JoinRequest> {
@@ -27,7 +28,7 @@ export class JoinRequestRepository
     return this.repository.find({ ...params, relations });
   }
 
-  async delete(criteria: any = {}): Promise<void> {
-    await this.repository.delete(criteria.where ?? criteria);
+  async delete(params: JoinRequestQueryParams): Promise<void> {
+    await this.repository.delete(params.where ?? {});
   }
 }
