@@ -63,7 +63,7 @@ export class PostRepository
     });
   }
 
-  async delete(params: PostDeleteParams = {}): Promise<void> {
+  async delete(params: PostDeleteParams): Promise<void> {
     await this.repository.delete(params.where?.id ?? {});
   }
 

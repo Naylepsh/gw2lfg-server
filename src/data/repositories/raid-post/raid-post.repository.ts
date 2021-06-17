@@ -18,6 +18,7 @@ import {
   findOneAndLoadRelations,
 } from "../common/find-and-load-relations";
 import { addOrder } from "../common/add-order";
+import { PostDeleteParams } from "../post/post.repository.interface";
 
 @Service()
 @EntityRepository(RaidPost)
@@ -56,8 +57,8 @@ export class RaidPostRepository
     });
   }
 
-  async delete(criteria: any = {}): Promise<void> {
-    await this.repository.delete(criteria.where ?? criteria);
+  async delete(params: PostDeleteParams): Promise<void> {
+    await this.repository.delete(params.where?.id ?? {});
   }
 
   private static relations = [
