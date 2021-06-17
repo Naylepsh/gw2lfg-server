@@ -35,7 +35,7 @@ export class DeleteOldPostsService {
 
   private async removeJoinRequestsToPosts(postsIds: number[]) {
     if (postsIds.length > 0) {
-      await this.uow.joinRequests.delete({ post: { id: In(postsIds) } });
+      await this.uow.joinRequests.delete({ where: { post: { id: In(postsIds) } }});
     }
   }
 
