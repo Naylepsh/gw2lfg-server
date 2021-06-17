@@ -19,6 +19,7 @@ import { paginate } from "../common/paginate";
 import { addOrder } from "../common/add-order";
 import {
   IPostRepository,
+  PostDeleteParams,
   PostQueryParams,
   PostsQueryParams,
   PostWhereAuthorParams,
@@ -62,8 +63,8 @@ export class PostRepository
     });
   }
 
-  async delete(criteria: any = {}): Promise<void> {
-    await this.repository.delete(criteria.where ?? criteria);
+  async delete(params: PostDeleteParams = {}): Promise<void> {
+    await this.repository.delete(params.where?.id ?? {});
   }
 
   private static relations = [

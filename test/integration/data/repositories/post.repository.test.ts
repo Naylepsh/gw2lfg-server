@@ -53,11 +53,11 @@ describe("TypeORM posting repository tests", () => {
   });
 
   afterEach(async () => {
-    await joinRequestRepository.delete();
-    await requirementRepository.delete();
-    await roleRepository.delete();
-    await postRepository.delete();
-    await userRepository.delete();
+    await joinRequestRepository.delete({});
+    await requirementRepository.delete({});
+    await roleRepository.delete({});
+    await postRepository.delete({});
+    await userRepository.delete({});
 
     resetTestObject();
   });

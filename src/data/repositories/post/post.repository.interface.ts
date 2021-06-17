@@ -4,7 +4,7 @@ export interface IPostRepository {
   save(post: Post): Promise<Post>;
   findOne(params: PostQueryParams): Promise<Post | undefined>;
   findMany(params: PostsQueryParams): Promise<Post[]>;
-  delete(criteria?: any): Promise<void>;
+  delete(params: PostDeleteParams): Promise<void>;
 }
 
 export interface PostQueryParams {
@@ -42,4 +42,10 @@ export interface PostWhereRoleParams {
 export interface PostWhereJoinRequestParams {
   status?: string;
   authorId?: number;
+}
+
+export interface PostDeleteParams {
+  where?: {
+    id: number | number[];
+  };
 }
