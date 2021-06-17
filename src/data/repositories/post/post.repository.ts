@@ -43,11 +43,9 @@ export class PostRepository
 
     addPostQueriesOnPostQb(qb, alias, params.where);
 
-    return findOneAndLoadRelations(
-      qb,
-      this.repository,
-      { relations: PostRepository.relations }
-    );
+    return findOneAndLoadRelations(qb, this.repository, {
+      relations: PostRepository.relations,
+    });
   }
 
   async findMany(params: PostsQueryParams): Promise<Post[]> {
@@ -58,11 +56,10 @@ export class PostRepository
     addOrder(qb, alias, params.order);
     paginate(qb, params);
 
-    return findManyAndLoadRelations(
-      qb,
-      this.repository,
-      { relations: PostRepository.relations, order: params.order }
-    );
+    return findManyAndLoadRelations(qb, this.repository, {
+      relations: PostRepository.relations,
+      order: params.order,
+    });
   }
 
   async delete(criteria: any = {}): Promise<void> {
