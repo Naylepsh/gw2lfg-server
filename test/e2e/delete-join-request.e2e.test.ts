@@ -9,6 +9,8 @@ import { types } from "@loaders/typedi.constants";
 import { clean, seedRaidBoss, seedRaidPost, seedUser } from "./seeders";
 import { AUTH_HEADER, toBearerToken } from "../common/to-bearer-token";
 import { Connection } from "typeorm";
+import { UserRepository } from "@data/repositories/user/user.repository";
+import { NotificationRepository } from "@data/repositories/notification/notification.repository";
 
 describe("Delete join request e2e tests", () => {
   const url = "/join-requests";
@@ -34,7 +36,11 @@ describe("Delete join request e2e tests", () => {
   }, timelimit);
 
   afterEach(async () => {
-    await clean(uow);
+    await clean(
+      uow,
+      conn.getCustomRepository(UserRepository),
+      conn.getCustomRepository(NotificationRepository)
+    );
   });
 
   afterAll(async () => {

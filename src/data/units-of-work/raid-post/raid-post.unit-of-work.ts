@@ -2,7 +2,6 @@ import { RaidBossRepository } from "../../repositories/raid-boss/raid-boss.repos
 import { RaidPostRepository } from "../../repositories/raid-post/raid-post.repository";
 import { RequirementRepository } from "../../repositories/requirement/requirement.repository";
 import { RoleRepository } from "../../repositories/role/role.repository";
-import { UserRepository } from "../../repositories/user/user.repository";
 import { ItemRequirementRepository } from "../../repositories/item-requirement/item-requirement.repository";
 import { IRaidPostUnitOfWork } from "./raid-post.unit-of-work.interface";
 import { GenericUnitOfWork } from "../generic.unit-of-work";
@@ -23,10 +22,6 @@ export class RaidPostUnitOfWork implements IRaidPostUnitOfWork {
 
   withTransaction<T>(work: () => T): Promise<T> {
     return this.unitOfWork.withTransaction(work);
-  }
-
-  get users() {
-    return this.unitOfWork.getCustomRepository(UserRepository);
   }
 
   get raidBosses() {

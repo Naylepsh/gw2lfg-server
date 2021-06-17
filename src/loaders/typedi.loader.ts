@@ -65,6 +65,11 @@ const loadRepositories = (conn: Connection) => {
 
   const joinRequestRepo = conn.getCustomRepository(repos.JoinRequestRepository);
   Container.set(types.repositories.joinRequest, joinRequestRepo);
+
+  const notificationsRepo = conn.getCustomRepository(
+    repos.NotificationRepository
+  );
+  Container.set(types.repositories.notification, notificationsRepo);
 };
 
 /**

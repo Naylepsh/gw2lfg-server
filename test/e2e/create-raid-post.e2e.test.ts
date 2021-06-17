@@ -9,6 +9,8 @@ import { IRaidPostRepository } from "@data/repositories/raid-post/raid-post.repo
 import { seedRaidBoss, clean, seedUser } from "./seeders";
 import { AUTH_HEADER, toBearerToken } from "../common/to-bearer-token";
 import { Connection } from "typeorm";
+import { UserRepository } from "@data/repositories/user/user.repository";
+import { NotificationRepository } from "@data/repositories/notification/notification.repository";
 
 describe("Create raid post e2e tests", () => {
   const url = "/raid-posts";
@@ -31,7 +33,11 @@ describe("Create raid post e2e tests", () => {
   }, timeLimit);
 
   afterEach(async () => {
-    await clean(uow);
+    await clean(
+      uow,
+      conn.getCustomRepository(UserRepository),
+      conn.getCustomRepository(NotificationRepository)
+    );
   });
 
   afterAll(async () => {

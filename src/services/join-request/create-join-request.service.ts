@@ -20,6 +20,11 @@ import { Role } from "@data/entities/role/role.entity";
 import { SignUpsTimeEndedError } from "./errors/signs-ups-time-ended.error";
 import { byId } from "@root/data/queries/common.queries";
 import { byJoinRequestRelations } from "@root/data/queries/join-request.queries";
+import { CreateNotificationService } from "../notification/create-notification.service";
+import {
+  YouSentRequestNotification,
+  UserWantsToJoinNotification
+} from "@root/services/join-request/notifications/create-join-request.notifications";
 
 /**
  * Service for creation of join requests.
@@ -33,7 +38,8 @@ export class CreateJoinRequestService {
     @Inject(types.repositories.joinRequest)
     private readonly joinRequestRepo: IJoinRequestRepository,
     @Inject(types.services.requirementsCheck)
-    private readonly checkRequirementsService: ICheckRequirementsService
+    private readonly checkRequirementsService: ICheckRequirementsService,
+    private readonly createNotificationService: CreateNotificationService
   ) {}
 
   async create({ userId, postId, roleId }: CreateJoinRequestDTO) {
@@ -46,12 +52,28 @@ export class CreateJoinRequestService {
 
     await this.ensureJoinRequestCanBeCreated(user, post, role, requests);
 
-    const joinRequest = new JoinRequest({
-      user: user!,
-      post: post!,
-      role: role!,
-    });
-    return this.joinRequestRepo.save(joinRequest);
+    const joinRequest = await this.joinRequestRepo.save(
+      new JoinRequest({
+        user: user!,
+        post: post!,
+        role: role!,
+      })
+    );
+
+    await this.sendNotifications(joinRequest, post!);
+
+    return joinRequest;
+  }
+
+  private async sendNotifications(joinRequest: JoinRequest, post: Post) {
+    return Promise.all([
+      this.createNotificationService.save(
+        new YouSentRequestNotification(joinRequest)
+      ),
+      this.createNotificationService.save(
+        new UserWantsToJoinNotification(joinRequest, post!.author)
+      ),
+    ]);
   }
 
   private async ensureJoinRequestCanBeCreated(

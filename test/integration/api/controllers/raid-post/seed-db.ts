@@ -6,6 +6,8 @@ import { CreateRaidPostService } from "@root/services/raid-post/create-raid-post
 import { RegisterService } from "@root/services/user/register.service";
 import { RaidPostMemoryUnitOfWork } from "../../../../common/uows/raid-post.memory-unit-of-work";
 import { addHours } from "../../../../common/hours.util";
+import { NotificationMemoryRepository } from "../../../../common/repositories/notification.memory-repository";
+import { CreateNotificationService } from "@services/notification/create-notification.service";
 
 export async function seedDbWithOnePost(uow: RaidPostMemoryUnitOfWork) {
   const registerService = new RegisterService(uow.users);
@@ -21,8 +23,15 @@ export async function seedDbWithOnePost(uow: RaidPostMemoryUnitOfWork) {
   const savedBoss = await uow.raidBosses.save(boss);
   const bossesIds = [savedBoss.id];
 
+  const notificationRepo = new NotificationMemoryRepository();
+  const notificationService = new CreateNotificationService(notificationRepo);
+  const publishService = new CreateRaidPostService(
+    uow,
+    uow.users,
+    notificationService
+  );
+
   const item = Object.keys(items)[0];
-  const publishService = new CreateRaidPostService(uow);
   const dto = {
     server: "EU",
     date: addHours(new Date(), 12),

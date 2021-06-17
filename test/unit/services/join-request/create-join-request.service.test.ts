@@ -15,9 +15,12 @@ import { CheckItemRequirementsService } from "@services/requirement/check-item-r
 import { FindUserItemsService } from "@services/user/find-user-items.service";
 import { addHours } from "../../../common/hours.util";
 import { JoinRequestMemoryRepository } from "../../../common/repositories/join-request.memory-repository";
+import { NotificationMemoryRepository } from "../../../common/repositories/notification.memory-repository";
 import { RaidPostMemoryRepository } from "../../../common/repositories/raid-post.memory-repository";
 import { RoleMemoryRepository } from "../../../common/repositories/role.memory-repository";
 import { UserMemoryRepository } from "../../../common/repositories/user.memory-repository";
+import { INotificationRepository } from "@data/repositories/notification/notification.repository.interface";
+import { CreateNotificationService } from "@services/notification/create-notification.service";
 import { storage } from "../item-storage";
 
 class JoinRequestServiceTestObject {
@@ -49,6 +52,7 @@ describe("CreateJoinRequest service tests", () => {
   let roleRepo: IRoleRepository;
   let postRepo: IPostRepository;
   let joinRequestRepo: JoinRequestMemoryRepository;
+  let notificationRepo: INotificationRepository;
 
   const apiKey = "api-key";
   const user = new User({
@@ -65,6 +69,7 @@ describe("CreateJoinRequest service tests", () => {
     roleRepo = new RoleMemoryRepository();
     postRepo = new RaidPostMemoryRepository();
     joinRequestRepo = new JoinRequestMemoryRepository();
+    notificationRepo = new NotificationMemoryRepository();
   });
 
   it("should save the request if valid data was passed", async () => {
@@ -175,6 +180,64 @@ describe("CreateJoinRequest service tests", () => {
     ).rejects.toThrow();
   });
 
+  it("should notify request creator", async () => {
+    const { post, role } = await seed();
+    const service = setupSendJoinRequestService();
+
+    await service.create({
+      userId: user.id,
+      postId: post.id,
+      roleId: role.id,
+    });
+    const requestSender = await userRepo.save(
+      new User({
+        username: "different-username",
+        password: "password",
+        apiKey,
+      })
+    );
+
+    await service.create({
+      userId: requestSender.id,
+      postId: post.id,
+      roleId: role.id,
+    });
+
+    const senderNotifications = await notificationRepo.findMany({
+      where: { recipent: requestSender.username },
+    });
+    expect(senderNotifications.length).toBeGreaterThan(0);
+  });
+
+  it("should notify post author", async () => {
+    const { post, role } = await seed();
+    const service = setupSendJoinRequestService();
+
+    await service.create({
+      userId: user.id,
+      postId: post.id,
+      roleId: role.id,
+    });
+    const requestSender = await userRepo.save(
+      new User({
+        username: "different-username",
+        password: "password",
+        apiKey,
+      })
+    );
+
+    await service.create({
+      userId: requestSender.id,
+      postId: post.id,
+      roleId: role.id,
+    });
+
+    const senderNotifications = await notificationRepo.findMany({
+      where: { recipent: post.author.username },
+    });
+    expect(senderNotifications.length).toBeGreaterThan(0);
+  });
+
   function resetTestObject() {
     obj = new JoinRequestServiceTestObject();
   }
@@ -203,12 +266,17 @@ describe("CreateJoinRequest service tests", () => {
     return { post, itemRequirement, role };
   }
 
-  function setupItemFetcher() {
-    const allItemsFetcher = storage(
-      new Map<string, GW2ApiItem[]>([[apiKey, obj.itemsInStorage]])
-    );
+  function setupSendJoinRequestService() {
+    const findUserItemsService = setupFindUserItemsService();
+    const notificationService = new CreateNotificationService(notificationRepo);
 
-    return new GetItems(allItemsFetcher);
+    return new CreateJoinRequestService(
+      userRepo,
+      postRepo,
+      joinRequestRepo,
+      new CheckItemRequirementsService(findUserItemsService),
+      notificationService
+    );
   }
 
   function setupFindUserItemsService() {
@@ -216,14 +284,11 @@ describe("CreateJoinRequest service tests", () => {
     return new FindUserItemsService(userRepo, itemFetcher);
   }
 
-  function setupSendJoinRequestService() {
-    const findUserItemsService = setupFindUserItemsService();
-
-    return new CreateJoinRequestService(
-      userRepo,
-      postRepo,
-      joinRequestRepo,
-      new CheckItemRequirementsService(findUserItemsService)
+  function setupItemFetcher() {
+    const allItemsFetcher = storage(
+      new Map<string, GW2ApiItem[]>([[apiKey, obj.itemsInStorage]])
     );
+
+    return new GetItems(allItemsFetcher);
   }
 });

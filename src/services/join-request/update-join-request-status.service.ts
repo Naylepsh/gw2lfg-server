@@ -3,7 +3,13 @@ import { IJoinRequestRepository } from "@data/repositories/join-request/join-req
 import { types } from "@loaders/typedi.constants";
 import { EntityNotFoundError } from "../common/errors/entity-not-found.error";
 import { UpdateJoinRequestStatusDTO } from "./dtos/update-join-request-status.dto";
-import { byId } from "../../data/queries/common.queries";
+import { byId } from "@data/queries/common.queries";
+import { RevertStatusToPendingError } from "./errors/revert-to-pending.error";
+import {
+  UserAcceptedRequestNotification,
+  YouAcceptedRequestNotification
+} from "@root/services/join-request/notifications/update-join-request.notifications";
+import { CreateNotificationService } from "../notification/create-notification.service";
 
 /**
  * Service for updating the status of join requests.
@@ -12,7 +18,8 @@ import { byId } from "../../data/queries/common.queries";
 export class UpdateJoinRequestStatusService {
   constructor(
     @Inject(types.repositories.joinRequest)
-    private readonly joinRequestRepo: IJoinRequestRepository
+    private readonly joinRequestRepo: IJoinRequestRepository,
+    private readonly notificationService: CreateNotificationService
   ) {}
 
   async updateStatus(dto: UpdateJoinRequestStatusDTO) {
@@ -20,7 +27,7 @@ export class UpdateJoinRequestStatusService {
 
     const request = await this.joinRequestRepo.findOne({
       ...byId(id),
-      relations: ["user", "post", "role"],
+      relations: ["user", "post", "role", "post.author"],
     });
 
     if (!request) {
@@ -29,6 +36,26 @@ export class UpdateJoinRequestStatusService {
       );
     }
 
-    return this.joinRequestRepo.save({ ...request, status: newStatus });
+    if (newStatus === "PENDING" && request.status === "ACCEPTED") {
+      throw new RevertStatusToPendingError();
+    }
+
+    const notifications = [
+      new UserAcceptedRequestNotification(request),
+      new YouAcceptedRequestNotification(request),
+    ];
+
+    const savedRequest = await this.joinRequestRepo.save({
+      ...request,
+      status: newStatus,
+    });
+
+    await Promise.all(
+      notifications.map((notification) =>
+        this.notificationService.save(notification)
+      )
+    );
+
+    return savedRequest;
   }
 }

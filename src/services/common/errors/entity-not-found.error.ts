@@ -21,3 +21,9 @@ export class RoleNotFoundError extends EntityNotFoundError {
     super(message);
   }
 }
+
+export class NotificationNotFoundError extends EntityNotFoundError {
+  constructor(message: string = "Entity not found") {
+    super(message);
+  }
+}

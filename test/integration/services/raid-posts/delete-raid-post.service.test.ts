@@ -9,10 +9,13 @@ import { RaidPostUnitOfWork } from "@data/units-of-work/raid-post/raid-post.unit
 import { loadTypeORM } from "@loaders/typeorm.loader";
 import { DeleteRaidPostService } from "@root/services/raid-post/delete-raid-post.service";
 import { JoinRequestRepository } from "@data/repositories/join-request/join-request.repository";
+import { IUserRepository } from "@data/repositories/user/user.repository.interface";
+import { UserRepository } from "@data/repositories/user/user.repository";
 
 describe("DeleteRaidPostService integration tests", () => {
   let conn: Connection;
   let uow: RaidPostUnitOfWork;
+  let userRepo: IUserRepository;
   let unpublishService: DeleteRaidPostService;
 
   beforeAll(async () => {
@@ -20,6 +23,7 @@ describe("DeleteRaidPostService integration tests", () => {
 
     const genericUow = new GenericUnitOfWork(conn);
     uow = new RaidPostUnitOfWork(genericUow);
+    userRepo = conn.getCustomRepository(UserRepository);
     unpublishService = new DeleteRaidPostService(uow);
   });
 
@@ -29,8 +33,8 @@ describe("DeleteRaidPostService integration tests", () => {
       await uow.roles.delete({});
       await uow.raidBosses.delete({});
       await uow.raidPosts.delete({});
-      await uow.users.delete({});
     });
+    await userRepo.delete({});
   });
 
   afterAll(async () => {
@@ -38,14 +42,14 @@ describe("DeleteRaidPostService integration tests", () => {
   });
 
   async function seedDb() {
+    const user = await userRepo.save(
+      new User({
+        username: "username",
+        password: "password",
+        apiKey: "api-key",
+      })
+    );
     return await uow.withTransaction(async () => {
-      const user = await uow.users.save(
-        new User({
-          username: "username",
-          password: "password",
-          apiKey: "api-key",
-        })
-      );
       const role = await uow.roles.save(
         new Role({ name: "any", class: "any" })
       );
