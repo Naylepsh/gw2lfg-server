@@ -64,6 +64,7 @@ export class DeleteJoinRequestController {
 
     return this.joinRequestService.delete({
       id,
+      deletionAuthorId: user.id,
     });
   }
 }

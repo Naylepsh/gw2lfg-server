@@ -33,7 +33,6 @@ export class DeleteJoinRequestService {
     await this.joinRequestRepo.delete(byId(dto.id));
 
     if (notifications) {
-      // TODO: add save([]) to notificationService
       await Promise.all(
         notifications.map((notification) =>
           this.notificationService.save(notification)
@@ -47,14 +46,14 @@ export class DeleteJoinRequestService {
     id,
   }: DeleteJoinRequestDTO) {
     if (typeof deletionAuthorId === "undefined") {
-      return;
+      return [];
     }
 
     const query = { ...byId(id), relations: ["user", "post", "post.author"] };
     const joinRequest = await this.joinRequestRepo.findOne(query);
 
     if (!joinRequest) {
-      return;
+      return [];
     }
 
     const notifications: Notification[] = [];
