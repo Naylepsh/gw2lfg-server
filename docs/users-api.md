@@ -45,7 +45,7 @@ Registers an user. Returns json data about created resource and associated jwt.
           createdAt: "2021-01-09T08:21:15.128Z",
           updatedAt: "2021-01-09T08:21:15.128Z"
         },
-        token: "my.jwt.token"
+        token: "Bearer <my-token>"
       }
     }
     ```
@@ -160,7 +160,7 @@ Logins an user. Returns json data with associated jwt.
     ```
     {
       data: {
-        token: "my.jwt.token"
+        token: "Bearer <my-token>"
       }
     }
     ```
@@ -239,7 +239,7 @@ Returns json data about a user that's associated with given jwt.
 
   **Required:**
 
-  `gw2lfg-auth-token:[string]`
+  `Authentication:[string]`
 
 - **URL Params**
 
@@ -280,7 +280,7 @@ Returns json data about a user that's associated with given jwt.
   ```javascript
   axios.get("/me", {
     headers: {
-      "gw2lfg-auth-token": "my.jwt.token",
+      Authentication: "Bearer <my-token>",
     },
   });
   ```
@@ -506,7 +506,7 @@ Returns json data about a single user's raid posts. Providing jwt will check whe
 
   **Optional:**
 
-  `gw2lfg-auth-token:[string]`
+  `Authentication:[string]`
 
 - **URL Params**
 
@@ -667,7 +667,7 @@ Returns json data about a single user's raid posts. Providing jwt will check whe
   ```javascript
   axios.get("/users/2/raid-posts", {
     headers: {
-      "gw2lfg-auth-token": "my.jwt.token",
+      Authentication: "Bearer <my-token>",
     },
   });
   ```

@@ -184,7 +184,7 @@ Returns json data about created resource.
 
   **Required:**
 
-  `gw2lfg-auth-token: [string]`
+  `Authentication: [string]`
 
 - **URL Params**
 
@@ -332,7 +332,7 @@ Returns json data about created resource.
     },
     {
       headers: {
-        "gw2lfg-auth-token": "my.jwt.token",
+        "Authentication": "Bearer <my-token>",
       },
     }
   );
@@ -458,7 +458,7 @@ Returns json data about updated resource.
 
   **Required:**
 
-  `gw2lfg-auth-token: [string]`
+  `Authentication: [string]`
 
 - **URL Params**
 
@@ -618,7 +618,7 @@ Returns json data about updated resource.
     },
     {
       headers: {
-        "gw2lfg-auth-token": "my.jwt.token",
+        "Authentication": "Bearer <my-token>",
       },
     }
   );
@@ -642,7 +642,7 @@ Deletes a single raid post.
 
   **Required:**
 
-  `gw2lfg-auth-token: [string]`
+  `Authentication: [string]`
 
 - **URL Params**
 
@@ -689,7 +689,7 @@ Deletes a single raid post.
   ```javascript
   axios.delete("/raid-posts", {
     headers: {
-      "gw2lfg-auth-token": "my.jwt.token",
+      "Authentication": "Bearer <my-token>",
     },
   });
   ```

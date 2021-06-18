@@ -1,5 +1,9 @@
 # API
 
+## Auth
+
+API uses bearer tokens
+
 ## Complex Types
 
 API uses following complex types:
@@ -41,3 +45,4 @@ API uses following complex types:
 - [Raid Posts](raid-posts-api.md)
 - [Raid Bosses](raid-bosses-api.md)
 - [Join Requests](join-requests-api.md)
+- [Notifications](notifications-api.md)

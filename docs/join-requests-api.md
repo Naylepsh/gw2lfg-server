@@ -149,7 +149,7 @@ Returns json data about created resource.
 
   **Required:**
 
-  `gw2lfg-auth-token: [string]`
+  `Authentication: [string]`
 
 - **URL Params**
 
@@ -289,7 +289,7 @@ Returns json data about created resource.
     },
     {
       headers: {
-        "gw2lfg-auth-token": "my.jwt.token",
+        Authentication: "Bearer <my-token>",
       },
     }
   );
@@ -397,7 +397,7 @@ User has to be the author of the post that the join-request points.
 
   **Required:**
 
-  `gw2lfg-auth-token: [string]`
+  `Authentication: [string]`
 
 - **URL Params**
 
@@ -503,7 +503,7 @@ User has to be the author of the post that the join-request points.
     },
     {
       headers: {
-        "gw2lfg-auth-token": "my.jwt.token",
+        Authentication: "Bearer <my-token>",
       },
     }
   );
@@ -528,7 +528,7 @@ User has to be either join request author (cancels their own request) or the aut
 
   **Required:**
 
-  `gw2lfg-auth-token: [string]`
+  `Authentication: [string]`
 
 - **URL Params**
 
@@ -575,7 +575,7 @@ User has to be either join request author (cancels their own request) or the aut
   ```javascript
   axios.delete("/join-requests/1", {
     headers: {
-      "gw2lfg-auth-token": "my.jwt.token",
+      Authentication: "Bearer <my-token>",
     },
   });
   ```
