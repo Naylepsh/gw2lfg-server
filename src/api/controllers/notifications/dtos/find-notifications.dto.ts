@@ -24,9 +24,8 @@ export class FindNotificationsDTO {
   @IsIdArray()
   ids?: string;
 
-  @IsOptional()
   @IsString()
-  recipent?: string;
+  recipent: string;
 
   @IsOptional()
   @IsBooleanString()

@@ -27,9 +27,7 @@ export class FindNotificationsController {
     @CurrentUser({ required: true }) user: User,
     @QueryParams() dto: FindNotificationsDTO
   ) {
-    const canAccess = dto.recipent
-      ? await this.accessService.canAccess(user, dto.recipent)
-      : true;
+    const canAccess = await this.accessService.canAccess(user, dto.recipent);
     if (!canAccess) {
       throw new ForbiddenError();
     }
