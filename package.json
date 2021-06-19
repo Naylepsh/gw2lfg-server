@@ -14,7 +14,7 @@
     "test:unit": "jest -i test/unit",
     "test:integr": "jest -i test/integration",
     "test:integr:controllers": "jest --detectOpenHandles -i test/integration/api/controllers",
-    "test:integr:typeorm": "jest --detectOpenHandles -i test/integration/data",
+    "test:integr:data": "jest --detectOpenHandles -i test/integration/data",
     "test:integr:services": "jest --detectOpenHandles -i test/integration/services",
     "test:e2e": "jest --detectOpenHandles -i test/e2e",
     "migration:generate": "npx typeorm migration:generate -n",
