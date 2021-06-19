@@ -11,7 +11,7 @@ export class RaidPostMemoryRepository implements IRaidPostRepository {
   constructor(entities: RaidPost[] = []) {
     this.repository = new IdentifiableMemoryRepository<RaidPost>(entities);
   }
-  save(post: RaidPost): Promise<RaidPost> {
+  async save(post: RaidPost): Promise<RaidPost> {
     return this.repository.save(post);
   }
   async findOne(params: RaidPostQueryParams): Promise<RaidPost | undefined> {

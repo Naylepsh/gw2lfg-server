@@ -29,6 +29,10 @@ describe("DeleteRaidPost Service tests", () => {
       roles: [role],
     });
     id = post.id;
+
+    // have to explicitly set up subentities relation ids
+    role.post = post;
+    requirement.post = post;
   });
 
   afterEach(async () => {

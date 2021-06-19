@@ -11,11 +11,11 @@
     "bosses:seed": "node dist/scripts/seed/seed-bosses.js",
     "raid-post:delete": "node dist/scripts/raid-post/delete-raid-post.js",
     "user:delete": "node dist/scripts/user/delete-user.js",
-    "test:unit": "jest -i test/unit",
+    "test:unit": "jest -i test/unit/",
     "test:integr": "jest -i test/integration",
     "test:integr:controllers": "jest --detectOpenHandles -i test/integration/api/controllers",
     "test:integr:data": "jest --detectOpenHandles -i test/integration/data",
-    "test:integr:services": "jest --detectOpenHandles -i test/integration/services",
+    "test:integr:services": "jest --detectOpenHandles -i test/integration/services/",
     "test:e2e": "jest --detectOpenHandles -i test/e2e",
     "migration:generate": "npx typeorm migration:generate -n",
     "migration:run": "npx typeorm migration:run"
