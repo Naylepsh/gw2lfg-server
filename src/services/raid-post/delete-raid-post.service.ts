@@ -2,7 +2,7 @@ import { Inject, Service } from "typedi";
 import { IRaidPostUnitOfWork } from "@data/units-of-work/raid-post/raid-post.unit-of-work.interface";
 import { types } from "@loaders/typedi.constants";
 import { UnpublishRaidPostDTO } from "./dtos/delete-raid-post.dto";
-import { byId } from "@root/data/queries/common.queries";
+import { byId, byIds } from "@root/data/queries/common.queries";
 
 /**
  * Service for deletion of raid posts.
@@ -21,13 +21,13 @@ export class DeleteRaidPostService {
       await this.uow.joinRequests.delete({ where: { post: { id: post.id } } });
 
       if (post.hasRequirements()) {
-        await this.uow.requirements.delete({
-          where: { post: { id: post.id } },
-        });
+        await this.uow.requirements.delete(
+          byIds(post.requirements.map((r) => r.id))
+        );
       }
 
       if (post.hasRoles()) {
-        await this.uow.roles.delete(post.roles.map((r) => r.id));
+        await this.uow.roles.delete(byIds(post.roles.map((r) => r.id)));
       }
 
       await this.uow.raidPosts.delete(byId(post.id));

@@ -35,19 +35,23 @@ export class DeleteOldPostsService {
 
   private async removeJoinRequestsToPosts(postsIds: number[]) {
     if (postsIds.length > 0) {
-      await this.uow.joinRequests.delete({ where: { post: { id: In(postsIds) } }});
+      await this.uow.joinRequests.delete({
+        where: { post: { id: In(postsIds) } },
+      });
     }
   }
 
   private async removeRequirementsOfPosts(postsIds: number[]) {
     if (postsIds.length > 0) {
-      await this.uow.requirements.delete({ where: {post: { id: In(postsIds) } }});
+      await this.uow.requirements.delete({
+        where: { post: { id: In(postsIds) } },
+      });
     }
   }
 
   private async removeRolesOfPosts(postsIds: number[]) {
     if (postsIds.length > 0) {
-      await this.uow.roles.delete({ post: { id: In(postsIds) } });
+      await this.uow.roles.delete({ where: { post: { id: In(postsIds) } } });
     }
   }
 

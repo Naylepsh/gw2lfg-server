@@ -19,7 +19,7 @@ export class RoleRepository
     return this.repository.findOne(params);
   }
 
-  async delete(criteria: any = {}): Promise<void> {
-    await this.repository.delete(criteria.where ?? criteria);
+  async delete(params: RoleQueryParams): Promise<void> {
+    await this.repository.delete(params.where ?? {});
   }
 }
