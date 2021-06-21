@@ -96,7 +96,8 @@ export class CreateJoinRequestService {
     const requestsForRole = requests.filter((r) => r.id === roleId);
     this.ensureUserHasNotRequestedTheSameSpot(requestsForRole, user);
     this.ensureTheSpotIsNotTaken(requestsForRole);
-    if (requests.length === 0) {
+    const userRequests = requests.filter((r) => r.user.id === user.id);
+    if (userRequests.length === 0) {
       await this.ensureUserMeetsRequirements(post, user);
     }
   }
