@@ -23,7 +23,7 @@ import { byJoinRequestRelations } from "@root/data/queries/join-request.queries"
 import { CreateNotificationService } from "../notification/create-notification.service";
 import {
   YouSentRequestNotification,
-  UserWantsToJoinNotification
+  UserWantsToJoinNotification,
 } from "@root/services/join-request/notifications/create-join-request.notifications";
 
 /**
@@ -95,7 +95,7 @@ export class CreateJoinRequestService {
   ) {
     const requestsForRole = requests.filter((r) => r.id === roleId);
     this.ensureUserHasNotRequestedTheSameSpot(requestsForRole, user);
-    this.ensureTheSpotIsNotTaken(requests);
+    this.ensureTheSpotIsNotTaken(requestsForRole);
     if (requests.length === 0) {
       await this.ensureUserMeetsRequirements(post, user);
     }
