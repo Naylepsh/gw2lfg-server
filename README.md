@@ -39,8 +39,7 @@ Server will be available at `localhost:<port-specified-in-env>`
 
 ## TESTING
 
-The option of running all the tests at the same time was kind of buggy, thus it was temporary removed. It's recommended to run tests by layers (pick one of `unit`, `integr`, `e2e`). Currently the following tests commands are available:
-
+- `yarn test` - runs all tests and shows code coverage
 - `yarn test:unit` - runs all test files in `test/unit` directory
 - `yarn test:integr` - runs all test files in `test/integration` directory
 - `yarn test:integr:controllers` - runs all test files in `test/integration/api/controllers` directory

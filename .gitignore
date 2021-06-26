@@ -6,3 +6,6 @@ dist/
 
 # ENVIRONMENT VARIABLES
 .env.*
+
+# JEST TEST COVERAGE
+coverage/

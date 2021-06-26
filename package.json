@@ -11,6 +11,7 @@
     "bosses:seed": "node dist/scripts/seed/seed-bosses.js",
     "raid-post:delete": "node dist/scripts/raid-post/delete-raid-post.js",
     "user:delete": "node dist/scripts/user/delete-user.js",
+    "test": "jest --runInBand --collectCoverage",
     "test:unit": "jest -i test/unit/",
     "test:integr": "jest -i test/integration",
     "test:integr:controllers": "jest --detectOpenHandles -i test/integration/api/controllers",
