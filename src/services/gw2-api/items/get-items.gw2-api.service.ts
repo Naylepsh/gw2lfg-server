@@ -12,7 +12,7 @@ import { ItemsFetcher } from "./items-fetcher.interface";
 /**
  * Fetches all items with given ids from the account associated with given API key
  */
-Service(types.services.getItemsFromEntireAccountFetcher);
+@Service(types.services.getItemsFromEntireAccountFetcher)
 export class GetItemsFromEntireAccount implements ItemsFetcher {
   constructor() {}
 

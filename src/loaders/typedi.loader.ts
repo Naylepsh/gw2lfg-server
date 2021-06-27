@@ -5,7 +5,7 @@ import { data } from "../data";
  * Most services are imported only so that the TypeDI can acquire their metadata.
  * As long as it's not a interface, just importing it is enough for TypeDI.
  */
-import { services } from "../services";
+import "../services";
 import { types } from "./typedi.constants";
 
 /**
@@ -13,7 +13,6 @@ import { types } from "./typedi.constants";
  */
 export const loadTypeDI = () => {
   loadDataLayerDependencies();
-  loadServiceLayerDependencies();
 };
 
 /**
@@ -70,16 +69,4 @@ const loadRepositories = (conn: Connection) => {
     repos.NotificationRepository
   );
   Container.set(types.repositories.notification, notificationsRepo);
-};
-
-/**
- * Loads concrete classes from /service directory into TypeDI container, so that
- * TypeDI knows what implementation to use when encountered an interface.
- */
-const loadServiceLayerDependencies = () => {
-  const { GetItemsFromEntireAccount } = services;
-
-  const itemFetcher = new GetItemsFromEntireAccount();
-
-  Container.set(types.services.getItemsFromEntireAccountFetcher, itemFetcher);
 };
