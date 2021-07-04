@@ -33,6 +33,3 @@ export const types = {
     getItemsFromEntireAccountFetcher: "get-items-from-entire-account.fetcher",
   },
 };
-
-export const getItemsFromEntireAccountFetcherType =
-  "get-items-from-entire-account.fetcher";
