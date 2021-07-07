@@ -1,6 +1,5 @@
 import "reflect-metadata"; // needed for various packages, such as TypeDI
 import "module-alias/register"; // needed for usage of module aliases
-import "./data/repositories/user/user.repository";
 import { loadDependencies } from "./loaders";
 import { config } from "./config";
 
