@@ -13,7 +13,7 @@ const main = async () => {
 
   if (process.argv.length > 3) {
     console.log(
-      "Missing id argument.\nSample API usage: yarn cli:raid-post:delete 42"
+      "Missing id argument.\nSample API usage: yarn cli:user:delete 42"
     );
     return;
   }
